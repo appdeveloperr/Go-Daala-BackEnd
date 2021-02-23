@@ -1,0 +1,56 @@
+<%- include('.\\' + '../_layouts/usersheader'); %>
+<h2 class="page-title">All Posts</h1>
+  <a href="/users/add_post" class="btn btn-primary">Create Post</a>
+  <br><br>
+  <% if(all_post!=null) { %>
+  <table class="table table-striped sorting">
+    <thead>
+      <tr class="Home">
+        <th>Text</th>
+        <th>Images</th>
+        <th>Date</th>
+        <th>Edit </th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% all_post.forEach(function(item){ %>
+      <tr id="id_<%= item._id %>" class="<%= item.title %>">
+        <!-- used for sorting id   -->
+        <td><%= item.input_text%></td>
+       
+        
+        <td>
+          <% if(all_images == null){  %>
+            <img src="files/noimage.png" id="imagePreview">
+            <% } else {     all_images.forEach(function(image){ if(image.posting_id==item._id){    %>
+              <img src="<%= image.path%>" id="imagePreview" alt="" >
+              <!-- <%= image.path %> -->
+      <% }});} %>    
+    </td>
+
+    <td><%= item.date%></td>
+        <td><a href="/users/edit_post/<%= item._id %>">Edit</a></td>
+        <td><a class="confirmDeletion" href="/users/delete_post/<%= item._id%>">Delete</a></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <% } %>
+
+
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+
+  <script>
+    $('tbody').sortable({
+      placeholder: "ui-state-hightlight",
+      update: function () {
+        var ids = $('tbody').sortable('serialize');
+        var url = '/adminnews/reordernews';
+        $.post(url, ids);
+      }
+    });
+  </script
+
+<%- include('.\\' + '../_layouts/usersfooter'); %>

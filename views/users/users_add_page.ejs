@@ -1,0 +1,19 @@
+<%- include('.\\' + '../_layouts/usersheader'); %>
+<h3 class="page-title">Create  Page</h3>
+<a href="/users/users_pages" class="btn btn-primary">All Pages</a>
+<br><br>
+	<form action="/users/upload_page"  method="POST">
+
+		<div class="form-group">
+			<label for="">Page</label>
+			<input type="text" name="page" placeholder="Enter pages" value="<%=page%>">
+		</div>
+
+
+		<input type="submit" value="Post"class="btn btn-dark">
+	</form>
+
+
+	
+
+	<%- include('.\\' + '../_layouts/usersfooter'); %>

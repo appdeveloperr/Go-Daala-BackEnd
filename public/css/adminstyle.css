@@ -1,0 +1,22 @@
+.sorting tr:not(.home){
+cursor:pointer;
+}
+.ui-state-hightlight{
+	border: 1px dashed #ccc;
+}
+#imagePreview{
+width: 100px;
+height: 100px;
+margin-top: 10px;
+}
+#GalleyImages{
+	display: inline-block;
+	list-style: none;
+
+}
+
+
+.navbar{
+padding-left:125px;
+	padding-right:20px;
+	}
