@@ -26,7 +26,10 @@ db.sequelize = sequelize;
 
 db.user = require("../api_models/user.model.js")(sequelize, Sequelize);
 db.role = require("../api_models/role.model")(sequelize, Sequelize);
+db.banner = require("../api_models/banner.model")(sequelize, Sequelize);
 
+
+//Table Relationships
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",
