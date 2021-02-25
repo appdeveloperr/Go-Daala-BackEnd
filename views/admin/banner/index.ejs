@@ -1,6 +1,4 @@
 <%- include('.\\' + '../../_layouts/adminheader'); %>
-
-<!-- Content Wrapper. Contains page content -->
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -41,23 +39,22 @@
                                     <td><%=item.id%></td>
                                     <td><%=item.banner_type%></td>
                                     <td><img src="<%=img%>" width="100" height="100"></td>
-                                    <td><a href="/admin/banner/edit/<%=item.id%>" class="mr-2"><i
-                                                class="fa fa-edit"></i></a><a class="confirmDeletion"
-                                            href="/admin/banner/delete/<%=item.id%>"><i
-                                            class="fa fa-trash text-danger"></i></a>
+                                    <td>
+                                            <!-- <form enctype="multipart/form-data" action="/admin/banner/Edit" method="POST">
+                                                <input type="hidden" name="id" value="<%=item.id%>">
+                                                <input type="submit" value="Edit">
+                                                </form> -->
+                                        <a href="/admin/banner/Edit/<%=item.id%>" class="mr-2">
+                                             <i class="fa fa-edit"></i>
+                                         </a>
+                                       
+                                        <a class="confirmDeletion" href="/admin/banner/delete/<%=item.id%>">
+                                            <i class="fa fa-trash text-danger"></i>
+                                        </a>
 
                                     </td>
                                 </tr>
                                 <%});%>
-
-
-
-
-
-
-
-
-
 
                             </tbody>
                             <tfoot>

@@ -15,6 +15,7 @@ var corsOptions = {
   methods: [
     'GET',
     'POST',
+    'PUT'
   ],
 };
 
@@ -31,7 +32,7 @@ app.set('view engine', 'ejs');
 
 
 //Set public Folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public/')));
 //Set Global  errors variable 
 app.locals.errors=null;
 
@@ -47,10 +48,10 @@ const db = require("./models/api_models");
 const Role = db.role;
 
 // // force: true will drop the table if it already exists
-db.sequelize.sync({force: false}).then(() => {
-  console.log('Drop and Resync Database with { force: true }');
-  initial();
-});
+// db.sequelize.sync({force: false}).then(() => {
+//   console.log('Drop and Resync Database with { force: true }');
+//   initial();
+// });
 
 
 
