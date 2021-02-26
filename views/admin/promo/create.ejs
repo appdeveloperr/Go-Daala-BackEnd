@@ -1,5 +1,6 @@
 <%- include('.\\' + '../../_layouts/adminheader'); %>
 
+
 <!-- Content Wrapper. Contains page content -->
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -8,7 +9,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h2>Add Image</h2>
+                    <h1>Add Code</h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -24,51 +25,38 @@
                     <div class="card ">
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form role="form" id="quickForm" method="post" action="/admin/banner/upload"
-                            enctype="multipart/form-data">
+                        <form  id="quickForm" action="/admin/promo/upload_promo"
+                            enctype="multipart/form-data"  method="POST">
                             <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Code</label>
+                                    <input type="text" name="code" class="form-control" placeholder="Enter Code">
+                                </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Type</label>
                                     <select name="type" class="form-control" id="exampleInputEmail1">
                                         <option value="">Select Type</option>
-                                        <option value="web banner">web banner</option>
-                                        <option value="web slider">web slider</option>
-                                        <option value="mobile banner">mobile banner</option>
-                                        <option value="mobile slider">mobile slider</option>
+                                        <option value="fixed">fixed</option>
+                                        <option value="percentage">percentage</option>
                                     </select>
                                 </div>
-                                <label for="exampleInputPassword1">Image</label>
                                 <div class="form-group">
-                                    <input type="file" class="form-control" name="myFile" id="img" >
-                                    <img src="#" id="imagePreview" alt="">
+                                    <label for="exampleInputEmail1">Discount</label>
+                                    <input type="number" name="discount" class="form-control" id="exampleInputEmail1"
+                                        placeholder="Enter Discount">
                                 </div>
-                              
+                                <div class="icheck-success d-inline">
+                                    <input type="checkbox" id="checkboxSuccess3" name="publish">
+                                    <label for="checkboxSuccess3">
+                                        Publish
+                                    </label>
+                                </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
                         </form>
-                        <script>
-
-
-                            function readURL(input) {
-                    
-                                for (var i = 0; i < input.files.length; i++) {
-                                    if (input.files && input.files[i]) {
-                                        var reader = new FileReader();
-                                        reader.onload = function (e) {
-                                            $("#imagePreview").attr('src', e.target.result).width(100).height(100);
-                                        }
-                                        reader.readAsDataURL(input.files[i]);
-                                    }
-                                }
-                            }
-                    
-                            $("#img").change(function () {
-                                readURL(this);
-                            });
-                        </script>
                     </div>
                     <!-- /.card -->
                 </div>
@@ -85,4 +73,5 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
 <%- include('.\\' + '../../_layouts/adminfooter'); %>

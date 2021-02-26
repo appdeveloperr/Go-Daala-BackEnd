@@ -136,7 +136,14 @@ require('./routes/api_routes/user.routes')(app);
 require('./routes/admin_routes/admin.routes')(app);
 
 
+// var auth = require('./routes/api_routes/auth.routes');
+// app.use('/',auth);
 
+// var admin = require('./routes/admin_routes/admin.routes');
+// app.use('/',admin);
+
+// var user = require('./routes/api_routes/user.routes');
+// app.use('/',user);
 
 //Set routes
 //var pages = require('./routes/pages.js');
@@ -164,24 +171,24 @@ app.listen(PORT, () => {
 
 
 
-function initial() {
+// function initial() {
 
-  //   //---------- INSERTING DUMMY ROLES ----------
-    Role.create({
-      id: 1,
-      name: "user"
-    });
+//   //   //---------- INSERTING DUMMY ROLES ----------
+//     Role.create({
+//       id: 1,
+//       name: "user"
+//     });
    
-    Role.create({
-      id: 2,
-      name: "moderator"
-    });
+//     Role.create({
+//       id: 2,
+//       name: "moderator"
+//     });
    
-    Role.create({
-      id: 3,
-      name: "admin"
-    });
+//     Role.create({
+//       id: 3,
+//       name: "admin"
+//     });
   
   
-  };
+//   };
   

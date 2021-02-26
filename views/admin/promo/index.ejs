@@ -1,0 +1,147 @@
+<%- include('.\\' + '../../_layouts/adminheader'); %>
+
+<!-- Content Wrapper. Contains page content -->
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Promo Codes</h1>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+    
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-12">
+                                            <!-- /.card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="/admin/promo/create_promo" class="btn btn-primary">Add Code</a>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Code</th>
+                                        <th>Type</th>
+                                        <th>Discount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                                                    <tr>
+                                        <td>1</td>
+                                        <td>20%</td>
+                                        <td>Percentage</td>
+                                        <td>20</td>
+                                        <td><span class="text-success">Publish</span></td>
+                                        <td><a  href="https://admin.theesouq.com/admin/promo/1/edit" class="mr-2"><i class="fa fa-edit"></i></a><a href="#" onclick="deleteRecord(1)"><i class="fa fa-trash text-danger"></i></a>
+                                            <form id="del_form1" action="https://admin.theesouq.com/admin/promo/1" method="post">
+                                                <input type="hidden" name="_token" value="itIUTvqgLJWTwvsx3eXqnwbRtCnBzfz9nGV3XsmN">                                            <input type="hidden" name="_method" value="DELETE">                                        </form>
+                                        </td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>2</td>
+                                        <td>Joker</td>
+                                        <td>Fixed</td>
+                                        <td>100</td>
+                                        <td><span class="text-success">Publish</span></td>
+                                        <td><a  href="https://admin.theesouq.com/admin/promo/2/edit" class="mr-2"><i class="fa fa-edit"></i></a><a href="#" onclick="deleteRecord(2)"><i class="fa fa-trash text-danger"></i></a>
+                                            <form id="del_form2" action="https://admin.theesouq.com/admin/promo/2" method="post">
+                                                <input type="hidden" name="_token" value="itIUTvqgLJWTwvsx3eXqnwbRtCnBzfz9nGV3XsmN">                                            <input type="hidden" name="_method" value="DELETE">                                        </form>
+                                        </td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>3</td>
+                                        <td>Umer</td>
+                                        <td>Fixed</td>
+                                        <td>400</td>
+                                        <td><span class="text-success">Publish</span></td>
+                                        <td><a  href="https://admin.theesouq.com/admin/promo/3/edit" class="mr-2"><i class="fa fa-edit"></i></a><a href="#" onclick="deleteRecord(3)"><i class="fa fa-trash text-danger"></i></a>
+                                            <form id="del_form3" action="https://admin.theesouq.com/admin/promo/3" method="post">
+                                                <input type="hidden" name="_token" value="itIUTvqgLJWTwvsx3eXqnwbRtCnBzfz9nGV3XsmN">                                            <input type="hidden" name="_method" value="DELETE">                                        </form>
+                                        </td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>4</td>
+                                        <td>Usman1</td>
+                                        <td>Fixed</td>
+                                        <td>100</td>
+                                        <td><span class="text-success">Publish</span></td>
+                                        <td><a  href="https://admin.theesouq.com/admin/promo/4/edit" class="mr-2"><i class="fa fa-edit"></i></a><a href="#" onclick="deleteRecord(4)"><i class="fa fa-trash text-danger"></i></a>
+                                            <form id="del_form4" action="https://admin.theesouq.com/admin/promo/4" method="post">
+                                                <input type="hidden" name="_token" value="itIUTvqgLJWTwvsx3eXqnwbRtCnBzfz9nGV3XsmN">                                            <input type="hidden" name="_method" value="DELETE">                                        </form>
+                                        </td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>5</td>
+                                        <td>26762434</td>
+                                        <td>Fixed</td>
+                                        <td>324234</td>
+                                        <td><span class="text-danger">UnPublish</span></td>
+                                        <td><a  href="https://admin.theesouq.com/admin/promo/5/edit" class="mr-2"><i class="fa fa-edit"></i></a><a href="#" onclick="deleteRecord(5)"><i class="fa fa-trash text-danger"></i></a>
+                                            <form id="del_form5" action="https://admin.theesouq.com/admin/promo/5" method="post">
+                                                <input type="hidden" name="_token" value="itIUTvqgLJWTwvsx3eXqnwbRtCnBzfz9nGV3XsmN">                                            <input type="hidden" name="_method" value="DELETE">                                        </form>
+                                        </td>
+                                    </tr>
+                                                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Code</th>
+                                        <th>Type</th>
+                                        <th>Discount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+
+    });
+    function deleteRecord(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                document.getElementById('del_form' + id).submit();
+            }
+        })
+    }
+</script>
+<%- include('.\\' + '../../_layouts/adminfooter'); %>

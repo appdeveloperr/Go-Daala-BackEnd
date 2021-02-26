@@ -1,62 +1,85 @@
 const db = require("../../models/api_models");
-const Banner = db.banner;
-const fs = require('fs')
-
-//--------Banner create Function -----------------
-exports.create = function (req, res, next) {
-  var fileinfo = req.file;
-  if (fileinfo) {//image exist
-    var filename = fileinfo.filename;
-    var type = req.body.type;
+const Promo = db.promo;
 
 
-    var destination = fileinfo.destination
+//---------- Get Promo Function ----------
+ 
 
-    if (!type) {
-      req.flash('danger', 'Selected type must needed!');
-      res.redirect('/admin/banner/create');
-    } else {
-      Banner.create({
-        banner_type: type,
-        image_path: destination + "" + filename
-      }).then(banner => {
-        req.flash('success', 'Successfuly your banner is  Added!');
-        res.redirect('/admin/banner/index');
-      }).catch(err => {
-        console.log(err);
-      });
-    }
-  } else {//image is not exist
-    req.flash('danger', 'Image file must upload needed!');
-    res.redirect('/admin/banner/create');
+
+
+//--------Promo create Function -----------------
+exports.create = function (req, res) {
+  
+  req.checkBody('code', 'Code must have value!').notEmpty();
+  req.checkBody('type', 'type must have selected needed!').notEmpty();
+  req.checkBody('discount', 'Discount must have value!').notEmpty();
+
+
+  var errors = req.validationErrors();
+	if (errors) {
+		res.render('./admin/promo/create', {
+      errors: errors,
+      userdata: req.user,
+      code:req.body.code,
+      type:req.body.type,
+      discount:req.body.discount
+		});
+	} else {
+  console.log("no validation error");
   }
+  // var fileinfo = req.file;
+  // if (fileinfo) {//image exist
+  //   var filename = fileinfo.filename;
+  //   var type = req.body.type;
+
+
+  //   var destination = fileinfo.destination
+
+  //   if (!type) {
+  //     req.flash('danger', 'Selected type must needed!');
+  //     res.redirect('/admin/banner/create');
+  //   } else {
+  //     Banner.create({
+  //       banner_type: type,
+  //       image_path: destination + "" + filename
+  //     }).then(banner => {
+  //       req.flash('success', 'Successfuly your banner is  Added!');
+  //       res.redirect('/admin/banner/index');
+  //     }).catch(err => {
+  //       console.log(err);
+  //     });
+  //   }
+  // } else {//image is not exist
+  //   req.flash('danger', 'Image file must upload needed!');
+  //   res.redirect('/admin/banner/create');
+  // }
 }
 
 
-//--------Banner Index Function -----------------
+//--------Promo Index Function -----------------
 exports.index = function (req, res) {
 
-  Banner.findAll().then(all_banners => {
-    if (!all_banners) {
-      console.log("no recode is exist")
-    }
-    res.render('./admin/banner/index', {
-      userdata: req.user,
-      all_banners: all_banners
+//   Promo.findAll().then(all_banners => {
+//     if (!all_banners) {
+//       console.log("no recode is exist")
+//     }
+    res.render('./admin/promo/index', {
+      userdata: req.user
+      
     });
 
-  }).catch(err => {
-    return res.status(200).send({
-      responsecode: 400,
-      message: err.message,
-    });
-  });
+//   }).catch(err => {
+//     return res.status(200).send({
+//       responsecode: 400,
+//       message: err.message,
+//     });
+//   });
 }
 
 
 
 
-//---------- Edit Banner Function ----------------------
+//---------- Edit Promo Function ----------------------
 exports.edit = function (req, res) {
   var id = req.params.id;
   if (id) {
@@ -92,7 +115,7 @@ exports.edit = function (req, res) {
 
 
 
-//---------- Update Banner Function ----------------------
+//---------- Update Promo Function ----------------------
 exports.update = function (req, res, next) {
 
 
@@ -154,7 +177,7 @@ exports.update = function (req, res, next) {
 
 
 
-//-----------------------delete bannar Function---------------------
+//-----------------------delete Promo Function---------------------
 exports.delete = function (req, res) {
 
   Banner.findOne({

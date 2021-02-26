@@ -22,3 +22,6 @@ exports.isEditor = function (req, res, next) {
         res.redirect('/users/login');
     }
 }
+
+
+//---------------- Api Function-----------------------------------

@@ -12,7 +12,8 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var LocalStrategy = require('passport-local').Strategy;
 var auth = require('../../controllers/admin_controllers/auth');
-var controller = require('../../controllers/admin_controllers/banner');
+var banner_controller = require('../../controllers/admin_controllers/banner');
+var promo_controller = require('../../controllers/admin_controllers/promo');
 var isAdmin = auth.isAdmin;
 const multer = require('multer');
 var path = require('path');
@@ -55,11 +56,16 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/admin/banner/index', isAdmin, controller.index);
+
+
+  //--------------------bannar side is start -------------------------
+
+  //---------------------bannar index-----------------------
+  app.get('/admin/banner/index', isAdmin, banner_controller.index);
 
 
 
-
+  //---------------------get bannar  create-----------------------
   app.get('/admin/banner/create', isAdmin, function (req, res) {
 
     res.render('admin/banner/create', {
@@ -89,22 +95,70 @@ module.exports = function (app) {
 
   const uploads = multer({ storage: storage, fileFilter: fileFilter });
 
+//------------------post banner create-----------------------------------------
+  app.post("/admin/banner/upload", isAdmin, uploads.single('myFile'), banner_controller.create);
 
-  app.post("/admin/banner/upload", isAdmin, uploads.single('myFile'), controller.create);
-
-
+//------------------get banner edit  && redirect to get banner edit  To next route -----------------------------------------
   app.get("/admin/banner/Edit/:id", isAdmin, function (req, res) {
     var id = req.params.id;
     res.redirect('/admin/Edit_bannar/' + id);
 
   });
 
-  app.get('/admin/Edit_bannar/:id', controller.edit)
-  app.post("/admin/banner/update", isAdmin,uploads.single('myFile'),controller.update);
-    
-  app.get('/admin/banner/delete/:id',controller.delete);
   
+  app.get('/admin/Edit_bannar/:id', banner_controller.edit);
+
+  //------------------post banner update---------------------------------
+  app.post("/admin/banner/update", isAdmin,uploads.single('myFile'),banner_controller.update);
+    
+
+  //-----------------get banner delete ---------------------
+  app.get('/admin/banner/delete/:id',banner_controller.delete); 
+//----------------------------banner  side end -------------
 
 
 
-};
+
+
+//----------------------------promo side start ---------------
+
+//----------------------------get promo  index ---------------
+app.get('/admin/promo/index', isAdmin, promo_controller.index);
+
+
+
+//----------------------------get promo  create ---------------
+app.get('/admin/promo/create_promo',isAdmin, function (req, res) {
+
+  res.render('admin/promo/create', {
+    userdata: req.user,
+    code:'',
+    type:'',
+    discount:''
+  });
+});
+
+
+//------------------post promo create-----------------------------------------
+app.post("/admin/promo/upload_promo",isAdmin,function(req,res){
+  // req.checkBody('code', 'Code must have value!').notEmpty();
+  // req.checkBody('type', 'type must have selected needed!').notEmpty();
+  // req.checkBody('discount', 'Discount must have value!').notEmpty();
+
+console.log(req.body);
+  // var errors = req.validationErrors();
+  // console.log(errors);
+	// if (errors) {
+	// 	res.render('./admin/promo/create', {
+  //     errors: errors,
+  //     userdata: req.user,
+  //     code:req.body.code,
+  //     type:req.body.type,
+  //     discount:req.body.discount
+	// 	});
+	// } else {
+  // console.log("no validation error");
+  // }
+});
+
+}

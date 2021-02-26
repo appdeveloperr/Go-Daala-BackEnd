@@ -27,6 +27,9 @@ db.sequelize = sequelize;
 db.user = require("../api_models/user.model.js")(sequelize, Sequelize);
 db.role = require("../api_models/role.model")(sequelize, Sequelize);
 db.banner = require("../api_models/banner.model")(sequelize, Sequelize);
+db.promo = require("../api_models/promo.model")(sequelize, Sequelize);
+db.vendor = require("../api_models/vendor.model")(sequelize, Sequelize);
+
 
 
 //Table Relationships
