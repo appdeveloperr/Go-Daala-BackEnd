@@ -10,10 +10,14 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     }
   }).then(vendor => {
     if (vendor) {
-      res.status(400).send({
-        message: "Failed! Username is already in use!"
+      return res.status(200).send({
+        status: 400,
+        message: "Failed! Username is already in use!",
+        successData: {
+        }
+
       });
-      return;
+
     }
 
     // Email
@@ -23,10 +27,17 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
       }
     }).then(vendor => {
       if (vendor) {
-        res.status(400).send({
-          message: "Failed! Email is already in use!"
+
+
+        return res.status(200).send({
+          status: 400,
+          message: "Failed! Email is already in use!",
+          successData: {
+          }
+
         });
-        return;
+
+
       }
 
       next();
@@ -45,7 +56,7 @@ checkRolesExisted = (req, res, next) => {
       }
     }
   }
-  
+
   next();
 };
 

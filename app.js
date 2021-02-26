@@ -131,9 +131,13 @@ app.use(passport.session());
 // });
 
 // set routes
+//----------- Admin Panel Routes ---------------
+require('./routes/admin_routes/admin.routes')(app);
+
+//----------- API Routes --------------------
 require('./routes/api_routes/auth.routes')(app);
 require('./routes/api_routes/user.routes')(app);
-require('./routes/admin_routes/admin.routes')(app);
+require('./routes/api_routes/vendor.routes')(app);
 
 
 // var auth = require('./routes/api_routes/auth.routes');
