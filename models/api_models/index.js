@@ -29,7 +29,7 @@ db.role = require("../api_models/role.model")(sequelize, Sequelize);
 db.banner = require("../api_models/banner.model")(sequelize, Sequelize);
 db.promo = require("../api_models/promo.model")(sequelize, Sequelize);
 db.vendor = require("../api_models/vendor.model")(sequelize, Sequelize);
-
+db.address = require("../api_models/address.model")(sequelize, Sequelize);
 
 
 //Table Relationships
@@ -42,6 +42,10 @@ db.user.belongsToMany(db.role, {
   through: "user_roles",
   foreignKey: "userId",
   otherKey: "roleId"
+});
+
+db.address.belongsTo(db.vendor, {
+  foreignKey: "vendor_id"
 });
 
 db.ROLES = ["user", "admin", "moderator"];

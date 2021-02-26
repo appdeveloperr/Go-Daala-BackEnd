@@ -1,7 +1,7 @@
-const { vendorVerifySignUp } = require("../../middleware");
-const { vendorAuthJwt } = require("../../middleware");
+const { vendorVerifySignUp } = require("../../../middleware");
+const { vendorAuthJwt } = require("../../../middleware");
 
-const controller = require("../../controllers/api_controllers/vendor.controller");
+const controller = require("../../../controllers/api_controllers/vendor.controller");
 const multer = require('multer');
 var path = require('path');
 
@@ -50,4 +50,5 @@ module.exports = function (app) {
     app.post('/api/vendor/update-profile',
     vendorAuthJwt.verifyToken,
     controller.update);
+
 };

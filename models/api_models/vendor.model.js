@@ -1,5 +1,11 @@
 module.exports = (sequelize, Sequelize) => {
   const Vendor = sequelize.define("vendors", {
+    id:{
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
     first_name: {
       type: Sequelize.STRING
     },

@@ -1,6 +1,7 @@
 const db = require("../../models/api_models");
 const config = require("../../config/auth.config");
 const Vendor = db.vendor;
+const Address = db.address;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -165,3 +166,110 @@ exports.update = (req, res) => {
     });
 }
 
+
+exports.create_address = (req, res) => {
+    // Save vendor to Database
+    Address.create({
+        label: req.body.label,
+        address: req.body.address,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude
+
+    }).then(address => {
+        console.log(address);
+        return res.status(200).send({
+            status: 200,
+            message: "Address Create is successful",
+            successData: {
+                address: {
+                    id: address.id,
+                    address: address.address,
+                    latitude: address.latitude,
+                    longitude: address.longitude
+
+                }
+            }
+        });
+
+    }).catch(err => {
+
+        return res.status(200).send({
+            status: 400,
+            message: err.message,
+            successData: {}
+        });
+
+    });
+
+}
+
+exports.update_address = (req, res) => {
+    Address.update({
+        label: req.body.label,
+        address: req.body.address,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude
+    },
+        {
+            where: { id: req.body.id },
+            returning: true,
+            plain: true
+        },
+    ).then(address => {
+
+        if (address) {
+
+            return res.status(200).send({
+                status: 200,
+                message: "Address updated is successful",
+                successData: {
+                    address: {
+                        id: address[1].id,
+                        label: address[1].label,
+                        address: address[1].address,
+                        latitude: address[1].latitude,
+                        longitude: address[1].longitude
+                    }
+                }
+            });
+        }
+    }).catch(err => {
+        return res.status(200).send({
+            status: 400,
+            message: err.message,
+            successData: {}
+        });
+
+
+    });
+}
+
+exports.delete_address =(req, res)=>{
+    Address.destroy({
+        where: {
+           id: req.body.id
+        }
+      }).then(address => {
+  
+        if (!address) {
+            return res.status(200).send({
+                status: 400,
+                message: "Contacts not found",
+                successData: {}
+            });
+        }
+           
+        return res.status(200).send({
+            status: 200,
+            message: "Vendor Address is successful Deleted",
+            successData: {}
+        });
+  
+      }).catch(err => {
+        return res.status(200).send({
+            status: 400,
+            message: err.message,
+            successData: {}
+        });
+      });
+}

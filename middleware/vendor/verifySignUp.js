@@ -1,7 +1,7 @@
 const db = require("../../models/api_models");
 const ROLES = db.ROLES;
 const Vendor = db.vendor;
-
+const Address = db.address;
 checkDuplicateEmailOrPhone_number = (req, res, next) => {
   // Username
   console.log("email: ",req.body.email);
@@ -61,8 +61,51 @@ checkRolesExisted = (req, res, next) => {
   next();
 };
 
+checkDuplicateLatitudeOrLongitude = (req,res,next)=>{
+  Address.findOne({
+    where: {
+      latitude: req.body.latitude
+    }
+  }).then(address => {
+    if (address) {
+      return res.status(200).send({
+        status: 400,
+        message: "Failed! Latitude is already in use!",
+        successData: {
+        }
+
+      });
+
+    }
+
+    // Email
+    Address.findOne({
+      where: {
+        longitude: req.body.longitude
+      }
+    }).then(address => {
+      if (address) {
+
+
+        return res.status(200).send({
+          status: 400,
+          message: "Failed! Longitude is already in use!",
+          successData: {
+          }
+
+        });
+
+
+      }
+
+      next();
+    });
+  });
+}
+
 const verifySignUp = {
   checkDuplicateEmailOrPhone_number: checkDuplicateEmailOrPhone_number,
+  checkDuplicateLatitudeOrLongitude:checkDuplicateLatitudeOrLongitude,
   checkRolesExisted: checkRolesExisted
 };
 

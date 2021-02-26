@@ -55,7 +55,7 @@ const db = require("./models/api_models");
 const Role = db.role;
 
 // // force: true will drop the table if it already exists
-// db.sequelize.sync({force: false}).then(() => {
+// db.sequelize.sync({force: true}).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');
 //   initial();
 // });
@@ -144,7 +144,11 @@ require('./routes/admin_routes/admin.routes')(app);
 //----------- API Routes --------------------
 require('./routes/api_routes/auth.routes')(app);
 require('./routes/api_routes/user.routes')(app);
-require('./routes/api_routes/vendor.routes')(app);
+
+
+//-----------------Vendor Api routes--------------
+require('./routes/api_routes/vendor/auth.routes')(app);
+require('./routes/api_routes/vendor/address.routes')(app);
 
 
 // var auth = require('./routes/api_routes/auth.routes');
