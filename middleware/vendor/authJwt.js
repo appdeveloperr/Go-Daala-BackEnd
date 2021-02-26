@@ -5,19 +5,22 @@ const Vendor = db.vendor;
 
 
 verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+  let token = req.headers["access_token"];
 
   if (!token) {
-    return res.status(403).send({
+    return res.status(200).send({
+      status:400,
       message: "No token provided!"
     });
   }
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      return res.status(401).send({
+      return res.status(200).send({
+        status:400,
         message: "Unauthorized!"
       });
+     
     }
     req.userId = decoded.id;
     next();

@@ -2,17 +2,18 @@ const db = require("../../models/api_models");
 const ROLES = db.ROLES;
 const Vendor = db.vendor;
 
-checkDuplicateUsernameOrEmail = (req, res, next) => {
+checkDuplicateEmailOrPhone_number = (req, res, next) => {
   // Username
+  console.log("email: ",req.body.email);
   Vendor.findOne({
     where: {
-      username: req.body.username
+      email: req.body.email
     }
   }).then(vendor => {
     if (vendor) {
       return res.status(200).send({
         status: 400,
-        message: "Failed! Username is already in use!",
+        message: "Failed! email is already in use!",
         successData: {
         }
 
@@ -23,7 +24,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     // Email
     Vendor.findOne({
       where: {
-        email: req.body.email
+        phone_number: req.body.phone_number
       }
     }).then(vendor => {
       if (vendor) {
@@ -31,7 +32,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
 
         return res.status(200).send({
           status: 400,
-          message: "Failed! Email is already in use!",
+          message: "Failed! Phone Number is already in use!",
           successData: {
           }
 
@@ -61,7 +62,7 @@ checkRolesExisted = (req, res, next) => {
 };
 
 const verifySignUp = {
-  checkDuplicateUsernameOrEmail: checkDuplicateUsernameOrEmail,
+  checkDuplicateEmailOrPhone_number: checkDuplicateEmailOrPhone_number,
   checkRolesExisted: checkRolesExisted
 };
 

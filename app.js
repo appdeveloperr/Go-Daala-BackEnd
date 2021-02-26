@@ -8,6 +8,8 @@ const Strategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 const cors = require("cors");
 const app = express();
+var multer = require('multer');
+var upload = multer();
 
 
 var corsOptions = {
@@ -32,7 +34,7 @@ app.set('view engine', 'ejs');
 
 
 //Set public Folder
-app.use(express.static(path.join(__dirname, '/public/')));
+// app.use(express.static(path.join(__dirname, '/public/')));
 //Set Global  errors variable 
 app.locals.errors=null;
 
@@ -42,6 +44,11 @@ app.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// for parsing multipart/form-data
+app.use(upload.array()); 
+app.use(express.static(path.join(__dirname, '/public/')));
 
 // database
 const db = require("./models/api_models");
@@ -175,24 +182,24 @@ app.listen(PORT, () => {
 
 
 
-// function initial() {
+function initial() {
 
-//   //   //---------- INSERTING DUMMY ROLES ----------
-//     Role.create({
-//       id: 1,
-//       name: "user"
-//     });
+  //   //---------- INSERTING DUMMY ROLES ----------
+    Role.create({
+      id: 1,
+      name: "user"
+    });
    
-//     Role.create({
-//       id: 2,
-//       name: "moderator"
-//     });
+    Role.create({
+      id: 2,
+      name: "moderator"
+    });
    
-//     Role.create({
-//       id: 3,
-//       name: "admin"
-//     });
+    Role.create({
+      id: 3,
+      name: "admin"
+    });
   
   
-//   };
+  };
   

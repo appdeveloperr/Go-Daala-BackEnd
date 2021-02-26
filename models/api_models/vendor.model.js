@@ -1,16 +1,24 @@
 module.exports = (sequelize, Sequelize) => {
-    const Vendor = sequelize.define("vendors", {
-      username: {
-        type: Sequelize.STRING
-      },
-      email: {
-        type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      }
-    });
-  
-    return Vendor;
-  };
-  
+  const Vendor = sequelize.define("vendors", {
+    first_name: {
+      type: Sequelize.STRING
+    },
+    last_name: {
+      type: Sequelize.STRING
+    },
+    email: {
+      type: Sequelize.STRING
+    },
+    phone_number: {
+      type: Sequelize.STRING
+    },
+    password: {
+      type: Sequelize.STRING
+    },
+    profile: {
+      type: Sequelize.STRING
+    }
+  });
+
+  return Vendor;
+};
