@@ -1,6 +1,4 @@
 <%- include('.\\' + '../../_layouts/adminheader'); %>
-
-<!-- Content Wrapper. Contains page content -->
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -8,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Promo Codes</h1>
+                    <h1>Vehicles</h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -21,43 +19,43 @@
                 <!-- /.card -->
                 <div class="card">
                     <div class="card-header">
-                        <a href="/admin/promo/create_promo" class="btn btn-primary">Add Code</a>
+                        <a href="/admin/vehicle/create" class="btn btn-primary">Create Vehicle</a>
                     </div>
                     <!-- /.card-header -->
-                    <%if(all_promos){%>
+                    <%if(all_Vehicles){ %>
                     <div class="card-body">
-                            
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Code</th>
                                     <th>Type</th>
-                                    <th>Discount</th>
-                                    <th>Status</th>
+                                    <th>Image</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <%all_promos.forEach(function(item){%>
+                                <%all_Vehicles.forEach(function(item){ var image=item.image_path; var img_length=image.length; var img=image.slice(8, img_length); %>
                                 <tr>
                                     <td><%=item.id%></td>
-                                    <td><%=item.code%></td>
-                                    <td><%=item.type%></td>
-                                    <td><%=item.discount%></td>
-                                    <%if(item.publish=='on'){%>
-                                    <td><span class="text-success">Publish</span></td>
-                                    <%}else{%>
-                                        <td><span class="text-danger">UnPublish</span></td>
-                                        <%}%>
-                                    <td><a href="/admin/promo/edit/<%=item.id%>" class="mr-2"><i
-                                                class="fa fa-edit"></i>
-                                            </a>
-                                            <a class="confirmDeletion" href="/admin/promo/delete/<%=item.id%>"><i
-                                                class="fa fa-trash text-danger"></i>
-                                            </a>
-                                </td>
-                                <%})%>
+                                    <td><%=item.vehicle_type%></td>
+                                    <td><img src="<%=img%>" width="100" height="100"></td>
+                                    <td>
+                                            <!-- <form enctype="multipart/form-data" action="/admin/banner/Edit" method="POST">
+                                                <input type="hidden" name="id" value="<%=item.id%>">
+                                                <input type="submit" value="Edit">
+                                                </form> -->
+                                        <a href="/admin/vehicle/Edit/<%=item.id%>" class="mr-2">
+                                             <i class="fa fa-edit"></i>
+                                         </a>
+                                       
+                                        <a class="confirmDeletion" href="/admin/vehicle/delete/<%=item.id%>">
+                                            <i class="fa fa-trash text-danger"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                                <%});%>
+
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -65,12 +63,9 @@
                                     <th></th>
                                     <th></th>
                                     <th></th>
-                                    <th></th>
-                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>
-                   
                     </div>
                     <%}%>
                     <!-- /.card-body -->

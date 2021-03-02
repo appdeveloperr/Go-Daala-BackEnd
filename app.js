@@ -8,8 +8,9 @@ const Strategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 const cors = require("cors");
 const app = express();
-var multer = require('multer');
-var upload = multer();
+var bcrypt = require("bcryptjs");
+// var multer = require('multer');
+// var upload = multer();
 
 
 var corsOptions = {
@@ -47,15 +48,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // for parsing multipart/form-data
-app.use(upload.array()); 
+// app.use(upload.array()); 
 app.use(express.static(path.join(__dirname, '/public/')));
 
 // database
 const db = require("./models/api_models");
 const Role = db.role;
+// const User = db.user;
 
 // // force: true will drop the table if it already exists
-// db.sequelize.sync({force: true}).then(() => {
+// db.sequelize.sync({force: false}).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');
 //   initial();
 // });
@@ -141,6 +143,7 @@ app.use(passport.session());
 //----------- Admin Panel Routes ---------------
 require('./routes/admin_routes/admin.routes')(app);
 
+
 //----------- API Routes --------------------
 require('./routes/api_routes/auth.routes')(app);
 require('./routes/api_routes/user.routes')(app);
@@ -149,7 +152,8 @@ require('./routes/api_routes/user.routes')(app);
 //-----------------Vendor Api routes--------------
 require('./routes/api_routes/vendor/auth.routes')(app);
 require('./routes/api_routes/vendor/address.routes')(app);
-
+require('./routes/api_routes/vendor/trip.routes')(app);
+require('./routes/api_routes/vendor/validate_promo_code.routes')(app);
 
 // var auth = require('./routes/api_routes/auth.routes');
 // app.use('/',auth);
@@ -204,6 +208,12 @@ function initial() {
       name: "admin"
     });
   
+    //------ Inserting Dumy Admin Data ----
+    User.create({
+      username:"admin",
+      email:"admin@godaala.com",
+      password:bcrypt.hashSync("admin@godaala", 8)
+    })
   
   };
   

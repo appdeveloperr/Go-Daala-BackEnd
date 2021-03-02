@@ -1,5 +1,5 @@
 exports.isAdmin = function (req, res, next) {
-    if (req.isAuthenticated() && req.user.username === 'Admin') {      
+    if (req.isAuthenticated() && req.user.username === 'admin') {      
             next();
      
     } else {

@@ -2,6 +2,7 @@ const db = require("../../models/api_models");
 const config = require("../../config/auth.config");
 const Vendor = db.vendor;
 const Address = db.address;
+const Trip = db.trip;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -9,9 +10,9 @@ var bcrypt = require("bcryptjs");
 
 
 
-
+//-------------vendor signup--------------------
 exports.signup = (req, res) => {
-
+console.log("tracking");
     // Save vendor to Database
     Vendor.create({
         first_name: req.body.first_name,
@@ -19,7 +20,8 @@ exports.signup = (req, res) => {
         email: req.body.email,
         phone_number: req.body.phone_number,
         password: bcrypt.hashSync(req.body.password, 8),
-        profile: ''
+        profile: '/public/files/uploadsFiles/vendor/'
+        //  + req.files.profile.name,
     }).then(user => {
 
         var token = jwt.sign({ id: user.id }, config.secret, {
@@ -57,8 +59,7 @@ exports.signup = (req, res) => {
 };
 
 
-
-
+//--------------vendor signin-------------------
 exports.signin = (req, res) => {
     Vendor.findOne({
         where: {
@@ -119,6 +120,8 @@ exports.signin = (req, res) => {
         });
 };
 
+
+//--------------vendor profile update---------------
 exports.update = (req, res) => {
     Vendor.update({
         first_name: req.body.first_name,
@@ -167,6 +170,9 @@ exports.update = (req, res) => {
 }
 
 
+
+
+//--------------vendor create address---------------
 exports.create_address = (req, res) => {
     // Save vendor to Database
     Address.create({
@@ -203,6 +209,7 @@ exports.create_address = (req, res) => {
 
 }
 
+//--------------vendor update address------------
 exports.update_address = (req, res) => {
     Address.update({
         label: req.body.label,
@@ -244,13 +251,14 @@ exports.update_address = (req, res) => {
     });
 }
 
-exports.delete_address =(req, res)=>{
+//--------------vendor delete address------------
+exports.delete_address = (req, res) => {
     Address.destroy({
         where: {
-           id: req.body.id
+            id: req.body.id
         }
-      }).then(address => {
-  
+    }).then(address => {
+
         if (!address) {
             return res.status(200).send({
                 status: 400,
@@ -258,18 +266,90 @@ exports.delete_address =(req, res)=>{
                 successData: {}
             });
         }
-           
+
         return res.status(200).send({
             status: 200,
             message: "Vendor Address is successful Deleted",
             successData: {}
         });
-  
-      }).catch(err => {
+
+    }).catch(err => {
         return res.status(200).send({
             status: 400,
             message: err.message,
             successData: {}
         });
-      });
+    });
 }
+
+
+
+
+//--------------vendor create trip---------------
+exports.create_trip = (req, res) => {
+    // Save vendor to Database
+    Trip.create({
+        pickup: req.body.pickup,
+        dropoff: req.body.dropoff,
+        pickup_latitude: req.body.pickup_latitude,
+        pick_longitude: req.body.pick_longitude,
+        vehicle_name: req.body.vehicle_name,
+        estimated_distance: req.body.estimated_distance,
+        estimated_time: req.body.estimated_time,
+        total_cost: req.body.total_cost
+
+    }).then(trip => {
+
+        return res.status(200).send({
+            status: 200,
+            message: "Trip  Create is successful",
+            successData: {
+                address: {
+                    id: trip.id,
+                    pickup: trip.pickup,
+                    dropoff: trip.dropoff,
+                    pickup_latitude: trip.pickup_latitude,
+                    pick_longitude: trip.pick_longitude,
+                    vehicle_name: trip.vehicle_name,
+                    estimated_distance: trip.estimated_distance,
+                    estimated_time: trip.estimated_time,
+                    total_cost: trip.total_cost
+
+                }
+            }
+        });
+
+    }).catch(err => {
+
+        return res.status(200).send({
+            status: 400,
+            message: err.message,
+            successData: {}
+        });
+
+    });
+
+}
+
+
+//---------------vendor validate promo code -----------------
+exports.validate_promo_code = (req, res) => {
+    Promo.findOne({
+        where: {
+        code: req.body.code
+        }
+    }).then(edit => {
+        //if User not found with given ID
+        if (edit) {
+            console.log(edit);
+        } else {
+            console.log("not find");
+        }
+    });
+}
+
+
+
+
+
+

@@ -2,81 +2,84 @@ const db = require("../../models/api_models");
 const Promo = db.promo;
 
 
-//---------- Get Promo Function ----------
- 
 
+
+//--------Promo Index Function -----------------
+exports.index = function (req, res) {
+
+  Promo.findAll().then(all_promos => {
+    if (!all_promos) {
+      console.log("no recode is exist")
+    }
+    res.render('./admin/promo/index', {
+      userdata: req.user,
+      all_promos: all_promos
+
+    });
+
+  }).catch(err => {
+    return res.status(200).send({
+      responsecode: 400,
+      message: err.message,
+    });
+  });
+}
 
 
 //--------Promo create Function -----------------
 exports.create = function (req, res) {
-  
+
   req.checkBody('code', 'Code must have value!').notEmpty();
   req.checkBody('type', 'type must have selected needed!').notEmpty();
   req.checkBody('discount', 'Discount must have value!').notEmpty();
 
 
   var errors = req.validationErrors();
-	if (errors) {
-		res.render('./admin/promo/create', {
+  if (errors) {
+    res.render('./admin/promo/create', {
       errors: errors,
       userdata: req.user,
-      code:req.body.code,
-      type:req.body.type,
-      discount:req.body.discount
-		});
-	} else {
-  console.log("no validation error");
-  }
-  // var fileinfo = req.file;
-  // if (fileinfo) {//image exist
-  //   var filename = fileinfo.filename;
-  //   var type = req.body.type;
-
-
-  //   var destination = fileinfo.destination
-
-  //   if (!type) {
-  //     req.flash('danger', 'Selected type must needed!');
-  //     res.redirect('/admin/banner/create');
-  //   } else {
-  //     Banner.create({
-  //       banner_type: type,
-  //       image_path: destination + "" + filename
-  //     }).then(banner => {
-  //       req.flash('success', 'Successfuly your banner is  Added!');
-  //       res.redirect('/admin/banner/index');
-  //     }).catch(err => {
-  //       console.log(err);
-  //     });
-  //   }
-  // } else {//image is not exist
-  //   req.flash('danger', 'Image file must upload needed!');
-  //   res.redirect('/admin/banner/create');
-  // }
-}
-
-
-//--------Promo Index Function -----------------
-exports.index = function (req, res) {
-
-//   Promo.findAll().then(all_banners => {
-//     if (!all_banners) {
-//       console.log("no recode is exist")
-//     }
-    res.render('./admin/promo/index', {
-      userdata: req.user
-      
+      code: req.body.code,
+      type: req.body.type,
+      discount: req.body.discount
     });
+  } else {
+    var publish = "UnPublish";
+    if (req.body.publish) {
+      Promo.create({
+        code: req.body.code,
+        type: req.body.type,
+        discount: req.body.discount,
+        publish: req.body.publish
+      }).then(banner => {
+        req.flash('success', 'Successfuly your promo is  Added!');
+        res.redirect('/admin/promo/index');
+      }).catch(err => {
+        return res.status(200).send({
+          responsecode: 400,
+          message: err.message,
+        });
+      });
+    } else {
+      Promo.create({
+        code: req.body.code,
+        type: req.body.type,
+        discount: req.body.discount,
+        publish: "unpublish"
+      }).then(banner => {
+        req.flash('success', 'Successfuly your promo is  Added!');
+        res.redirect('/admin/promo/index');
+      }).catch(err => {
+        return res.status(200).send({
+          responsecode: 400,
+          message: err.message,
+        });
+      });
+    }
 
-//   }).catch(err => {
-//     return res.status(200).send({
-//       responsecode: 400,
-//       message: err.message,
-//     });
-//   });
+  }
+
 }
-
-
 
 
 //---------- Edit Promo Function ----------------------
@@ -84,7 +87,7 @@ exports.edit = function (req, res) {
   var id = req.params.id;
   if (id) {
     //var id = 1;
-    Banner.findOne({
+    Promo.findOne({
       where: {
         id: id
       }
@@ -92,9 +95,13 @@ exports.edit = function (req, res) {
       //if User not found with given ID
       if (edit) {
 
-        res.render('admin/banner/edit', {
+        res.render('admin/promo/edit', {
           userdata: req.user,
-          data: edit.dataValues
+          id: edit.id,
+          code: edit.code,
+          type: edit.type,
+          discount: edit.discount,
+          publish: edit.publish
         });
 
       } else {
@@ -118,110 +125,91 @@ exports.edit = function (req, res) {
 //---------- Update Promo Function ----------------------
 exports.update = function (req, res, next) {
 
-
-  var fileinfo = req.file;
-  if (fileinfo) {//image exist
-
-    var filename = fileinfo.filename;
-    var old_file = req.body.old_file;
+  req.checkBody('code', 'Code must have value!').notEmpty();
+  req.checkBody('type', 'type must have selected needed!').notEmpty();
+  req.checkBody('discount', 'Discount must have value!').notEmpty();
 
 
-    fs.unlink(old_file, function (error) {
-      if (error) { console.log("err ", error) } else {
-        console.log("file deleted!")
-      }
-    })
-    var destination = fileinfo.destination
-    Banner.update({
-      banner_type: req.body.type,
-      image_path: destination + "" + filename
-    }, {
-      where: {
-        id: req.body.id
-      }
-    }).then(banner => {
-      if (banner) {
-        req.flash('success', 'Successfuly your banner is  Added!');
-        res.redirect('/admin/banner/index');
-      }
-    }).catch(err => {
-      console.log(err);
+  var errors = req.validationErrors();
+  if (errors) {
+    res.render('./admin/promo/edit', {
+      errors: errors,
+      userdata: req.user,
+      id: req.body.id,
+      code: req.body.code,
+      type: req.body.type,
+      discount: req.body.discount,
+      publish: req.body.publish
     });
+  } else {
+    if (req.body.publish) {
+      Promo.update({
+        code: req.body.code,
+        type: req.body.type,
+        discount: req.body.discount,
+        publish: req.body.publish
+      }, {
+        where: {
+          id: req.body.id
+        }
+      }).then(promo => {
+        req.flash('success', 'Successfuly your promo is  Added!');
+        res.redirect('/admin/promo/index');
+      }).catch(err => {
+        return res.status(200).send({
+          responsecode: 400,
+          message: err.message,
+        });
+      });
+    } else {
+      Promo.update({
+        code: req.body.code,
+        type: req.body.type,
+        discount: req.body.discount,
+        publish: "unpublish"
 
-  } else {//image is not exist
+      }, {
+        where: {
+          id: req.body.id
+        }
+      }).then(banner => {
+        req.flash('success', 'Successfuly your promo is  Added!');
+        res.redirect('/admin/promo/index');
+      }).catch(err => {
+        return res.status(200).send({
+          responsecode: 400,
+          message: err.message,
+        });
+      });
+    }
 
-
-    console.log(req.body.type);
-    Banner.update({
-      banner_type: req.body.type
-    }, {
-      where: {
-        id: req.body.id
-      },
-      order: [
-        'id', 'DESC',
-      ],
-    }).then(banner => {
-      if (banner) {
-        req.flash('success', 'Successfuly your banner is  Added!');
-        res.redirect('/admin/banner/index');
-      }
-    }).catch(err => {
-      console.log(err);
-    });
-
-    // req.flash('danger', 'Image file must upload needed!');
-    res.redirect('/admin/banner/index');
   }
 }
 
 
-
 //-----------------------delete Promo Function---------------------
 exports.delete = function (req, res) {
-
-  Banner.findOne({
+  Promo.destroy({
     where: {
       id: req.params.id
     }
-  }).then(Delete => {
-    //if User not found with given ID
-    if (Delete) {
-      fs.unlink(Delete.dataValues.image_path, function (error) {
-        if (error) { console.log("err ", error) } else {
-          console.log("file deleted!")
-        }
+  }).then(promo => {
+
+    if (!promo) {
+      return res.status(200).send({
+        responsecode: 400,
+        message: "Contacts not found",
       });
-    } else {
-      console.log("if User not found with given ID");
     }
+
+    req.flash('success', 'Successfuly your Promo is  Deleted!');
+    res.redirect('/admin/promo/index');
+
   }).catch(err => {
     return res.status(200).send({
       responsecode: 400,
       message: err.message,
     });
-  },
-    Banner.destroy({
-      where: {
-         id: req.params.id
-      }
-    }).then(banner => {
+  });
 
-      if (!banner) {
-          return res.status(200).send({
-              responsecode: 400,
-              message: "Contacts not found",
-          });
-      }
-         
-      req.flash('success', 'Successfuly your banner is  Deleted!');
-      res.redirect('/admin/banner/index');
-
-    }).catch(err => {
-      return res.status(200).send({
-          responsecode: 400,
-          message: err.message,
-      });
-    }));
-
-  }
+}

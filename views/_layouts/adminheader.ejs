@@ -73,7 +73,7 @@
             <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block"><%=userdata.username%></a>
+            <a href="#" class="d-block"><%if(userdata){%><%=userdata.username%><%}%></a>
           </div>
         </div>
 
@@ -149,11 +149,22 @@
               </a>
             </li>
 
+
             <li class="nav-item">
               <a href="/admin/promo/index" class="nav-link">
                 <i class="nav-icon fas fa-cube"></i>
                 <p>
-                  Promo Code
+                  Promo
+                </p>
+              </a>
+            </li>
+
+
+            <li class="nav-item">
+              <a href="/admin/vehicle/index" class="nav-link">
+                <i class="nav-icon fas fa-cube"></i>
+                <p>
+                  Vehicle
                 </p>
               </a>
             </li>

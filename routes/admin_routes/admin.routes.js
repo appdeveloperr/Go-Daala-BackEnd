@@ -13,6 +13,7 @@ var bcrypt = require("bcryptjs");
 var LocalStrategy = require('passport-local').Strategy;
 var auth = require('../../controllers/admin_controllers/auth');
 var banner_controller = require('../../controllers/admin_controllers/banner');
+var vehicle_controller = require('../../controllers/admin_controllers/vehicle');
 var promo_controller = require('../../controllers/admin_controllers/promo');
 var isAdmin = auth.isAdmin;
 const multer = require('multer');
@@ -28,6 +29,7 @@ module.exports = function (app) {
 
 
   app.get("/", function (req, res) {
+   
     if (res.locals.user) res.redirect('/admin/dashboard');
     res.render('admin/login', {
       email: '',
@@ -50,7 +52,7 @@ module.exports = function (app) {
   });
 
   app.get('/admin/dashboard', isAdmin, function (req, res) {
-
+    
     res.render('admin/index', {
       userdata: req.user
     });
@@ -120,11 +122,12 @@ module.exports = function (app) {
 
 
 
+
+
 //----------------------------promo side start ---------------
 
 //----------------------------get promo  index ---------------
 app.get('/admin/promo/index', isAdmin, promo_controller.index);
-
 
 
 //----------------------------get promo  create ---------------
@@ -138,27 +141,75 @@ app.get('/admin/promo/create_promo',isAdmin, function (req, res) {
   });
 });
 
-
 //------------------post promo create-----------------------------------------
-app.post("/admin/promo/upload_promo",isAdmin,function(req,res){
-  // req.checkBody('code', 'Code must have value!').notEmpty();
-  // req.checkBody('type', 'type must have selected needed!').notEmpty();
-  // req.checkBody('discount', 'Discount must have value!').notEmpty();
+app.post("/admin/promo/upload_promo",isAdmin,promo_controller.create);
 
-console.log(req.body);
-  // var errors = req.validationErrors();
-  // console.log(errors);
-	// if (errors) {
-	// 	res.render('./admin/promo/create', {
-  //     errors: errors,
-  //     userdata: req.user,
-  //     code:req.body.code,
-  //     type:req.body.type,
-  //     discount:req.body.discount
-	// 	});
-	// } else {
-  // console.log("no validation error");
-  // }
+//------------------get banner edit  && redirect to get banner edit  To next route -----------------------------------------
+app.get("/admin/promo/Edit/:id", isAdmin, function (req, res) {
+  var id = req.params.id;
+  res.redirect('/admin/Edit_promo/' + id);
+
 });
+
+
+app.get('/admin/Edit_promo/:id', promo_controller.edit);
+
+
+  //------------------post promo update---------------------------------
+  app.post("/admin/promo/update",promo_controller.update);
+    
+
+  //-----------------get promo delete ---------------------
+  app.get('/admin/promo/delete/:id',promo_controller.delete); 
+//----------------------------banner  side end -------------
+
+
+
+
+
+  //--------------------vehicles side is start -------------------------
+
+  //---------------------vehicle index-----------------------
+  app.get('/admin/vehicle/index', isAdmin, vehicle_controller.index);
+
+
+
+  //---------------------get vehicle  create-----------------------
+  app.get('/admin/vehicle/create', isAdmin, function (req, res) {
+
+    res.render('admin/vehicle/create', {
+      userdata: req.user
+    });
+  });
+
+
+
+
+//------------------post vehicle create-----------------------------------------
+  app.post("/admin/vehicle/upload", isAdmin, uploads.single('myFile'), vehicle_controller.create);
+
+//------------------get vehicle edit  && redirect to get vehicle edit  To next route -----------------------------------------
+  app.get("/admin/vehicle/Edit/:id", isAdmin, function (req, res) {
+    var id = req.params.id;
+    res.redirect('/admin/Edit_vehicle/' + id);
+
+  });
+
+  
+  app.get('/admin/Edit_vehicle/:id', vehicle_controller.edit);
+
+  //------------------post vehicle update---------------------------------
+  app.post("/admin/vehicle/update", isAdmin,uploads.single('myFile'),vehicle_controller.update);
+    
+
+  //-----------------get vehicle delete ---------------------
+  app.get('/admin/vehicle/delete/:id',vehicle_controller.delete); 
+
+
+
+//----------------------------Vehicles  side end -------------
+//--------------------------------------------------------------//
+
+
 
 }

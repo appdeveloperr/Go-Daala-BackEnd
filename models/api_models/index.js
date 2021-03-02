@@ -30,7 +30,8 @@ db.banner = require("../api_models/banner.model")(sequelize, Sequelize);
 db.promo = require("../api_models/promo.model")(sequelize, Sequelize);
 db.vendor = require("../api_models/vendor.model")(sequelize, Sequelize);
 db.address = require("../api_models/address.model")(sequelize, Sequelize);
-
+db.vehicle = require("../api_models/vehicle.model")(sequelize, Sequelize);
+db.trip = require("../api_models/trip.model")(sequelize, Sequelize);
 
 //Table Relationships
 db.role.belongsToMany(db.user, {
