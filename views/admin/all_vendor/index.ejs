@@ -1,0 +1,141 @@
+<%- include('.\\' + '../../_layouts/adminheader' ); %>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>All Vendors</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <!-- /.card -->
+                    <div class="card">
+                        <!-- <div class="card-header">
+                        <a href="/admin/vehicle/create" class="btn btn-primary">Create Vehicle</a>
+                    </div> -->
+                        <!-- /.card-header -->
+                        <%if(all_vendor){ %>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
+                                            <th>Profile Image</th>
+                                            <th>Account Information</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <%all_vendor.forEach(function(item){ %>
+                                                <%var image=item.profile; var img_length=image.length; var
+                                                    img=image.slice(7, img_length); console.log(img);%>
+                                                    <td>
+                                                        <%=item.id%>
+                                                    </td>
+                                                    <td>
+                                                        <%=item.first_name%>
+                                                            <%=item.last_name%>
+                                                    </td>
+                                                    <td>
+                                                        <%=item.email%>
+                                                    </td>
+                                                    <td>
+                                                        <%=item.phone_number%>
+                                                    </td>
+                                                    <td><img src="" width="100" height="100"></td>
+                                                    <%if(item.account_info=="unblock"){%>
+                                                        <td>
+                                                            <a href="/admin/vendor/block/<%=item.id%>" class="mr-2">
+                                                                <button type="button"
+                                                                    class="btn btn-danger">BLOCK</button>
+                                                            </a>
+                                                        </td>
+                                                        <%}else{%>
+                                                            <td>
+                                                                <a href="/admin/vendor/unblock/<%=item.id%>"
+                                                                    class="mr-2">
+                                                                    <button type="button"
+                                                                        class="btn btn-success">UNBLOCK</button>
+                                                                </a>
+                                                            </td>
+                                                            <%}%>
+                                                                <td>
+
+                                                                    <a class="confirmDeletion"
+                                                                        href="/admin/vendor/delete/<%=item.id%>">
+                                                                        <button type="button"
+                                                                    class="btn btn-danger">Delete</button>
+                                                                    </a>
+
+                                                                </td>
+                                        </tr>
+                                        <%});%>
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <%}%>
+                                <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+        });
+        function deleteRecord(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    document.getElementById('del_form' + id).submit();
+                }
+            })
+        }
+    </script>
+    <%- include('.\\' + '../../_layouts/adminfooter' ); %>

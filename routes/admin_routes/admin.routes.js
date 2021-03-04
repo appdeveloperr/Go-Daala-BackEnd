@@ -15,6 +15,8 @@ var auth = require('../../controllers/admin_controllers/auth');
 var banner_controller = require('../../controllers/admin_controllers/banner');
 var vehicle_controller = require('../../controllers/admin_controllers/vehicle');
 var promo_controller = require('../../controllers/admin_controllers/promo');
+var all_vendor_controller = require('../../controllers/admin_controllers/all_vendor');
+var all_driver_controller = require('../../controllers/admin_controllers/all_driver');
 var isAdmin = auth.isAdmin;
 const multer = require('multer');
 var path = require('path');
@@ -25,7 +27,6 @@ const fs = require('fs');
 
 
 module.exports = function (app) {
-
 
 
   app.get("/", function (req, res) {
@@ -211,5 +212,37 @@ app.get('/admin/Edit_promo/:id', promo_controller.edit);
 //--------------------------------------------------------------//
 
 
+//-----------------get all Vendors admin side----------------
+app.get('/admin/all_vendor/index',all_vendor_controller.index);
 
+//-----------------get vendor unblock admin side----------------
+app.get('/admin/vendor/unblock/:id',all_vendor_controller.unblock);
+
+//-----------------get vendor block admin side----------------
+app.get('/admin/vendor/block/:id',all_vendor_controller.block);
+
+//-----------------get  vendor delete admin side----------------
+app.get('/admin/vendor/delete/:id',all_vendor_controller.delete);
+
+
+
+
+
+
+//-----------------get all driver admin side----------------
+app.get('/admin/all_driver/index',all_driver_controller.index);
+
+//-----------------get driver unblock admin side----------------
+app.get('/admin/driver/unblock/:id',all_driver_controller.unblock);
+
+//-----------------get driver block admin side----------------
+app.get('/admin/driver/block/:id',all_driver_controller.block);
+
+//-----------------get  driver delete admin side----------------
+app.get('/admin/driver/delete/:id',all_driver_controller.delete);
+
+
+
+//-----------------get  driver and his vehicle information admin side----------------
+app.get('/admin/driver/vehicles/:id',all_driver_controller.information);
 }

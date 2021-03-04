@@ -9,6 +9,8 @@ var flash = require('connect-flash');
 const cors = require("cors");
 const app = express();
 var bcrypt = require("bcryptjs");
+
+
 // var multer = require('multer');
 // var upload = multer();
 
@@ -153,7 +155,11 @@ require('./routes/api_routes/user.routes')(app);
 require('./routes/api_routes/vendor/auth.routes')(app);
 require('./routes/api_routes/vendor/address.routes')(app);
 require('./routes/api_routes/vendor/trip.routes')(app);
-require('./routes/api_routes/vendor/validate_promo_code.routes')(app);
+require('./routes/api_routes/vendor/validation_promo_code.routes')(app);
+
+//-----------------driver Api routes--------------
+require('./routes/api_routes/driver/auth.routes')(app);
+require('./routes/api_routes/driver/vehicle_reg.routes')(app);
 
 // var auth = require('./routes/api_routes/auth.routes');
 // app.use('/',auth);

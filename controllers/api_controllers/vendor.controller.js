@@ -3,6 +3,7 @@ const config = require("../../config/auth.config");
 const Vendor = db.vendor;
 const Address = db.address;
 const Trip = db.trip;
+const Promo = db.promo;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -12,7 +13,7 @@ var bcrypt = require("bcryptjs");
 
 //-------------vendor signup--------------------
 exports.signup = (req, res) => {
-console.log("tracking");
+    
     // Save vendor to Database
     Vendor.create({
         first_name: req.body.first_name,
@@ -20,8 +21,9 @@ console.log("tracking");
         email: req.body.email,
         phone_number: req.body.phone_number,
         password: bcrypt.hashSync(req.body.password, 8),
-        profile: '/public/files/uploadsFiles/vendor/'
-        //  + req.files.profile.name,
+        profile: '/public/files/uploadsFiles/vendor/'+ req.files.profile.name,
+        account_info:'unblock'
+        //  
     }).then(user => {
 
         var token = jwt.sign({ id: user.id }, config.secret, {
@@ -41,6 +43,7 @@ console.log("tracking");
                     email: user.email,
                     phone_number: user.phone_number,
                     profile: user.profile,
+                    account_info:user.account_info,
                     accessToken: token
                 }
             }
@@ -104,6 +107,7 @@ exports.signin = (req, res) => {
                         email: user.email,
                         phone_number: user.phone_number,
                         profile: user.profile,
+                        account_info:user.account_info,
                         accessToken: token
                     }
                 }
@@ -153,6 +157,7 @@ exports.update = (req, res) => {
                         email: user[1].email,
                         phone_number: user[1].phone_number,
                         profile: user[1].profile,
+                        account_info:user[1].account_info,
                         accessToken: token
                     }
                 }
@@ -179,19 +184,20 @@ exports.create_address = (req, res) => {
         label: req.body.label,
         address: req.body.address,
         latitude: req.body.latitude,
-        longitude: req.body.longitude
+        longitude: req.body.longitude,
+        vendor_id:req.body.vendor_id
 
-    }).then(address => {
-        console.log(address);
+    }).then(addresss => {
         return res.status(200).send({
             status: 200,
             message: "Address Create is successful",
             successData: {
                 address: {
-                    id: address.id,
-                    address: address.address,
-                    latitude: address.latitude,
-                    longitude: address.longitude
+                    id: addresss.id,
+                    address: addresss.address,
+                    latitude: addresss.latitude,
+                    longitude: addresss.longitude,
+                    vendor_id:addresss.vendor_id
 
                 }
             }
@@ -215,7 +221,8 @@ exports.update_address = (req, res) => {
         label: req.body.label,
         address: req.body.address,
         latitude: req.body.latitude,
-        longitude: req.body.longitude
+        longitude: req.body.longitude,
+        
     },
         {
             where: { id: req.body.id },
@@ -235,7 +242,8 @@ exports.update_address = (req, res) => {
                         label: address[1].label,
                         address: address[1].address,
                         latitude: address[1].latitude,
-                        longitude: address[1].longitude
+                        longitude: address[1].longitude,
+                        vendor_id:address[1].vendor_id
                     }
                 }
             });
@@ -336,14 +344,35 @@ exports.create_trip = (req, res) => {
 exports.validate_promo_code = (req, res) => {
     Promo.findOne({
         where: {
-        code: req.body.code
+            code: req.body.code
         }
-    }).then(edit => {
+    }).then(promo => {
         //if User not found with given ID
-        if (edit) {
-            console.log(edit);
+        if (promo) {
+            if (promo.dataValues.publish == "on") {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Promo code is valid",
+                    successData: {
+                        promo: {
+                            id: promo.id,
+                            code: promo.code,
+                            type: promo.type,
+                            discount: promo.discount,
+                            publish: promo.publish
+                        }
+                    }
+                });
+            }
         } else {
-            console.log("not find");
+
+            return res.status(200).send({
+                status: 400,
+                message: "promo code is invalid",
+                successData: {
+
+                }
+            });
         }
     });
 }

@@ -13,13 +13,13 @@ module.exports = function (app) {
         next();
     });
 
-
-
     app.post(
         "/api/vendor/validate-promo-code",
         vendorAuthJwt.verifyToken,
         controller.validate_promo_code,
     );
+
+  
     
     };
     

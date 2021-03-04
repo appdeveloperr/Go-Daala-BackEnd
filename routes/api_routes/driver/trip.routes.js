@@ -25,29 +25,30 @@ module.exports = function (app) {
 
 
 
-    //------------Vendor Create address Function----------------
+    //------------Vendor Create trip Function----------------
     app.post(
-        "/api/vendor/create-address",
-        // vendorVerifySignUp.checkDuplicateLatitudeOrLongitude,
+        "/api/vendor/create-trip",
         vendorAuthJwt.verifyToken,
-        controller.create_address,
+        controller.create_trip,
 
         // uploads.single('profile'),
     );
 
- //------------Vendor Update address Function----------------
-    app.post(
-        "/api/vendor/update-address",
-        vendorAuthJwt.verifyToken,
-        controller.update_address
-    )
+//  //------------Vendor Update address Function----------------
+//     app.post(
+//         "/api/vendor/update-address",
+//         vendorAuthJwt.verifyToken,
+//         controller.update_address
+//     )
 
- //------------Vendor Delete address Function----------------
- app.post(
-    "/api/vendor/delete-address",
-    vendorAuthJwt.verifyToken,
-    controller.delete_address
-)
+//  //------------Vendor Delete address Function----------------
+//  app.post(
+//     "/api/vendor/delete-address",
+//     vendorAuthJwt.verifyToken,
+//     controller.delete_address
+// )
+
+
 
 
 };

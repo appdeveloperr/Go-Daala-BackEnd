@@ -9,6 +9,11 @@ const session = require("./session");
 const vendorAuthJwt = require("./vendor/authJwt");
 const vendorVerifySignUp = require("./vendor/verifySignUp");
 
+//-------- Vendor Imports ----------
+const driverAuthJwt = require("./driver/authJwt");
+const driverVerifySignUp = require("./driver/verifySignUp");
+const driverVerifyNumberPlate = require("./driver/driverVerifyNumberPlate");
+
 module.exports = {
   authJwt,
   verifySignUp,
@@ -16,5 +21,8 @@ module.exports = {
   validater,
   session,
   vendorAuthJwt,
-  vendorVerifySignUp
+  vendorVerifySignUp,
+  driverAuthJwt,
+  driverVerifySignUp,
+  driverVerifyNumberPlate
 };

@@ -23,6 +23,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     profile: {
       type: Sequelize.STRING
+    },
+    account_info: {
+      type: Sequelize.STRING
     }
   });
 
