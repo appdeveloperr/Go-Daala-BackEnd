@@ -9,7 +9,8 @@ var flash = require('connect-flash');
 const cors = require("cors");
 const app = express();
 var bcrypt = require("bcryptjs");
-
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 // var multer = require('multer');
 // var upload = multer();
@@ -136,6 +137,25 @@ app.use(passport.session());
 
 
 
+io.sockets.on('connection', function(socket) {
+  socket.on('username', function(username,room) {
+      socket.username = username;
+      socket.room = room;
+      io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
+  });
+
+  socket.on('disconnect', function(username) {
+      io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i> ');
+  })
+
+  socket.on('chat_message', function(message) {
+    
+      io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
+      console.log('username: ',socket.username,' and message: ',message);
+  });
+
+});
+
 //simple route
 // app.get("/", (req, res) => {
 //   res.json({ message: "Welcome to Go-Daala Application" });
@@ -188,9 +208,11 @@ require('./routes/api_routes/driver/vehicle_reg.routes')(app);
 
 //Start the server
 
+
+
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+http.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 

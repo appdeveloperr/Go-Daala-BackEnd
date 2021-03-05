@@ -151,19 +151,12 @@ exports.information = function (req, res, next) {
           driver_id: req.params.id
         }
       }).then(one_vehicle => {
-        console.log(one_vehicle)
-        if (one_vehicle) {
           res.render('./admin/all_driver/information', {
             userdata: req.user,
-            one_driver: one_driver,
-            one_vehicle: one_vehicle
+            one_drivers: one_driver.dataValues,
+            one_vehicle: one_vehicle.dataValues
           });
-        } else {
-          return res.status(200).send({
-            responsecode: 400,
-            message: "vehicles not exists",
-          });
-        }
+        
       }).catch(err => {
         return res.status(200).send({
           responsecode: 400,
@@ -179,6 +172,11 @@ exports.information = function (req, res, next) {
     });
   });
 };
+
+
+exports.chat=function(req,res,next){
+  res.render('index');
+}
 
 
 

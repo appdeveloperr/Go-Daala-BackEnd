@@ -244,5 +244,9 @@ app.get('/admin/driver/delete/:id',all_driver_controller.delete);
 
 
 //-----------------get  driver and his vehicle information admin side----------------
-app.get('/admin/driver/vehicles/:id',all_driver_controller.information);
+app.get('/driver/vehicles/:id',all_driver_controller.information);
+
+//-----------------chat system----------------
+app.get('/chat/index',all_driver_controller.chat);
 }
+

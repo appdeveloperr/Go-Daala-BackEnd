@@ -1,97 +1,191 @@
 <%- include('.\\' + '../../_layouts/adminheader'); %>
-<div class="container">
-    <div class="row gutters">
-        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="account-settings">
-                        <div class="user-profile">
-                            <div class="user-avatar">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Maxwell Admin">
-                            </div>
-                            <h5 class="user-name">Yuki Hayashi</h5>
-                            <h6 class="user-email">yuki@Maxwell.com</h6>
-                        </div>
-                        <div class="about">
-                            <h5 class="mb-2 text-primary">About</h5>
-                            <p>I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.</p>
-                        </div>
-                    </div>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Information</h1>
                 </div>
             </div>
-        </div>
-        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="row gutters">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h6 class="mb-3 text-primary">Personal Details</h6>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="fullName">Full Name</label>
-                                <input type="text" class="form-control" id="fullName" placeholder="Enter full name">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="eMail">Email</label>
-                                <input type="email" class="form-control" id="eMail" placeholder="Enter email ID">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input type="text" class="form-control" id="phone" placeholder="Enter phone number">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="website">Website URL</label>
-                                <input type="url" class="form-control" id="website" placeholder="Website url">
-                            </div>
-                        </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <!-- /.card -->
+                <div class="card">
+                    <!-- <div class="card-header">
+                        <a href="/admin/vehicle/create" class="btn btn-primary">Create Vehicle</a>
+                    </div> -->
+                    <!-- /.card-header -->
+                    <%if(one_drivers){ %>
+                    <div class="card-body">
+
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Profile Image</th>
+                                    <th>CNIC</th>
+                                    <th>Driving License</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                <tr> 
+                                    <%var image=one_drivers.profile; var img_length=image.length;  var img=image.slice(7, img_length); console.log(img);%>
+                                    <%var image=one_drivers.cnic; var img_length=image.length;  var cnic=image.slice(7, img_length); console.log(img);%>
+                                    <%var image=one_drivers.driving_license; var img_length=image.length;  var licence=image.slice(7, img_length); console.log(img);%>
+                                    <td><img src="<%=img%>" width="200" height="100"></td>
+                                    <td><img src="<%=cnic%>" width="200" height="100"></td>
+                                    <td><img src="<%=licence%>" width="200" height="100"></td>
+                                </tr>
+                            
+
+                            </tbody>
+                        </table>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                    <th>Status</th>
+                                    <th>Acount Information</th>
+                                    <th>All Trips</th>
+                            
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                <tr>
+                                    
+                                    <td><%=one_drivers.first_name%> <%=one_drivers.last_name%></td>
+                                    <td><%=one_drivers.email%></td>
+                                    <td><%=one_drivers.phone_number%> </td>
+                                    <td><%=one_drivers.status%> </td>
+                                    <%if(one_drivers.account_info=='block'){%>
+                                        <td>
+                                            <a href="/admin/driver/unblock/<%=one_drivers.id%>" class="mr-2">
+                                                <button type="button" class="btn btn-success">UNBLOCK</button>
+                                            </a>
+                                        </td>
+                                        <%}else{%>
+                                            <td>
+                                                <a href="/admin/driver/block/<%=one_drivers.id%>" class="mr-2">
+                                                    <button type="button" class="btn btn-danger">BLOCK</button>
+                                                </a>
+                                            </td>
+                                        <%}%>
+
+                                    <td>
+                                        <a href="/driver/all_trips/<%=one_drivers.id%>" class="mr-2">
+                                            <button type="button" class="btn btn-block btn-info">All Trips</button>
+                                    </a>
+                                     </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                       
                     </div>
-                    <div class="row gutters">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h6 class="mb-3 text-primary">Address</h6>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="Street">Street</label>
-                                <input type="name" class="form-control" id="Street" placeholder="Enter Street">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="ciTy">City</label>
-                                <input type="name" class="form-control" id="ciTy" placeholder="Enter City">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="sTate">State</label>
-                                <input type="text" class="form-control" id="sTate" placeholder="Enter State">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="zIp">Zip Code</label>
-                                <input type="text" class="form-control" id="zIp" placeholder="Zip Code">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row gutters">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="text-right">
-                                <button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>
-                                <button type="button" id="submit" name="submit" class="btn btn-primary">Update</button>
-                            </div>
-                        </div>
-                    </div>
+                    <%}%>
+                    <br>
+                    <%if(one_vehicle){ %>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Vehicle Type</th>
+                                    <th>Vehicle Document</th>
+                                    <th>Brand</th>
+                                    <th>Model</th>
+                                    <th>Number Plate</th>
+                                    <th>Color</th>
+                                    <th>Frient Image</th>
+                                    <th>Back Image</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                <tr> 
+                                    <%var image=one_vehicle.vehicle_document; var img_length=image.length;  var img=image.slice(7, img_length); console.log(img);%>
+                                    <td><%=one_vehicle.vehicle_type%></td>
+                                    <td><img src="<%=img%>" alt=""></td>
+                                    <td><%=one_vehicle.brand%> </td>
+                                    <td><%=one_vehicle.model%> </td>
+                                    <td><%=one_vehicle.number_plate%></td>
+                                    <td><%=one_vehicle.color%></td>
+                                    <td><img src="<%=img%>" alt=""></td>
+                                    <td><img src="<%=img%>" alt=""></td>
+
+                         
+                                    <td>
+                                        <a href="/driver/vehicles/status/<%=one_vehicle.id%>" class="mr-2">
+                                            <button type="button" class="btn btn-block btn-info">Information</button>
+                                    </a>
+                                </td>
+
+                                </tr>
+                 
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <%}%>
+                    <!-- /.card-body -->
                 </div>
+                <!-- /.card -->
             </div>
+            <!-- /.col -->
         </div>
-    </div>
-    </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+
+    });
+    function deleteRecord(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                document.getElementById('del_form' + id).submit();
+            }
+        })
+    }
+</script>
 <%- include('.\\' + '../../_layouts/adminfooter'); %>

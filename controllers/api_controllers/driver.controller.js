@@ -113,6 +113,7 @@ exports.signin = (req, res) => {
                         email: user.email,
                         phone_number: user.phone_number,
                         profile: user.profile,
+                        account_info: user.account_info,
                         accessToken: token
                     }
                 }
@@ -230,37 +231,37 @@ exports.create_vehicle_reg = (req, res) => {
 
 //-------------Driver create vehicle register--------------------
 exports.get_all_vehicles = (req, res) => {
-    
+
     Vehicle.findAll().then(all_vehicle => {
         if (!all_vehicle) {
             return res.status(200).send({
                 responsecode: 400,
-                message:"no recode is exist",
-              });
-        }else{
+                message: "no recode is exist",
+            });
+        } else {
             return res.status(200).send({
                 status: 200,
                 message: "list of all vehicles",
                 successData: {
                     vehicle: {
-                        id: all_vehicle.id,
-                        vehicle_type: all_vehicle.vehicle_document,
-                        image_path:all_vehicle.image_path
-                       
+                        id: all_vehicle[0].dataValues.id,
+                        vehicle_type: all_vehicle[0].dataValues.vehicle_type,
+                        image_path: all_vehicle[0].dataValues.image_path
+
                     }
                 }
             });
         }
-       
-       
-      
-      }).catch(err => {
+
+
+
+    }).catch(err => {
         return res.status(200).send({
-          responsecode: 400,
-          message: err.message,
+            responsecode: 400,
+            message: err.message,
         });
-      });
-      }
+    });
+}
 
 
 // //--------------vendor create address---------------
