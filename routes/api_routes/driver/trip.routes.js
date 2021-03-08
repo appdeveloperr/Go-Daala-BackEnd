@@ -1,7 +1,7 @@
-const { vendorVerifySignUp } = require("../../../middleware");
-const { vendorAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/vendor.controller");
+const { driverAuthJwt } = require("../../../middleware");
+
+const controller = require("../../../controllers/api_controllers/driver.controller");
 
 
 
@@ -15,38 +15,20 @@ module.exports = function (app) {
         next();
     });
 
-
-
-
-    // app.post("/api/vendor/signin", controller.signin);
-    // app.post('/api/vendor/update-profile',
-    //     vendorAuthJwt.verifyToken,
-    //     controller.update);
-
-
-
-    //------------Vendor Create trip Function----------------
+    //------------driver Create trip Function----------------
     app.post(
-        "/api/vendor/create-trip",
-        vendorAuthJwt.verifyToken,
+        "/api/driver/create-trip",
+        driverAuthJwt.verifyToken,
         controller.create_trip,
-
-        // uploads.single('profile'),
     );
 
-//  //------------Vendor Update address Function----------------
-//     app.post(
-//         "/api/vendor/update-address",
-//         vendorAuthJwt.verifyToken,
-//         controller.update_address
-//     )
 
-//  //------------Vendor Delete address Function----------------
-//  app.post(
-//     "/api/vendor/delete-address",
-//     vendorAuthJwt.verifyToken,
-//     controller.delete_address
-// )
+        //------------driver Create trip Function----------------
+        app.post(
+            "/api/driver/recent-trip",
+            driverAuthJwt.verifyToken,
+            controller.recent_trip,
+        );
 
 
 

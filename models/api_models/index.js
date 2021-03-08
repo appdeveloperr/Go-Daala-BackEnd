@@ -60,6 +60,14 @@ db.vehicle_reg.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 
+db.trip.belongsTo(db.driver, {
+  foreignKey: "driver_id"
+});
+
+db.trip.belongsTo(db.vendor, {
+  foreignKey: "vendor_id"
+});
+
 db.ROLES = ["user", "admin", "moderator"];
 
 module.exports = db;

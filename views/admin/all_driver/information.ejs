@@ -1,191 +1,250 @@
-<%- include('.\\' + '../../_layouts/adminheader'); %>
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Information</h1>
+<%- include('.\\' + '../../_layouts/adminheader' ); %>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Information</h1>
+                    </div>
                 </div>
-            </div>
-        </div><!-- /.container-fluid -->
-    </section>
+            </div><!-- /.container-fluid -->
+        </section>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="row">
-            <div class="col-12">
-                <!-- /.card -->
-                <div class="card">
-                    <!-- <div class="card-header">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <!-- /.card -->
+                    <div class="card">
+                        <!-- <div class="card-header">
                         <a href="/admin/vehicle/create" class="btn btn-primary">Create Vehicle</a>
                     </div> -->
-                    <!-- /.card-header -->
-                    <%if(one_drivers){ %>
-                    <div class="card-body">
+                        <!-- /.card-header -->
+                        <%if(one_drivers){ %>
+                            <div class="card-body">
+                                <caption>
+                                    <h2> Driver Information</h2>
+                                </caption>
 
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Profile Image</th>
-                                    <th>CNIC</th>
-                                    <th>Driving License</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                               
-                                <tr> 
-                                    <%var image=one_drivers.profile; var img_length=image.length;  var img=image.slice(7, img_length); console.log(img);%>
-                                    <%var image=one_drivers.cnic; var img_length=image.length;  var cnic=image.slice(7, img_length); console.log(img);%>
-                                    <%var image=one_drivers.driving_license; var img_length=image.length;  var licence=image.slice(7, img_length); console.log(img);%>
-                                    <td><img src="<%=img%>" width="200" height="100"></td>
-                                    <td><img src="<%=cnic%>" width="200" height="100"></td>
-                                    <td><img src="<%=licence%>" width="200" height="100"></td>
-                                </tr>
-                            
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Profile Image</th>
+                                            <th>CNIC</th>
+                                            <th>Driving License</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                            </tbody>
-                        </table>
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone Number</th>
-                                    <th>Status</th>
-                                    <th>Acount Information</th>
-                                    <th>All Trips</th>
-                            
-                                </tr>
-                            </thead>
-                            <tbody>
-                               
-                                <tr>
-                                    
-                                    <td><%=one_drivers.first_name%> <%=one_drivers.last_name%></td>
-                                    <td><%=one_drivers.email%></td>
-                                    <td><%=one_drivers.phone_number%> </td>
-                                    <td><%=one_drivers.status%> </td>
-                                    <%if(one_drivers.account_info=='block'){%>
-                                        <td>
-                                            <a href="/admin/driver/unblock/<%=one_drivers.id%>" class="mr-2">
-                                                <button type="button" class="btn btn-success">UNBLOCK</button>
-                                            </a>
-                                        </td>
-                                        <%}else{%>
+                                        <tr>
+                                            <%var image=one_drivers.profile; var img_length=image.length; var
+                                                img=image.slice(7, img_length);%>
+                                                <%var image=one_drivers.cnic; var img_length=image.length; var
+                                                    cnic=image.slice(7, img_length); %>
+                                                    <%var image=one_drivers.driving_license; var
+                                                        img_length=image.length; var licence=image.slice(7, img_length);
+                                                        %>
+                                                        <td><img src="<%=img%>" width="200" height="100"></td>
+                                                        <td><img src="<%=cnic%>" width="200" height="100"></td>
+                                                        <td><img src="<%=licence%>" width="200" height="100"></td>
+
+                                                        <td>
+                                                            <a href="/driver/all_trips/<%=one_drivers.id%>"
+                                                                class="mr-2">
+                                                                <button type="button"
+                                                                    class="btn btn-outline-primary">All Trips</button>
+                                                            </a>
+
+                                                            <%if(one_drivers.account_info=='block'){%>
+
+                                                                <a href="/admin/driver/unblock/<%=one_drivers.id%>"
+                                                                    class="mr-2">
+                                                                    <button type="button"
+                                                                        class="btn btn-success">UNBLOCK</button>
+                                                                </a>
+
+                                                                <%}else{%>
+
+                                                                    <a href="/admin/driver/block/<%=one_drivers.id%>"
+                                                                        class="mr-2">
+                                                                        <button type="button"
+                                                                            class="btn btn-danger">BLOCK</button>
+                                                                    </a>
+
+                                                                    <%}%>
+                                                        </td>
+                                        </tr>
+                                        <thead>
+                                            <tr>
+
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone Number</th>
+                                                <th>Status</th>
+
+
+
+                                            </tr>
+                                        </thead>
+
+                                        <tr>
+
                                             <td>
-                                                <a href="/admin/driver/block/<%=one_drivers.id%>" class="mr-2">
-                                                    <button type="button" class="btn btn-danger">BLOCK</button>
-                                                </a>
+                                                <%=one_drivers.first_name%>
+                                                    <%=one_drivers.last_name%>
                                             </td>
+                                            <td>
+                                                <%=one_drivers.email%>
+                                            </td>
+                                            <td>
+                                                <%=one_drivers.phone_number%>
+                                            </td>
+                                            <td>
+                                                <%=one_drivers.status%>
+                                            </td>
+
+
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+
+
+
+                                <%}%>
+                                    <br> <br> <br>
+                                    <%if(one_vehicle){ %>
+
+                                        <caption>
+                                            <h2> Vehicle Information</h2>
+                                        </caption>
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Document</th>
+                                                    <th>Frint Image</th>
+                                                    <th>Back Image</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr>
+                                                    <%var image=one_vehicle.vehicle_document; var
+                                                        img_length=image.length; var img=image.slice(7, img_length);
+                                                        console.log(img);%>
+                                                        <%var image=one_vehicle.frint_image; var
+                                                            img_length=image.length; var frint=image.slice(7,
+                                                            img_length); console.log(img);%>
+                                                            <%var image=one_vehicle.back_image; var
+                                                                img_length=image.length; var back=image.slice(7,
+                                                                img_length); console.log(img);%>
+                                                                <td><img src="<%=img%>" width="200" height="100"></td>
+                                                                <td><img src="<%=frint%>" width="200" height="100"></td>
+                                                                <td><img src="<%=back%>" width="200" height="100"></td>
+
+                                                                <%if(one_vehicle.status=='active'){%>
+                                                                    <td>
+                                                                        <a href="/admin/driver/vehicle/unactive/<%=one_drivers.id%>"
+                                                                            class="mr-2">
+                                                                            <button type="button"
+                                                                                class="btn btn-danger">UNACTIVE</button>
+                                                                        </a>
+                                                                    </td>
+                                                                    <%}else{%>
+                                                                        <td>
+                                                                            <a href="/admin/driver/vehicle/active/<%=one_drivers.id%>"
+                                                                                class="mr-2">
+                                                                                <button type="button"
+                                                                                    class="btn btn-success">ACTIVE</button>
+                                                                            </a>
+                                                                        </td>
+                                                                        <%}%>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Vehicle Type</th>
+                                                    <th>Brand</th>
+                                                    <th>Model</th>
+                                                    <th>Number Plate</th>
+                                                    <th>Color</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr>
+                                                    <td>
+                                                        <%=one_vehicle.vehicle_type%>
+                                                    </td>
+                                                    <td>
+                                                        <%=one_vehicle.brand%>
+                                                    </td>
+                                                    <td>
+                                                        <%=one_vehicle.model%>
+                                                    </td>
+                                                    <td>
+                                                        <%=one_vehicle.number_plate%>
+                                                    </td>
+                                                    <td>
+                                                        <%=one_vehicle.color%>
+                                                    </td>
+
+
+
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
                                         <%}%>
-
-                                    <td>
-                                        <a href="/driver/all_trips/<%=one_drivers.id%>" class="mr-2">
-                                            <button type="button" class="btn btn-block btn-info">All Trips</button>
-                                    </a>
-                                     </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-
-                       
+                            </div>
+                            <!-- /.card-body -->
                     </div>
-                    <%}%>
-                    <br>
-                    <%if(one_vehicle){ %>
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Vehicle Type</th>
-                                    <th>Vehicle Document</th>
-                                    <th>Brand</th>
-                                    <th>Model</th>
-                                    <th>Number Plate</th>
-                                    <th>Color</th>
-                                    <th>Frient Image</th>
-                                    <th>Back Image</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                               
-                                <tr> 
-                                    <%var image=one_vehicle.vehicle_document; var img_length=image.length;  var img=image.slice(7, img_length); console.log(img);%>
-                                    <td><%=one_vehicle.vehicle_type%></td>
-                                    <td><img src="<%=img%>" alt=""></td>
-                                    <td><%=one_vehicle.brand%> </td>
-                                    <td><%=one_vehicle.model%> </td>
-                                    <td><%=one_vehicle.number_plate%></td>
-                                    <td><%=one_vehicle.color%></td>
-                                    <td><img src="<%=img%>" alt=""></td>
-                                    <td><img src="<%=img%>" alt=""></td>
-
-                         
-                                    <td>
-                                        <a href="/driver/vehicles/status/<%=one_vehicle.id%>" class="mr-2">
-                                            <button type="button" class="btn btn-block btn-info">Information</button>
-                                    </a>
-                                </td>
-
-                                </tr>
-                 
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <%}%>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
 
 
-<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
-<script>
-    $(function () {
-        $("#example1").DataTable({
-            "responsive": true,
-            "autoWidth": false,
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
         });
-
-    });
-    function deleteRecord(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                document.getElementById('del_form' + id).submit();
-            }
-        })
-    }
-</script>
-<%- include('.\\' + '../../_layouts/adminfooter'); %>
+        function deleteRecord(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    document.getElementById('del_form' + id).submit();
+                }
+            })
+        }
+    </script>
+    <%- include('.\\' + '../../_layouts/adminfooter' ); %>

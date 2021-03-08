@@ -57,7 +57,7 @@ app.use(express.static(path.join(__dirname, '/public/')));
 // database
 const db = require("./models/api_models");
 const Role = db.role;
-// const User = db.user;
+//  const User = db.user;
 
 // // force: true will drop the table if it already exists
 // db.sequelize.sync({force: false}).then(() => {
@@ -180,6 +180,7 @@ require('./routes/api_routes/vendor/validation_promo_code.routes')(app);
 //-----------------driver Api routes--------------
 require('./routes/api_routes/driver/auth.routes')(app);
 require('./routes/api_routes/driver/vehicle_reg.routes')(app);
+require('./routes/api_routes/driver/trip.routes')(app);
 
 // var auth = require('./routes/api_routes/auth.routes');
 // app.use('/',auth);

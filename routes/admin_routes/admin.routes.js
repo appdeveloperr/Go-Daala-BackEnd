@@ -246,6 +246,26 @@ app.get('/admin/driver/delete/:id',all_driver_controller.delete);
 //-----------------get  driver and his vehicle information admin side----------------
 app.get('/driver/vehicles/:id',all_driver_controller.information);
 
+
+//-----------------get  vehicle active  admin side----------------
+app.get('/admin/driver/vehicle/active/:id',all_driver_controller.active);
+
+
+//-----------------get  vehicle unactive  admin side----------------
+app.get('/admin/driver/vehicle/unactive/:id',all_driver_controller.unactive);
+
+
+//-----------------get  driver all trips  admin side----------------
+app.get('/driver/all_trips/:id',all_driver_controller.recent_trip);
+
+
+
+
+//---------------------get payment method  admin side-------------------
+app.get('/payment_get_way',all_driver_controller.payment_get_way)
+
+
+app.post('/payment_get_way',all_driver_controller.post_payment_get_way)
 //-----------------chat system----------------
 app.get('/chat/index',all_driver_controller.chat);
 }

@@ -1,8 +1,10 @@
 const db = require("../../models/api_models");
 const Driver = db.driver;
 const Vehicle_reg = db.vehicle_reg;
+const Trip = db.trip;
 const fs = require('fs');
 const { vehicle } = require("../../models/api_models");
+const { app } = require("firebase-admin");
 
 
 
@@ -151,10 +153,11 @@ exports.information = function (req, res, next) {
           driver_id: req.params.id
         }
       }).then(one_vehicle => {
+        console.log(one_vehicle);
           res.render('./admin/all_driver/information', {
             userdata: req.user,
             one_drivers: one_driver.dataValues,
-            one_vehicle: one_vehicle.dataValues
+            one_vehicle: one_vehicle
           });
         
       }).catch(err => {
@@ -173,6 +176,87 @@ exports.information = function (req, res, next) {
   });
 };
 
+
+
+//---------- Update vehicle account active Function ----------------------
+exports.active = function (req, res, next) {
+
+
+  Vehicle_reg.update({
+    status: 'unactive'
+  }, {
+    where: {
+      id: req.params.id
+    }
+  }).then(unactive => {
+    if (unactive) {
+      req.flash('success', 'Successfuly your driver vehicle is  unactive');
+      res.redirect('/admin/all_driver/index');
+    }
+  }).catch(err => {
+    console.log(err);
+  });
+}
+
+
+
+//---------- Update driver account block Function ----------------------
+exports.unactive = function (req, res, next) {
+
+
+  Vehicle_reg.update({
+    status: 'active'
+  }, {
+    where: {
+      id: req.params.id
+    }
+  }).then(active => {
+    if (active) {
+      req.flash('danger', 'Successfuly your driver vehicle is  active');
+      res.redirect('/admin/all_driver/index');
+    }
+  }).catch(err => {
+    console.log(err);
+  });
+}
+
+
+//--------------driver recent  all trip---------------
+exports.recent_trip = (req, res) => {
+  // Save vendor to Database
+  Trip.findAll({ where: {
+      driver_id: req.params.id
+  }
+  }).then(trip => {
+    console.log(trip);
+    res.render('admin/trip/driver_trip',{
+      userdata :req.user,
+      driver_trip:trip
+    });
+
+  }).catch(err => {
+
+      return res.status(200).send({
+          status: 400,
+          message: err.message,
+          successData: {}
+      });
+
+  });
+
+}
+
+
+//--------------- payment get method -------------------//
+exports.payment_get_way=function(req,res,next){
+  res.render('admin/payment_get_way',{
+    userdata:req.user
+  });
+}
+
+exports.post_payment_get_way = function(req,res,next){
+  console.log("hello",req.body)
+}
 
 exports.chat=function(req,res,next){
   res.render('index');

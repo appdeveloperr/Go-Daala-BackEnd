@@ -23,13 +23,7 @@ module.exports = function (app) {
 
     app.post(
         "/api/vendor/signup",
-        vendorVerifySignUp.checkDuplicateEmailOrPhone_number, (req, res, next) => {
-            var path_file = 'E:/Techreneur/Go-Daala-BackEnd/public/files/uploadsFiles/vendor/' + req.files.profile.name;
-            req.files.profile.mv(path_file, function (err) {
-                if (err) console.log("error occured");
-            });
-            return next();
-        }, controller.signup);
+        vendorVerifySignUp.checkDuplicateEmailOrPhone_number,controller.signup);
 
 
     app.post("/api/vendor/signin", controller.signin);

@@ -23,22 +23,6 @@ module.exports = function (app) {
         "/api/driver/create-vehicle",
      driverVerifyNumberPlate.checkDuplicatePlate,
         driverAuthJwt.verifyToken,
-        (req,res,next)=>{
-            var path_file = 'E:/Techreneur/Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
-            //-----------------move vehicle document into server-------------------------------//
-            req.files.vehicle_document.mv(path_file + '' + req.files.vehicle_document.name, function (err) {
-                if (err) console.log("error occured");
-            });
-            //-----------------move frint_image into server-------------------------------//
-            req.files.frint_image.mv(path_file + '' + req.files.frint_image.name, function (err) {
-                if (err) console.log("error occured");
-            });
-            //-----------------move back_image into server-------------------------------//
-            req.files.back_image.mv(path_file + '' + req.files.back_image.name, function (err) {
-                if (err) console.log("error occured");
-            });
-            return next();
-        },
        controller.create_vehicle_reg
 
     );

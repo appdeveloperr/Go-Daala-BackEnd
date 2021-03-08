@@ -20,24 +20,7 @@ module.exports = function (app) {
 
 
     app.post(
-        "/api/driver/signupdriver", driverVerifySignUp.checkDuplicateEmailOrPhone_number, (req, res, next) => {
-            var path_file = 'E:/Techreneur/Go-Daala-BackEnd/public/files/uploadsFiles/vendor/';
-            //-----------------move profile into server-------------------------------//
-            req.files.profile.mv(path_file + '' + req.files.profile.name, function (err) {
-                if (err) console.log("error occured");
-            });
-            //-----------------move cnic into server-------------------------------//
-            req.files.cnic.mv(path_file + '' + req.files.cnic.name, function (err) {
-                if (err) console.log("error occured");
-            });
-            //-----------------move driving_license into server-------------------------------//
-            req.files.driving_license.mv(path_file + '' + req.files.driving_license.name, function (err) {
-                if (err) console.log("error occured");
-            });
-            return next();
-        },
-        controller.signup
-    );
+        "/api/driver/signupdriver", driverVerifySignUp.checkDuplicateEmailOrPhone_number,controller.signup);
 
 
 

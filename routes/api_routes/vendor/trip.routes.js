@@ -34,6 +34,13 @@ module.exports = function (app) {
         // uploads.single('profile'),
     );
 
+    app.post(
+        "/api/vendor/recent-trip",
+        vendorAuthJwt.verifyToken, controller.recent_trip,
+
+        // uploads.single('profile'),
+    );
+
 //  //------------Vendor Update address Function----------------
 //     app.post(
 //         "/api/vendor/update-address",

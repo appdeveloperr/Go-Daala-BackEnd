@@ -3,47 +3,63 @@ const ROLES = db.ROLES;
 const Vendor = db.vendor;
 const Address = db.address;
 checkDuplicateEmailOrPhone_number = (req, res, next) => {
-  // Username
-  console.log("email: ",req.body.email);
-  Vendor.findOne({
-    where: {
-      email: req.body.email
-    }
-  }).then(vendor => {
-    if (vendor) {
-      return res.status(200).send({
-        status: 400,
-        message: "Failed! email is already in use!",
-        successData: {
+  req.checkBody('email', 'email must have value!').notEmpty();
+  req.checkBody('phone_number', 'phone number must have value!').notEmpty();
+  var errors = req.validationErrors();
+  if (errors) {
+    return res.status(200).send({
+      status: 400,
+      message: "validation error in Signing Up",
+      successData: {
+        error: {
+          error: errors
         }
-
-      });
-
-    }
-
-    // Email
+      }
+    });
+  } else {
+    // Username
+    console.log("email: ", req.body.email);
     Vendor.findOne({
       where: {
-        phone_number: req.body.phone_number
+        email: req.body.email
       }
     }).then(vendor => {
       if (vendor) {
-
-
         return res.status(200).send({
           status: 400,
-          message: "Failed! Phone Number is already in use!",
+          message: "Failed! email is already in use!",
           successData: {
           }
 
         });
 
-
       }
 
-      next();
+      // Email
+      Vendor.findOne({
+        where: {
+          phone_number: req.body.phone_number
+        }
+      }).then(vendor => {
+        if (vendor) {
+
+
+          return res.status(200).send({
+            status: 400,
+            message: "Failed! Phone Number is already in use!",
+            successData: {
+            }
+
+          });
+
+
+        }
+
+        next();
+      });
     });
-  });
+
+  }
 };
 
 checkRolesExisted = (req, res, next) => {
@@ -61,7 +77,7 @@ checkRolesExisted = (req, res, next) => {
   next();
 };
 
-checkDuplicateLatitudeOrLongitude = (req,res,next)=>{
+checkDuplicateLatitudeOrLongitude = (req, res, next) => {
   Address.findOne({
     where: {
       latitude: req.body.latitude
@@ -105,7 +121,7 @@ checkDuplicateLatitudeOrLongitude = (req,res,next)=>{
 
 const verifySignUp = {
   checkDuplicateEmailOrPhone_number: checkDuplicateEmailOrPhone_number,
-  checkDuplicateLatitudeOrLongitude:checkDuplicateLatitudeOrLongitude,
+  checkDuplicateLatitudeOrLongitude: checkDuplicateLatitudeOrLongitude,
   checkRolesExisted: checkRolesExisted
 };
 
