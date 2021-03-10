@@ -136,31 +136,31 @@
                                                 <tr>
                                                     <%var image=one_vehicle.vehicle_document; var
                                                         img_length=image.length; var img=image.slice(7, img_length);
-                                                        console.log(img);%>
+                                                       %>
                                                         <%var image=one_vehicle.frint_image; var
                                                             img_length=image.length; var frint=image.slice(7,
-                                                            img_length); console.log(img);%>
+                                                            img_length); %>
                                                             <%var image=one_vehicle.back_image; var
                                                                 img_length=image.length; var back=image.slice(7,
-                                                                img_length); console.log(img);%>
+                                                                img_length);  console.log(one_vehicle.status) %>
                                                                 <td><img src="<%=img%>" width="200" height="100"></td>
                                                                 <td><img src="<%=frint%>" width="200" height="100"></td>
                                                                 <td><img src="<%=back%>" width="200" height="100"></td>
 
-                                                                <%if(one_vehicle.status=='active'){%>
+                                                                <%if(one_vehicle.status=='unactive'){%>
                                                                     <td>
-                                                                        <a href="/admin/driver/vehicle/unactive/<%=one_drivers.id%>"
+                                                                        <a href="/admin/driver/vehicle/active/<%=one_drivers.id%>"
                                                                             class="mr-2">
                                                                             <button type="button"
-                                                                                class="btn btn-danger">UNACTIVE</button>
+                                                                                class="btn btn-success">ACTIVE</button>
                                                                         </a>
                                                                     </td>
                                                                     <%}else{%>
                                                                         <td>
-                                                                            <a href="/admin/driver/vehicle/active/<%=one_drivers.id%>"
+                                                                            <a href="/admin/driver/vehicle/unactive/<%=one_drivers.id%>"
                                                                                 class="mr-2">
                                                                                 <button type="button"
-                                                                                    class="btn btn-success">ACTIVE</button>
+                                                                                    class="btn btn-danger">UNACTIVE</button>
                                                                             </a>
                                                                         </td>
                                                                         <%}%>

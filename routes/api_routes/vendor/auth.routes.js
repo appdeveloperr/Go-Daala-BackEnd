@@ -31,4 +31,10 @@ module.exports = function (app) {
         vendorAuthJwt.verifyToken,
         controller.update);
 
+
+        app.post('/api/vendor/update-picture',
+        vendorAuthJwt.verifyToken,
+        controller.update_picture
+        )
+
 };

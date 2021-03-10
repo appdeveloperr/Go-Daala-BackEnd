@@ -47,7 +47,17 @@ module.exports = function (app) {
     "/api/vendor/delete-address",
     vendorAuthJwt.verifyToken,
     controller.delete_address
+);
+
+ //------------Vendor index address Function----------------
+app.get(
+    "/api/vendor/index-address",
+    vendorAuthJwt.verifyToken,
+    controller.index_address
 )
+
+
+
 
 
 };

@@ -3,13 +3,14 @@ const config = require("../../config/auth.config");
 const Driver = db.driver;
 const Vehicle_reg = db.vehicle_reg;
 const Vehicle = db.vehicle;
+const Contect_us = db.contect_us;
 const Trip = db.trip;
 const Promo = db.promo;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require('fs');
-
+var path = require('path');
 
 
 
@@ -69,19 +70,41 @@ exports.signup = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = 'E:/Techreneur/Go-Daala-BackEnd/public/files/uploadsFiles/vendor/';
+                var path_file = './public/files/uploadsFiles/driver/';
+                var fileOne = 'profile-1' + Date.now() + req.files.profile.name;
                 //-----------------move profile into server-------------------------------//
-                req.files.profile.mv(path_file + '' + req.files.profile.name, function (err) {
+                req.files.profile.mv(path_file + '' + fileOne, function (err) {
                     if (err) console.log("error occured");
                 });
+
+
+
+                // var profilename = 'profile-1' + Date.now() + path.extname(req.files.profile.name);
+                // fs.rename(path_file + '' + req.files.profile.name, path_file + '' + profilename, function (err) {
+                //     if (err) console.log('file not renameing');
+                // });
+
+
+
                 //-----------------move cnic into server-------------------------------//
-                req.files.cnic.mv(path_file + '' + req.files.cnic.name, function (err) {
+
+                var cnicfilename = 'profile-2' + Date.now() + req.files.cnic.name;
+                req.files.cnic.mv(path_file + cnicfilename, function (err) {
                     if (err) console.log("error occured");
                 });
+
+
+
+
+
                 //-----------------move driving_license into server-------------------------------//
-                req.files.driving_license.mv(path_file + '' + req.files.driving_license.name, function (err) {
+                var drivefilename = 'profile-3' + Date.now() + req.files.driving_license.name;
+                req.files.driving_license.mv(path_file + drivefilename, function (err) {
                     if (err) console.log("error occured");
                 });
+
+
+
                 // Save vendor to Database
                 Driver.create({
                     first_name: req.body.first_name,
@@ -89,9 +112,9 @@ exports.signup = (req, res) => {
                     email: req.body.email,
                     phone_number: req.body.phone_number,
                     password: bcrypt.hashSync(req.body.password, 8),
-                    profile: '/public/files/uploadsFiles/vendor/' + req.files.profile.name,
-                    cnic: '/public/files/uploadsFiles/vendor/' + req.files.cnic.name,
-                    driving_license: '/public/files/uploadsFiles/vendor/' + req.files.driving_license.name,
+                    profile: '/public/files/uploadsFiles/driver/' + fileOne,
+                    cnic: '/public/files/uploadsFiles/driver/' + cnicfilename,
+                    driving_license: '/public/files/uploadsFiles/driver/' + drivefilename,
                     status: "deactive",
                     account_info: "block"
                 }).then(user => {
@@ -186,6 +209,23 @@ exports.signin = (req, res) => {
                     expiresIn: 86400 // 24 hours
                 });
 
+                Driver.update({
+                    status: 'active'
+                },
+                    {
+                        where: { id: user.id },
+
+                    },
+                ).then(update => {
+
+                }).catch(err => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+                });
+
 
                 return res.status(200).send({
                     status: 200,
@@ -200,7 +240,7 @@ exports.signin = (req, res) => {
                             profile: user.profile,
                             cnic: user.cnic,
                             driving_license: user.driving_license,
-                            status: user.status,
+                            status: 'active',
                             account_info: user.account_info,
                             accessToken: token
 
@@ -227,7 +267,7 @@ exports.update = (req, res) => {
     req.checkBody('last_name', 'last name must have value!').notEmpty();
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
-    req.checkBody('password', 'password must have value!').notEmpty();
+
 
 
     var errors = req.validationErrors();
@@ -248,7 +288,6 @@ exports.update = (req, res) => {
                 last_name: req.body.last_name,
                 email: req.body.email,
                 phone_number: req.body.phone_number,
-                password: bcrypt.hashSync(req.body.password, 8),
 
             },
                 {
@@ -348,30 +387,42 @@ exports.create_vehicle_reg = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = 'E:/Techreneur/Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
+                var path_file = './public/files/uploadsFiles/driver/';
+
+
                 //-----------------move vehicle document into server-------------------------------//
-                req.files.vehicle_document.mv(path_file + '' + req.files.vehicle_document.name, function (err) {
+                var docfilename = 'profile-1' + Date.now() + req.files.vehicle_document.name;
+                req.files.vehicle_document.mv(path_file + '' + docfilename, function (err) {
                     if (err) console.log("error occured");
                 });
+
                 //-----------------move frint_image into server-------------------------------//
-                req.files.frint_image.mv(path_file + '' + req.files.frint_image.name, function (err) {
+                var frintfilename = 'profile-2' + Date.now() + req.files.frint_image.name;
+                req.files.frint_image.mv(path_file + '' + frintfilename, function (err) {
                     if (err) console.log("error occured");
                 });
+
+
+
                 //-----------------move back_image into server-------------------------------//
-                req.files.back_image.mv(path_file + '' + req.files.back_image.name, function (err) {
+                var backfilename = 'profile-3' + Date.now() + req.files.back_image.name;
+                req.files.back_image.mv(path_file + '' + backfilename, function (err) {
                     if (err) console.log("error occured");
                 });
+
+
+
                 // Save vendor to Database
                 Vehicle_reg.create({
                     driver_id: req.body.driver_id,
                     vehicle_type: req.body.vehicle_type,
-                    vehicle_document: '/public/files/uploadsFiles/vendor/' + req.files.vehicle_document.name,
+                    vehicle_document: '/public/files/uploadsFiles/driver/' + docfilename,
                     brand: req.body.brand,
                     model: req.body.model,
                     number_plate: req.body.number_plate,
                     color: req.body.color,
-                    frint_image: '/public/files/uploadsFiles/vendor/' + req.files.frint_image.name,
-                    back_image: '/public/files/uploadsFiles/vendor/' + req.files.back_image.name,
+                    frint_image: '/public/files/uploadsFiles/driver/' + frintfilename,
+                    back_image: '/public/files/uploadsFiles/driver/' + backfilename,
                     status: "deactive",
 
 
@@ -383,6 +434,7 @@ exports.create_vehicle_reg = (req, res) => {
                         successData: {
                             vehicle: {
                                 id: vehicle_reg.id,
+                                vehicle_type: vehicle_reg.vehicle_type,
                                 vehicle_document: vehicle_reg.vehicle_document,
                                 brand: vehicle_reg.brand,
                                 model: vehicle_reg.model,
@@ -425,7 +477,7 @@ exports.get_all_vehicles = (req, res) => {
                 status: 200,
                 message: "list of all vehicles",
                 successData: {
-                    vehicle_type: {
+                    vehicle_type_list: {
                         id: all_vehicle[0].dataValues.id,
                         vehicle_type: all_vehicle[0].dataValues.vehicle_type,
                         image_path: all_vehicle[0].dataValues.image_path
@@ -447,23 +499,15 @@ exports.get_all_vehicles = (req, res) => {
 
 
 
-//--------------vendor create trip---------------
-exports.create_trip = (req, res) => {
-    req.checkBody('pickup', 'pickup must have value!').notEmpty();
-    req.checkBody('dropoff', 'dropoff must have value!').notEmpty();
-    req.checkBody('pickup_latitude', 'pickup_latitude must have value!').notEmpty();
-    req.checkBody('pick_longitude', 'pick_longitude must have value!').notEmpty();
-    req.checkBody('vehicle_name', 'vehicle_name must have value!').notEmpty();
-    req.checkBody('estimated_distance', 'estimated_distance must have value!').notEmpty();
-    req.checkBody('estimated_time', 'estimated_time must have value!').notEmpty();
-    req.checkBody('total_cost', 'total_cost must have value!').notEmpty();
-    req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
-    req.checkBody('vendor_id', 'vendor_id must have ID!').notEmpty();
+//--------------driver receive trip---------------
+exports.receive_trip = (req, res) => {
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    req.checkBody('driver_id', 'please provide driver id!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
             status: 400,
-            message: "validation error in Create Trip",
+            message: "validation error in receive Trip",
             successData: {
                 error: {
                     error: errors
@@ -472,58 +516,252 @@ exports.create_trip = (req, res) => {
         });
     } else {
         // Save vendor to Database
-        Trip.create({
-            pickup: req.body.pickup,
-            dropoff: req.body.dropoff,
-            pickup_latitude: req.body.pickup_latitude,
-            pick_longitude: req.body.pick_longitude,
-            vehicle_name: req.body.vehicle_name,
-            estimated_distance: req.body.estimated_distance,
-            estimated_time: req.body.estimated_time,
-            total_cost: req.body.total_cost,
+        Trip.update({
             driver_id: req.body.driver_id,
-            vendor_id: req.body.vendor_id
+            status: "wait",
 
-        }).then(trip => {
+        },
+            {
+                where: { id: req.body.trip_id },
+                returning: true,
+                plain: true
+            }).then(trip => {
 
-            return res.status(200).send({
-                status: 200,
-                message: "Create Trip  is successful",
-                successData: {
-                    trip: {
-                        id: trip.id,
-                        pickup: trip.pickup,
-                        dropoff: trip.dropoff,
-                        pickup_latitude: trip.pickup_latitude,
-                        pick_longitude: trip.pick_longitude,
-                        vehicle_name: trip.vehicle_name,
-                        estimated_distance: trip.estimated_distance,
-                        estimated_time: trip.estimated_time,
-                        total_cost: trip.total_cost,
-                        driver_id: trip.driver_id,
-                        vendor_id: trip.vendor_id
+                return res.status(200).send({
+                    status: 200,
+                    message: "Driver receive trip  is successful",
+                    successData: {
+                        trip: {
+                            id: trip[1].id,
+                            pickup: trip[1].pickup,
+                            dropoff: trip[1].dropoff,
+                            pickup_latitude: trip[1].pickup_latitude,
+                            pick_longitude: trip[1].pick_longitude,
+                            vehicle_name: trip[1].vehicle_name,
+                            estimated_distance: trip[1].estimated_distance,
+                            estimated_time: trip[1].estimated_time,
+                            total_cost: trip[1].total_cost,
+                            driver_id: trip[1].driver_id,
+                            vendor_id: trip[1].vendor_id,
+                            status: trip[1].status
 
+
+                        }
                     }
-                }
+                });
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+
             });
-
-        }).catch(err => {
-
-            return res.status(200).send({
-                status: 400,
-                message: err.message,
-                successData: {}
-            });
-
-        });
 
     }
 }
 
 
+//--------------driver cencal trip---------------
+exports.cencal_trip = (req, res) => {
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    req.checkBody('driver_id', 'please provide driver id!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in receive Trip",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save vendor to Database
+        Trip.update({
+            driver_id: null,
+            status: "cencal",
+
+        },
+            {
+                where: { id: req.body.trip_id },
+                returning: true,
+                plain: true
+            }).then(trip => {
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "Driver cencal trip  is successfull",
+                    successData: {
+                        trip: {
+                            id: trip[1].id,
+                            pickup: trip[1].pickup,
+                            dropoff: trip[1].dropoff,
+                            pickup_latitude: trip[1].pickup_latitude,
+                            pick_longitude: trip[1].pick_longitude,
+                            vehicle_name: trip[1].vehicle_name,
+                            estimated_distance: trip[1].estimated_distance,
+                            estimated_time: trip[1].estimated_time,
+                            total_cost: trip[1].total_cost,
+                            driver_id: trip[1].driver_id,
+                            vendor_id: trip[1].vendor_id,
+                            status: trip[1].status
+
+
+                        }
+                    }
+                });
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+
+            });
+
+    }
+}
+
+
+//--------------driver start trip---------------
+exports.start_trip = (req, res) => {
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    req.checkBody('driver_id', 'please provide driver id!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in receive Trip",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save vendor to Database
+        Trip.update({
+            driver_id: req.body.driver_id,
+            status: "start",
+
+        },
+            {
+                where: { id: req.body.trip_id },
+                returning: true,
+                plain: true
+            }).then(trip => {
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "Driver start trip  is successfull",
+                    successData: {
+                        trip: {
+                            id: trip[1].id,
+                            pickup: trip[1].pickup,
+                            dropoff: trip[1].dropoff,
+                            pickup_latitude: trip[1].pickup_latitude,
+                            pick_longitude: trip[1].pick_longitude,
+                            vehicle_name: trip[1].vehicle_name,
+                            estimated_distance: trip[1].estimated_distance,
+                            estimated_time: trip[1].estimated_time,
+                            total_cost: trip[1].total_cost,
+                            driver_id: trip[1].driver_id,
+                            vendor_id: trip[1].vendor_id,
+                            status: trip[1].status
+
+
+                        }
+                    }
+                });
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+
+            });
+
+    }
+}
+
+
+
+//--------------driver end trip---------------
+exports.end_trip = (req, res) => {
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    req.checkBody('driver_id', 'please provide driver id!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in receive Trip",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save vendor to Database
+        Trip.update({
+            driver_id: req.body.driver_id,
+            status: "end",
+
+        },
+            {
+                where: { id: req.body.trip_id },
+                returning: true,
+                plain: true
+            }).then(trip => {
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "Driver end trip  is successfull",
+                    successData: {
+                        trip: {
+                            id: trip[1].id,
+                            pickup: trip[1].pickup,
+                            dropoff: trip[1].dropoff,
+                            pickup_latitude: trip[1].pickup_latitude,
+                            pick_longitude: trip[1].pick_longitude,
+                            vehicle_name: trip[1].vehicle_name,
+                            estimated_distance: trip[1].estimated_distance,
+                            estimated_time: trip[1].estimated_time,
+                            total_cost: trip[1].total_cost,
+                            driver_id: trip[1].driver_id,
+                            vendor_id: trip[1].vendor_id,
+                            status: trip[1].status
+
+
+                        }
+                    }
+                });
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+
+            });
+
+    }
+}
+
 //--------------driver recent  all trip---------------
 exports.recent_trip = (req, res) => {
-    req.checkBody('vendor_id', 'vendor_id must have ID!').notEmpty();
+    req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -576,204 +814,241 @@ exports.recent_trip = (req, res) => {
 
 }
 
-// //--------------vendor create address---------------
-// exports.create_address = (req, res) => {
-//     // Save vendor to Database
-//     Address.create({
-//         label: req.body.label,
-//         address: req.body.address,
-//         latitude: req.body.latitude,
-//         longitude: req.body.longitude
 
-//     }).then(address => {
-//         console.log(address);
-//         return res.status(200).send({
-//             status: 200,
-//             message: "Address Create is successful",
-//             successData: {
-//                 address: {
-//                     id: address.id,
-//                     address: address.address,
-//                     latitude: address.latitude,
-//                     longitude: address.longitude
+//--------------driver contact us ----------------------
+exports.contact_us = (req, res) => {
 
-//                 }
-//             }
-//         });
-
-//     }).catch(err => {
-
-//         return res.status(200).send({
-//             status: 400,
-//             message: err.message,
-//             successData: {}
-//         });
-
-//     });
-
-// }
-
-// //--------------vendor update address------------
-// exports.update_address = (req, res) => {
-//     Address.update({
-//         label: req.body.label,
-//         address: req.body.address,
-//         latitude: req.body.latitude,
-//         longitude: req.body.longitude
-//     },
-//         {
-//             where: { id: req.body.id },
-//             returning: true,
-//             plain: true
-//         },
-//     ).then(address => {
-
-//         if (address) {
-
-//             return res.status(200).send({
-//                 status: 200,
-//                 message: "Address updated is successful",
-//                 successData: {
-//                     address: {
-//                         id: address[1].id,
-//                         label: address[1].label,
-//                         address: address[1].address,
-//                         latitude: address[1].latitude,
-//                         longitude: address[1].longitude
-//                     }
-//                 }
-//             });
-//         }
-//     }).catch(err => {
-//         return res.status(200).send({
-//             status: 400,
-//             message: err.message,
-//             successData: {}
-//         });
+}
 
 
-//     });
-// }
-
-// //--------------vendor delete address------------
-// exports.delete_address = (req, res) => {
-//     Address.destroy({
-//         where: {
-//             id: req.body.id
-//         }
-//     }).then(address => {
-
-//         if (!address) {
-//             return res.status(200).send({
-//                 status: 400,
-//                 message: "Contacts not found",
-//                 successData: {}
-//             });
-//         }
-
-//         return res.status(200).send({
-//             status: 200,
-//             message: "Vendor Address is successful Deleted",
-//             successData: {}
-//         });
-
-//     }).catch(err => {
-//         return res.status(200).send({
-//             status: 400,
-//             message: err.message,
-//             successData: {}
-//         });
-//     });
-// }
+//--------------driver forgot password  ----------------------
+exports.forgot_password = (req, res) => {
+    req.checkBody('new_password', 'new_password must have value!').notEmpty();
+    req.checkBody('phone_number', 'phone number must have value!').notEmpty();
 
 
 
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in forgot password",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Driver.update({
+            password: bcrypt.hashSync(req.body.new_password, 8)
 
-// //--------------vendor create trip---------------
-// exports.create_trip = (req, res) => {
-//     // Save vendor to Database
-//     Trip.create({
-//         pickup: req.body.pickup,
-//         dropoff: req.body.dropoff,
-//         pickup_latitude: req.body.pickup_latitude,
-//         pick_longitude: req.body.pick_longitude,
-//         vehicle_name: req.body.vehicle_name,
-//         estimated_distance: req.body.estimated_distance,
-//         estimated_time: req.body.estimated_time,
-//         total_cost: req.body.total_cost
+        },
+            {
+                where: { phone_number: req.body.phone_number },
+                returning: true,
+                plain: true
+            },
+        ).then(user => {
 
-//     }).then(trip => {
-
-//         return res.status(200).send({
-//             status: 200,
-//             message: "Trip  Create is successful",
-//             successData: {
-//                 address: {
-//                     id: trip.id,
-//                     pickup: trip.pickup,
-//                     dropoff: trip.dropoff,
-//                     pickup_latitude: trip.pickup_latitude,
-//                     pick_longitude: trip.pick_longitude,
-//                     vehicle_name: trip.vehicle_name,
-//                     estimated_distance: trip.estimated_distance,
-//                     estimated_time: trip.estimated_time,
-//                     total_cost: trip.total_cost
-
-//                 }
-//             }
-//         });
-
-//     }).catch(err => {
-
-//         return res.status(200).send({
-//             status: 400,
-//             message: err.message,
-//             successData: {}
-//         });
-
-//     });
-
-// }
-
-
-// //---------------vendor validate promo code -----------------
-// exports.validate_promo_code = (req, res) => {
-//     Promo.findOne({
-//         where: {
-//             code: req.body.code
-//         }
-//     }).then(promo => {
-//         //if User not found with given ID
-//         if (promo) {
-//             if (promo.dataValues.publish == "on") {
-//                 return res.status(200).send({
-//                     status: 200,
-//                     message: "Promo code is valid",
-//                     successData: {
-//                         promo: {
-//                             id: promo.id,
-//                             code: promo.code,
-//                             type: promo.type,
-//                             discount: promo.discount,
-//                             publish: promo.publish
-//                         }
-//                     }
-//                 });
-//             }
-//         } else {
-
-//             return res.status(200).send({
-//                 status: 400,
-//                 message: "promo code is invalid",
-//                 successData: {
-
-//                 }
-//             });
-//         }
-//     });
-// }
+            if (user) {
+                var token = jwt.sign({ id: user.id }, config.secret, {
+                    expiresIn: 86400 // 24 hours
+                });
+                return res.status(200).send({
+                    status: 200,
+                    message: "Password UPDATED is successful",
+                    successData: {
+                        user: {
+                            id: user[1].id,
+                            first_name: user[1].first_name,
+                            last_name: user[1].last_name,
+                            email: user[1].email,
+                            phone_number: user[1].phone_number,
+                            accessToken: token
+                        }
+                    }
+                });
+            }
+        }).catch(err => {
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
 
 
+        });
+    }
+}
+
+//--------------driver update picture  ----------------------
+exports.update_picture = (req, res) => {
+    req.checkBody('id', 'id must have ID!').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in update picture",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        if (!req.files) {  ////////--------------------new profile is not uploaded----------------/////////
+            req.checkBody('new_profile', 'new_profile must have uploaded!').notEmpty();
+            return res.status(200).send({
+                status: 400,
+                message: "validation error in update picture",
+                successData: {
+                    error: {
+                        error: errors
+                    }
+                }
+            });
+        } else {
+
+            req.checkBody('new_profile', 'new_profile picture must have uploaded animage').isImage(req.files.new_profile.name);
+            var errors = req.validationErrors();
+            if (errors) {   //////////------input file must have image validation error
+                return res.status(200).send({
+                    status: 400,
+                    message: "validation error in update picture",
+                    successData: {
+                        error: {
+                            error: errors
+                        }
+                    }
+                });
+            } else {   ///------------------ no error exist
+
+                var path_file = './public/files/uploadsFiles/driver/';
+
+                //-----------------move profile into server-------------------------------//
+                var filename = 'profile-' + Date.now() + req.files.new_profile.name;
+                req.files.new_profile.mv(path_file + '' + filename, function (err) {
+                    if (err) console.log("error occured");
+                });
+
+
+
+
+                fs.unlink('.' + req.body.file, function (err) {
+                    if (err) {
+                        console.log("err occer file not deleted");
+                    } else {
+                        console.log("file  deleted");
+                    }
+                })
+                Driver.update({
+                    profile: '/public/files/uploadsFiles/driver/' + filename
+                },
+                    {
+                        where: { id: req.body.id },
+                        returning: true,
+                        plain: true
+                    },
+                ).then(user => {
+
+                    if (user) {
+
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Profile picture is  UPDATED is successful",
+                            successData: {
+                                user: {
+                                    id: user[1].id,
+                                    first_name: user[1].first_name,
+                                    last_name: user[1].last_name,
+                                    email: user[1].email,
+                                    phone_number: user[1].phone_number,
+                                    profile: user[1].profile,
+                                    cnic: user[1].cnic,
+                                    driving_license: user[1].driving_license,
+                                    status: user[1].status,
+                                    account_info: user[1].account_info
+                                }
+                            }
+                        });
+                    }
+                }).catch(err => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
+
+                });
+
+            }
+        }
+
+
+
+
+    }
+}
+
+exports.contect_us = function (req, res, next) {
+    req.checkBody('first_name', 'First Name must have value!').notEmpty();
+    req.checkBody('last_name', 'Last Name must have value!').notEmpty();
+    req.checkBody('email', 'Email must have value!').notEmpty();
+    req.checkBody('phone', 'Phone Number must have value!').notEmpty();
+    req.checkBody('message', 'Message must have value!').notEmpty();
+
+
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in contect us",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Contect_us.create({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            phone: req.body.phone,
+            message: req.body.message
+
+
+        }).then(contect => {
+            if (contect) {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Contect is successfuly send",
+                    successData: {
+                        contect_us: {
+                            first_name: contect.first_name,
+                            last_name: contect.last_name,
+                            email: contect.email,
+                            phone: contect.phone,
+                            message: contect.message
+                        }
+                    }
+                });
+            }
+
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+    }
+};
 
 
 

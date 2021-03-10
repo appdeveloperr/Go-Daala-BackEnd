@@ -1,0 +1,106 @@
+<%- include('.\\' + '../../_layouts/adminheader'); %>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Banner</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <!-- /.card -->
+                <div class="card">
+                    <div class="card-header">
+                        <a href="/admin/faq/create" class="btn btn-primary">Add FAQ's</a>
+                    </div>
+                    <!-- /.card-header -->
+                    <%if(all_faq_s){ %>
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>title</th>
+                                    <th>Desc</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%all_faq_s.forEach(function(item){  %>
+                                <tr>
+                                    <td><%=item.id%></td>
+                                    <td><%=item.title%></td>
+                                    <td><%=item.disc%></td>
+                                    <td>
+                                        <a href="/admin/faq/Edit/<%=item.id%>" class="mr-2">
+                                             <i class="fa fa-edit"></i>
+                                         </a>
+                                       
+                                        <a class="confirmDeletion" href="/admin/faq/delete/<%=item.id%>">
+                                            <i class="fa fa-trash text-danger"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                                <%});%>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <%}%>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+
+    });
+    function deleteRecord(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                document.getElementById('del_form' + id).submit();
+            }
+        })
+    }
+</script>
+<%- include('.\\' + '../../_layouts/adminfooter'); %>

@@ -40,6 +40,8 @@ db.trip = require("../api_models/trip.model")(sequelize, Sequelize);
 db.driver = require("../api_models/driver.model")(sequelize, Sequelize);
 db.vehicle_reg = require("../api_models/vehicle_reg.model")(sequelize, Sequelize);
 
+db.contect_us = require("../api_models/contect_us.model")(sequelize, Sequelize);
+
 //Table Relationships
 db.role.belongsToMany(db.user, {
   through: "user_roles",

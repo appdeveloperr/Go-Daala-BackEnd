@@ -1,0 +1,96 @@
+<%- include('.\\' + '../../_layouts/adminheader'); %>
+
+<!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Edit Banner</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- jquery validation -->
+                    <div class="card ">
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" id="quickForm" method="post" action="/admin/banner/update"
+                            enctype="multipart/form-data">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Type</label>
+                                    <select name="type" class="form-control" id="exampleInputEmail1">
+                                        <option value="<%=data.banner_type%>" selected><%=data.banner_type%></option>
+
+                                        <option value="web banner">web banner</option>
+
+                                        <option value="web slider">web slider</option>
+
+
+                                        <option value="mobile banner">mobile banner</option>
+
+                                        <option value="mobile slider">mobile slider</option>
+                                    </select>
+                                </div>
+                                <label for="exampleInputPassword1">Select another image</label>
+                                <div class="form-group">
+                                    <input type="file" class="form-control" name="myFile" id="img">
+                                    <img src="#" id="imagePreview" alt="">
+                                    <%var image=data.image_path; var img_length=image.length; var img=image.slice(8, img_length);%>
+                                    <img src="<%=img%>" id="imagePreview" alt="">
+                                </div>
+                                <input type="hidden" name="id" value="<%=data.id%>">
+                                <input type="hidden" name="old_file" value="<%=data.image_path%>">
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                        <script>
+
+
+                            function readURL(input) {
+
+                                for (var i = 0; i < input.files.length; i++) {
+                                    if (input.files && input.files[i]) {
+                                        var reader = new FileReader();
+                                        reader.onload = function (e) {
+                                            $("#imagePreview").attr('src', e.target.result).width(150).height(150);
+                                        }
+                                        reader.readAsDataURL(input.files[i]);
+                                    }
+                                }
+                            }
+
+                            $("#img").change(function () {
+                                readURL(this);
+                            });
+                        </script>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!--/.col (left) -->
+                <!-- right column -->
+                <div class="col-md-6">
+
+                </div>
+                <!--/.col (right) -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<%- include('.\\' + '../../_layouts/adminfooter'); %>

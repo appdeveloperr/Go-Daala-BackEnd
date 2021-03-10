@@ -2,6 +2,7 @@ const db = require("../../models/api_models");
 const Driver = db.driver;
 const Vehicle_reg = db.vehicle_reg;
 const Trip = db.trip;
+const Contect_us = db.contect_us;
 const fs = require('fs');
 const { vehicle } = require("../../models/api_models");
 const { app } = require("firebase-admin");
@@ -36,7 +37,8 @@ exports.unblock = function (req, res, next) {
 
 
   Driver.update({
-    account_info: 'unblock'
+    account_info: 'unblock',
+    status: "unactive"
   }, {
     where: {
       id: req.params.id
@@ -58,7 +60,8 @@ exports.block = function (req, res, next) {
 
 
   Driver.update({
-    account_info: 'block'
+    account_info: 'block',
+    status: "unactive"
   }, {
     where: {
       id: req.params.id
@@ -153,13 +156,12 @@ exports.information = function (req, res, next) {
           driver_id: req.params.id
         }
       }).then(one_vehicle => {
-        console.log(one_vehicle);
-          res.render('./admin/all_driver/information', {
-            userdata: req.user,
-            one_drivers: one_driver.dataValues,
-            one_vehicle: one_vehicle
-          });
-        
+        res.render('./admin/all_driver/information', {
+          userdata: req.user,
+          one_drivers: one_driver.dataValues,
+          one_vehicle: one_vehicle
+        });
+
       }).catch(err => {
         return res.status(200).send({
           responsecode: 400,
@@ -183,14 +185,14 @@ exports.active = function (req, res, next) {
 
 
   Vehicle_reg.update({
-    status: 'unactive'
+    status: 'active'
   }, {
     where: {
       id: req.params.id
     }
   }).then(unactive => {
     if (unactive) {
-      req.flash('success', 'Successfuly your driver vehicle is  unactive');
+      req.flash('success', 'Successfuly your driver vehicle is  active');
       res.redirect('/admin/all_driver/index');
     }
   }).catch(err => {
@@ -205,14 +207,14 @@ exports.unactive = function (req, res, next) {
 
 
   Vehicle_reg.update({
-    status: 'active'
+    status: 'unactive'
   }, {
     where: {
       id: req.params.id
     }
   }).then(active => {
     if (active) {
-      req.flash('danger', 'Successfuly your driver vehicle is  active');
+      req.flash('danger', 'Successfuly your driver vehicle is  unactive');
       res.redirect('/admin/all_driver/index');
     }
   }).catch(err => {
@@ -224,15 +226,93 @@ exports.unactive = function (req, res, next) {
 //--------------driver recent  all trip---------------
 exports.recent_trip = (req, res) => {
   // Save vendor to Database
-  Trip.findAll({ where: {
+  Trip.findAll({
+    where: {
       driver_id: req.params.id
-  }
+    }
   }).then(trip => {
-    console.log(trip);
-    res.render('admin/trip/driver_trip',{
-      userdata :req.user,
-      driver_trip:trip
+    res.render('admin/trip/driver_trip', {
+      userdata: req.user,
+      driver_trip: trip
     });
+
+  }).catch(err => {
+
+    return res.status(200).send({
+      status: 400,
+      message: err.message,
+      successData: {}
+    });
+
+  });
+
+}
+
+
+//--------------- payment get method -------------------//
+exports.payment_get_way = function (req, res, next) {
+  res.render('admin/payment_get_way', {
+    userdata: req.user
+  });
+}
+
+exports.post_payment_get_way = function (req, res, next) {
+
+  console.log("hello", req.body)
+}
+
+exports.chat = function (req, res, next) {
+  res.render('index');
+}
+
+exports.get_contect_us = function (req, res, next) {
+  res.render('admin/contect_us', {
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+};
+
+exports.create = function (req, res, next) {
+  req.checkBody('first_name', 'First Name must have value!').notEmpty();
+  req.checkBody('last_name', 'Last Name must have value!').notEmpty();
+  req.checkBody('email', 'Email must have value!').notEmpty();
+  req.checkBody('phone', 'Phone Number must have value!').notEmpty();
+  req.checkBody('message', 'Message must have value!').notEmpty();
+
+
+  var errors = req.validationErrors();
+  if (errors) {
+    res.render('admin/contect_us', {
+      errors:errors,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      email: req.body.email,
+      phone: req.body.phone,
+      message: req.body.message
+    });
+  } else {
+    Contect_us.create({
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      email: req.body.email,
+      phone: req.body.phone,
+      message: req.body.message
+     
+
+  }).then(contect => {
+      if(contect){
+        req.flash('success', 'Successfuly your massage  is  send');
+        res.render('admin/contect_us', {
+          first_name: '',
+          last_name: '',
+          email: '',
+          phone: '',
+          message: ''
+        });
+      }
 
   }).catch(err => {
 
@@ -243,23 +323,21 @@ exports.recent_trip = (req, res) => {
       });
 
   });
+  }
+};
 
+exports.faqs_index=function(req,res){
+  res.render('admin/faqs/index',{
+    userdata: req.user,
+    all_faq_s: null
+  })
 }
 
-
-//--------------- payment get method -------------------//
-exports.payment_get_way=function(req,res,next){
-  res.render('admin/payment_get_way',{
-    userdata:req.user
-  });
-}
-
-exports.post_payment_get_way = function(req,res,next){
-  console.log("hello",req.body)
-}
-
-exports.chat=function(req,res,next){
-  res.render('index');
+exports.faqs_create=function(req,res){
+  res.render('admin/faqs/create',{
+    userdata: req.user,
+    all_faq_s: null
+  })
 }
 
 

@@ -26,22 +26,13 @@ module.exports = function (app) {
 
     app.post("/api/driver/signin", controller.signin);
     app.post('/api/driver/update-profile',
-        driverAuthJwt.verifyToken, (req, res, next) => {
-            console.log('this is updated')
-            if (!req.files) {
-                return next();
-
-            } else {
-                var path_file = 'E:/Techreneur/Go-Daala-BackEnd/public/files/uploadsFiles/vendor/';
-                //-----------------move profile into server-------------------------------//
-                req.files.profile.mv(path_file + '' + req.files.profile.name, function (err) {
-                    if (err) console.log("error occured");
-                    return next();
-                });
-
-            }
-            return next();
-        },
+        driverAuthJwt.verifyToken, 
         controller.update);
+
+
+    app.post('/api/driver/update-picture',
+    driverAuthJwt.verifyToken,
+    controller.update_picture
+    )
 
 };

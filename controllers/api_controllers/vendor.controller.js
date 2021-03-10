@@ -4,11 +4,12 @@ const Vendor = db.vendor;
 const Address = db.address;
 const Trip = db.trip;
 const Promo = db.promo;
+const Contect_us= db.contect_us;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-
-
+var fs = require('fs');
+var path = require('path');
 
 
 //-------------vendor signup--------------------
@@ -62,10 +63,14 @@ exports.signup = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = 'E:/Techreneur/Go-Daala-BackEnd/public/files/uploadsFiles/vendor/' + req.files.profile.name;
-                req.files.profile.mv(path_file, function (err) {
+                var path_file = './public/files/uploadsFiles/vendor/';
+                var filename = 'profile-1' + Date.now() + req.files.profile.name;
+                req.files.profile.mv(path_file+''+filename, function (err) {
                     if (err) console.log("error occured");
                 });
+
+               
+
                 // Save vendor to Database
                 Vendor.create({
                     first_name: req.body.first_name,
@@ -73,7 +78,7 @@ exports.signup = (req, res) => {
                     email: req.body.email,
                     phone_number: req.body.phone_number,
                     password: bcrypt.hashSync(req.body.password, 8),
-                    profile: '/public/files/uploadsFiles/vendor/' + req.files.profile.name,
+                    profile: '/public/files/uploadsFiles/vendor/' + filename,
                     account_info: 'unblock'
                     //  
                 }).then(user => {
@@ -420,7 +425,36 @@ exports.delete_address = (req, res) => {
 }
 
 
+exports.index_address=(req,res)=>{
+    Address.findAll().then(all_address => {
+        if (!all_address) {
+            return res.status(200).send({
+                responsecode: 400,
+                message: "no recode exist",
+                successData:{
 
+                }
+              });
+        }
+        return res.status(200).send({
+            status: 200,
+            message: "Get all vendor address",
+            successData: {
+                address: {
+                    all_address:all_address
+                }
+            }
+        });
+     
+     
+    
+      }).catch(err => {
+        return res.status(200).send({
+          responsecode: 400,
+          message: err.message,
+        });
+      });
+}
 
 //--------------vendor create trip---------------
 exports.create_trip = (req, res) => {
@@ -432,7 +466,6 @@ exports.create_trip = (req, res) => {
     req.checkBody('estimated_distance', 'estimated_distance must have value!').notEmpty();
     req.checkBody('estimated_time', 'estimated_time must have value!').notEmpty();
     req.checkBody('total_cost', 'total_cost must have value!').notEmpty();
-    req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
     req.checkBody('vendor_id', 'vendor_id must have ID!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -456,8 +489,9 @@ exports.create_trip = (req, res) => {
             estimated_distance: req.body.estimated_distance,
             estimated_time: req.body.estimated_time,
             total_cost: req.body.total_cost,
-            driver_id: req.body.driver_id,
-            vendor_id: req.body.vendor_id
+            driver_id: null,
+            vendor_id: req.body.vendor_id,
+            status:null
 
         }).then(trip => {
 
@@ -476,7 +510,8 @@ exports.create_trip = (req, res) => {
                         estimated_time: trip.estimated_time,
                         total_cost: trip.total_cost,
                         driver_id: trip.driver_id,
-                        vendor_id: trip.vendor_id
+                        vendor_id: trip.vendor_id,
+                        status:trip.status
 
                     }
                 }
@@ -602,7 +637,237 @@ exports.validate_promo_code = (req, res) => {
 }
 
 
+exports.forgot_password = function (req, res) {
+    req.checkBody('new_password', 'new passwod must have value!').notEmpty();
+    req.checkBody('phone_number', 'phone_number must have value!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in forgot password",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
 
+        Vendor.update({
+            password: bcrypt.hashSync(req.body.new_password, 8)
+        },
+            {
+                where: { phone_number: req.body.phone_number },
+                returning: true,
+                plain: true
+            },
+        ).then(user => {
+
+            if (user) {
+                var token = jwt.sign({ id: user.id }, config.secret, {
+                    expiresIn: 86400 // 24 hours
+                });
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "Password UPDATED is successful",
+                    successData: {
+                        user: {
+                            id: user[1].id,
+                            first_name: user[1].first_name,
+                            last_name: user[1].last_name,
+                            email: user[1].email,
+                            phone_number: user[1].phone_number,
+                            profile: user[1].profile,
+                            account_info: user[1].account_info,
+                            accessToken: token
+                        }
+                    }
+                });
+            }
+        }).catch(err => {
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+        });
+    }
+}
+
+
+////// ----------------------update profile picture-----------------------/////////////
+exports.update_picture = function (req, res) {
+    req.checkBody('id', 'id must have ID!').notEmpty();
+    req.checkBody('file', 'old file must have oldpath needed!');
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in update picture",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        if (!req.files) {  ////////--------------------new profile is not uploaded----------------/////////
+            req.checkBody('new_profile', 'new_profile must have uploaded!').notEmpty();
+            return res.status(200).send({
+                status: 400,
+                message: "validation error in update picture",
+                successData: {
+                    error: {
+                        error: errors
+                    }
+                }
+            });
+        } else {
+
+            req.checkBody('new_profile', 'new_profile picture must have uploaded animage').isImage(req.files.new_profile.name);
+            var errors = req.validationErrors();
+            if (errors) {   //////////------input file must have image validation error
+                return res.status(200).send({
+                    status: 400,
+                    message: "validation error in update picture",
+                    successData: {
+                        error: {
+                            error: errors
+                        }
+                    }
+                });
+            } else {   ///------------------ no error exist
+
+
+
+                var path_file = './public/files/uploadsFiles/vendor/';
+
+                var file = req.files.new_profile;
+
+
+
+
+                //-----------------move profile into server-------------------------------//
+                var filename = 'profile-1' + Date.now() + req.files.new_profile.name;
+                req.files.new_profile.mv(path_file + '' + filename, function (err) {
+                    if (err) console.log("error occured");
+                });
+
+            
+
+                fs.unlink('.' + req.body.file, function (err) {
+                    if (err) {
+                        console.log("err occer file not deleted");
+                    } else {
+                        console.log("file  deleted");
+                    }
+                })
+                Vendor.update({
+                    profile: '/public/files/uploadsFiles/vendor/' + filename
+                },
+                    {
+                        where: { id: req.body.id },
+                        returning: true,
+                        plain: true
+                    },
+                ).then(user => {
+
+                    if (user) {
+
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Profile picture is  UPDATED is successful",
+                            successData: {
+                                user: {
+                                    id: user[1].id,
+                                    first_name: user[1].first_name,
+                                    last_name: user[1].last_name,
+                                    email: user[1].email,
+                                    phone_number: user[1].phone_number,
+                                    profile: user[1].profile,
+                                    account_info: user[1].account_info
+                                }
+                            }
+                        });
+                    }
+                }).catch(err => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
+
+                });
+
+            }
+        }
+
+
+
+
+    }
+}
+
+
+
+exports.contect_us = function (req, res, next) {
+    req.checkBody('first_name', 'First Name must have value!').notEmpty();
+    req.checkBody('last_name', 'Last Name must have value!').notEmpty();
+    req.checkBody('email', 'Email must have value!').notEmpty();
+    req.checkBody('phone', 'Phone Number must have value!').notEmpty();
+    req.checkBody('message', 'Message must have value!').notEmpty();
+
+
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in contect us",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Contect_us.create({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            phone: req.body.phone,
+            message: req.body.message
+
+
+        }).then(contect => {
+            if (contect) {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Contect is successfuly send",
+                    successData: {
+                        contect_us: {
+                            first_name: contect.first_name,
+                            last_name: contect.last_name,
+                            email: contect.email,
+                            phone: contect.phone,
+                            message: contect.message
+                        }
+                    }
+                });
+            }
+
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+    }
+};
 
 
 

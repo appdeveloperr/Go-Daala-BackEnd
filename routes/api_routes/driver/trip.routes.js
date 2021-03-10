@@ -15,22 +15,50 @@ module.exports = function (app) {
         next();
     });
 
-    //------------driver Create trip Function----------------
+    //------------driver receive trip Function----------------
     app.post(
-        "/api/driver/create-trip",
+        "/api/driver/receive-trip",
         driverAuthJwt.verifyToken,
-        controller.create_trip,
+        controller.receive_trip,
+    );
+
+    //------------driver cencal trip Function----------------
+    app.post(
+        "/api/driver/cencal-trip",
+        driverAuthJwt.verifyToken,
+        controller.cencal_trip,
+    );
+
+    //------------driver start trip Function----------------
+    app.post(
+        "/api/driver/start-trip",
+        driverAuthJwt.verifyToken,
+        controller.start_trip,
     );
 
 
-        //------------driver Create trip Function----------------
+     //------------driver end trip Function----------------
+     app.post(
+        "/api/driver/end-trip",
+        driverAuthJwt.verifyToken,
+        controller.end_trip,
+    );
+
+
+    //------------driver recent trip Function----------------
+    app.post(
+        "/api/driver/recent-trip",
+        driverAuthJwt.verifyToken,
+        controller.recent_trip,
+    );
+
+
+    //------------driver recent trip Function----------------
         app.post(
-            "/api/driver/recent-trip",
+            "/api/driver/contact_us",
             driverAuthJwt.verifyToken,
-            controller.recent_trip,
+            controller.contact_us,
         );
-
-
 
 
 };

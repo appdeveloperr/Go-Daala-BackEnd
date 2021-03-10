@@ -268,5 +268,14 @@ app.get('/payment_get_way',all_driver_controller.payment_get_way)
 app.post('/payment_get_way',all_driver_controller.post_payment_get_way)
 //-----------------chat system----------------
 app.get('/chat/index',all_driver_controller.chat);
+
+app.get('/admin/get_content_us',all_driver_controller.get_contect_us);
+
+app.post('/admin/contect_us',all_driver_controller.create)
+
+
+app.get('/admin/faqs/index',all_driver_controller.faqs_index)
+
+app.get('/admin/faqs/create',all_driver_controller.faqs_create)
 }
 

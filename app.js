@@ -173,12 +173,14 @@ require('./routes/api_routes/user.routes')(app);
 
 //-----------------Vendor Api routes--------------
 require('./routes/api_routes/vendor/auth.routes')(app);
+require('./routes/api_routes/vendor/forgot_password.routes')(app);
 require('./routes/api_routes/vendor/address.routes')(app);
 require('./routes/api_routes/vendor/trip.routes')(app);
 require('./routes/api_routes/vendor/validation_promo_code.routes')(app);
 
 //-----------------driver Api routes--------------
 require('./routes/api_routes/driver/auth.routes')(app);
+require('./routes/api_routes/driver/forgot_password.routes')(app);
 require('./routes/api_routes/driver/vehicle_reg.routes')(app);
 require('./routes/api_routes/driver/trip.routes')(app);
 

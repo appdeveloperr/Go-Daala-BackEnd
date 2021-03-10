@@ -29,6 +29,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       total_cost: {
         type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.STRING
       }
     });
   
