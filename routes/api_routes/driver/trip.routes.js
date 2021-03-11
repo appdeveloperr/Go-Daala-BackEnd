@@ -57,8 +57,15 @@ module.exports = function (app) {
         app.post(
             "/api/driver/contact_us",
             driverAuthJwt.verifyToken,
-            controller.contact_us,
+            controller.contact_us
         );
 
+
+          //------------driver current location Function----------------
+          app.post(
+            "/api/driver/current-location",
+            driverAuthJwt.verifyToken,
+            controller.current_location,
+        );
 
 };

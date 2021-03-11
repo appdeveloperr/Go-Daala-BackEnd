@@ -5,6 +5,7 @@ const Address = db.address;
 const Trip = db.trip;
 const Promo = db.promo;
 const Contect_us= db.contect_us;
+const Faqs = db.faqs;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -684,7 +685,14 @@ exports.forgot_password = function (req, res) {
                         }
                     }
                 });
+            }else{
+                return res.status(200).send({
+                    status: 400,
+                    message: "this phone number is exist! please do this again with currect information",
+                    successData: {}
+                });
             }
+
         }).catch(err => {
             return res.status(200).send({
                 status: 400,
@@ -868,6 +876,42 @@ exports.contect_us = function (req, res, next) {
         });
     }
 };
+
+
+exports.get_all_faqs=(req,res)=>{
+    Faqs.findAll().then(all_faqs => {
+        if (!all_faqs) {
+            return res.status(200).send({
+                responsecode: 400,
+                message: "no recode is exist",
+                successData:{
+                }
+            });
+        } else {
+            return res.status(200).send({
+                status: 200,
+                message: "list of all FAQ's' ",
+                successData: {
+                    all_faqs_list: {
+                        all_faqs:all_faqs
+
+                    }
+                }
+            });
+        }
+
+
+
+    }).catch(err => {
+        return res.status(200).send({
+            responsecode: 400,
+            message: err.message,
+            successData:{
+
+            }
+        });
+    });
+}
 
 
 

@@ -16,7 +16,13 @@
      <!-- /.control-sidebar -->
    </div>
    <!-- ./wrapper -->
- 
+ <script src="//cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+<script>
+   CKEDITOR.replace('disc', { 
+    enterMode: CKEDITOR.ENTER_BR, 
+    on: {'instanceReady': function (evt) { evt.editor.execCommand('manimize');     }},
+    });      
+</script>
    <!-- jQuery -->
    <script src="../../plugins/jquery/jquery.min.js"></script>
    <!-- jQuery UI 1.11.4 -->

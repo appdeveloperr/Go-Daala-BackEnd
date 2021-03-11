@@ -277,5 +277,16 @@ app.post('/admin/contect_us',all_driver_controller.create)
 app.get('/admin/faqs/index',all_driver_controller.faqs_index)
 
 app.get('/admin/faqs/create',all_driver_controller.faqs_create)
+
+app.post('/admin/faqs/upload',all_driver_controller.faqs_upload);
+
+
+app.get('/faqs/Edit/:id',all_driver_controller.faqs_edit);
+
+
+app.get('/admin/faqs/delete/:id',all_driver_controller.faqs_delete);
+
+app.post('/admin/faqs/update',all_driver_controller.faqs_update);
+
 }
 

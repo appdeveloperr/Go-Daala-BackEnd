@@ -19,7 +19,7 @@
                 <!-- /.card -->
                 <div class="card">
                     <div class="card-header">
-                        <a href="/admin/faq/create" class="btn btn-primary">Add FAQ's</a>
+                        <a href="/admin/faqs/create" class="btn btn-primary">Add FAQ's</a>
                     </div>
                     <!-- /.card-header -->
                     <%if(all_faq_s){ %>
@@ -40,11 +40,11 @@
                                     <td><%=item.title%></td>
                                     <td><%=item.disc%></td>
                                     <td>
-                                        <a href="/admin/faq/Edit/<%=item.id%>" class="mr-2">
+                                        <a href="/faqs/Edit/<%=item.id%>" class="mr-2">
                                              <i class="fa fa-edit"></i>
                                          </a>
                                        
-                                        <a class="confirmDeletion" href="/admin/faq/delete/<%=item.id%>">
+                                        <a class="confirmDeletion" href="/admin/faqs/delete/<%=item.id%>">
                                             <i class="fa fa-trash text-danger"></i>
                                         </a>
 

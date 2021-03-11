@@ -6,6 +6,8 @@ const Vehicle = db.vehicle;
 const Contect_us = db.contect_us;
 const Trip = db.trip;
 const Promo = db.promo;
+const Faqs = db.faqs;
+const Dirver_lat_long= db.driver_lat_long;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -478,9 +480,7 @@ exports.get_all_vehicles = (req, res) => {
                 message: "list of all vehicles",
                 successData: {
                     vehicle_type_list: {
-                        id: all_vehicle[0].dataValues.id,
-                        vehicle_type: all_vehicle[0].dataValues.vehicle_type,
-                        image_path: all_vehicle[0].dataValues.image_path
+                            vehicle_list:all_vehicle
 
                     }
                 }
@@ -497,6 +497,40 @@ exports.get_all_vehicles = (req, res) => {
     });
 }
 
+exports.get_all_faqs=(req,res)=>{
+    Faqs.findAll().then(all_faqs => {
+        if (!all_faqs) {
+            return res.status(200).send({
+                responsecode: 400,
+                message: "no recode is exist",
+                successData:{
+                }
+            });
+        } else {
+            return res.status(200).send({
+                status: 200,
+                message: "list of all FAQ's' ",
+                successData: {
+                    all_faqs_list: {
+                        all_faqs:all_faqs
+
+                    }
+                }
+            });
+        }
+
+
+
+    }).catch(err => {
+        return res.status(200).send({
+            responsecode: 400,
+            message: err.message,
+            successData:{
+
+            }
+        });
+    });
+}
 
 
 //--------------driver receive trip---------------
@@ -816,10 +850,112 @@ exports.recent_trip = (req, res) => {
 
 
 //--------------driver contact us ----------------------
-exports.contact_us = (req, res) => {
+exports.contact_us = function (req, res, next) {
+    req.checkBody('first_name', 'First Name must have value!').notEmpty();
+    req.checkBody('last_name', 'Last Name must have value!').notEmpty();
+    req.checkBody('email', 'Email must have value!').notEmpty();
+    req.checkBody('phone', 'Phone Number must have value!').notEmpty();
+    req.checkBody('message', 'Message must have value!').notEmpty();
+
+
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in contect us",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Contect_us.create({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            phone: req.body.phone,
+            message: req.body.message
+
+
+        }).then(contect => {
+            if (contect) {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Contect is successfuly send",
+                    successData: {
+                        contect_us: {
+                            first_name: contect.first_name,
+                            last_name: contect.last_name,
+                            email: contect.email,
+                            phone: contect.phone,
+                            message: contect.message
+                        }
+                    }
+                });
+            }
+
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+    }
+};
+
+//--------------driver current location ----------------------
+exports.current_location=(req,res)=>{
+    req.checkBody('latitude', 'latitude must have needed!').notEmpty();
+    req.checkBody('longitude', 'longitude must have needed!').notEmpty();
+    req.checkBody('driver_id', 'driver_id must have required!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in  driver current  location",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Dirver_lat_long.create({
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
+            driver_id: req.body.driver_id
+
+
+        }).then(driver_lat => {
+            if (driver_lat) {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Driver current location is successfuly submeitted",
+                    successData: {
+                        driver_lat_long: {
+                            latitude: driver_lat.latitude,
+                            longitude: driver_lat.longitude,
+                            driver_id: driver_lat.driver_id
+                        }
+                    }
+                });
+            }
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+    }
 
 }
-
 
 //--------------driver forgot password  ----------------------
 exports.forgot_password = (req, res) => {
@@ -865,12 +1001,23 @@ exports.forgot_password = (req, res) => {
                             last_name: user[1].last_name,
                             email: user[1].email,
                             phone_number: user[1].phone_number,
+                            profile: user[1].profile,
+                            cnic: user[1].cnic,
+                            driving_license: user[1].driving_license,
+                            account_info: user[1].account_info,
                             accessToken: token
                         }
                     }
                 });
+            }else{
+                return res.status(200).send({
+                    status: 400,
+                    message: "this phone number is exist! please do this again with currect information",
+                    successData: {}
+                });
             }
         }).catch(err => {
+          
             return res.status(200).send({
                 status: 400,
                 message: err.message,

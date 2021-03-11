@@ -39,9 +39,10 @@ db.trip = require("../api_models/trip.model")(sequelize, Sequelize);
 //----------------------driver models-------------------------------
 db.driver = require("../api_models/driver.model")(sequelize, Sequelize);
 db.vehicle_reg = require("../api_models/vehicle_reg.model")(sequelize, Sequelize);
+db.driver_lat_long = require("../api_models/driver_lat_long.model")(sequelize, Sequelize);
 
 db.contect_us = require("../api_models/contect_us.model")(sequelize, Sequelize);
-
+db.faqs = require("../api_models/faqs.model")(sequelize, Sequelize);
 //Table Relationships
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -59,6 +60,10 @@ db.address.belongsTo(db.vendor, {
 });
 
 db.vehicle_reg.belongsTo(db.driver, {
+  foreignKey: "driver_id"
+});
+
+db.driver_lat_long.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 

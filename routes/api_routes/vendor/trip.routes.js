@@ -41,6 +41,13 @@ module.exports = function (app) {
         // uploads.single('profile'),
     );
 
+
+ //  //------------ get vendor all FAQ'S Function----------------
+ app.get(
+    "/api/vendor/faqs/index",
+    vendorAuthJwt.verifyToken, controller.get_all_faqs,
+       
+)
 //  //------------Vendor Update address Function----------------
 //     app.post(
 //         "/api/vendor/update-address",

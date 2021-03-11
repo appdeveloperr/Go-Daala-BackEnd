@@ -34,12 +34,12 @@ module.exports = function (app) {
         controller.get_all_vehicles
     )
 
-//  //------------Vendor Delete address Function----------------
-//  app.post(
-//     "/api/vendor/delete-address",
-//     // vendorAuthJwt.verifyToken,
-//     // controller.delete_address
-// )
+//  //------------ get driver all FAQ'S Function----------------
+ app.get(
+    "/api/driver/faqs/index",
+    driverAuthJwt.verifyToken,
+        controller.get_all_faqs
+)
 
 
 };
