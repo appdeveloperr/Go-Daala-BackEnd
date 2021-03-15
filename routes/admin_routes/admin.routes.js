@@ -17,12 +17,13 @@ var vehicle_controller = require('../../controllers/admin_controllers/vehicle');
 var promo_controller = require('../../controllers/admin_controllers/promo');
 var all_vendor_controller = require('../../controllers/admin_controllers/all_vendor');
 var all_driver_controller = require('../../controllers/admin_controllers/all_driver');
+var help_support = require('../../controllers/admin_controllers/help_support')
 var isAdmin = auth.isAdmin;
 const multer = require('multer');
 var path = require('path');
 const passport = require('passport');
 const fs = require('fs');
-
+const stripe = require('stripe');
 
 
 
@@ -259,13 +260,6 @@ app.get('/admin/driver/vehicle/unactive/:id',all_driver_controller.unactive);
 app.get('/driver/all_trips/:id',all_driver_controller.recent_trip);
 
 
-
-
-//---------------------get payment method  admin side-------------------
-app.get('/payment_get_way',all_driver_controller.payment_get_way)
-
-
-app.post('/payment_get_way',all_driver_controller.post_payment_get_way)
 //-----------------chat system----------------
 app.get('/chat/index',all_driver_controller.chat);
 
@@ -287,6 +281,15 @@ app.get('/faqs/Edit/:id',all_driver_controller.faqs_edit);
 app.get('/admin/faqs/delete/:id',all_driver_controller.faqs_delete);
 
 app.post('/admin/faqs/update',all_driver_controller.faqs_update);
+
+
+app.get('/admin/help_support/index',help_support.index);
+
+app.get('/contect_us/reply/:id',help_support.reply);
+
+
+app.post('/admin/help_support/reply',help_support.upload_reply);
+
 
 }
 

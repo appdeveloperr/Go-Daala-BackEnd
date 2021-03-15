@@ -11,7 +11,6 @@ const { title } = require("process");
 
 
 
-
 //--------All vendor Index Function -----------------
 exports.index = function (req, res) {
 
@@ -251,17 +250,8 @@ exports.recent_trip = (req, res) => {
 }
 
 
-//--------------- payment get method -------------------//
-exports.payment_get_way = function (req, res, next) {
-  res.render('admin/payment_get_way', {
-    userdata: req.user
-  });
-}
 
-exports.post_payment_get_way = function (req, res, next) {
 
-  console.log("hello", req.body)
-}
 
 exports.chat = function (req, res, next) {
   res.render('index');
@@ -301,7 +291,8 @@ exports.create = function (req, res, next) {
       last_name: req.body.last_name,
       email: req.body.email,
       phone: req.body.phone,
-      message: req.body.message
+      message: req.body.message,
+      message_holder:'outsider'
 
 
     }).then(contect => {

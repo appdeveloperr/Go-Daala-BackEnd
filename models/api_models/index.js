@@ -43,6 +43,8 @@ db.driver_lat_long = require("../api_models/driver_lat_long.model")(sequelize, S
 
 db.contect_us = require("../api_models/contect_us.model")(sequelize, Sequelize);
 db.faqs = require("../api_models/faqs.model")(sequelize, Sequelize);
+db.otp = require("../api_models/otp.model")(sequelize, Sequelize);
+
 //Table Relationships
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -74,6 +76,8 @@ db.trip.belongsTo(db.driver, {
 db.trip.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
+
+
 
 db.ROLES = ["user", "admin", "moderator"];
 

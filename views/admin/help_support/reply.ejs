@@ -1,0 +1,128 @@
+<%- include('.\\' + '../../_layouts/adminheader'); %>
+
+<!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Reply Form</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <%if(all_contect_record){ %>
+        
+        
+    <!-- Main content -->
+    <div class="col col-md-10 col-lg-9 col-xl-8 mx-auto my-auto">
+        <div class="card my-5 msgcard">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div id="messages_container" class="chat-log">
+                        <%all_contect_record.forEach(function(item){%>
+                        <%if(!item.admin_id){%>
+                        <div class="chat-log_item chat-log_item-own z-depth-0">
+                            <div class="row justify-content-end mx-1 d-flex">
+                                <div class="col-auto px-0">
+                                    <span class="chat-log_author">
+                                        @<%=item.first_name%>
+                                    </span>
+                                </div>
+                                <div class="col-auto px-0">
+                                </div>
+                            </div>
+                            <hr class="my-1 py-0 col-8" style="opacity: 0.5">
+                            <div class="chat-log_message">
+                                <p><%=item.message%></p>
+                            </div>
+                            <hr class="my-1 py-0 col-8" style="opacity: 0.5">
+                            <div class="row chat-log_time m-0 p-0 justify-content-end">
+                                <%=item.createdAt%>
+                            </div>
+                        </div>
+
+                        <%}else if(item.admin_id!=null){%>
+
+
+
+                        <div class="chat-log_item chat-log_item z-depth-0">
+                            <div class="row justify-content-end mx-1 d-flex">
+                                <div class="col-auto px-0">
+                                    <span class="chat-log_author">
+                                        @<%=userdata.username%>
+                                    </span>
+                                </div>
+                                <div class="col-auto px-0">
+                                </div>
+                            </div>
+                            <hr class="my-1 py-0 col-8" style="opacity: 0.5">
+                            <div class="chat-log_message">
+                                <p><%=item.message%>
+                                </p>
+                            </div>
+                            <hr class="my-1 py-0 col-8" style="opacity: 0.5">
+                            <div class="row chat-log_time m-0 p-0 justify-content-end">
+                                    <%=item.createdAt%>
+                            </div>
+                        </div>
+                        <%}%>
+                        <%});%>
+                    </div>
+                </div>
+            </div>
+            
+            <form action="/admin/help_support/reply" method="POST">
+            <%all_contect_record.forEach(function(item){%>
+            <input type="hidden" name="id" value="<%=item.id%>">
+            <input type="hidden" name="admin_id" value="<%=userdata.id%>">
+            <input type="hidden" name="admin_name" value="<%=userdata.username%>">
+            <input type="hidden" name="admin_email" value="<%=userdata.email%>">
+            <input type="hidden" name="driver_id" value="<%=item.driver_id%>">
+            <input type="hidden" name="vendor_id" value="<%=item.vendor_id%>">
+            <%});%>
+            <div class="card-footer border-0 bottom-rounded z-depth-0" style="background-color: #97E3C2">
+                <div class="row">
+                    <div class="col col-md-10 col-lg-9 mx-auto">
+                        <div class="row d-flex justify-content-center">
+                        
+                       
+                            
+                            <div class="col-12 col-md-9 align-self-center my-0">
+                                <div class="row d-flex align-self-center justify-content-center">
+                                    <div class="col-12 d-flex">
+                                        <div class="form-group col-12 my-0 mx-0">
+                                            <textarea rows="2" id="content" name="content" placeholder="reply!"
+                                                class="form-control textarea resize-ta"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         
+                            <div
+                                class="col-12 col-md-3 d-flex align-self-center justify-content-center justify-content-md-end my-0">
+                                <div class="md-form my-1">
+                                    <button type="submit" type="button" class="btn btn-success">Send
+                                        Message</button>
+
+                                </div>
+                            </div>
+
+                        
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+        </div>
+    </div>
+   
+    <%}%>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<%- include('.\\' + '../../_layouts/adminfooter'); %>

@@ -11,7 +11,8 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require('fs');
 var path = require('path');
-
+var OTP = db.otp;
+const axios = require('axios');
 
 //-------------vendor signup--------------------
 exports.signup = (req, res) => {
@@ -688,7 +689,7 @@ exports.forgot_password = function (req, res) {
             }else{
                 return res.status(200).send({
                     status: 400,
-                    message: "this phone number is exist! please do this again with currect information",
+                    message: "this phone number is not exist in DB! please do this again with currect information",
                     successData: {}
                 });
             }
@@ -845,7 +846,8 @@ exports.contect_us = function (req, res, next) {
             last_name: req.body.last_name,
             email: req.body.email,
             phone: req.body.phone,
-            message: req.body.message
+            message: req.body.message,
+            vendor_id: req.body.vendor_id
 
 
         }).then(contect => {
@@ -859,7 +861,8 @@ exports.contect_us = function (req, res, next) {
                             last_name: contect.last_name,
                             email: contect.email,
                             phone: contect.phone,
-                            message: contect.message
+                            message: contect.message,
+                            vendor_id:contect.vendor_id
                         }
                     }
                 });
@@ -914,4 +917,193 @@ exports.get_all_faqs=(req,res)=>{
 }
 
 
+exports.get_reply=function(req,res){
+    Contect_us.findAll({
+        where: {
+            vendor_id:req.body.vendor_id,
+            admin_id:"1"
+        }
+    }).then(all_vendor_record => {
+        if (all_vendor_record) {
+            return res.status(200).send({
+                status: 200,
+                message: "vendor reply is successfuly received",
+                successData: {
+                    all_reply_vendor_record: {
+                        all_vendor_record:all_vendor_record
+                    }
+                }
+            });
+           
+        }else{
+            return res.status(200).send({
+                responsecode: 400,
+                message: "no recode is exist in db",
+            }); 
+        }
+    }).catch(err => {
+        return res.status(200).send({
+            responsecode: 400,
+            message: err.message,
+        });
+    });
+}
+
+//SendOTP
+exports.sendOTP = (req, res) => {
+    // if (req.body.type.toLowerCase() == "register") {
+    req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
+
+    console.log(req.body.phone_number);
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in OTP sending!",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    }
+     else {
+
+
+        //Check User Already Exist or Not?
+        Vendor.findOne({
+            where: {
+                phone_number: req.body.phone_number
+            }
+        })
+            .then(user => {
+     
+                if (!user) {
+                    //User is not Exist
+                    var val = Math.floor(1000 + Math.random() * 9000);
+                    var messageData = "Your Go Daala Verification Code is: " + val;
+                    var mobileno = req.body.phone_number;
+                        
+                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum='+mobileno+'&sendernum=8583&textmessage='+messageData)
+                    .then(response => {
+
+
+                            OTP.create({
+                                otp: val,
+                                phone_number: mobileno
+                            }).then(otp => {
+
+                                return res.status(200).send({
+                                    responsecode: 200,
+                                    message: "OTP send successfully"
+                                });
+
+                            }).catch(error => {
+                                return res.status(200).send({
+                                    responsecode: 400,
+                                    message: error
+                                });
+
+                            });
+
+
+                        })
+                        .catch(error => {
+                            return res.status(200).send({
+                                responsecode: 400,
+                                message: error
+                            });
+                        });
+
+                } else {
+
+                    return res.status(200).send({
+                        responsecode: 400,
+                        message: "User Already Exist",
+                    });
+
+
+                }
+
+
+
+
+            })
+            .catch(err => {
+                res.status(500).send({ message: err.message });
+            });
+
+    }
+};
+
+//Verify OTP
+exports.varify_otp = (req, res) => {
+    req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
+    req.checkBody('otp', 'Phone Number must have value!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in OTP sending!",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+
+        //If User is exist then moving to Contact
+        OTP.findOne({
+            where: {
+                otp: req.body.otp,
+                phone_number: req.body.phone_number
+
+            }
+        }).then(otp => {
+
+
+            if (!otp) {
+                return res.status(200).send({
+                    responsecode: 400,
+                    message: "Invalid OTP",
+                });
+            }
+
+
+            //Delete OTP after ine-time used
+            OTP.destroy({
+                where: {
+                    otp: req.body.otp,
+                    phone_number: req.body.phone_number
+                }
+            }).then(removedOTP => {
+
+               
+                    return res.status(200).send({
+                        responsecode: 200,
+                        message: "OTP Validation Success",
+                    });
+                
+
+            }).catch(err => {
+                return res.status(200).send({
+                    responsecode: 400,
+                    message: err.message,
+                });
+            });
+
+
+
+
+        }).catch(err => {
+            return res.status(200).send({
+                responsecode: 400,
+                message: err.message,
+            });
+        });
+    }
+
+
+}
 

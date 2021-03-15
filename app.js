@@ -60,7 +60,7 @@ const Role = db.role;
 //  const User = db.user;
 
 // // force: true will drop the table if it already exists
-// db.sequelize.sync({force: false}).then(() => {
+// db.sequelize.sync({force: true}).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');
 //   initial();
 // });
@@ -177,12 +177,14 @@ require('./routes/api_routes/vendor/forgot_password.routes')(app);
 require('./routes/api_routes/vendor/address.routes')(app);
 require('./routes/api_routes/vendor/trip.routes')(app);
 require('./routes/api_routes/vendor/validation_promo_code.routes')(app);
+require('./routes/api_routes/vendor/otp.routes')(app);
 
 //-----------------driver Api routes--------------
 require('./routes/api_routes/driver/auth.routes')(app);
 require('./routes/api_routes/driver/forgot_password.routes')(app);
 require('./routes/api_routes/driver/vehicle_reg.routes')(app);
 require('./routes/api_routes/driver/trip.routes')(app);
+require('./routes/api_routes/driver/otp.routes')(app);
 
 // var auth = require('./routes/api_routes/auth.routes');
 // app.use('/',auth);

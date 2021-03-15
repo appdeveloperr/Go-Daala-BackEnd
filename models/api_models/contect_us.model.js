@@ -20,8 +20,19 @@ module.exports = (sequelize, Sequelize) => {
         },
         message: {
             type: Sequelize.STRING
+        },
+        message_holder: {
+            type: Sequelize.STRING
+        },
+        driver_id: {
+            type: Sequelize.STRING
+        },
+        vendor_id: {
+            type: Sequelize.STRING
+        },
+        admin_id: {
+            type: Sequelize.STRING
         }
-
 
     });
 

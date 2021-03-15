@@ -43,11 +43,13 @@ module.exports = function (app) {
 
 
  //  //------------ get vendor all FAQ'S Function----------------
- app.get(
+ app.post(
     "/api/vendor/faqs/index",
     vendorAuthJwt.verifyToken, controller.get_all_faqs,
        
 )
+
+
 //  //------------Vendor Update address Function----------------
 //     app.post(
 //         "/api/vendor/update-address",

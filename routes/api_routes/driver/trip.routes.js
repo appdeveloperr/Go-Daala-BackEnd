@@ -68,4 +68,10 @@ module.exports = function (app) {
             controller.current_location,
         );
 
+        app.get(
+            "/api/driver/get-reply",
+            driverAuthJwt.verifyToken,
+            controller.get_reply,
+        );
+
 };

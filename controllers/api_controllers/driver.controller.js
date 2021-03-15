@@ -7,12 +7,14 @@ const Contect_us = db.contect_us;
 const Trip = db.trip;
 const Promo = db.promo;
 const Faqs = db.faqs;
-const Dirver_lat_long= db.driver_lat_long;
+const Dirver_lat_long = db.driver_lat_long;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require('fs');
 var path = require('path');
+var OTP = db.otp;
+const axios = require('axios');
 
 
 
@@ -480,7 +482,7 @@ exports.get_all_vehicles = (req, res) => {
                 message: "list of all vehicles",
                 successData: {
                     vehicle_type_list: {
-                            vehicle_list:all_vehicle
+                        vehicle_list: all_vehicle
 
                     }
                 }
@@ -497,13 +499,13 @@ exports.get_all_vehicles = (req, res) => {
     });
 }
 
-exports.get_all_faqs=(req,res)=>{
+exports.get_all_faqs = (req, res) => {
     Faqs.findAll().then(all_faqs => {
         if (!all_faqs) {
             return res.status(200).send({
                 responsecode: 400,
                 message: "no recode is exist",
-                successData:{
+                successData: {
                 }
             });
         } else {
@@ -512,7 +514,7 @@ exports.get_all_faqs=(req,res)=>{
                 message: "list of all FAQ's' ",
                 successData: {
                     all_faqs_list: {
-                        all_faqs:all_faqs
+                        all_faqs: all_faqs
 
                     }
                 }
@@ -525,7 +527,7 @@ exports.get_all_faqs=(req,res)=>{
         return res.status(200).send({
             responsecode: 400,
             message: err.message,
-            successData:{
+            successData: {
 
             }
         });
@@ -908,7 +910,7 @@ exports.contact_us = function (req, res, next) {
 };
 
 //--------------driver current location ----------------------
-exports.current_location=(req,res)=>{
+exports.current_location = (req, res) => {
     req.checkBody('latitude', 'latitude must have needed!').notEmpty();
     req.checkBody('longitude', 'longitude must have needed!').notEmpty();
     req.checkBody('driver_id', 'driver_id must have required!').notEmpty();
@@ -1009,7 +1011,7 @@ exports.forgot_password = (req, res) => {
                         }
                     }
                 });
-            }else{
+            } else {
                 return res.status(200).send({
                     status: 400,
                     message: "this phone number is exist! please do this again with currect information",
@@ -1017,7 +1019,7 @@ exports.forgot_password = (req, res) => {
                 });
             }
         }).catch(err => {
-          
+
             return res.status(200).send({
                 status: 400,
                 message: err.message,
@@ -1165,7 +1167,8 @@ exports.contect_us = function (req, res, next) {
             last_name: req.body.last_name,
             email: req.body.email,
             phone: req.body.phone,
-            message: req.body.message
+            message: req.body.message,
+            driver_id: req.body.driver_id
 
 
         }).then(contect => {
@@ -1179,7 +1182,8 @@ exports.contect_us = function (req, res, next) {
                             last_name: contect.last_name,
                             email: contect.email,
                             phone: contect.phone,
-                            message: contect.message
+                            message: contect.message,
+                            driver_id: contect.driver_id
                         }
                     }
                 });
@@ -1197,6 +1201,331 @@ exports.contect_us = function (req, res, next) {
     }
 };
 
+exports.get_reply = function (req, res) {
+    Contect_us.findAll({
+        where: {
+            driver_id: req.body.driver_id,
+            admin_id: "1"
+        }
+    }).then(all_driver_record => {
+        if (all_driver_record) {
+            return res.status(200).send({
+                status: 200,
+                message: "Driver reply is successfuly received",
+                successData: {
+                    all_reply_driver_record: {
+                        all_driver_record: all_driver_record
+                    }
+                }
+            });
+
+        } else {
+            return res.status(200).send({
+                responsecode: 400,
+                message: "no recode is exist in db",
+            });
+        }
+    }).catch(err => {
+        return res.status(200).send({
+            responsecode: 400,
+            message: err.message,
+        });
+    });
+}
+
+//SendOTP
+exports.sendOTP = (req, res) => {
+    req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
+
+    console.log(req.body.phone_number);
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in OTP sending!",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    }
+     else {
 
 
+        //Check User Already Exist or Not?
+        Driver.findOne({
+            where: {
+                phone_number: req.body.phone_number
+            }
+        })
+            .then(user => {
+     
+                if (!user) {
+                    //User is not Exist
+                    var val = Math.floor(1000 + Math.random() * 9000);
+                    var messageData = "Your Go Daala Verification Code is: " + val;
+                    var mobileno = req.body.phone_number;
+
+                    // axios.get('http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient='+mobileno+'&originator=99095&messagedata='+messageData)
+                        
+                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum='+mobileno+'&sendernum=8583&textmessage='+messageData)
+                    .then(response => {
+
+
+                            OTP.create({
+                                otp: val,
+                                phone_number: mobileno
+                            }).then(otp => {
+
+                                return res.status(200).send({
+                                    responsecode: 200,
+                                    message: "OTP send successfully"
+                                });
+
+                            }).catch(error => {
+                                console.log(error);
+                            });
+
+
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+
+                } else {
+
+                    return res.status(200).send({
+                        responsecode: 400,
+                        message: "User Already Exist",
+                    });
+
+
+                }
+
+
+
+
+            })
+            .catch(err => {
+                res.status(500).send({ message: err.message });
+            });
+
+    }
+    // else if (req.body.type.toLowerCase() == "login") {
+
+    //   //Check User Already Exist or Not?
+    //   User.findOne({
+    //     where: {
+    //       phone: req.body.user_phone
+    //     }
+    //   })
+    //     .then(user => {
+
+    //       if (!user) {
+    //         //User is not Exist
+    //         return res.status(200).send({
+    //           responsecode: 400,
+    //           message: "User is Not Exist",
+    //         });
+    //       } else {
+
+
+    //         var val = Math.floor(1000 + Math.random() * 9000);
+    //         var messageData = "Your mKhata Verification Code is: " + val;
+    //         var mobileno = req.body.user_phone;
+
+    //         axios.get(`http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient=${mobileno}&originator=99095&messagedata=${messageData}`)
+    //         .then(response => {
+
+
+    //             OTP.create({
+    //               otp: val,
+    //               phone: req.body.user_phone
+    //             }).then(otp => {
+
+    //               return res.status(200).send({
+    //                 responsecode: 200,
+    //                 message: "OTP send successfully"
+    //               });
+
+    //             }).catch(error => {
+    //               console.log(error);
+    //             });
+
+
+    //           })
+    //           .catch(error => {
+    //             console.log(error);
+    //           });
+
+
+    //       }
+
+
+
+
+    //     })
+    //     .catch(err => {
+    //       res.status(500).send({ message: err.message });
+    //     });
+    // }else if (req.body.type.toLowerCase() == "password") {
+
+    //   //Check User Already Exist or Not?
+    //   User.findOne({
+    //     where: {
+    //       phone: req.body.user_phone
+    //     }
+    //   })
+    //     .then(user => {
+
+    //       if (!user) {
+    //         //User is not Exist
+    //         return res.status(200).send({
+    //           responsecode: 400,
+    //           message: "User is Not Exist",
+    //         });
+    //       } else {
+
+
+    //         var val = Math.floor(1000 + Math.random() * 9000);
+    //         var messageData = "Your mKhata Verification Code is: " + val;
+    //         var mobileno = req.body.user_phone;
+
+    //         axios.get(`http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient=${mobileno}&originator=99095&messagedata=${messageData}`)
+    //         .then(response => {
+
+
+    //             OTP.create({
+    //               otp: val,
+    //               phone: req.body.user_phone
+    //             }).then(otp => {
+
+    //               return res.status(200).send({
+    //                 responsecode: 200,
+    //                 message: "OTP send successfully"
+    //               });
+
+    //             }).catch(error => {
+    //               console.log(error);
+    //             });
+
+
+    //           })
+    //           .catch(error => {
+    //             console.log(error);
+    //           });
+
+
+    //       }
+
+
+
+
+    //     })
+    //     .catch(err => {
+    //       res.status(500).send({ message: err.message });
+    //     });
+    // }else{
+
+    //   var val = Math.floor(1000 + Math.random() * 9000);
+    //   var messageData = "Your mKhata Verification Code is: " + val;
+    //   var mobileno = req.body.user_phone;
+
+    //   axios.get(`https://pk.eocean.us/APIManagement/API/RequestAPI?user=mkhata&pwd=AHd5JmJP6h9s40dgcFKLsdRwfmTnQJhyvd3KkUQcNvhAwOpQ%2bAHL4Rcz1sBpEbQn0Q%3d%3d&sender=MKhata&reciever=${mobileno}&msg-data=${messageData}&response=string`)
+    //     .then(response => {
+
+
+    //       OTP.create({
+    //         otp: val,
+    //         phone: req.body.user_phone
+    //       }).then(otp => {
+
+    //         return res.status(200).send({
+    //           responsecode: 200,
+    //           message: "OTP send successfully"
+    //         });
+
+    //       }).catch(error => {
+    //         console.log(error);
+    //       });
+
+
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     });
+    // }
+};
+
+//Verify OTP
+exports.varify_otp = (req, res) => {
+    req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
+    req.checkBody('otp', 'Phone Number must have value!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in OTP sending!",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+
+        //If User is exist then moving to Contact
+        OTP.findOne({
+            where: {
+                otp: req.body.otp,
+                phone_number: req.body.phone_number
+
+            }
+        }).then(otp => {
+
+
+            if (!otp) {
+                return res.status(200).send({
+                    responsecode: 400,
+                    message: "Invalid OTP",
+                });
+            }
+
+
+            //Delete OTP after ine-time used
+            OTP.destroy({
+                where: {
+                    otp: req.body.otp,
+                    phone_number: req.body.phone_number
+                }
+            }).then(removedOTP => {
+
+               
+                    return res.status(200).send({
+                        responsecode: 200,
+                        message: "OTP Validation Success",
+                    });
+                
+
+            }).catch(err => {
+                return res.status(200).send({
+                    responsecode: 400,
+                    message: err.message,
+                });
+            });
+
+
+
+
+        }).catch(err => {
+            return res.status(200).send({
+                responsecode: 400,
+                message: err.message,
+            });
+        });
+    }
+
+
+}
 

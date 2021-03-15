@@ -29,6 +29,13 @@ module.exports = function (app) {
         controller.contect_us,
     );
 
+
+    app.post(
+        "/api/vendor/get-reply",
+        vendorAuthJwt.verifyToken,
+        controller.get_reply,
+    );
+
 //  //------------Vendor Update address Function----------------
 //     app.post(
 //         "/api/vendor/update-address",
