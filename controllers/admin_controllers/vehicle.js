@@ -54,9 +54,6 @@ exports.index = function (req, res) {
   });
 }
 
-
-
-
 //---------- Edit Vehicle Function ----------------------
 exports.edit = function (req, res) {
   var id = req.params.id;
@@ -89,8 +86,6 @@ exports.edit = function (req, res) {
     console.log('id is undifindes')
   }
 }
-
-
 
 
 //---------- Update Vehicle Function ----------------------

@@ -120,8 +120,6 @@ exports.edit = function (req, res) {
 }
 
 
-
-
 //---------- Update Promo Function ----------------------
 exports.update = function (req, res, next) {
 

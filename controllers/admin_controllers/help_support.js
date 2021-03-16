@@ -87,7 +87,7 @@ exports.reply = function (req, res) {
 }
 
 
-
+//---------Help and Support admin upload reply Function -----------------
 exports.upload_reply = function (req, res) {
     req.checkBody('content', 'Reply text must have needed!').notEmpty();
     var errors = req.validationErrors();

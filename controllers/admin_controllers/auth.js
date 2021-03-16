@@ -1,3 +1,4 @@
+//-----check admin or unathroize person -------------------
 exports.isAdmin = function (req, res, next) {
     if (req.isAuthenticated() && req.user.username === 'admin') {      
             next();

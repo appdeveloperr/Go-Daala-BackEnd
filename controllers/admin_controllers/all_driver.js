@@ -257,6 +257,7 @@ exports.chat = function (req, res, next) {
   res.render('index');
 }
 
+//------ get contect us page for outsider--------------------
 exports.get_contect_us = function (req, res, next) {
   res.render('admin/contect_us', {
     first_name: '',
@@ -267,6 +268,7 @@ exports.get_contect_us = function (req, res, next) {
   });
 };
 
+//-----post contect us page for outsider--------------------
 exports.create = function (req, res, next) {
   req.checkBody('first_name', 'First Name must have value!').notEmpty();
   req.checkBody('last_name', 'Last Name must have value!').notEmpty();
@@ -319,6 +321,7 @@ exports.create = function (req, res, next) {
   }
 };
 
+//-----admin get all FAQ'S --------------------
 exports.faqs_index = function (req, res) {
   Faqs.findAll().then(all_faqs => {
     if (!all_faqs) {
@@ -331,6 +334,7 @@ exports.faqs_index = function (req, res) {
   });
 }
 
+//-----admin get create page FAQ'S --------------------
 exports.faqs_create = function (req, res) {
   res.render('admin/faqs/create', {
     userdata: req.user,
@@ -339,6 +343,7 @@ exports.faqs_create = function (req, res) {
   })
 };
 
+//-----admin post create FAQ'S -------------------
 exports.faqs_upload = function (req, res) {
   req.checkBody('title', 'Title must have needed!').notEmpty();
   req.checkBody('disc', 'Discreption must have needed!').notEmpty();
@@ -373,7 +378,7 @@ exports.faqs_upload = function (req, res) {
   }
 }
 
-
+//-----admin get edit  FAQ'S page -------------------
 exports.faqs_edit = function (req,res){
 var id=req.params.id;
 if (id) {
@@ -407,7 +412,7 @@ if (id) {
 }
 }
 
-
+//-----admin update FAQ's -------------------
 exports.faqs_update=function(req,res){
   Faqs.update({
     title:req.body.title,
@@ -435,6 +440,8 @@ exports.faqs_update=function(req,res){
 
 });
 }
+
+//-----admin delete FAQ's -------------------
 exports.faqs_delete=function(req,res){
   Faqs.destroy({
     where: {
@@ -459,45 +466,6 @@ exports.faqs_delete=function(req,res){
   })}
 
 
-
-
-
-
-
-
-
-// //---------- Edit Vehicle Function ----------------------
-// exports.edit = function (req, res) {
-//   var id = req.params.id;
-//   if (id) {
-//     //var id = 1;
-//     Vehicle.findOne({
-//       where: {
-//         id: id
-//       }
-//     }).then(edit => {
-//       //if User not found with given ID
-//       if (edit) {
-
-//         res.render('admin/vehicle/edit', {
-//           userdata: req.user,
-//           data: edit.dataValues
-//         });
-
-//       } else {
-//         console.log("if User not found with given ID");
-
-//       }
-//     }).catch(err => {
-//       return res.status(200).send({
-//         responsecode: 400,
-//         message: err.message,
-//       });
-//     });
-//   } else {
-//     console.log('id is undifindes')
-//   }
-// }
 
 
 

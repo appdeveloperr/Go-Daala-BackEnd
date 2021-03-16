@@ -426,7 +426,7 @@ exports.delete_address = (req, res) => {
     });
 }
 
-
+//--------------vendor get all address------------
 exports.index_address=(req,res)=>{
     Address.findAll().then(all_address => {
         if (!all_address) {
@@ -638,7 +638,7 @@ exports.validate_promo_code = (req, res) => {
     }
 }
 
-
+//---------------vendor forgot password -----------------
 exports.forgot_password = function (req, res) {
     req.checkBody('new_password', 'new passwod must have value!').notEmpty();
     req.checkBody('phone_number', 'phone_number must have value!').notEmpty();
@@ -820,7 +820,7 @@ exports.update_picture = function (req, res) {
 }
 
 
-
+//---------------vendor contect to admin -----------------
 exports.contect_us = function (req, res, next) {
     req.checkBody('first_name', 'First Name must have value!').notEmpty();
     req.checkBody('last_name', 'Last Name must have value!').notEmpty();
@@ -880,7 +880,7 @@ exports.contect_us = function (req, res, next) {
     }
 };
 
-
+//---------------vendor get all FAQ's -----------------
 exports.get_all_faqs=(req,res)=>{
     Faqs.findAll().then(all_faqs => {
         if (!all_faqs) {
@@ -916,7 +916,7 @@ exports.get_all_faqs=(req,res)=>{
     });
 }
 
-
+//---------------vendor get all reply list from admin -----------------
 exports.get_reply=function(req,res){
     Contect_us.findAll({
         where: {
@@ -949,7 +949,7 @@ exports.get_reply=function(req,res){
     });
 }
 
-//SendOTP
+//------------------vendor SendOTP------------------------------------
 exports.sendOTP = (req, res) => {
     // if (req.body.type.toLowerCase() == "register") {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
@@ -994,13 +994,13 @@ exports.sendOTP = (req, res) => {
                             }).then(otp => {
 
                                 return res.status(200).send({
-                                    responsecode: 200,
+                                    status: 200,
                                     message: "OTP send successfully"
                                 });
 
                             }).catch(error => {
                                 return res.status(200).send({
-                                    responsecode: 400,
+                                    status: 400,
                                     message: error
                                 });
 
@@ -1010,18 +1010,53 @@ exports.sendOTP = (req, res) => {
                         })
                         .catch(error => {
                             return res.status(200).send({
-                                responsecode: 400,
+                                status: 400,
                                 message: error
                             });
                         });
 
                 } else {
 
-                    return res.status(200).send({
-                        responsecode: 400,
-                        message: "User Already Exist",
-                    });
+                    // return res.status(200).send({
+                    //     status: 400,
+                    //     message: "User Already Exist",
+                    // });
 
+                    //User is not Exist
+                    var val = Math.floor(1000 + Math.random() * 9000);
+                    var messageData = "Your Go Daala Verification Code is: " + val;
+                    var mobileno = req.body.phone_number;
+                        
+                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum='+mobileno+'&sendernum=8583&textmessage='+messageData)
+                    .then(response => {
+
+
+                            OTP.create({
+                                otp: val,
+                                phone_number: mobileno
+                            }).then(otp => {
+
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: "OTP send successfully"
+                                });
+
+                            }).catch(error => {
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: error
+                                });
+
+                            });
+
+
+                        })
+                        .catch(error => {
+                            return res.status(200).send({
+                                status: 400,
+                                message: error
+                            });
+                        });
 
                 }
 
@@ -1030,13 +1065,17 @@ exports.sendOTP = (req, res) => {
 
             })
             .catch(err => {
-                res.status(500).send({ message: err.message });
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message ,
+                });
+                
             });
 
     }
 };
 
-//Verify OTP
+//--------------------vendor Verify OTP-------------------------------------
 exports.varify_otp = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
     req.checkBody('otp', 'Phone Number must have value!').notEmpty();
@@ -1065,7 +1104,7 @@ exports.varify_otp = (req, res) => {
 
             if (!otp) {
                 return res.status(200).send({
-                    responsecode: 400,
+                    status: 400,
                     message: "Invalid OTP",
                 });
             }
@@ -1081,14 +1120,14 @@ exports.varify_otp = (req, res) => {
 
                
                     return res.status(200).send({
-                        responsecode: 200,
+                        status: 200,
                         message: "OTP Validation Success",
                     });
                 
 
             }).catch(err => {
                 return res.status(200).send({
-                    responsecode: 400,
+                    status: 400,
                     message: err.message,
                 });
             });
@@ -1098,7 +1137,7 @@ exports.varify_otp = (req, res) => {
 
         }).catch(err => {
             return res.status(200).send({
-                responsecode: 400,
+                status: 400,
                 message: err.message,
             });
         });

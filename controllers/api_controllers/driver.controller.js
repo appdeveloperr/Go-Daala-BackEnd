@@ -1142,6 +1142,7 @@ exports.update_picture = (req, res) => {
     }
 }
 
+//--------------driver contect a message to admin  ----------------------
 exports.contect_us = function (req, res, next) {
     req.checkBody('first_name', 'First Name must have value!').notEmpty();
     req.checkBody('last_name', 'Last Name must have value!').notEmpty();
@@ -1201,6 +1202,7 @@ exports.contect_us = function (req, res, next) {
     }
 };
 
+//--------------driver get reply from admin  ----------------------
 exports.get_reply = function (req, res) {
     Contect_us.findAll({
         where: {
@@ -1279,24 +1281,30 @@ exports.sendOTP = (req, res) => {
                             }).then(otp => {
 
                                 return res.status(200).send({
-                                    responsecode: 200,
+                                    status: 200,
                                     message: "OTP send successfully"
                                 });
 
                             }).catch(error => {
-                                console.log(error);
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: error
+                                });
                             });
 
 
                         })
                         .catch(error => {
-                            console.log(error);
+                            return res.status(200).send({
+                                status: 400,
+                                message: error
+                            });
                         });
 
                 } else {
 
                     return res.status(200).send({
-                        responsecode: 400,
+                        status: 400,
                         message: "User Already Exist",
                     });
 
@@ -1308,7 +1316,10 @@ exports.sendOTP = (req, res) => {
 
             })
             .catch(err => {
-                res.status(500).send({ message: err.message });
+                return res.status(200).send({
+                    status: 400,
+                    message: err
+                });
             });
 
     }
@@ -1487,7 +1498,7 @@ exports.varify_otp = (req, res) => {
 
             if (!otp) {
                 return res.status(200).send({
-                    responsecode: 400,
+                    status: 400,
                     message: "Invalid OTP",
                 });
             }
@@ -1503,14 +1514,15 @@ exports.varify_otp = (req, res) => {
 
                
                     return res.status(200).send({
-                        responsecode: 200,
+                        status: 200,
                         message: "OTP Validation Success",
+                        phone_number:req.body.phone_number
                     });
                 
 
             }).catch(err => {
                 return res.status(200).send({
-                    responsecode: 400,
+                    status: 400,
                     message: err.message,
                 });
             });
@@ -1520,7 +1532,7 @@ exports.varify_otp = (req, res) => {
 
         }).catch(err => {
             return res.status(200).send({
-                responsecode: 400,
+                status: 400,
                 message: err.message,
             });
         });
