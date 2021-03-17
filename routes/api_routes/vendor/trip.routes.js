@@ -43,7 +43,7 @@ module.exports = function (app) {
 
 
  //  //------------ get vendor all FAQ'S Function----------------
- app.post(
+ app.get(
     "/api/vendor/faqs/index",
     vendorAuthJwt.verifyToken, controller.get_all_faqs,
        

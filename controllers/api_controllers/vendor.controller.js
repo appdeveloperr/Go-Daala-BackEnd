@@ -4,7 +4,7 @@ const Vendor = db.vendor;
 const Address = db.address;
 const Trip = db.trip;
 const Promo = db.promo;
-const Contect_us= db.contect_us;
+const Contect_us = db.contect_us;
 const Faqs = db.faqs;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
@@ -67,11 +67,11 @@ exports.signup = (req, res) => {
 
                 var path_file = './public/files/uploadsFiles/vendor/';
                 var filename = 'profile-1' + Date.now() + req.files.profile.name;
-                req.files.profile.mv(path_file+''+filename, function (err) {
+                req.files.profile.mv(path_file + '' + filename, function (err) {
                     if (err) console.log("error occured");
                 });
 
-               
+
 
                 // Save vendor to Database
                 Vendor.create({
@@ -427,35 +427,35 @@ exports.delete_address = (req, res) => {
 }
 
 //--------------vendor get all address------------
-exports.index_address=(req,res)=>{
+exports.index_address = (req, res) => {
     Address.findAll().then(all_address => {
         if (!all_address) {
             return res.status(200).send({
                 responsecode: 400,
                 message: "no recode exist",
-                successData:{
+                successData: {
 
                 }
-              });
+            });
         }
         return res.status(200).send({
             status: 200,
             message: "Get all vendor address",
             successData: {
                 address: {
-                    all_address:all_address
+                    all_address: all_address
                 }
             }
         });
-     
-     
-    
-      }).catch(err => {
+
+
+
+    }).catch(err => {
         return res.status(200).send({
-          responsecode: 400,
-          message: err.message,
+            responsecode: 400,
+            message: err.message,
         });
-      });
+    });
 }
 
 //--------------vendor create trip---------------
@@ -493,7 +493,7 @@ exports.create_trip = (req, res) => {
             total_cost: req.body.total_cost,
             driver_id: null,
             vendor_id: req.body.vendor_id,
-            status:null
+            status: null
 
         }).then(trip => {
 
@@ -513,7 +513,7 @@ exports.create_trip = (req, res) => {
                         total_cost: trip.total_cost,
                         driver_id: trip.driver_id,
                         vendor_id: trip.vendor_id,
-                        status:trip.status
+                        status: trip.status
 
                     }
                 }
@@ -553,27 +553,38 @@ exports.recent_trip = (req, res) => {
                 vendor_id: req.body.vendor_id
             }
         }).then(trip => {
-            return res.status(200).send({
-                status: 200,
-                message: "Get vendor recent  Trip",
-                successData: {
-                    trip: {
-                        id: trip.id,
-                        pickup: trip.pickup,
-                        dropoff: trip.dropoff,
-                        pickup_latitude: trip.pickup_latitude,
-                        pick_longitude: trip.pick_longitude,
-                        vehicle_name: trip.vehicle_name,
-                        estimated_distance: trip.estimated_distance,
-                        estimated_time: trip.estimated_time,
-                        total_cost: trip.total_cost,
-                        driver_id: trip.driver_id,
-                        vendor_id: trip.vendor_id
+            if (trip) {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Get vendor recent  Trip",
+                    successData: {
+                        trip: {
+                            id: trip.id,
+                            pickup: trip.pickup,
+                            dropoff: trip.dropoff,
+                            pickup_latitude: trip.pickup_latitude,
+                            pick_longitude: trip.pick_longitude,
+                            vehicle_name: trip.vehicle_name,
+                            estimated_distance: trip.estimated_distance,
+                            estimated_time: trip.estimated_time,
+                            total_cost: trip.total_cost,
+                            driver_id: trip.driver_id,
+                            vendor_id: trip.vendor_id
 
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Get vendor recent  Trip",
+                    successData: {
+                        trip: {
+                        }
+                    }
+                });
 
+            }
         }).catch(err => {
 
             return res.status(200).send({
@@ -583,6 +594,7 @@ exports.recent_trip = (req, res) => {
             });
 
         });
+
     }
 }
 
@@ -686,7 +698,7 @@ exports.forgot_password = function (req, res) {
                         }
                     }
                 });
-            }else{
+            } else {
                 return res.status(200).send({
                     status: 400,
                     message: "this phone number is not exist in DB! please do this again with currect information",
@@ -763,7 +775,7 @@ exports.update_picture = function (req, res) {
                     if (err) console.log("error occured");
                 });
 
-            
+
 
                 fs.unlink('.' + req.body.file, function (err) {
                     if (err) {
@@ -862,7 +874,7 @@ exports.contect_us = function (req, res, next) {
                             email: contect.email,
                             phone: contect.phone,
                             message: contect.message,
-                            vendor_id:contect.vendor_id
+                            vendor_id: contect.vendor_id
                         }
                     }
                 });
@@ -881,13 +893,13 @@ exports.contect_us = function (req, res, next) {
 };
 
 //---------------vendor get all FAQ's -----------------
-exports.get_all_faqs=(req,res)=>{
+exports.get_all_faqs = (req, res) => {
     Faqs.findAll().then(all_faqs => {
         if (!all_faqs) {
             return res.status(200).send({
                 responsecode: 400,
                 message: "no recode is exist",
-                successData:{
+                successData: {
                 }
             });
         } else {
@@ -896,7 +908,7 @@ exports.get_all_faqs=(req,res)=>{
                 message: "list of all FAQ's' ",
                 successData: {
                     all_faqs_list: {
-                        all_faqs:all_faqs
+                        all_faqs: all_faqs
 
                     }
                 }
@@ -909,7 +921,7 @@ exports.get_all_faqs=(req,res)=>{
         return res.status(200).send({
             responsecode: 400,
             message: err.message,
-            successData:{
+            successData: {
 
             }
         });
@@ -917,11 +929,11 @@ exports.get_all_faqs=(req,res)=>{
 }
 
 //---------------vendor get all reply list from admin -----------------
-exports.get_reply=function(req,res){
+exports.get_reply = function (req, res) {
     Contect_us.findAll({
         where: {
-            vendor_id:req.body.vendor_id,
-            admin_id:"1"
+            vendor_id: req.body.vendor_id
+            // admin_id:"1"
         }
     }).then(all_vendor_record => {
         if (all_vendor_record) {
@@ -930,16 +942,16 @@ exports.get_reply=function(req,res){
                 message: "vendor reply is successfuly received",
                 successData: {
                     all_reply_vendor_record: {
-                        all_vendor_record:all_vendor_record
+                        all_vendor_record: all_vendor_record
                     }
                 }
             });
-           
-        }else{
+
+        } else {
             return res.status(200).send({
                 responsecode: 400,
                 message: "no recode is exist in db",
-            }); 
+            });
         }
     }).catch(err => {
         return res.status(200).send({
@@ -967,7 +979,7 @@ exports.sendOTP = (req, res) => {
             }
         });
     }
-     else {
+    else {
 
 
         //Check User Already Exist or Not?
@@ -977,15 +989,15 @@ exports.sendOTP = (req, res) => {
             }
         })
             .then(user => {
-     
+
                 if (!user) {
                     //User is not Exist
                     var val = Math.floor(1000 + Math.random() * 9000);
                     var messageData = "Your Go Daala Verification Code is: " + val;
                     var mobileno = req.body.phone_number;
-                        
-                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum='+mobileno+'&sendernum=8583&textmessage='+messageData)
-                    .then(response => {
+
+                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                        .then(response => {
 
 
                             OTP.create({
@@ -1026,9 +1038,9 @@ exports.sendOTP = (req, res) => {
                     var val = Math.floor(1000 + Math.random() * 9000);
                     var messageData = "Your Go Daala Verification Code is: " + val;
                     var mobileno = req.body.phone_number;
-                        
-                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum='+mobileno+'&sendernum=8583&textmessage='+messageData)
-                    .then(response => {
+
+                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                        .then(response => {
 
 
                             OTP.create({
@@ -1067,9 +1079,9 @@ exports.sendOTP = (req, res) => {
             .catch(err => {
                 return res.status(200).send({
                     status: 400,
-                    message: err.message ,
+                    message: err.message,
                 });
-                
+
             });
 
     }
@@ -1118,12 +1130,12 @@ exports.varify_otp = (req, res) => {
                 }
             }).then(removedOTP => {
 
-               
-                    return res.status(200).send({
-                        status: 200,
-                        message: "OTP Validation Success",
-                    });
-                
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "OTP Validation Success",
+                });
+
 
             }).catch(err => {
                 return res.status(200).send({
