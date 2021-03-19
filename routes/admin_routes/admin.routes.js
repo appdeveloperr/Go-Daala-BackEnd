@@ -216,6 +216,9 @@ app.get('/admin/Edit_promo/:id', promo_controller.edit);
 //-----------------get all Vendors admin side----------------
 app.get('/admin/all_vendor/index',all_vendor_controller.index);
 
+//-----------------get information Vendors admin side----------------
+app.get('/vendor/information/:id',all_vendor_controller.info);
+
 //-----------------get vendor unblock admin side----------------
 app.get('/admin/vendor/unblock/:id',all_vendor_controller.unblock);
 

@@ -35,6 +35,7 @@ db.vendor = require("../api_models/vendor.model")(sequelize, Sequelize);
 db.address = require("../api_models/address.model")(sequelize, Sequelize);
 db.vehicle = require("../api_models/vehicle.model")(sequelize, Sequelize);
 db.trip = require("../api_models/trip.model")(sequelize, Sequelize);
+db.review = require("../api_models/review.model")(sequelize, Sequelize);
 
 //----------------------driver models-------------------------------
 db.driver = require("../api_models/driver.model")(sequelize, Sequelize);
@@ -57,18 +58,23 @@ db.user.belongsToMany(db.role, {
   otherKey: "roleId"
 });
 
+//---------vendor save address with vendor id--------//
 db.address.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
+//---------vehicle register with driver id----------------------//
 db.vehicle_reg.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 
+//---------current location of driver lat long---------//
 db.driver_lat_long.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 
+
+//-----------trip--------------------//
 db.trip.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
@@ -77,6 +83,19 @@ db.trip.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
+
+//--------------review--------------
+db.review.belongsTo(db.driver, {
+  foreignKey: "driver_id"
+});
+
+db.review.belongsTo(db.vendor, {
+  foreignKey: "vendor_id"
+});
+
+db.review.belongsTo(db.trip, {
+  foreignKey: "trip_id"
+});
 
 
 db.ROLES = ["user", "admin", "moderator"];

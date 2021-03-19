@@ -1,0 +1,182 @@
+<%- include('.\\' + '../../_layouts/adminheader' ); %>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Information</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <!-- /.card -->
+                    <div class="card">
+                        <!-- <div class="card-header">
+                        <a href="/admin/vehicle/create" class="btn btn-primary">Create Vehicle</a>
+                    </div> -->
+                        <!-- /.card-header -->
+                        <%if(one_vendor){ %>
+                            <div class="card-body">
+                                <caption>
+                                    <h2> Vendor Information</h2>
+                                </caption>
+
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Profile Image</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                            <th>phone_number</th>
+                                            <th>account_info</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <%var image=one_vendor.profile; var img_length=image.length; var
+                                                img=image.slice(7, img_length);%>
+
+                                                <td><img src="<%=img%>" width="200" height="100"></td>
+                                                <td>
+                                                    <%=one_vendor.first_name%>
+                                                </td>
+                                                <td>
+                                                    <%=one_vendor.last_name%>
+                                                </td>
+                                                <td>
+                                                    <%=one_vendor.email%>
+                                                </td>
+                                                <td>
+                                                    <%=one_vendor.phone_number%>
+                                                </td>
+                                                <td>
+
+
+                                                    <%if(one_vendor.account_info=='block'){%>
+
+                                                        <a href="/admin/driver/unblock/<%=one_vendor.id%>" class="mr-2">
+                                                            <button type="button"
+                                                                class="btn btn-success">UNBLOCK</button>
+                                                        </a>
+
+                                                        <%}else{%>
+
+                                                            <a href="/admin/driver/block/<%=one_vendor.id%>"
+                                                                class="mr-2">
+                                                                <button type="button"
+                                                                    class="btn btn-danger">BLOCK</button>
+                                                            </a>
+
+                                                            <%}%>
+                                                </td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+
+
+
+                                <%}%>
+                                    <br> 
+                                    <%if(all_trips){ %>
+
+                                        <caption>
+                                            <h2> Trips Information</h2>
+                                        </caption>
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pick up</th>
+                                                    <th>Drop off</th>
+                                                    <th>vehicle_name</th>
+                                                    <th>estimated_distance</th>
+                                                    <th>estimated_time</th>
+                                                    <th>total_cost</th>
+                                                    <th>status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%all_trips.forEach(function(item){%>
+                                                <tr>
+                                                  
+
+                                                        <td>
+                                                            <%=item.pickup%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.dropoff%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.vehicle_name%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.estimated_distance%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.estimated_time%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.total_cost%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.status%>
+                                                        </td>
+
+                                                        
+                                                </tr>
+                                                <%});%>
+
+                                            </tbody>
+                                        </table>
+
+                                        <%}%>
+                            </div>
+                            <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+        });
+        function deleteRecord(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    document.getElementById('del_form' + id).submit();
+                }
+            })
+        }
+    </script>
+    <%- include('.\\' + '../../_layouts/adminfooter' ); %>

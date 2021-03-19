@@ -14,6 +14,8 @@ var bcrypt = require("bcryptjs");
 var fs = require('fs');
 var path = require('path');
 var OTP = db.otp;
+var Reviews = db.review;
+var Vendor = db.vendor;
 const axios = require('axios');
 
 
@@ -80,13 +82,6 @@ exports.signup = (req, res) => {
                 req.files.profile.mv(path_file + '' + fileOne, function (err) {
                     if (err) console.log("error occured");
                 });
-
-
-
-                // var profilename = 'profile-1' + Date.now() + path.extname(req.files.profile.name);
-                // fs.rename(path_file + '' + req.files.profile.name, path_file + '' + profilename, function (err) {
-                //     if (err) console.log('file not renameing');
-                // });
 
 
 
@@ -203,9 +198,18 @@ exports.signin = (req, res) => {
                 );
 
                 if (!passwordIsValid) {
-                    return res.status(401).send({
+                    return res.status(400).send({
                         accessToken: null,
                         message: "Invalid user Password!"
+                    });
+                }
+                console.log(user)
+
+                if(user.dataValues.account_info=='block'){
+                    return res.status(200).send({
+                        status: 400,
+                        message: "please wait for admin approvel.",
+                        successData: {}
                     });
                 }
 
@@ -1252,7 +1256,7 @@ exports.sendOTP = (req, res) => {
             }
         });
     }
-     else {
+    else {
 
 
         //Check User Already Exist or Not?
@@ -1262,7 +1266,7 @@ exports.sendOTP = (req, res) => {
             }
         })
             .then(user => {
-     
+
                 if (!user) {
                     //User is not Exist
                     var val = Math.floor(1000 + Math.random() * 9000);
@@ -1270,9 +1274,9 @@ exports.sendOTP = (req, res) => {
                     var mobileno = req.body.phone_number;
 
                     // axios.get('http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient='+mobileno+'&originator=99095&messagedata='+messageData)
-                        
-                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum='+mobileno+'&sendernum=8583&textmessage='+messageData)
-                    .then(response => {
+
+                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                        .then(response => {
 
 
                             OTP.create({
@@ -1512,13 +1516,13 @@ exports.varify_otp = (req, res) => {
                 }
             }).then(removedOTP => {
 
-               
-                    return res.status(200).send({
-                        status: 200,
-                        message: "OTP Validation Success",
-                        phone_number:req.body.phone_number
-                    });
-                
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "OTP Validation Success",
+                    phone_number: req.body.phone_number
+                });
+
 
             }).catch(err => {
                 return res.status(200).send({
@@ -1539,5 +1543,173 @@ exports.varify_otp = (req, res) => {
     }
 
 
+}
+
+//-------------------vendor create review for trip--------------------------------
+exports.create_review = (req, res) => {
+    req.checkBody('rating', 'Rating must have Number needed!').notEmpty();
+    req.checkBody('discription', 'Discription must have needed!').notEmpty();
+    req.checkBody('trip_id', 'Trip_id must have id required!').notEmpty();
+    req.checkBody('driver_id', 'Driver_id must have id required!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in driver Create review",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save trips to Database
+        Reviews.create({
+            rating: req.body.rating,
+            discription: req.body.discription,
+            trip_id: req.body.trip_id,
+            driver_id: req.body.driver_id,
+            vendor_id: null
+        }).then(reviews => {
+
+            return res.status(200).send({
+                status: 200,
+                message: "Create driver reviews   is successful",
+                successData: {
+                    review: {
+                        id: reviews.id,
+                        rating: reviews.rating,
+                        discription: reviews.discription,
+                        trip_id: reviews.trip_id,
+                        driver_id: reviews.driver_id,
+                    }
+                }
+            });
+
+
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+
+    }
+}
+
+
+//--------------------driver get vendor review from trip------------------------------
+exports.get_review = (req, res) => {
+    req.checkBody('trip_id', 'Trip_id must have Id needed!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in vendor get review",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Reviews.findOne({
+            where: {
+                trip_id: req.body.trip_id,
+                driver_id: null
+            }
+        }).then(reviews => {
+            if (reviews) {
+                
+                Vendor.findOne({
+                    where: {
+                        id: reviews.vendor_id
+                    }
+                }).then(vendors => {
+                    if (vendors) {
+                        Trip.findOne({
+                            where: {
+                                id: req.body.trip_id
+                            }
+                        }).then(trip => {
+                            if (trip) {
+
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: "get vonder reviews   is successful",
+                                    successData: {
+                                        review: {
+                                            id: reviews.id,
+                                            rating: reviews.rating,
+                                            discription: reviews.discription,
+
+                                            trip_id: reviews.trip_id,
+                                            vendor_id: reviews.vendor_id
+                                        },
+                                        vendor: {
+                                            vendor_name: vendors.dataValues.first_name + " " + vendors.dataValues.last_name
+                                        },
+                                        trip: {
+                                            trip: trip.dataValues
+                                        }
+                                    }
+                                });
+                            } else {
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: "get vendor reviews   is successful",
+                                    successData: {
+                                    }
+                                });
+                            }
+                        }).catch(err => {
+
+                            return res.status(200).send({
+                                status: 400,
+                                message: err.message,
+                                successData: {}
+                            });
+
+                        })
+
+                    } else {
+                        return res.status(200).send({
+                            status: 200,
+                            message: "get vendor reviews   is successful",
+                            successData: {
+                            }
+                        });
+                    }
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
+                })
+            } else {
+                return res.status(200).send({
+                    status: 200,
+                    message: "get vendor reviews   is successful",
+                    successData: {
+                    }
+                });
+
+            }
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+    }
 }
 

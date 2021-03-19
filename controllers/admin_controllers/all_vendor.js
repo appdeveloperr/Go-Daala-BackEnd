@@ -1,5 +1,6 @@
 const db = require("../../models/api_models");
 const Vendor = db.vendor;
+const Trips = db.trip;
 const Address = db.address;
 const fs = require('fs');
 const { vehicle } = require("../../models/api_models");
@@ -27,7 +28,43 @@ exports.index = function (req, res) {
     });
   });
 }
+//----------get vendor information  function------------------
+exports.info= function(req,res){
+  Vendor.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then(one_vendor => {
+    if (!one_vendor) {
+      res.send("error of no recode is exist")
+    } else {
+      Trips.findAll({
+        where: {
+          vendor_id: req.params.id
+        }
+      }).then(all_trips => {
+        console.log(all_trips);
+        res.render('./admin/all_vendor/information', {
+          userdata: req.user,
+          one_vendor: one_vendor.dataValues,
+          all_trips: all_trips
+        });
 
+      }).catch(err => {
+        return res.status(200).send({
+          responsecode: 400,
+          message: err.message,
+        });
+      });
+
+    }
+  }).catch(err => {
+    return res.status(200).send({
+      responsecode: 400,
+      message: err.message,
+    });
+  });
+}
 //---------- Update Vendor account unblock Function ----------------------
 exports.unblock = function (req, res, next) {
 

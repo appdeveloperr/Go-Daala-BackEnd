@@ -1,8 +1,8 @@
 const db = require("../../models/api_models");
 const ROLES = db.ROLES;
-const Vendor = db.vendor;
+const Driver= db.driver;
 const Address = db.address;
-checkDuplicateEmailOrPhone_number = (req, res, next) => {
+checkDuplicate = (req, res, next) => {
   req.checkBody('email', 'email must have value!').notEmpty();
   req.checkBody('phone_number', 'phone number must have value!').notEmpty();
   var errors = req.validationErrors();
@@ -17,14 +17,14 @@ checkDuplicateEmailOrPhone_number = (req, res, next) => {
       }
     });
   } else {
-    // Username
+    //------------------if email is same  --------------------------------
     console.log("email: ", req.body.email);
-    Vendor.findOne({
+    Driver.findOne({
       where: {
         email: req.body.email
       }
-    }).then(vendor => {
-      if (vendor) {
+    }).then(driver => {
+      if (driver) {
         return res.status(200).send({
           status: 400,
           message: "Failed! email is already in use!",
@@ -33,32 +33,40 @@ checkDuplicateEmailOrPhone_number = (req, res, next) => {
 
         });
 
-      }
+      } else {
+          //------------------if phone number is same  --------------------------------
+          Driver.findOne({
+          where: {
+            phone_number: req.body.phone_number
+          }
+        }).then(driver => {
+          if (driver) {
+            return res.status(200).send({
+              status: 400,
+              message: "Failed! Phone Number is already in use!",
+              successData: {
+              }
 
-      // Email
-      Vendor.findOne({
-        where: {
-          phone_number: req.body.phone_number
-        }
-      }).then(vendor => {
-        if (vendor) {
-
-
+            });
+          } else {
+            console.log("no matched")
+            next();
+          }
+        }).catch(err => {
           return res.status(200).send({
             status: 400,
-            message: "Failed! Phone Number is already in use!",
-            successData: {
-            }
-
+            message: err.message,
+            successData: {}
           });
-
-
-        }
-
-        next();
+        });
+      }
+    }).catch(err => {
+      return res.status(200).send({
+        status: 400,
+        message: err.message,
+        successData: {}
       });
     });
-
   }
 };
 
@@ -120,7 +128,7 @@ checkDuplicateLatitudeOrLongitude = (req, res, next) => {
 }
 
 const verifySignUp = {
-  checkDuplicateEmailOrPhone_number: checkDuplicateEmailOrPhone_number,
+  checkDuplicateEmailOrPhone_number: checkDuplicate,
   checkDuplicateLatitudeOrLongitude: checkDuplicateLatitudeOrLongitude,
   checkRolesExisted: checkRolesExisted
 };

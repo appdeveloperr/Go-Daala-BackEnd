@@ -6,14 +6,17 @@ const Trip = db.trip;
 const Promo = db.promo;
 const Contect_us = db.contect_us;
 const Faqs = db.faqs;
+const driver_lat_long = db.driver_lat_long;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require('fs');
 var path = require('path');
 var OTP = db.otp;
+var Reviews = db.review;
+var Driver = db.driver;
 const axios = require('axios');
-
+const { review } = require("../../models/api_models");
 //-------------vendor signup--------------------
 exports.signup = (req, res) => {
 
@@ -165,6 +168,13 @@ exports.signin = (req, res) => {
                     return res.status(401).send({
                         accessToken: null,
                         message: "Invalid user Password!"
+                    });
+                }
+                if(user.dataValues.account_info=='block'){
+                    return res.status(200).send({
+                        status: 400,
+                        message: "please wait for admin approvel.",
+                        successData: {}
                     });
                 }
 
@@ -462,6 +472,8 @@ exports.index_address = (req, res) => {
 exports.create_trip = (req, res) => {
     req.checkBody('pickup', 'pickup must have value!').notEmpty();
     req.checkBody('dropoff', 'dropoff must have value!').notEmpty();
+    req.checkBody('dropoff_lat', 'dropoff_lat must have value!').notEmpty();
+    req.checkBody('dropoff_long', 'dropoff_long must have value!').notEmpty();
     req.checkBody('pickup_latitude', 'pickup_latitude must have value!').notEmpty();
     req.checkBody('pick_longitude', 'pick_longitude must have value!').notEmpty();
     req.checkBody('vehicle_name', 'vehicle_name must have value!').notEmpty();
@@ -481,43 +493,84 @@ exports.create_trip = (req, res) => {
             }
         });
     } else {
-        // Save vendor to Database
+
+
+        var obj = new Array();
+        var obj2 = new Array();
+        // var centerPoint = { lat: 31.571868, lng: 74.3309312 }; // office lat long 
+        // var centerPoint = { lat: 31.506432, lng: 74.32437759999999 }; // model town lat long
+        var centerPoint = { lat: req.body.pickup_latitude, lng: req.body.pick_longitude };
+
+        driver_lat_long.findAll().then(loc => {
+            if (loc) {
+                loc.forEach(element => {
+                    var checkPoint = { lat: element.latitude, lng: element.longitude };
+                    var n = arePointsNear(checkPoint, centerPoint, 5);
+                    if (n == true) {
+                        obj.push(element.dataValues);
+                    }
+                });
+                var unit = "K";
+                obj.forEach(item => {
+                    var n = distance(centerPoint.lat, centerPoint.lng, item.latitude, item.longitude, unit);
+
+                    item.distance = n;
+                    obj2.push(item);
+                });
+                obj2.sort(function (a, b) {
+                    var alc = a.distance, blc = b.distance;
+                    return alc > blc ? 1 : alc < blc ? -1 : 0;
+                });
+
+
+
+            }
+        });
+
+        // Save trips to Database
         Trip.create({
             pickup: req.body.pickup,
             dropoff: req.body.dropoff,
-            pickup_latitude: req.body.pickup_latitude,
-            pick_longitude: req.body.pick_longitude,
+            dropoff_lat: req.body.dropoff_lat,
+            dropoff_long: req.body.dropoff_long,
+            pickup_lat: req.body.pickup_latitude,
+            pickup_long: req.body.pick_longitude,
             vehicle_name: req.body.vehicle_name,
             estimated_distance: req.body.estimated_distance,
             estimated_time: req.body.estimated_time,
             total_cost: req.body.total_cost,
             driver_id: null,
             vendor_id: req.body.vendor_id,
-            status: null
+            status: 'wait'
 
         }).then(trip => {
 
             return res.status(200).send({
                 status: 200,
-                message: "Create Trip  is successful",
+                message: "Create Trip with nearest drivers  is successful",
                 successData: {
                     trip: {
                         id: trip.id,
                         pickup: trip.pickup,
                         dropoff: trip.dropoff,
-                        pickup_latitude: trip.pickup_latitude,
-                        pick_longitude: trip.pick_longitude,
+
+                        dropoff_lat: trip.dropoff_lat,
+                        dropoff_long: trip.dropoff_long,
+
+
+                        pickup_lat: trip.pickup_lat,
+                        pickup_long: trip.pickup_long,
                         vehicle_name: trip.vehicle_name,
                         estimated_distance: trip.estimated_distance,
                         estimated_time: trip.estimated_time,
                         total_cost: trip.total_cost,
-                        driver_id: trip.driver_id,
                         vendor_id: trip.vendor_id,
                         status: trip.status
-
-                    }
+                    },
+                    closest_driver_lists: { closest_driver_list: obj2 }
                 }
             });
+
 
         }).catch(err => {
 
@@ -530,6 +583,74 @@ exports.create_trip = (req, res) => {
         });
     }
 }
+
+
+
+
+//-------------vendor test lat long ------------
+exports.test_lat_log = function (req, res) {
+    var obj = new Array();
+    var obj2 = new Array();
+    // var centerPoint = { lat: 31.571868, lng: 74.3309312 }; // office lat long 
+    var centerPoint = { lat: 31.506432, lng: 74.32437759999999 }; // model town lat long
+
+    driver_lat_long.findAll().then(loc => {
+        if (loc) {
+            loc.forEach(element => {
+                var checkPoint = { lat: element.latitude, lng: element.longitude };
+                var n = arePointsNear(checkPoint, centerPoint, 5);
+                if (n == true) {
+                    obj.push(element.dataValues);
+                }
+            });
+            var unit = "K";
+            obj.forEach(item => {
+                var n = distance(centerPoint.lat, centerPoint.lng, item.latitude, item.longitude, unit);
+
+                item.distance = n;
+                obj2.push(item);
+            });
+            obj2.sort(function (a, b) {
+                var alc = a.distance, blc = b.distance;
+                return alc > blc ? 1 : alc < blc ? -1 : 0;
+            });
+            console.log(obj2);
+
+        }
+    })
+}
+
+
+function arePointsNear(checkPoint, centerPoint, km) {
+    var ky = 40000 / 360;
+    var kx = Math.cos(Math.PI * centerPoint.lat / 180.0) * ky;
+    var dx = Math.abs(centerPoint.lng - checkPoint.lng) * kx;
+    var dy = Math.abs(centerPoint.lat - checkPoint.lat) * ky;
+    return Math.sqrt(dx * dx + dy * dy) <= km;
+}
+
+function distance(lat1, lon1, lat2, lon2, unit) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+        return 0;
+    }
+    else {
+        var radlat1 = Math.PI * lat1 / 180;
+        var radlat2 = Math.PI * lat2 / 180;
+        var theta = lon1 - lon2;
+        var radtheta = Math.PI * theta / 180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515;
+        if (unit == "K") { dist = dist * 1.609344 }
+        if (unit == "N") { dist = dist * 0.8684 }
+        return dist;
+    }
+}
+
 
 
 //--------------vendor recent  all trip---------------
@@ -548,7 +669,7 @@ exports.recent_trip = (req, res) => {
         });
     } else {
         // Save vendor to Database
-        Trip.findOne({
+        Trip.findAll({
             where: {
                 vendor_id: req.body.vendor_id
             }
@@ -558,19 +679,9 @@ exports.recent_trip = (req, res) => {
                     status: 200,
                     message: "Get vendor recent  Trip",
                     successData: {
-                        trip: {
-                            id: trip.id,
-                            pickup: trip.pickup,
-                            dropoff: trip.dropoff,
-                            pickup_latitude: trip.pickup_latitude,
-                            pick_longitude: trip.pick_longitude,
-                            vehicle_name: trip.vehicle_name,
-                            estimated_distance: trip.estimated_distance,
-                            estimated_time: trip.estimated_time,
-                            total_cost: trip.total_cost,
-                            driver_id: trip.driver_id,
-                            vendor_id: trip.vendor_id
+                        recent_trip: {
 
+                            trips: trip
                         }
                     }
                 });
@@ -1156,5 +1267,172 @@ exports.varify_otp = (req, res) => {
     }
 
 
+}
+
+//-------------------vendor create review for trip--------------------------------
+exports.create_review = (req, res) => {
+    req.checkBody('rating', 'Rating must have Number needed!').notEmpty();
+    req.checkBody('discription', 'Discription must have needed!').notEmpty();
+    req.checkBody('trip_id', 'Trip_id must have id required!').notEmpty();
+    req.checkBody('vendor_id', 'Vendor_id must have id required!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in vendor Create review",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save Review to Database
+        Reviews.create({
+            rating: req.body.rating,
+            discription: req.body.discription,
+            trip_id: req.body.trip_id,
+            vendor_id: req.body.vendor_id,
+            driver_id: null
+        }).then(reviews => {
+
+            return res.status(200).send({
+                status: 200,
+                message: "Create vendor reviews   is successful",
+                successData: {
+                    review: {
+                        id: reviews.id,
+                        rating: reviews.rating,
+                        discription: reviews.discription,
+
+                        trip_id: reviews.trip_id,
+                        vendor_id: reviews.vendor_id,
+
+                    }
+                }
+            });
+
+
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+
+    }
+}
+
+//--------------------vendor get driver review from trip------------------------------
+exports.get_review = (req, res) => {
+    req.checkBody('trip_id', 'Trip_id must have Id needed!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in vendor get review",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Reviews.findOne({
+            where: {
+                trip_id: req.body.trip_id,
+                vendor_id: null
+            }
+        }).then(reviews => {
+            if (reviews) {
+                Driver.findOne({
+                    where: {
+                        id: reviews.driver_id
+                    }
+                }).then(drivers => {
+                    if (drivers) {
+                        Trip.findOne({
+                            where: {
+                                id: req.body.trip_id
+                            }
+                        }).then(trip => {
+                            if (trip) {
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: "get driver reviews   is successful",
+                                    successData: {
+                                        review: {
+                                            id: reviews.id,
+                                            rating: reviews.rating,
+                                            discription: reviews.discription,
+
+                                            trip_id: reviews.trip_id,
+                                            driver_id: reviews.driver_id
+                                        },
+                                        driver: {
+                                            driver_name: drivers.dataValues.first_name + " " + drivers.dataValues.last_name
+                                        },
+                                        trip: {
+                                            trip: trip.dataValues
+                                        }
+                                    }
+                                });
+                            } else {
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: "get driver reviews   is successful",
+                                    successData: {
+                                    }
+                                });
+                            }
+                        }).catch(err => {
+
+                            return res.status(200).send({
+                                status: 400,
+                                message: err.message,
+                                successData: {}
+                            });
+
+                        })
+
+                    } else {
+                        return res.status(200).send({
+                            status: 200,
+                            message: "get driver reviews   is successful",
+                            successData: {
+                            }
+                        });
+                    }
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
+                })
+            } else {
+                return res.status(200).send({
+                    status: 200,
+                    message: "get vendor reviews   is successful",
+                    successData: {
+                    }
+                });
+
+            }
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+    }
 }
 

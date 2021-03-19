@@ -64,7 +64,7 @@ module.exports = function (app) {
           //------------driver current location Function----------------
           app.post(
             "/api/driver/current-location",
-            driverAuthJwt.verifyToken,
+            // driverAuthJwt.verifyToken,
             controller.current_location,
         );
 
@@ -73,5 +73,16 @@ module.exports = function (app) {
             driverAuthJwt.verifyToken,
             controller.get_reply,
         );
+
+        app.post('/api/driver/review-create',
+         driverAuthJwt.verifyToken,
+         controller.create_review
+         );
+
+         app.post('/api/driver/get-review',
+         driverAuthJwt.verifyToken,
+          controller.get_review
+        );
+
 
 };

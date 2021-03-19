@@ -25,6 +25,8 @@ module.exports = function (app) {
 
 
     app.post("/api/driver/signin", controller.signin);
+
+    
     app.post('/api/driver/update-profile',
         driverAuthJwt.verifyToken, 
         controller.update);

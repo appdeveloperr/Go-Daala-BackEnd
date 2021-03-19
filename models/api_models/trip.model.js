@@ -12,10 +12,16 @@ module.exports = (sequelize, Sequelize) => {
       dropoff: {
         type: Sequelize.STRING
       },
+      dropoff_lat: {
+        type: Sequelize.STRING
+      },
+      dropoff_long: {
+        type: Sequelize.STRING
+      },
       pickup_lat: {
         type: Sequelize.STRING
       },
-      pickup_drop: {
+      pickup_long: {
         type: Sequelize.STRING
       },
       vehicle_name: {

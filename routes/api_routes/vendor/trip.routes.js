@@ -37,32 +37,42 @@ module.exports = function (app) {
     app.post(
         "/api/vendor/recent-trip",
         vendorAuthJwt.verifyToken, controller.recent_trip,
-
-        // uploads.single('profile'),
     );
 
-
- //  //------------ get vendor all FAQ'S Function----------------
- app.get(
-    "/api/vendor/faqs/index",
-    vendorAuthJwt.verifyToken, controller.get_all_faqs,
-       
-)
+    app.get('/api/vendor/test', controller.test_lat_log);
 
 
-//  //------------Vendor Update address Function----------------
-//     app.post(
-//         "/api/vendor/update-address",
-//         vendorAuthJwt.verifyToken,
-//         controller.update_address
-//     )
+    //  //------------ get vendor all FAQ'S Function----------------
+    app.get(
+        "/api/vendor/faqs/index",
+        vendorAuthJwt.verifyToken, controller.get_all_faqs,
 
-//  //------------Vendor Delete address Function----------------
-//  app.post(
-//     "/api/vendor/delete-address",
-//     vendorAuthJwt.verifyToken,
-//     controller.delete_address
-// )
+    );
+
+    app.post('/api/vendor/review-create',
+     vendorAuthJwt.verifyToken,
+      controller.create_review
+    );
+
+    app.post('/api/vendor/get-review',
+    vendorAuthJwt.verifyToken,
+     controller.get_review
+   );
+
+
+    //  //------------Vendor Update address Function----------------
+    //     app.post(
+    //         "/api/vendor/update-address",
+    //         vendorAuthJwt.verifyToken,
+    //         controller.update_address
+    //     )
+
+    //  //------------Vendor Delete address Function----------------
+    //  app.post(
+    //     "/api/vendor/delete-address",
+    //     vendorAuthJwt.verifyToken,
+    //     controller.delete_address
+    // )
 
 
 
