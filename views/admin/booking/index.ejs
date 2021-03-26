@@ -1,0 +1,157 @@
+<%- include('.\\' + '../../_layouts/adminheader'); %>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>BOOKING</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <!-- /.card -->
+                <div class="card">
+                    <div class="card-header">
+                        <a href="/admin/booking/index" class="btn btn-primary"> ONGOING</a>
+                        <a href="/booking/index/complete" class="btn btn-primary"> COMPLETED</a>
+                        <a href="/booking/index/cancel" class="btn btn-primary"> CANCELLED</a>
+                    </div>
+                    <!-- /.card-header --->
+                    <%if(all_trips){ var a =1;%>
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pick Up</th>
+                                    <th>Drop Off</th>
+                                    <th>Vehicle Name</th>
+                                    <th>Estimated Distance</th>
+                                    <th>Estimated Time</th>
+                                    <th>Total Cost</th>
+                                    <th>Vendor Name</th>
+                                    <th>Driver Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr> <%all_trips.forEach(function(item){  %>
+                                    <%if(state=='ONGOING' && (item.status=='start' || item.status=='wait')){%>
+
+                                    <td><%=a%><%a++%></td>
+                                    <td><%=item.pickup%></td>
+                                    <td><%=item.dropoff%> </td>
+                                    <td><%=item.vehicle_name%> </td>
+                                    <td><%=item.estimated_distance%></td>
+                                    <td><%=item.estimated_time%></td>
+                                    <td><%=item.total_cost%></td>
+                                    <%all_vendor.forEach(function(item_vendor){%>
+                                    <%if(item.vendor_id==item_vendor.id){%>
+                                    <td><%=item_vendor.first_name%> <%=item_vendor.last_name%> </td>
+                                    <%}%>
+                                    <%});%>
+
+                                    <%if(item.driver_id!=null){%>
+                                    <%all_driver.forEach(function(item_driver){%>
+                                    <%if(item.driver_id==item_driver.id){%>
+                                    <td><%=item_driver.first_name%> <%=item_driver.last_name%> </td>
+                                    <%}%>
+                                    <%});%>
+                                    <%}else{%>
+                                    <td></td>
+                                    <%}%>
+
+                                    <%}if(state=='COMPLETE' && item.status=='end'){%>
+
+
+
+                                    <td><%=a%><%a++%></td>
+                                    <td><%=item.pickup%></td>
+                                    <td><%=item.dropoff%> </td>
+                                    <td><%=item.vehicle_name%> </td>
+                                    <td><%=item.estimated_distance%></td>
+                                    <td><%=item.estimated_time%></td>
+                                    <td><%=item.total_cost%></td>
+                                    <%all_vendor.forEach(function(item_vendor){%>
+                                    <%if(item.vendor_id==item_vendor.id){%>
+                                    <td><%=item_vendor.first_name%> <%=item_vendor.last_name%> </td>
+                                    <%}%>
+                                        <%});%>
+                                    <%if(item.driver_id!=null){%>
+                                    <%all_driver.forEach(function(item_driver){%>
+                                    <%if(item.driver_id==item_driver.id){%>
+                                    <td><%=item_driver.first_name%> <%=item_driver.last_name%> </td>
+                                    <%}%>
+                                        <%});%>
+                                    <%}else{%>
+                                    <td></td>
+                                    <%}%>
+
+                                    <%}if(state=='CANCEL' && item.status=='cencal'){%>
+
+                                    <td><%=a%><%a++%></td>
+                                    <td><%=item.pickup%></td>
+                                    <td><%=item.dropoff%> </td>
+                                    <td><%=item.vehicle_name%> </td>
+                                    <td><%=item.estimated_distance%></td>
+                                    <td><%=item.estimated_time%></td>
+                                    <td><%=item.total_cost%></td>
+                                    <%all_vendor.forEach(function(item_vendor){%>
+                                    <%if(item.vendor_id==item_vendor.id){%>
+                                    <td><%=item_vendor.first_name%> <%=item_vendor.last_name%> </td>
+                                    <%}%>
+                                    <%});%>
+
+
+                                    <%if(item.driver_id!=null){%>
+                                    <%all_driver.forEach(function(item_driver){%>
+                                    <%if(item.driver_id==item_driver.id){%>
+                                    <td><%=item_driver.first_name%> <%=item_driver.last_name%> </td>
+                                    <%}%>
+                                    <%});%>
+                                    <%}else{%>
+                                    <td></td>
+
+                                    <%}}%>
+                                </tr>
+                                <%});%>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <%}%>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+
+<%- include('.\\' + '../../_layouts/adminfooter'); %>

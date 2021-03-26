@@ -1,64 +1,64 @@
 <%- include('.\\' + '../../_layouts/adminheader' ); %>
 
-    <!-- Content Wrapper. Contains page content -->
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h2>Add FAQ'</h2>
-                    </div>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h2>Add FAQ's</h2>
                 </div>
-            </div><!-- /.container-fluid -->
-        </section>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
 
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <!-- left column -->
-                    <div class="col-md-12">
-                        <!-- jquery validation -->
-                        <div class="card ">
-                            <!-- /.card-header -->
-                            <!-- form start -->
-                            <form role="form" id="quickForm" method="post" action="/admin/faqs/upload">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Title</label>
-                                        <input type="text" class="form-control" name="title" value="<%=title%>">
-                                    </div>
-                                    <label for="exampleInputPassword1">Disc</label>
-                                    <div class="form-group">
-                                        <textarea class="form-control" name="disc" value="<%=disc%>">
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- jquery validation -->
+                    <div class="card ">
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" id="quickForm" method="post" action="/admin/faqs/upload">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="email">Title</label>
+                                    <input type="text" class="form-control" id="email" name="title" value="<%=title%>">
+                                </div>
+                                <label for="exampleInputPassword1">Disc</label>
+
+                                <div class="form-group">
+                                    
+                                    <textarea class="form-control" id="pwd" name="disc" value="<%=disc%>">
 
                                         </textarea>
-                                        <!-- <input type="text" class="form-control" name="disc"> -->
-                                    </div>
-
                                 </div>
-                                <!-- /.card-body -->
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                </div>
-                            </form>
 
-                        </div>
-                        <!-- /.card -->
-                    </div>
-                    <!--/.col (left) -->
-                    <!-- right column -->
-                    <div class="col-md-6">
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
 
                     </div>
-                    <!--/.col (right) -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <%- include('.\\' + '../../_layouts/adminfooter' ); %>
+                <!--/.col (left) -->
+                <!-- right column -->
+                <div class="col-md-6">
+
+                </div>
+                <!--/.col (right) -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<%- include('.\\' + '../../_layouts/adminfooter' ); %>

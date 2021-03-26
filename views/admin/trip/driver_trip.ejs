@@ -22,7 +22,7 @@
                         <a href="/admin/vehicle/create" class="btn btn-primary">Create Vehicle</a>
                     </div> -->
                     <!-- /.card-header -->
-                    <%if(driver_trip){ %>
+                    <%if(driver_trip){ var a=1; %>
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
@@ -40,7 +40,7 @@
                             <tbody>
                                
                                 <tr> <%driver_trip.forEach(function(item){  %>
-                                    <td><%=item.id%></td>
+                                    <td><%=a%><%a++%></td>
                                     <td><%=item.pickup%></td>
                                     <td><%=item.dropoff%> </td>
                                     <td><%=item.vehicle_name%> </td>

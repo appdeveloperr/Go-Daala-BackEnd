@@ -45,7 +45,8 @@ db.driver_lat_long = require("../api_models/driver_lat_long.model")(sequelize, S
 db.contect_us = require("../api_models/contect_us.model")(sequelize, Sequelize);
 db.faqs = require("../api_models/faqs.model")(sequelize, Sequelize);
 db.otp = require("../api_models/otp.model")(sequelize, Sequelize);
-
+db.used_promos = require("../api_models/used_promo.model")(sequelize, Sequelize);
+db.cencel_trip = require("../api_models/cancel_trip.model")(sequelize, Sequelize);
 //Table Relationships
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -83,7 +84,18 @@ db.trip.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
+//----------cancel trip relation--------------///
+db.cencel_trip.belongsTo(db.driver, {
+  foreignKey: "driver_id"
+});
 
+db.cencel_trip.belongsTo(db.vendor, {
+  foreignKey: "vendor_id"
+});
+
+db.cencel_trip.belongsTo(db.trip, {
+  foreignKey: "trip_id"
+});
 //--------------review--------------
 db.review.belongsTo(db.driver, {
   foreignKey: "driver_id"
@@ -96,6 +108,16 @@ db.review.belongsTo(db.vendor, {
 db.review.belongsTo(db.trip, {
   foreignKey: "trip_id"
 });
+
+//----------------promo------------------
+db.used_promos.belongsTo(db.vendor, {
+  foreignKey: "vendor_id"
+});
+
+db.used_promos.belongsTo(db.promo, {
+  foreignKey: "promo_id"
+});
+
 
 
 db.ROLES = ["user", "admin", "moderator"];

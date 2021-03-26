@@ -1,6 +1,6 @@
 const { driverAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/driver.controller");
+const controller = require("../../../controllers/api_controllers/driver/auth");
 
 
 
@@ -24,17 +24,12 @@ module.exports = function (app) {
     );
 
     // //------------driver create contect-us  Function----------------
-    app.post(
-        "/api/driver/create-contect_us",
-        driverAuthJwt.verifyToken,
-        controller.contect_us,
-    );
+    // app.post(
+    //     "/api/driver/create-contect_us",
+    //     driverAuthJwt.verifyToken,
+    //     controller.contect_us,
+    // );
 
 
-    //     //------------driver Create trip Function----------------
-    //     app.post(
-    //         "/api/driver/recent-trip",
-    //         driverAuthJwt.verifyToken,
-    //         controller.recent_trip,
-    //     );
+
 }

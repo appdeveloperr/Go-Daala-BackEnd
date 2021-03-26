@@ -1,6 +1,6 @@
 const { vendorAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/vendor.controller");
+const controller = require("../../../controllers/api_controllers/vendor/auth");
 
 
 
@@ -22,19 +22,7 @@ module.exports = function (app) {
 
     );
 
-      // //------------vendor create contect-us  Function----------------
-      app.post(
-        "/api/vendor/create-contect_us",
-        vendorAuthJwt.verifyToken,
-        controller.contect_us,
-    );
 
-
-    app.post(
-        "/api/vendor/get-reply",
-        vendorAuthJwt.verifyToken,
-        controller.get_reply,
-    );
 
 //  //------------Vendor Update address Function----------------
 //     app.post(

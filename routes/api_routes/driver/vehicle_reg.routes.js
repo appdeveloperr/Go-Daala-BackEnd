@@ -1,7 +1,7 @@
 const { driverVerifyNumberPlate } = require("../../../middleware");
 const { driverAuthJwt } = require("../../../middleware");
 const fileUpload = require('express-fileupload');
-const controller = require("../../../controllers/api_controllers/driver.controller");
+const controller = require("../../../controllers/api_controllers/driver/vehicle_reg");
 
 
 
@@ -34,12 +34,6 @@ module.exports = function (app) {
         controller.get_all_vehicles
     )
 
-//  //------------ get driver all FAQ'S Function----------------
- app.get(
-    "/api/driver/faqs/index",
-    driverAuthJwt.verifyToken,
-        controller.get_all_faqs
-)
 
 
 };

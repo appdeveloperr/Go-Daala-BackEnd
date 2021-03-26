@@ -68,7 +68,6 @@ const Role = db.role;
 
 
 
-
 app.set('trust proxy', 1)
 app.use(session({
     secret: 'max',
@@ -127,7 +126,7 @@ app.get('*', function (req, res, next) {
 });
 
 //passport Config
-require('./config/passport')(passport);
+require('./middleware/passport')(passport);
 //Passport Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
@@ -163,13 +162,23 @@ io.sockets.on('connection', function(socket) {
 
 // set routes
 //----------- Admin Panel Routes ---------------
-require('./routes/admin_routes/admin.routes')(app);
+require('./routes/admin_routes/auth.routes')(app);
+require('./routes/admin_routes/dashboard.routes')(app);
+require('./routes/admin_routes/banner.routes')(app);
+require('./routes/admin_routes/promo.routes')(app);
+require('./routes/admin_routes/vehicle.routes')(app);
+require('./routes/admin_routes/vendor.routes')(app);
+require('./routes/admin_routes/driver.routes')(app);
+require('./routes/admin_routes/booking.routes')(app);
+require('./routes/admin_routes/help_and_support.routes')(app);
+require('./routes/admin_routes/faq.routes')(app);
+require('./routes/admin_routes/notification.routes')(app);
+require('./routes/admin_routes/logout.routes')(app);
+require('./routes/admin_routes/contectus.routes')(app);
+require('./routes/admin_routes/chats.routes')(app);
 
 
 //----------- API Routes --------------------
-require('./routes/api_routes/auth.routes')(app);
-require('./routes/api_routes/user.routes')(app);
-
 
 //-----------------Vendor Api routes--------------
 require('./routes/api_routes/vendor/auth.routes')(app);
@@ -178,43 +187,26 @@ require('./routes/api_routes/vendor/address.routes')(app);
 require('./routes/api_routes/vendor/trip.routes')(app);
 require('./routes/api_routes/vendor/validation_promo_code.routes')(app);
 require('./routes/api_routes/vendor/otp.routes')(app);
-
+require('./routes/api_routes/vendor/contectus.routes')(app);
+require('./routes/api_routes/vendor/faq.routes')(app);
+require('./routes/api_routes/vendor/review.routes')(app);
 //-----------------driver Api routes--------------
 require('./routes/api_routes/driver/auth.routes')(app);
 require('./routes/api_routes/driver/forgot_password.routes')(app);
 require('./routes/api_routes/driver/vehicle_reg.routes')(app);
 require('./routes/api_routes/driver/trip.routes')(app);
 require('./routes/api_routes/driver/otp.routes')(app);
-
-// var auth = require('./routes/api_routes/auth.routes');
-// app.use('/',auth);
-
-// var admin = require('./routes/admin_routes/admin.routes');
-// app.use('/',admin);
-
-// var user = require('./routes/api_routes/user.routes');
-// app.use('/',user);
-
-//Set routes
-//var pages = require('./routes/pages.js');
-// app.use('/', function(req,res){
-//     res.send('hello every one');
-// });
-
-// var admin_routes = require('./routes/admin.js');
-// app.use('/admin', admin_routes);
+require('./routes/api_routes/driver/current_location.routes')(app);
+require('./routes/api_routes/driver/faq.routes')(app);
+require('./routes/api_routes/driver/review.routes')(app);
 
 
-// var users_routes = require('./routes/users_panel.js');
-// app.use('/users', users_routes);
 
-// var adminSignin = require('./routes/authentication.js');
-// app.use('/signin', adminSignin);
 
-//Start the server
 
 
 
+//Start the server
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 http.listen(PORT, () => {
@@ -226,20 +218,20 @@ http.listen(PORT, () => {
 function initial() {
 
   //   //---------- INSERTING DUMMY ROLES ----------
-    Role.create({
-      id: 1,
-      name: "user"
-    });
+    // Role.create({
+    //   id: 1,
+    //   name: "user"
+    // });
    
-    Role.create({
-      id: 2,
-      name: "moderator"
-    });
+    // Role.create({
+    //   id: 2,
+    //   name: "moderator"
+    // });
    
-    Role.create({
-      id: 3,
-      name: "admin"
-    });
+    // Role.create({
+    //   id: 3,
+    //   name: "admin"
+    // });
   
     //------ Inserting Dumy Admin Data ----
     User.create({

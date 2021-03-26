@@ -1,7 +1,7 @@
 const { vendorVerifySignUp } = require("../../../middleware");
 const { vendorAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/vendor.controller");
+const controller = require("../../../controllers/api_controllers/vendor/auth");
 // const multer = require('multer');
 // var path = require('path');
 const fileUpload = require('express-fileupload');

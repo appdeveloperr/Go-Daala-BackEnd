@@ -1,7 +1,7 @@
 
 const { driverAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/driver.controller");
+const controller = require("../../../controllers/api_controllers/driver/trip");
 
 
 
@@ -53,36 +53,14 @@ module.exports = function (app) {
     );
 
 
-    //------------driver recent trip Function----------------
-        app.post(
-            "/api/driver/contact_us",
-            driverAuthJwt.verifyToken,
-            controller.contact_us
-        );
 
 
-          //------------driver current location Function----------------
-          app.post(
-            "/api/driver/current-location",
-            // driverAuthJwt.verifyToken,
-            controller.current_location,
-        );
 
-        app.get(
-            "/api/driver/get-reply",
-            driverAuthJwt.verifyToken,
-            controller.get_reply,
-        );
+       
 
-        app.post('/api/driver/review-create',
-         driverAuthJwt.verifyToken,
-         controller.create_review
-         );
+     
 
-         app.post('/api/driver/get-review',
-         driverAuthJwt.verifyToken,
-          controller.get_review
-        );
+     
 
 
 };

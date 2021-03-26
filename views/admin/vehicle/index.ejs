@@ -22,7 +22,7 @@
                         <a href="/admin/vehicle/create" class="btn btn-primary">Create Vehicle</a>
                     </div>
                     <!-- /.card-header -->
-                    <%if(all_Vehicles){ %>
+                    <%if(all_Vehicles){ var a=1;%>
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
@@ -36,18 +36,18 @@
                             <tbody>
                                 <%all_Vehicles.forEach(function(item){ var image=item.image_path; var img_length=image.length; var img=image.slice(8, img_length); %>
                                 <tr>
-                                    <td><%=item.id%></td>
+                                    <td><%=a%><%a++%></td>
                                     <td><%=item.vehicle_type%></td>
                                     <td><img src="<%=img%>" width="100" height="100"></td>
                                     <td>
-                                            <!-- <form enctype="multipart/form-data" action="/admin/banner/Edit" method="POST">
+                                        <!-- <form enctype="multipart/form-data" action="/admin/banner/Edit" method="POST">
                                                 <input type="hidden" name="id" value="<%=item.id%>">
                                                 <input type="submit" value="Edit">
                                                 </form> -->
                                         <a href="/admin/vehicle/Edit/<%=item.id%>" class="mr-2">
-                                             <i class="fa fa-edit"></i>
-                                         </a>
-                                       
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
                                         <a class="confirmDeletion" href="/admin/vehicle/delete/<%=item.id%>">
                                             <i class="fa fa-trash text-danger"></i>
                                         </a>
@@ -83,28 +83,4 @@
 
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
-<script>
-    $(function () {
-        $("#example1").DataTable({
-            "responsive": true,
-            "autoWidth": false,
-        });
-
-    });
-    function deleteRecord(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                document.getElementById('del_form' + id).submit();
-            }
-        })
-    }
-</script>
 <%- include('.\\' + '../../_layouts/adminfooter'); %>

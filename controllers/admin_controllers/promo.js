@@ -1,6 +1,7 @@
 const db = require("../../models/api_models");
 const Promo = db.promo;
-
+const Used_promo = db.used_promos;
+const vendor = db.vendor;
 
 
 
@@ -30,6 +31,7 @@ exports.index = function (req, res) {
 exports.create = function (req, res) {
 
   req.checkBody('code', 'Code must have value!').notEmpty();
+  req.checkBody('exp_date', 'Expariy date must have needed!')
   req.checkBody('type', 'type must have selected needed!').notEmpty();
   req.checkBody('discount', 'Discount must have value!').notEmpty();
 
@@ -48,6 +50,7 @@ exports.create = function (req, res) {
     if (req.body.publish) {
       Promo.create({
         code: req.body.code,
+        exp_date: req.body.exp_date,
         type: req.body.type,
         discount: req.body.discount,
         publish: req.body.publish
@@ -63,6 +66,7 @@ exports.create = function (req, res) {
     } else {
       Promo.create({
         code: req.body.code,
+        exp_date: req.body.exp_date,
         type: req.body.type,
         discount: req.body.discount,
         publish: "unpublish"
@@ -99,6 +103,7 @@ exports.edit = function (req, res) {
           userdata: req.user,
           id: edit.id,
           code: edit.code,
+          exp_date: edit.exp_date,
           type: edit.type,
           discount: edit.discount,
           publish: edit.publish
@@ -143,6 +148,7 @@ exports.update = function (req, res, next) {
     if (req.body.publish) {
       Promo.update({
         code: req.body.code,
+        exp_date: req.body.exp_date,
         type: req.body.type,
         discount: req.body.discount,
         publish: req.body.publish
@@ -162,6 +168,7 @@ exports.update = function (req, res, next) {
     } else {
       Promo.update({
         code: req.body.code,
+        exp_date: req.body.exp_date,
         type: req.body.type,
         discount: req.body.discount,
         publish: "unpublish"
@@ -209,5 +216,60 @@ exports.delete = function (req, res) {
       message: err.message,
     });
   });
-
 }
+
+//------------------------used promo-code list aghast of promo_id for vendors----//
+exports.used_promo_vendor = function (req, res) {
+  var id = req.params.id;
+  
+ Used_promo.findAll({where:{
+        promo_id: id
+      }}).then(Used_promo => {
+      // if User not found with given ID
+      if (Used_promo) {
+        Promo.findOne({
+          where: {
+            id: id
+          }
+        }).then(promo_data => {
+          if (promo_data) {
+            vendor.findAll().then(vendor_list => {
+              if (vendor_list) {
+                res.render('admin/promo/used_promo_index', {
+                  userdata: req.user,
+                  use_promo: Used_promo,
+                  promo_data:promo_data,
+                  vendors_list: vendor_list
+                });
+              } else {
+                console.log('promo list is not exist in db');
+              }
+            }).catch(err => {
+              return res.status(200).send({
+                responsecode: 400,
+                message: err.message,
+              });
+            });
+          } else {
+            console.log('promo table of this id is not exist in db');
+          }
+        }).catch(err => {
+          return res.status(200).send({
+            responsecode: 400,
+            message: err.message,
+          });
+        });
+
+      } else {
+        console.log("if User not found with given ID");
+
+       }
+    }).catch(err => {
+      return res.status(200).send({
+        responsecode: 400,
+        message: err.message,
+      });
+    });
+   
+ 
+} 

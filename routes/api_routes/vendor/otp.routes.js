@@ -1,4 +1,4 @@
-const controller = require("../../../controllers/api_controllers/vendor.controller");
+const controller = require("../../../controllers/api_controllers/vendor/auth");
 
 
 

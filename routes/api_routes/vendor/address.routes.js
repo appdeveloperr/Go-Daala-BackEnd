@@ -1,7 +1,7 @@
 const { vendorVerifySignUp } = require("../../../middleware");
 const { vendorAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/vendor.controller");
+const controller = require("../../../controllers/api_controllers/vendor/address");
 
 
 
@@ -18,10 +18,7 @@ module.exports = function (app) {
 
 
 
-    // app.post("/api/vendor/signin", controller.signin);
-    // app.post('/api/vendor/update-profile',
-    //     vendorAuthJwt.verifyToken,
-    //     controller.update);
+
 
 
 
@@ -55,9 +52,5 @@ app.get(
     vendorAuthJwt.verifyToken,
     controller.index_address
 )
-
-
-
-
 
 };

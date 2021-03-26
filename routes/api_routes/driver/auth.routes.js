@@ -1,7 +1,7 @@
 const { driverVerifySignUp } = require("../../../middleware");
 const { driverAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/driver.controller");
+const controller = require("../../../controllers/api_controllers/driver/auth");
 const multer = require('multer');
 var path = require('path');
 // const fileUpload = require('express-fileupload');
