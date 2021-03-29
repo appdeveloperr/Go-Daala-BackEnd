@@ -29,7 +29,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Type</th>
-                                    <th>Image</th>
+                                    <th>Vehicle Service Charges</th>
+                                    <th>Vehicle Distance </th>
+                                    <th>Vehicle Time </th>
+                                    <th>Vehicle image </th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -38,12 +41,11 @@
                                 <tr>
                                     <td><%=a%><%a++%></td>
                                     <td><%=item.vehicle_type%></td>
+                                    <td><%=item.service%></td>
+                                    <td>Rs: <%=item.distance%>/Km</td>
+                                    <td>Rs:<%=item.time%>/min</td>
                                     <td><img src="<%=img%>" width="100" height="100"></td>
                                     <td>
-                                        <!-- <form enctype="multipart/form-data" action="/admin/banner/Edit" method="POST">
-                                                <input type="hidden" name="id" value="<%=item.id%>">
-                                                <input type="submit" value="Edit">
-                                                </form> -->
                                         <a href="/admin/vehicle/Edit/<%=item.id%>" class="mr-2">
                                             <i class="fa fa-edit"></i>
                                         </a>
@@ -59,6 +61,9 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>

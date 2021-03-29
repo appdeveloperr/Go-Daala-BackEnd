@@ -55,14 +55,14 @@ module.exports = function (app) {
   });
 
   
-  app.get('/admin/Edit_bannar/:id', banner_controller.edit);
+  app.get('/admin/Edit_bannar/:id',isAdmin, banner_controller.edit);
 
   //------------------post banner update---------------------------------
   app.post("/admin/banner/update", isAdmin,uploads.single('myFile'),banner_controller.update);
     
 
   //-----------------get banner delete ---------------------
-  app.get('/admin/banner/delete/:id',banner_controller.delete); 
+  app.get('/admin/banner/delete/:id',isAdmin,banner_controller.delete); 
 //----------------------------banner  side end -------------
 
 

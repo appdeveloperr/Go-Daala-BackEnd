@@ -9,16 +9,16 @@ module.exports = function (app) {
 
 
 //-----------------admin get Booking index ----------------
-app.get('/admin/booking/index',booking.index);
+app.get('/admin/booking/index',isAdmin,booking.index);
 
 //-----------------admin get Complete booking ----------------
-app.get('/booking/index/complete',booking.complete);
+app.get('/booking/index/complete',isAdmin,booking.complete);
 
 //-----------------admin get cancel booking----------------
-app.get('/booking/index/cancel',booking.cancel);
+app.get('/booking/index/cancel',isAdmin,booking.cancel);
 
 
 //-----------------develpor side testing ----------------
-app.get('/booking/index/test',booking.test);
+app.get('/booking/index/test',isAdmin,booking.test);
 
 }

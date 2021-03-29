@@ -3,6 +3,15 @@ module.exports = (sequelize, Sequelize) => {
         vehicle_type: {
             type: Sequelize.STRING
         },
+        service: {
+            type: Sequelize.STRING
+        },
+        distance: {
+            type: Sequelize.STRING
+        },
+        time: {
+            type: Sequelize.STRING
+        },
         image_path: {
             type: Sequelize.STRING
         }

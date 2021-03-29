@@ -16,7 +16,7 @@ exports.index = function (req, res) {
       console.log("no recode is exist")
     }
  
-    res.render('./admin/all_vendor/index', {
+    res.render('./admin/vendor/index', {
       userdata: req.user,
       all_vendor: all_vendor
     });
@@ -44,7 +44,7 @@ exports.info= function(req,res){
         }
       }).then(all_trips => {
         console.log(all_trips);
-        res.render('./admin/all_vendor/information', {
+        res.render('./admin/vendor/information', {
           userdata: req.user,
           one_vendor: one_vendor.dataValues,
           all_trips: all_trips
@@ -78,7 +78,7 @@ exports.unblock = function (req, res, next) {
     }).then(unblock => {
       if (unblock) {
         req.flash('success', 'Successfuly your Vendor is  unblock');
-        res.redirect('/admin/all_vendor/index');
+        res.redirect('/admin/vendor/index');
       }
     }).catch(err => {
       console.log(err);
@@ -100,7 +100,7 @@ exports.block = function (req, res, next) {
     }).then(block => {
       if (block) {
         req.flash('danger', 'Successfuly your Vendor is  blocked');
-        res.redirect('/admin/all_vendor/index');
+        res.redirect('/admin/vendor/index');
       }
     }).catch(err => {
       console.log(err);
@@ -158,7 +158,7 @@ exports.delete = function (req, res) {
     }).then(vendor => {
 
       req.flash('success', 'Successfuly your Vendor is  Deleted!');
-    res.redirect('/admin/all_vendor/index');
+    res.redirect('/admin/vendor/index');
     }).catch(err => {
       return res.status(200).send({
         responsecode: 400,

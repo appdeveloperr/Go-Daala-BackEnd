@@ -18,7 +18,7 @@ module.exports = function (app) {
 
 
 
-    
+
 
 
 
@@ -30,16 +30,23 @@ module.exports = function (app) {
 
         // uploads.single('profile'),
     );
-
+//--------------vendor recent all trip---------------------------//
     app.post(
         "/api/vendor/recent-trip",
         vendorAuthJwt.verifyToken, controller.recent_trip,
     );
 
+//------------vendor cencal trip Function----------------
+   app.post(
+    "/api/vendor/cencal-trip",
+    vendorAuthJwt.verifyToken,
+    controller.cencal_trip,
+); 
+
     app.get('/api/vendor/test', controller.test_lat_log);
 
 
- 
+
 
 
 

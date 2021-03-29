@@ -199,6 +199,7 @@ require('./routes/api_routes/driver/otp.routes')(app);
 require('./routes/api_routes/driver/current_location.routes')(app);
 require('./routes/api_routes/driver/faq.routes')(app);
 require('./routes/api_routes/driver/review.routes')(app);
+require('./routes/api_routes/driver/contectus.routes')(app);
 
 
 

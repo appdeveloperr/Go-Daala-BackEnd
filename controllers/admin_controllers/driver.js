@@ -20,7 +20,7 @@ exports.index = function (req, res) {
       console.log("no recode is exist")
     }
     // console.log(all_Vehicles);
-    res.render('./admin/all_driver/index', {
+    res.render('./admin/driver/index', {
       userdata: req.user,
       all_driver: all_driver
     });
@@ -41,7 +41,7 @@ exports.register_drivers=function(req,res){
       console.log("no recode is exist")
     }
     // console.log(all_Vehicles);
-    res.render('./admin/all_driver/index', {
+    res.render('./admin/driver/index', {
       userdata: req.user,
       all_driver: all_driver
     });
@@ -62,7 +62,7 @@ exports.unregister_drivers=function(req,res){
       console.log("no recode is exist")
     }
     // console.log(all_Vehicles);
-    res.render('./admin/all_driver/index', {
+    res.render('./admin/driver/index', {
       userdata: req.user,
       all_driver: all_driver
     });
@@ -85,7 +85,7 @@ exports.active_drivers=function(req,res){
       console.log("no recode is exist")
     }
     // console.log(all_Vehicles);
-    res.render('./admin/all_driver/index', {
+    res.render('./admin/driver/index', {
       userdata: req.user,
       all_driver: all_driver
     });
@@ -111,7 +111,7 @@ exports.unblock = function (req, res, next) {
   }).then(unblock => {
     if (unblock) {
       req.flash('success', 'Successfuly your driver is  unblock');
-      res.redirect('/admin/all_driver/index');
+      res.redirect('/admin/driver/index');
     }
   }).catch(err => {
     console.log(err);
@@ -134,7 +134,7 @@ exports.block = function (req, res, next) {
   }).then(unblock => {
     if (unblock) {
       req.flash('danger', 'Successfuly your driver is  blocked');
-      res.redirect('/admin/all_driver/index');
+      res.redirect('/admin/driver/index');
     }
   }).catch(err => {
     console.log(err);
@@ -193,7 +193,7 @@ exports.delete = function (req, res) {
       }
 
       req.flash('success', 'Successfuly your Driver is  Deleted!');
-      res.redirect('/admin/all_driver/index');
+      res.redirect('/admin/driver/index');
 
     }).catch(err => {
       return res.status(200).send({
@@ -221,7 +221,7 @@ exports.information = function (req, res, next) {
           driver_id: req.params.id
         }
       }).then(one_vehicle => {
-        res.render('./admin/all_driver/information', {
+        res.render('./admin/driver/information', {
           userdata: req.user,
           one_drivers: one_driver.dataValues,
           one_vehicle: one_vehicle
@@ -258,7 +258,7 @@ exports.active = function (req, res, next) {
   }).then(unactive => {
     if (unactive) {
       req.flash('success', 'Successfuly your driver vehicle is  active');
-      res.redirect('/admin/all_driver/index');
+      res.redirect('/admin/driver/index');
     }
   }).catch(err => {
     console.log(err);
@@ -280,7 +280,7 @@ exports.unactive = function (req, res, next) {
   }).then(active => {
     if (active) {
       req.flash('danger', 'Successfuly your driver vehicle is  unactive');
-      res.redirect('/admin/all_driver/index');
+      res.redirect('/admin/driver/index');
     }
   }).catch(err => {
     console.log(err);

@@ -9,7 +9,7 @@ module.exports = function (app) {
 
 
 //-----------------admin get notification ----------------
-app.get('/admin/notification/index',notification.create);
+app.get('/admin/notification/index',isAdmin,notification.create);
 
 
 

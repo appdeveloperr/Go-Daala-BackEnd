@@ -35,7 +35,6 @@ exports.reply = function (req, res) {
     }).then(one_contect_record => {
         //if User not found with given ID
         if (one_contect_record) {
-            
             if (one_contect_record.dataValues.driver_id) {
                 Contect_us.findAll({
                     where: {

@@ -123,6 +123,7 @@ exports.contact_us = function (req, res, next) {
             last_name: req.body.last_name,
             email: req.body.email,
             phone: req.body.phone,
+            driver_id:req.body.driver_id,
             message: req.body.message
 
 

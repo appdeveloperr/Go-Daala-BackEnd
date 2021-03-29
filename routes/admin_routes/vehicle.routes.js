@@ -42,7 +42,11 @@ const storage = multer.diskStorage({
   app.get('/admin/vehicle/create', isAdmin, function (req, res) {
 
     res.render('admin/vehicle/create', {
-      userdata: req.user
+      userdata: req.user,
+      type:"",
+      service_charges:"",
+      distance:"",
+      time:""
     });
   });
 
@@ -60,14 +64,14 @@ const storage = multer.diskStorage({
   });
 
   
-  app.get('/admin/Edit_vehicle/:id', vehicle_controller.edit);
+  app.get('/admin/Edit_vehicle/:id',isAdmin, vehicle_controller.edit);
 
   //------------------post vehicle update---------------------------------
   app.post("/admin/vehicle/update", isAdmin,uploads.single('myFile'),vehicle_controller.update);
     
 
   //-----------------get vehicle delete ---------------------
-  app.get('/admin/vehicle/delete/:id',vehicle_controller.delete); 
+  app.get('/admin/vehicle/delete/:id',isAdmin,vehicle_controller.delete); 
 
 
 

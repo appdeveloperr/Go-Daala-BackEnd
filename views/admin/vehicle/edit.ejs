@@ -32,9 +32,35 @@
 
                                         <input type="text" class="form-control" id="exampleInputEmail1" name="type"
                                             placeholder="Enter Vehicle name" value="<%=data.vehicle_type%>">
-
-
                                     </div>
+                                    <div class="form-group">
+                                        <label for="">Service Charges</label>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Rs:</span>
+                                          
+                                        <input type="number" name="service_charges" placeholder="Enter Service Charges Price Vehicle" class="form-control"
+                                            id="exampleInputEmail1" value="<%=data.service%>">
+                                    </div>
+                                </div>
+    
+                                    <div class="form-group">
+                                        <label for="">Distance</label>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Rs: /Km</span>
+                                         
+                                        <input type="number" name="distance" placeholder="Enter Distance Price Rs: /Km " class="form-control"
+                                            id="exampleInputEmail1" value="<%=data.distance%>">
+                                    </div>
+                                </div>
+    
+                                    <div class="form-group">
+                                        <label for="">Time</label>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Rs: /min</span>
+                                        <input type="number" name="time" placeholder="Enter Time Rs: /min" class="form-control"
+                                            id="exampleInputEmail1" value="<%=data.time%>">
+                                    </div>
+                                </div>
                                     <label for="exampleInputPassword1">Select another image</label>
                                     <div class="form-group">
                                         <input type="file" class="form-control" name="myFile" id="img">
@@ -44,6 +70,7 @@
                                             <img src="<%=img%>" id="imagePreview" alt="">
                                     </div>
                                     <input type="hidden" name="id" value="<%=data.id%>">
+                                    <input type="hidden" name="Data" value="<%=data%>">
                                     <input type="hidden" name="old_file" value="<%=data.image_path%>">
                                 </div>
                                 <!-- /.card-body -->

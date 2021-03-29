@@ -2,6 +2,7 @@ const db = require("../../../models/api_models");
 const Trip = db.trip;
 const driver_lat_long = db.driver_lat_long;
 var Driver = db.driver;
+var Cancel_trip = db.cencel_trip;
 var fs = require('fs');
 var path = require('path');
 
@@ -242,6 +243,85 @@ exports.recent_trip = (req, res) => {
             });
 
         });
+
+    }
+}
+
+//--------------vendor cencal trip---------------
+exports.cencal_trip = (req, res) => {
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    req.checkBody('vendor_id', 'please provide vendor id!').notEmpty();
+    
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in receive Trip",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save vendor to Database
+        Trip.update({
+            vendor_id: req.body.vendor_id,
+            status: "cencal",
+
+        },
+            {
+                where: { id: req.body.trip_id },
+                returning: true,
+                plain: true
+            }).then(trip => {
+                Cancel_trip.create({
+                    trip_id:req.body.trip_id,
+                    vendor_id:req.body.vender_id,
+                    driver_id:null
+                }).then(can_trip => {
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Vendor cencal trip  is successfull",
+                        successData: {
+                            trip: {
+                                id: trip[1].id,
+                                pickup: trip[1].pickup,
+                                dropoff: trip[1].dropoff,
+                                pickup_latitude: trip[1].pickup_latitude,
+                                pick_longitude: trip[1].pick_longitude,
+                                vehicle_name: trip[1].vehicle_name,
+                                estimated_distance: trip[1].estimated_distance,
+                                estimated_time: trip[1].estimated_time,
+                                total_cost: trip[1].total_cost,
+                                driver_id: trip[1].driver_id,
+                                vendor_id: trip[1].vendor_id,
+                                status: trip[1].status
+    
+    
+                            }
+                        }
+                    });
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+    
+                });
+               
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+
+            });
 
     }
 }

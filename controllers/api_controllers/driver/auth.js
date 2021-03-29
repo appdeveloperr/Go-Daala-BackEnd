@@ -191,7 +191,7 @@ exports.signin = (req, res) => {
                         message: "Invalid user Password!"
                     });
                 }
-                console.log(user)
+        
 
                 if(user.dataValues.account_info=='block'){
                     return res.status(200).send({
@@ -399,6 +399,8 @@ exports.forgot_password = (req, res) => {
     }
 }
 
+
+
 //--------------driver update picture  ----------------------
 exports.update_picture = (req, res) => {
     req.checkBody('id', 'id must have ID!').notEmpty();
@@ -538,8 +540,8 @@ exports.sendOTP = (req, res) => {
         })
             .then(user => {
 
-                if (!user) {
-                    //User is not Exist
+                if (!user) {//new driver register for otp
+                    //User is not Exist 
                     var val = Math.floor(1000 + Math.random() * 9000);
                     var messageData = "Your Go Daala Verification Code is: " + val;
                     var mobileno = req.body.phone_number;
@@ -576,12 +578,43 @@ exports.sendOTP = (req, res) => {
                             });
                         });
 
-                } else {
+                } else {  //User is forgot password 
+  
+                    //User is Exist 
+                    var val = Math.floor(1000 + Math.random() * 9000);
+                    var messageData = "Your Go Daala Verification Code is: " + val;
+                    var mobileno = req.body.phone_number;
 
-                    return res.status(200).send({
-                        status: 400,
-                        message: "User Already Exist",
-                    });
+
+                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                        .then(response => {
+
+
+                            OTP.create({
+                                otp: val,
+                                phone_number: mobileno
+                            }).then(otp => {
+
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: "OTP send successfully"
+                                });
+
+                            }).catch(error => {
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: error
+                                });
+                            });
+
+
+                        })
+                        .catch(error => {
+                            return res.status(200).send({
+                                status: 400,
+                                message: error
+                            });
+                        });
 
 
                 }
@@ -598,153 +631,10 @@ exports.sendOTP = (req, res) => {
             });
 
     }
-    // else if (req.body.type.toLowerCase() == "login") {
-
-    //   //Check User Already Exist or Not?
-    //   User.findOne({
-    //     where: {
-    //       phone: req.body.user_phone
-    //     }
-    //   })
-    //     .then(user => {
-
-    //       if (!user) {
-    //         //User is not Exist
-    //         return res.status(200).send({
-    //           responsecode: 400,
-    //           message: "User is Not Exist",
-    //         });
-    //       } else {
-
-
-    //         var val = Math.floor(1000 + Math.random() * 9000);
-    //         var messageData = "Your mKhata Verification Code is: " + val;
-    //         var mobileno = req.body.user_phone;
-
-    //         axios.get(`http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient=${mobileno}&originator=99095&messagedata=${messageData}`)
-    //         .then(response => {
-
-
-    //             OTP.create({
-    //               otp: val,
-    //               phone: req.body.user_phone
-    //             }).then(otp => {
-
-    //               return res.status(200).send({
-    //                 responsecode: 200,
-    //                 message: "OTP send successfully"
-    //               });
-
-    //             }).catch(error => {
-    //               console.log(error);
-    //             });
-
-
-    //           })
-    //           .catch(error => {
-    //             console.log(error);
-    //           });
-
-
-    //       }
-
-
-
-
-    //     })
-    //     .catch(err => {
-    //       res.status(500).send({ message: err.message });
-    //     });
-    // }else if (req.body.type.toLowerCase() == "password") {
-
-    //   //Check User Already Exist or Not?
-    //   User.findOne({
-    //     where: {
-    //       phone: req.body.user_phone
-    //     }
-    //   })
-    //     .then(user => {
-
-    //       if (!user) {
-    //         //User is not Exist
-    //         return res.status(200).send({
-    //           responsecode: 400,
-    //           message: "User is Not Exist",
-    //         });
-    //       } else {
-
-
-    //         var val = Math.floor(1000 + Math.random() * 9000);
-    //         var messageData = "Your mKhata Verification Code is: " + val;
-    //         var mobileno = req.body.user_phone;
-
-    //         axios.get(`http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient=${mobileno}&originator=99095&messagedata=${messageData}`)
-    //         .then(response => {
-
-
-    //             OTP.create({
-    //               otp: val,
-    //               phone: req.body.user_phone
-    //             }).then(otp => {
-
-    //               return res.status(200).send({
-    //                 responsecode: 200,
-    //                 message: "OTP send successfully"
-    //               });
-
-    //             }).catch(error => {
-    //               console.log(error);
-    //             });
-
-
-    //           })
-    //           .catch(error => {
-    //             console.log(error);
-    //           });
-
-
-    //       }
-
-
-
-
-    //     })
-    //     .catch(err => {
-    //       res.status(500).send({ message: err.message });
-    //     });
-    // }else{
-
-    //   var val = Math.floor(1000 + Math.random() * 9000);
-    //   var messageData = "Your mKhata Verification Code is: " + val;
-    //   var mobileno = req.body.user_phone;
-
-    //   axios.get(`https://pk.eocean.us/APIManagement/API/RequestAPI?user=mkhata&pwd=AHd5JmJP6h9s40dgcFKLsdRwfmTnQJhyvd3KkUQcNvhAwOpQ%2bAHL4Rcz1sBpEbQn0Q%3d%3d&sender=MKhata&reciever=${mobileno}&msg-data=${messageData}&response=string`)
-    //     .then(response => {
-
-
-    //       OTP.create({
-    //         otp: val,
-    //         phone: req.body.user_phone
-    //       }).then(otp => {
-
-    //         return res.status(200).send({
-    //           responsecode: 200,
-    //           message: "OTP send successfully"
-    //         });
-
-    //       }).catch(error => {
-    //         console.log(error);
-    //       });
-
-
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     });
-    // }
+    
 };
 
-//Verify OTP
+//--------------------vendor Verify OTP-------------------------------------
 exports.varify_otp = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
     req.checkBody('otp', 'Phone Number must have value!').notEmpty();
@@ -791,7 +681,6 @@ exports.varify_otp = (req, res) => {
                 return res.status(200).send({
                     status: 200,
                     message: "OTP Validation Success",
-                    phone_number: req.body.phone_number
                 });
 
 

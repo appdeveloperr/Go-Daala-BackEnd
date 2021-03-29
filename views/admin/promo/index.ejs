@@ -1,92 +1,99 @@
 <%- include('.\\' + '../../_layouts/adminheader'); %>
 
 <!-- Content Wrapper. Contains page content -->
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Promo Codes</h1>
+                    <h1>Promo Code</h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
     </section>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="row">
-            <div class="col-12">
-                <!-- /.card -->
-                <div class="card">
-                    <div class="card-header">
-                        <a href="/admin/promo/create_promo" class="btn btn-primary">Add Code</a>
-                    </div>
-                    <!-- /.card-header -->
-                    <%if(all_promos){ var a=1;%>
-                    <div class="card-body">
-                            
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Code</th>
-                                    <th>Expariy Date</th>
-                                    <th>Type</th>
-                                    <th>Discount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <%all_promos.forEach(function(item){  var year = item.exp_date.substr(1, 3);   var menth = item.exp_date.substr(5, 6);  var day = item.exp_date.substr(8, 9);%>
-                                 <tr>
-                                    <td><%=a%><%a++%></td>
-                                    <td><%=item.code%></td>
-                                    <!-- <td><%=day%> <%=menth%> <%=year%></td> -->
-                                    <td><%=item.exp_date%></td>
-                                    <td><%=item.type%></td>
-                                    <td><%=item.discount%></td>
-                                    <%if(item.publish=='on'){%>
-                                    <td><span class="text-success">Publish</span>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; <span class="text-seccess"><u><a href="/vendor/used/promo/<%=item.id%>" >use</a></u></span>
-                                    </td>
-                                    <%}else{%>
-                                        <td><span class="text-danger">UnPublish</span></td>
-                                        <%}%>
-                                    <td><a href="/admin/promo/edit/<%=item.id%>" class="mr-2"><i
-                                                class="fa fa-edit"></i>
-                                            </a>
-                                            <a class="confirmDeletion" href="/admin/promo/delete/<%=item.id%>"><i
-                                                class="fa fa-trash text-danger"></i>
-                                            </a>
-                                </td>
-                                <%})%>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                   
-                    </div>
-                    <%}%>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <!--/.card -->
+
+          <div class="card">
+            <div class="card-header">
+              
+                <a href="/admin/promo/create_promo" class="btn btn-primary">Add Code</a>
             </div>
-            <!-- /.col -->
+            <!-- /.card-header -->
+            <%if(all_promos){ var a=1;%>
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Code</th>
+                    <th>Expariy Date</th>
+                    <th>Type</th>
+                    <th>Discount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                        <%all_promos.forEach(function(item){ %>
+                <tr>
+                        <td><%=a%><%a++%></td>
+                        <td><%=item.code%></td>
+
+                        <td><%=item.exp_date%></td>
+                        <td><%=item.type%></td>
+                        <td><%=item.discount%></td>
+                        <%if(item.publish=='on'){%>
+                        <td><span class="text-success">Publish</span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; <span
+                                class="text-seccess"><u><a
+                                        href="/vendor/used/promo/<%=item.id%>">use</a></u></span>
+                        </td>
+                        <%}else{%>
+                        <td><span class="text-danger">UnPublish</span></td>
+                        <%}%>
+                    <td><a href="/admin/promo/edit/<%=item.id%>" class="mr-2"><i
+                            class="fa fa-edit"></i>
+                        </a>
+                        <a class="confirmDeletion" href="/admin/promo/delete/<%=item.id%>"><i
+                                class="fa fa-trash text-danger"></i>
+                        </a>
+                        </td>
+                </tr>
+                <%})%>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>Code</th>
+                    <th>Expariy Date</th>
+                    <th>Type</th>
+                    <th>Discount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </tfoot>
+              </table>
+            </div>
+            <%}%>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
         </div>
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 

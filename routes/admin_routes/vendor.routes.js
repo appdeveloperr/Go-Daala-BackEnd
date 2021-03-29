@@ -11,18 +11,18 @@ module.exports = function (app) {
 
 
   //-----------------get all Vendors admin side----------------
-app.get('/admin/all_vendor/index',vendor_controller.index);
+app.get('/admin/vendor/index',isAdmin,vendor_controller.index);
 
 //-----------------get information Vendors admin side----------------
-app.get('/vendor/information/:id',vendor_controller.info);
+app.get('/vendor/information/:id',isAdmin,vendor_controller.info);
 
 //-----------------get vendor unblock admin side----------------
-app.get('/admin/vendor/unblock/:id',vendor_controller.unblock);
+app.get('/admin/vendor/unblock/:id',isAdmin,vendor_controller.unblock);
 
 //-----------------get vendor block admin side----------------
-app.get('/admin/vendor/block/:id',vendor_controller.block);
+app.get('/admin/vendor/block/:id',isAdmin,vendor_controller.block);
 
 //-----------------get  vendor delete admin side----------------
-app.get('/admin/vendor/delete/:id',vendor_controller.delete);
+app.get('/admin/vendor/delete/:id',isAdmin,vendor_controller.delete);
 
 }

@@ -1,4 +1,5 @@
-
+var auth = require('../../controllers/admin_controllers/auth');
+var isAdmin = auth.isAdmin;
 var contectus_controller = require('../../controllers/admin_controllers/contectus');
 
 
@@ -13,7 +14,7 @@ module.exports = function (app) {
   
 
 //-----------------admin get all contect us or messages----------------
-app.get('/admin/get_content_us',contectus_controller.get_contect_us);
+app.get('/admin/get_content_us',isAdmin,contectus_controller.get_contect_us);
 
 //-----------------outsider create contect us or message----------------
 app.post('/admin/contect_us',contectus_controller.create)

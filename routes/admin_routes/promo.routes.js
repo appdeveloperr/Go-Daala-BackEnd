@@ -34,24 +34,24 @@ app.get("/admin/promo/Edit/:id", isAdmin, function (req, res) {
 });
 
 
-app.get('/admin/Edit_promo/:id', promo_controller.edit);
+app.get('/admin/Edit_promo/:id', isAdmin,promo_controller.edit);
 
 
   //------------------post promo update---------------------------------
-  app.post("/admin/promo/update",promo_controller.update);
+  app.post("/admin/promo/update",isAdmin,promo_controller.update);
     
 
   //-----------------get promo delete ---------------------
-  app.get('/admin/promo/delete/:id',promo_controller.delete); 
+  app.get('/admin/promo/delete/:id',isAdmin,promo_controller.delete); 
 
   //----------------get list of used promo code with aghast of promo_id--------------//
-  app.get('/vendor/used/promo/:id',
+  app.get('/vendor/used/promo/:id',isAdmin,
   function(req,res){
     var id = req.params.id;
      res.redirect('/used/promo/' + id);
   }
   ); 
-   app.get('/used/promo/:id',promo_controller.used_promo_vendor) 
+   app.get('/used/promo/:id',isAdmin,promo_controller.used_promo_vendor) 
 
 
 
