@@ -2,7 +2,7 @@ const db = require("../../models/api_models");
 const Trips = db.trip;
 const Vendor = db.vendor;
 const Driver = db.driver;
-const Cancel_trip = db.cencel_trip;
+const Cancel_trip = db.cancel_trip;
 
 
 
@@ -101,19 +101,19 @@ exports.complete = function (req, res) {
 
 //--------Booking cancel Function -----------------
 exports.cancel = function (req, res) {
-    Cancel_trip.findAll().then(all_cancel_trip => {
-        if (!all_cancel_trip) {
-            console.log(all_cancel_trip);
-        } else {
+   
             Trips.findAll({
                 where: {
-                    status: 'cancel'
+                    status: 'cencal'
                 }
             }).then(all_trips => {
                 if (!all_trips) {
                     console.log("no trips  recode is exist")
                 } else {
-
+                    Cancel_trip.findAll().then(all_cancel_trip => {
+                        if (!all_cancel_trip) {
+                          console.log("cancel trip is not exist")
+                        } else {
                     Vendor.findAll().then(all_vendor => {
                         if (!all_vendor) {
                             console.log("no vendor recode is exist")

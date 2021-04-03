@@ -26,6 +26,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     account_info: {
       type: Sequelize.STRING
+    },
+    fcm_token: {
+      type: Sequelize.STRING
     }
   });
 

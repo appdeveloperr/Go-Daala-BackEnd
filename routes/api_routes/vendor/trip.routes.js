@@ -25,7 +25,7 @@ module.exports = function (app) {
     //------------Vendor Create trip Function----------------
     app.post(
         "/api/vendor/create-trip",
-        vendorAuthJwt.verifyToken,
+        // vendorAuthJwt.verifyToken,
         controller.create_trip,
 
         // uploads.single('profile'),

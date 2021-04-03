@@ -2,6 +2,7 @@ const db = require("../../../models/api_models");
 const config = require("../../../config/auth.config");
 var Reviews = db.review;
 var Vendor = db.vendor;
+var Trip = db.trip;
 
 //-------------------vendor create review for trip--------------------------------
 exports.create_review = (req, res) => {
@@ -74,51 +75,81 @@ exports.get_review = (req, res) => {
             }
         });
     } else {
-        Reviews.findOne({
+        Reviews.findAll({
             where: {
                 trip_id: req.body.trip_id,
-                driver_id: null
             }
         }).then(reviews => {
-            if (reviews) {
-                
-                Vendor.findOne({
-                    where: {
-                        id: reviews.vendor_id
+            if (reviews == null || reviews == '') {
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "get vendor reviews  is empty successful",
+                    successData: {
                     }
-                }).then(vendors => {
-                    if (vendors) {
-                        Trip.findOne({
+                });
+            } else {
+
+
+                reviews.forEach(item => {
+                    if (item.dataValues.vendor_id != null) {//------------if vendor is gave reviews to driver ------//////
+
+                        Vendor.findOne({
                             where: {
-                                id: req.body.trip_id
+                                id: item.dataValues.vendor_id
                             }
-                        }).then(trip => {
-                            if (trip) {
+                        }).then(vendor => {
+                            if (vendor != null || vendor != '') {
 
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "get vonder reviews   is successful",
-                                    successData: {
-                                        review: {
-                                            id: reviews.id,
-                                            rating: reviews.rating,
-                                            discription: reviews.discription,
+                                delete vendor.dataValues.password;
+                                delete vendor.dataValues.id;
+                                delete vendor.dataValues.account_info;
+                                delete vendor.dataValues.fcm_token;
+                                delete vendor.dataValues.createdAt;
+                                delete vendor.dataValues.updatedAt;
+                                // delete vendor.dataValues.phone_number;
 
-                                            trip_id: reviews.trip_id,
-                                            vendor_id: reviews.vendor_id
-                                        },
-                                        vendor: {
-                                            vendor_name: vendors.dataValues.first_name + " " + vendors.dataValues.last_name
-                                        },
-                                        trip: {
-                                            trip: trip.dataValues
-                                        }
+                                Trip.findOne({
+                                    where: {
+                                        id: req.body.trip_id
                                     }
-                                });
+                                }).then(trip => {
+                                    if (trip != null || trip != '') {
+                                        return res.status(200).send({
+                                            status: 200,
+                                            message: "get driver reviews   is successful",
+                                            successData: {
+                                                reviews_list: {
+                                                    review: reviews
+                                                },
+                                                vendor: vendor.dataValues
+                                                ,
+                                                trip: trip.dataValues
+
+                                            }
+                                        });
+                                    } else {
+                                        return res.status(200).send({
+                                            status: 200,
+                                            message: "get driver reviews   is successful",
+                                            successData: {
+                                            }
+                                        });
+                                    }
+                                }).catch(err => {
+
+                                    return res.status(200).send({
+                                        status: 400,
+                                        message: err.message,
+                                        successData: {}
+                                    });
+
+                                })
+
                             } else {
                                 return res.status(200).send({
                                     status: 200,
-                                    message: "get vendor reviews   is successful",
+                                    message: "get driver reviews   is successful",
                                     successData: {
                                     }
                                 });
@@ -132,11 +163,56 @@ exports.get_review = (req, res) => {
                             });
 
                         })
+                    }
+
+                });
+
+
+                Trip.findOne({
+                    where: {
+                        id: req.body.trip_id
+                    }
+                }).then(trip => {
+                    if (trip != null || trip != '') {
+                        Vendor.findOne({
+                            where: {
+                                id: trip.dataValues.vendor_id
+                            }
+                        }).then(vendor => {
+                            delete vendor.dataValues.password;
+                            delete vendor.dataValues.id;
+                            delete vendor.dataValues.account_info;
+                            delete vendor.dataValues.fcm_token;
+                            delete vendor.dataValues.createdAt;
+                            delete vendor.dataValues.updatedAt;
+                            
+                            return res.status(200).send({
+                                status: 200,
+                                message: "get driver reviews   is successful",
+                                successData: {
+                                    reviews_list: {
+                                        review: reviews
+                                    },
+                                    vendor: vendor.dataValues
+                                    ,
+                                    trip: trip.dataValues
+
+                                }
+                            });
+                        }).catch(err => {
+
+                            return res.status(200).send({
+                                status: 400,
+                                message: err.message,
+                                successData: {}
+                            });
+
+                        })
 
                     } else {
                         return res.status(200).send({
                             status: 200,
-                            message: "get vendor reviews   is successful",
+                            message: "get driver reviews   is successful",
                             successData: {
                             }
                         });
@@ -149,13 +225,6 @@ exports.get_review = (req, res) => {
                         successData: {}
                     });
 
-                })
-            } else {
-                return res.status(200).send({
-                    status: 200,
-                    message: "get vendor reviews   is successful",
-                    successData: {
-                    }
                 });
 
             }

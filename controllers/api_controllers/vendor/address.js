@@ -94,7 +94,7 @@ exports.update_address = (req, res) => {
             },
         ).then(address => {
 
-            if (address) {
+            if (address!=null|| address!='') {
 
                 return res.status(200).send({
                     status: 200,

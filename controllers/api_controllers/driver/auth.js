@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
-
+    req.checkBody('fcm_token', 'Please provide a fcm token needed!')
 
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -103,7 +103,8 @@ exports.signup = (req, res) => {
                     cnic: '/public/files/uploadsFiles/driver/' + cnicfilename,
                     driving_license: '/public/files/uploadsFiles/driver/' + drivefilename,
                     status: "deactive",
-                    account_info: "block"
+                    account_info: "block",
+                    fcm_token: req.body.fcm_token
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret, {
@@ -153,6 +154,8 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
+    req.checkBody('fcm_token', 'Please provide fcm token value needed!')
+
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -191,9 +194,9 @@ exports.signin = (req, res) => {
                         message: "Invalid user Password!"
                     });
                 }
-        
 
-                if(user.dataValues.account_info=='block'){
+
+                if (user.dataValues.account_info == 'block') {
                     return res.status(200).send({
                         status: 400,
                         message: "please wait for admin approvel.",
@@ -206,7 +209,8 @@ exports.signin = (req, res) => {
                 });
 
                 Driver.update({
-                    status: 'active'
+                    status: 'active',
+                    fcm_token: req.body.fcm_token
                 },
                     {
                         where: { id: user.id },
@@ -293,7 +297,7 @@ exports.update = (req, res) => {
                 },
             ).then(user => {
 
-                if (user) {
+                if (user != null || user != '') {
                     var token = jwt.sign({ id: user.id }, config.secret, {
                         expiresIn: 86400 // 24 hours
                     });
@@ -357,7 +361,7 @@ exports.forgot_password = (req, res) => {
             },
         ).then(user => {
 
-            if (user) {
+            if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                     expiresIn: 86400 // 24 hours
                 });
@@ -472,7 +476,7 @@ exports.update_picture = (req, res) => {
                     },
                 ).then(user => {
 
-                    if (user) {
+                    if (user!=null || user!='') {
 
                         return res.status(200).send({
                             status: 200,
@@ -516,7 +520,7 @@ exports.update_picture = (req, res) => {
 exports.sendOTP = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
 
-    console.log(req.body.phone_number);
+
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -579,7 +583,7 @@ exports.sendOTP = (req, res) => {
                         });
 
                 } else {  //User is forgot password 
-  
+
                     //User is Exist 
                     var val = Math.floor(1000 + Math.random() * 9000);
                     var messageData = "Your Go Daala Verification Code is: " + val;
@@ -631,7 +635,7 @@ exports.sendOTP = (req, res) => {
             });
 
     }
-    
+
 };
 
 //--------------------vendor Verify OTP-------------------------------------

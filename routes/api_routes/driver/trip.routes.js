@@ -25,7 +25,7 @@ module.exports = function (app) {
     //------------driver cencal trip Function----------------
     app.post(
         "/api/driver/cencal-trip",
-        driverAuthJwt.verifyToken,
+         driverAuthJwt.verifyToken,
         controller.cencal_trip,
     );
 

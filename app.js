@@ -56,8 +56,8 @@ app.use(express.static(path.join(__dirname, '/public/')));
 
 // database
 const db = require("./models/api_models");
-const Role = db.role;
-//  const User = db.user;
+// const Role = db.role;
+  const User = db.user;
 
 // // force: true will drop the table if it already exists
 // db.sequelize.sync({force: true}).then(() => {
@@ -211,6 +211,7 @@ require('./routes/api_routes/driver/contectus.routes')(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 http.listen(PORT, () => {
+  // initial();
   console.log(`Server is running on port ${PORT}.`);
 });
 

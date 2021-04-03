@@ -22,7 +22,7 @@ module.exports = function (app) {
     );
 
     app.post('/api/driver/get-review',
-    driverAuthJwt.verifyToken,
+    // driverAuthJwt.verifyToken,
      controller.get_review
    );
 }

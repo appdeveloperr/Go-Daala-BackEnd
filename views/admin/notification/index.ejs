@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>All FAQ's List</h1>
+                    <h1>All Notifications List</h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -19,36 +19,37 @@
                 <!-- /.card -->
                 <div class="card">
                     <div class="card-header">
-                        <a href="/admin/faqs/create" class="btn btn-primary">Add FAQ's</a>
+                        <a href="/admin/notification/create" class="btn btn-primary">Create Notification</a>
                     </div>
                     <!-- /.card-header -->
-                    <%if(all_faq_s){ var a=1;%>
+                    <%if(all_notification){ var a=1;%>
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>title</th>
-                                    <th>Desc</th>
-                                    <th>Action</th>
+                                    <th>Body</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <%all_faq_s.forEach(function(item){  %>
+                                <%all_notification.forEach(function(item){ %>
                                 <tr>
+                                    <% var img =item.createdAt;  var dateObj= new Date(img);
+
+                                    
+                                    var month = dateObj.getUTCMonth() + 1;
+                                    var day = dateObj.getUTCDate();
+                                    var year = dateObj.getUTCFullYear();
+                                    
+                                  var  newdate = day + "/" + month + "/" + year;%>
                                     <td><%=a%><%a++%></td>
                                     <td><%=item.title%></td>
-                                    <td><%=item.disc%></td>
-                                    <td>
-                                        <a href="/faqs/Edit/<%=item.id%>" class="mr-2">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-
-                                        <a class="confirmDeletion" href="/admin/faqs/delete/<%=item.id%>">
-                                            <i class="fa fa-trash text-danger"></i>
-                                        </a>
-
-                                    </td>
+                                    <td><%=item.body%></td>
+                                    
+                                    <td><%=newdate%></td>
+                                    
                                 </tr>
                                 <%});%>
 

@@ -43,7 +43,7 @@
                             <tbody>
 
                                 <tr> <%all_trips.forEach(function(item){  %>
-                                    <%if(state=='ONGOING' && (item.status=='start' || item.status=='wait')){%>
+                                    <%if(state=='ONGOING' && (item.status=='start' || item.status=='wait')){ %>
 
                                     <td><%=a%><%a++%></td>
                                     <td><%=item.pickup%></td>
@@ -58,7 +58,7 @@
                                     <%}%>
                                     <%});%>
 
-                                    <%if(item.driver_id!=null){%>
+                                    <%if(item.driver_id!=null){ %>
                                     <%all_driver.forEach(function(item_driver){%>
                                     <%if(item.driver_id==item_driver.id){%>
                                     <td><%=item_driver.first_name%> <%=item_driver.last_name%> </td>
@@ -94,32 +94,38 @@
                                     <td></td>
                                     <%}%>
 
-                                    <%}if(state=='CANCEL' && item.status=='cencal'){%>
-
-                                    <td><%=a%><%a++%></td>
-                                    <td><%=item.pickup%></td>
-                                    <td><%=item.dropoff%> </td>
-                                    <td><%=item.vehicle_name%> </td>
-                                    <td><%=item.estimated_distance%></td>
-                                    <td><%=item.estimated_time%></td>
-                                    <td><%=item.total_cost%></td>
-                                    <%all_vendor.forEach(function(item_vendor){%>
-                                    <%if(item.vendor_id==item_vendor.id){%>
-                                    <td><%=item_vendor.first_name%> <%=item_vendor.last_name%> </td>
-                                    <%}%>
-                                    <%});%>
-
-
-                                    <%if(item.driver_id!=null){%>
-                                    <%all_driver.forEach(function(item_driver){%>
-                                    <%if(item.driver_id==item_driver.id){%>
-                                    <td><%=item_driver.first_name%> <%=item_driver.last_name%> </td>
-                                    <%}%>
-                                    <%});%>
-                                    <%}else{%>
-                                    <td></td>
-
-                                    <%}}%>
+                                    <%}if(state=='CANCEL' && item.status=='cencal'){ console.log(item)%>
+                                        <td><%=a%><%a++%></td>
+                                        <td><%=item.pickup%></td>
+                                        <td><%=item.dropoff%> </td>
+                                        <td><%=item.vehicle_name%> </td>
+                                        <td><%=item.estimated_distance%></td>
+                                        <td><%=item.estimated_time%></td>
+                                        <td><%=item.total_cost%></td>
+                                        <%all_vendor.forEach(function(item_vendor){%>
+                                        <%if(item.vendor_id==item_vendor.id){%>
+                                        <td><%=item_vendor.first_name%> <%=item_vendor.last_name%> </td>
+                                        <%}%>
+                                        <%});%>
+    
+    
+                                        <%if(item.driver_id!=null){%>
+                                        <%all_driver.forEach(function(item_driver){%>
+                                        <%if(item.driver_id==item_driver.id){%>
+                                        <td><%=item_driver.first_name%> <%=item_driver.last_name%> </td>
+                                        <%}%>
+                                        <%});%>
+                                        <%}else{%>
+                                        <td></td>
+    
+                                        <%}%>
+                                        <%all_cancel_trip.forEach(function(cancel){%>
+                                        <%if(item.id==cancel.trip_id){%>
+                                        <%if(cancel.driver_id==null){%>
+                                        <td>Vendor</td>
+                                        <%}else{%>
+                                            <td>Driver</td>
+                                        <%}}});}%>
                                 </tr>
                                 <%});%>
 

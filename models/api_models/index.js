@@ -29,7 +29,7 @@ db.user = require("../api_models/user.model.js")(sequelize, Sequelize);
 db.role = require("../api_models/role.model")(sequelize, Sequelize);
 db.banner = require("../api_models/banner.model")(sequelize, Sequelize);
 db.promo = require("../api_models/promo.model")(sequelize, Sequelize);
-
+db.notification = require("../api_models/notification.model")(sequelize, Sequelize);
 //---------------------------vendor models-------------------------
 db.vendor = require("../api_models/vendor.model")(sequelize, Sequelize);
 db.address = require("../api_models/address.model")(sequelize, Sequelize);
@@ -46,7 +46,7 @@ db.contect_us = require("../api_models/contect_us.model")(sequelize, Sequelize);
 db.faqs = require("../api_models/faqs.model")(sequelize, Sequelize);
 db.otp = require("../api_models/otp.model")(sequelize, Sequelize);
 db.used_promos = require("../api_models/used_promo.model")(sequelize, Sequelize);
-db.cencel_trip = require("../api_models/cancel_trip.model")(sequelize, Sequelize);
+db.cancel_trip = require("../api_models/cancel_trip.model")(sequelize, Sequelize);
 //Table Relationships
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -85,15 +85,15 @@ db.trip.belongsTo(db.vendor, {
 });
 
 //----------cancel trip relation--------------///
-db.cencel_trip.belongsTo(db.driver, {
+db.cancel_trip.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 
-db.cencel_trip.belongsTo(db.vendor, {
+db.cancel_trip.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
-db.cencel_trip.belongsTo(db.trip, {
+db.cancel_trip.belongsTo(db.trip, {
   foreignKey: "trip_id"
 });
 //--------------review--------------
@@ -116,6 +116,14 @@ db.used_promos.belongsTo(db.vendor, {
 
 db.used_promos.belongsTo(db.promo, {
   foreignKey: "promo_id"
+});
+//--------------notification----------------//
+db.notification.belongsTo(db.driver, {
+  foreignKey: "driver_id"
+});
+
+db.notification.belongsTo(db.vendor, {
+  foreignKey: "vendor_id"
 });
 
 

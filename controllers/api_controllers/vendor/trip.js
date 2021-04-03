@@ -5,6 +5,13 @@ var Driver = db.driver;
 var Cancel_trip = db.cencel_trip;
 var fs = require('fs');
 var path = require('path');
+var admin = require("firebase-admin");
+var serviceAccount = require("../../../config/go-daala-prod-firebase-adminsdk-kx7hm-c8b83fe095.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://go-daala-prod-default-rtdb.firebaseio.com/"
+});
 
 //--------------vendor create trip---------------
 exports.create_trip = (req, res) => {
@@ -40,7 +47,7 @@ exports.create_trip = (req, res) => {
         var centerPoint = { lat: req.body.pickup_latitude, lng: req.body.pick_longitude };
 
         driver_lat_long.findAll().then(loc => {
-            if (loc) {
+            if (loc!=null|| loc!='') {
                 loc.forEach(element => {
                     var checkPoint = { lat: element.latitude, lng: element.longitude };
                     var n = arePointsNear(checkPoint, centerPoint, 5);
@@ -65,6 +72,9 @@ exports.create_trip = (req, res) => {
             }
         });
 
+
+
+
         // Save trips to Database
         Trip.create({
             pickup: req.body.pickup,
@@ -82,12 +92,39 @@ exports.create_trip = (req, res) => {
             status: 'wait'
 
         }).then(trip => {
+            var a = trip.id;
+            var b = a.toString();
+            var payload = {
+                notification: {
+                    title: "trip_id",
+                    body: b
+                }
+            };
+    
+            var options = {
+                priority: "high",
+                timeToLive: 60 * 60 * 24
+            };
+            admin.messaging().sendToDevice("fVWy_0MyRYKsd5JhGjHkdR:APA91bFTQH9X5mOUO9BGMUAsWzVpfQtr3541s3DqqRoyl8Y7nVfsAeNAP7Kb5ZDLwPl2ZuzrJ-Pqw8EK7nTdgSg-xufkjnMX_kJXoHpSnJSywUo8CrlMALrPHy8nopJ5hWHPVPuWk30t", payload, options)
+            .then(function (response) {
+                console.log("Successfully sent message:", response);
+            })
+            .catch(function (error) {
+                console.log("Error sending message:", error);
+                return res.status(200).send({
+                    responsecode: 400,
+                    notification: response.results[0]
+                })
+
+            });
+
+            // https://go-daala-backend.herokuapp.com
 
             return res.status(200).send({
                 status: 200,
                 message: "Create Trip with nearest drivers  is successful",
                 successData: {
-                    trip: {
+                    request_trip: {
                         id: trip.id,
                         pickup: trip.pickup,
                         dropoff: trip.dropoff,
@@ -133,7 +170,7 @@ exports.test_lat_log = function (req, res) {
     var centerPoint = { lat: 31.506432, lng: 74.32437759999999 }; // model town lat long
 
     driver_lat_long.findAll().then(loc => {
-        if (loc) {
+        if (loc !=null|| locs!='') {
             loc.forEach(element => {
                 var checkPoint = { lat: element.latitude, lng: element.longitude };
                 var n = arePointsNear(checkPoint, centerPoint, 5);
@@ -212,7 +249,7 @@ exports.recent_trip = (req, res) => {
                 vendor_id: req.body.vendor_id
             }
         }).then(trip => {
-            if (trip) {
+            if (trip!=null|| trip!='') {
                 return res.status(200).send({
                     status: 200,
                     message: "Get vendor recent  Trip",

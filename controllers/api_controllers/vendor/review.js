@@ -1,6 +1,8 @@
 const db = require("../../../models/api_models");
 const Op = db.Sequelize.Op;
 var Reviews = db.review;
+var Driver = db.driver;
+var Trip = db.trip;
 
 //-------------------vendor create review for trip--------------------------------
 exports.create_review = (req, res) => {
@@ -74,53 +76,115 @@ exports.get_review = (req, res) => {
             }
         });
     } else {
-        Reviews.findOne({
+        Reviews.findAll({
             where: {
                 trip_id: req.body.trip_id,
-                vendor_id: null
             }
         }).then(reviews => {
-            if (reviews) {
-                Driver.findOne({
-                    where: {
-                        id: reviews.driver_id
-                    }
-                }).then(drivers => {
-                    if (drivers) {
-                        Trip.findOne({
-                            where: {
-                                id: req.body.trip_id
-                            }
-                        }).then(trip => {
-                            if (trip) {
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "get driver reviews   is successful",
-                                    successData: {
-                                        review: {
-                                            id: reviews.id,
-                                            rating: reviews.rating,
-                                            discription: reviews.discription,
 
-                                            trip_id: reviews.trip_id,
-                                            driver_id: reviews.driver_id
-                                        },
-                                        driver: {
-                                            driver_name: drivers.dataValues.first_name + " " + drivers.dataValues.last_name
-                                        },
-                                        trip: {
-                                            trip: trip.dataValues
-                                        }
-                                    }
-                                });
-                            } else {
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "get driver reviews   is successful",
-                                    successData: {
-                                    }
-                                });
+            if (reviews == null || reviews == '') {
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "get vendor reviews  is empty successful",
+                    successData: {
+                    }
+                });
+            } else {
+
+
+                reviews.forEach(item => {
+                    if (item.dataValues.driver_id != null) {
+                        Driver.findOne({
+                            where: {
+                                id: item.dataValues.driver_id
                             }
+                        }).then(drivers => {
+                            if (drivers != null || drivers != '') {
+                                delete drivers.dataValues.password;
+                                delete drivers.dataValues.id;
+                                delete drivers.dataValues.account_info;
+                                delete drivers.dataValues.fcm_token;
+                                delete drivers.dataValues.createdAt;
+                                delete drivers.dataValues.updatedAt;
+                                delete drivers.dataValues.phone_number;
+
+
+                                Trip.findOne({
+                                    where: {
+                                        id: req.body.trip_id
+                                    }
+                                }).then(trip => {
+                                    if (trip != null || trip != '') {
+                                        return res.send({
+                                            status: 200,
+                                            message: "get  reviews   is successful",
+                                            successData: {
+                                                reviews_list: {
+                                                    review: reviews
+                                                },
+                                                driver:  drivers.dataValues,
+                                                trip_data: trip.dataValues
+
+                                            }
+                                        });
+                                    
+                                    } 
+                                }).catch(err => {
+
+                                    return res.status(200).send({
+                                        status: 400,
+                                        message: err.message,
+                                        successData: {}
+                                    });
+
+                                })
+                            }
+                        }).catch(err => {
+
+                            return res.status(200).send({
+                                status: 400,
+                                message: err.message,
+                                successData: {}
+                            });
+
+                        })
+                    }
+                });
+
+
+                Trip.findOne({
+                    where: {
+                        id: req.body.trip_id
+                    }
+                }).then(trip => {
+                    if (trip != null || trip != '') {
+                        Driver.findOne({
+                            where: {
+                                id: trip.dataValues.driver_id
+                            }
+                        }).then(driver => {
+                            delete driver.dataValues.password;
+                            delete driver.dataValues.id;
+                            delete driver.dataValues.account_info;
+                            delete driver.dataValues.fcm_token;
+                            delete driver.dataValues.createdAt;
+                            delete driver.dataValues.updatedAt;
+                            delete driver.dataValues.phone_number;
+                            
+                            return res.status(200).send({
+                                status: 200,
+                                message: "get Vendor reviews   is successful",
+                                successData: {
+                                    reviews_list: {
+                                        review: reviews
+                                    },
+                                    driver: driver.dataValues
+                                    ,
+                                    trip: trip.dataValues
+
+                                }
+                            });
                         }).catch(err => {
 
                             return res.status(200).send({
@@ -134,7 +198,7 @@ exports.get_review = (req, res) => {
                     } else {
                         return res.status(200).send({
                             status: 200,
-                            message: "get driver reviews   is successful",
+                            message: "get Vendor reviews   is successful",
                             successData: {
                             }
                         });
@@ -148,14 +212,6 @@ exports.get_review = (req, res) => {
                     });
 
                 })
-            } else {
-                return res.status(200).send({
-                    status: 200,
-                    message: "get vendor reviews   is successful",
-                    successData: {
-                    }
-                });
-
             }
         }).catch(err => {
 

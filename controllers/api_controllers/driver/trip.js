@@ -2,7 +2,8 @@ const db = require("../../../models/api_models");
 const config = require("../../../config/auth.config");
 const Driver = db.driver;
 var Vendor = db.vendor;
-var Cancel_trip =db.cencal_trip;
+var Cancel_trip =db.cancel_trip;
+var Trip = db.trip;
 
 //--------------driver receive trip---------------
 exports.receive_trip = (req, res) => {
@@ -21,6 +22,8 @@ exports.receive_trip = (req, res) => {
         });
     } else {
         // Save vendor to Database
+        console.log("this is driver id:  "+req.body.driver_id);
+        console.log("this is trip id:  "+req.body.trip_id);
         Trip.update({
             driver_id: req.body.driver_id,
             status: "wait",
@@ -31,7 +34,7 @@ exports.receive_trip = (req, res) => {
                 returning: true,
                 plain: true
             }).then(trip => {
-
+                if(trip!=null  || trip!=''){
                 return res.status(200).send({
                     status: 200,
                     message: "Driver receive trip  is successful",
@@ -40,8 +43,12 @@ exports.receive_trip = (req, res) => {
                             id: trip[1].id,
                             pickup: trip[1].pickup,
                             dropoff: trip[1].dropoff,
-                            pickup_latitude: trip[1].pickup_latitude,
-                            pick_longitude: trip[1].pick_longitude,
+                          
+                            pickup_latitude: trip[1].pickup_lat,
+                            pickup_longitude: trip[1].pickup_long,
+
+                            dropoff_latitude:trip[1].dropoff_lat,
+                            dropoff_longitude:trip[1].dropoff_long,
                             vehicle_name: trip[1].vehicle_name,
                             estimated_distance: trip[1].estimated_distance,
                             estimated_time: trip[1].estimated_time,
@@ -54,7 +61,19 @@ exports.receive_trip = (req, res) => {
                         }
                     }
                 });
+            }else{
+                return res.status(200).send({
+                    status: 200,
+                    message: "Driver receive trip  is successful",
+                    successData: {
+                        trip: {
+                            
+                            trip
 
+                        }
+                    }
+                }); 
+            }
             }).catch(err => {
 
                 return res.status(200).send({
@@ -101,6 +120,7 @@ exports.cencal_trip = (req, res) => {
                     driver_id:req.body.driver_id,
                     vendor_id:null
                 }).then(can_trip => {
+                  
                     return res.status(200).send({
                         status: 200,
                         message: "Driver cencal trip  is successfull",
@@ -294,7 +314,7 @@ exports.recent_trip = (req, res) => {
         });
     } else {
         // Save vendor to Database
-        Trip.findOne({
+        Trip.findAll({
             where: {
                 driver_id: req.body.driver_id
             }
@@ -303,18 +323,8 @@ exports.recent_trip = (req, res) => {
                 status: 200,
                 message: "Get driver recent  Trip",
                 successData: {
-                    trip: {
-                        id: trip.id,
-                        pickup: trip.pickup,
-                        dropoff: trip.dropoff,
-                        pickup_latitude: trip.pickup_latitude,
-                        pick_longitude: trip.pick_longitude,
-                        vehicle_name: trip.vehicle_name,
-                        estimated_distance: trip.estimated_distance,
-                        estimated_time: trip.estimated_time,
-                        total_cost: trip.total_cost,
-                        driver_id: trip.driver_id,
-                        vendor_id: trip.vendor_id
+                    trip_list: {
+                       trip
 
                     }
                 }

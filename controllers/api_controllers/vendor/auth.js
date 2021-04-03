@@ -13,7 +13,7 @@ exports.signup = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
-
+    req.checkBody('fcm_token','Please provide a fcm token needed!')
 
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -72,7 +72,8 @@ exports.signup = (req, res) => {
                     phone_number: req.body.phone_number,
                     password: bcrypt.hashSync(req.body.password, 8),
                     profile: '/public/files/uploadsFiles/vendor/' + filename,
-                    account_info: 'unblock'
+                    account_info: 'unblock',
+                    fcm_token: req.body.fcm_token
                     //  
                 }).then(user => {
 
@@ -120,6 +121,7 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
+    req.checkBody('fcm_token', 'Please provide fcm token value needed!');
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -168,6 +170,24 @@ exports.signin = (req, res) => {
 
                 var token = jwt.sign({ id: user.id }, config.secret, {
                     expiresIn: 86400 // 24 hours
+                });
+
+                Vendor.update({
+                    fcm_token: req.body.fcm_token
+                }, {
+                    where: {
+                        id: user.id
+                    }
+                }).then(fcm => {
+
+
+                }).catch(err => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
                 });
 
 
@@ -236,7 +256,7 @@ exports.update = (req, res) => {
             },
         ).then(user => {
 
-            if (user) {
+            if (user!=null|| user!='') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                     expiresIn: 86400 // 24 hours
                 });
@@ -296,7 +316,7 @@ exports.forgot_password = function (req, res) {
             },
         ).then(user => {
 
-            if (user) {
+            if (user!=null|| user!='') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                     expiresIn: 86400 // 24 hours
                 });
@@ -413,7 +433,7 @@ exports.update_picture = function (req, res) {
                     },
                 ).then(user => {
 
-                    if (user) {
+                    if (user!=null|| user!='') {
 
                         return res.status(200).send({
                             status: 200,

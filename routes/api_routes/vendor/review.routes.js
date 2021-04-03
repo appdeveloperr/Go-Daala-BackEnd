@@ -18,12 +18,12 @@ module.exports = function (app) {
     
 
     app.post('/api/vendor/review-create',
-     vendorAuthJwt.verifyToken,
+    //  vendorAuthJwt.verifyToken,
       controller.create_review
     );
 
     app.post('/api/vendor/get-review',
-    vendorAuthJwt.verifyToken,
+    //  vendorAuthJwt.verifyToken,
      controller.get_review
    );
 

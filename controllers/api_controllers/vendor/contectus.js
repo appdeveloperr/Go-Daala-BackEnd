@@ -32,7 +32,7 @@ exports.contect_us = function (req, res, next) {
 
 
         }).then(contect => {
-            if (contect) {
+            if (contect!=null|| contect!='') {
                 return res.status(200).send({
                     status: 200,
                     message: "Contect is successfuly send",
@@ -70,7 +70,7 @@ exports.get_reply = function (req, res) {
             // admin_id:"1"
         }
     }).then(all_vendor_record => {
-        if (all_vendor_record) {
+        if (all_vendor_record!=null|| all_vendor_record!='') {
             return res.status(200).send({
                 status: 200,
                 message: "vendor reply is successfuly received",

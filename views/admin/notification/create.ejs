@@ -22,8 +22,8 @@
                     <!-- jquery validation -->
                     <div class="card ">
                         <!-- /.card-header -->
-                        <!-- form start -->
-                        <form role="form" id="quickForm" method="post" action="/admin/faqs/upload">
+                        <!-- form start    /admin/faqs/upload   -->
+                        <form role="form" id="quickForm" method="post" action="/admin/notification/send-to-all">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="email">Title</label>
@@ -32,11 +32,57 @@
                                 <label for="exampleInputPassword1">Disc</label>
 
                                 <div class="form-group">
-                                    
-                                    <textarea class="form-control" id="pwd" name="disc" value="<%=disc%>">
+
+                                    <textarea class="form-control"  name="disc" id="disc" value="<%=disc%>">
 
                                         </textarea>
                                 </div>
+
+
+                                <div class="radio">
+                                    <label><input type="radio" name="driver" value="All_drivers"
+                                            onclick=" getDriver('All_drivers')">All Drivers</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="driver" id="chkYes" value="spacific_driver"
+                                            onclick="getDriver('spacific_driver')">Spacific Driver</label>
+                                </div>
+
+                                <div id="dvtext" class="form-group" style="display: none">
+                                    <label for="cars">Choose a Driver:</label>
+                                    <select name="driver_fcm" class="form-control" id="exampleInputEmail1">
+                                        <%if(all_drivers){%>
+                                        <%all_drivers.forEach(function(driver){ %>
+                                        <option value="<%=driver.fcm_token%>"><%=driver.first_name%>
+                                            <%=driver.last_name%></option>
+                                        <%});}%>
+                                    </select>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="vendor" value="All_vendors"
+                                            onclick="getDriver('All_vendors')">All Vendors</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="vendor" value="spacific_vendor"
+                                            onclick="getDriver('spacific_vendor')">Spacific Vendor</label>
+                                </div>
+                                <div id="dvtext_vendor" class="form-group" style="display: none">
+                                    <label for="cars">Choose a Vendor:</label>
+                                    <select name="vendor_fcm" class="form-control">
+                                        <%if(all_vendors){%>
+                                        <%all_vendors.forEach(function(vendor){%>
+                                        <option value="<%=vendor.fcm_token%>"><%=vendor.first_name%>
+                                            <%=vendor.last_name%></option>
+                                        <%});}%>
+                                    </select>
+                                </div>
+
+
+
+
+
+
+
 
                             </div>
                             <!-- /.card-body -->
@@ -44,7 +90,24 @@
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
                         </form>
+                        <script>
 
+
+                            function getDriver(a) {
+                                if (a == 'spacific_driver') {
+                                    $("#dvtext").css("display", "block");
+                                } else if (a == 'All_drivers') {
+                                    $("#dvtext").css("display", "none");
+                                } else if (a == 'spacific_vendor') {
+                                    $("#dvtext_vendor").css("display", "block");
+                                } else if (a == 'All_vendors') {
+                                    $("#dvtext_vendor").css("display", "none");
+                                }
+                            }
+
+
+
+                        </script>
                     </div>
                     <!-- /.card -->
                 </div>

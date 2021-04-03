@@ -2,20 +2,27 @@ const db = require("../../models/api_models");
 const Trips = db.trip;
 const Vendor = db.vendor;
 const Driver = db.driver;
+var admin = require("firebase-admin");
+const notification = db.notification;
+var serviceAccount = require("../../config/go-daala-prod-firebase-adminsdk-kx7hm-c8b83fe095.json");
 
-
-
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://go-daala-prod-default-rtdb.firebaseio.com/"
+});
 
 //-----admin get all FAQ'S --------------------
-exports.faqs_index = function (req, res) {
-    Faqs.findAll().then(all_faqs => {
-      if (!all_faqs) {
+exports.notification_index = function (req, res) {
+    notification.findAll().then(all_notification => {
+      if (!all_notification) {
         console.log("no recode is exist")
+      }else{
+        res.render('admin/notification/index', {
+          userdata: req.user,
+          all_notification: all_notification
+        })
       }
-      res.render('admin/faqs/index', {
-        userdata: req.user,
-        all_faq_s: all_faqs
-      })
+     
     });
   }
   
@@ -29,7 +36,7 @@ exports.faqs_index = function (req, res) {
   };
   
   //-----admin post create FAQ'S -------------------
-  exports.faqs_upload = function (req, res) {
+  exports.notification_upload = function (req, res) {
     req.checkBody('title', 'Title must have needed!').notEmpty();
     req.checkBody('disc', 'Discreption must have needed!').notEmpty();
   

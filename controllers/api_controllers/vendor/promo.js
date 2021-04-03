@@ -25,7 +25,7 @@ exports.validate_promo_code = (req, res) => {
             }
         }).then(Promos => {
             //if User not found with given ID
-            if (Promos) {
+            if (Promos!=null|| Promos!='') {
                 Promos.forEach(item => {
 
                     if ((item.dataValues.publish == "on") && (req.body.exp_date <= item.dataValues.exp_date)) {

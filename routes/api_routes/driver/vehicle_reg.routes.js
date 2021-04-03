@@ -27,6 +27,17 @@ module.exports = function (app) {
 
     );
 
+
+      //------------Driver update Vehicle if driver register Function----------------
+      app.post(
+        "/api/driver/update-vehicle",
+    driverVerifyNumberPlate.checkDuplicatePlate,
+     driverAuthJwt.verifyToken,
+       controller.update_vehicle_reg
+
+    );
+
+
  //------------Get driver all vehicles from admin Function----------------
     app.get(
         "/api/driver/all-vehicles",
