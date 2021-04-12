@@ -29,6 +29,12 @@ module.exports = (sequelize, Sequelize) => {
     },
     fcm_token: {
       type: Sequelize.STRING
+    },
+    total_rating: {
+      type: Sequelize.INTEGER
+    },
+    total_review: {
+      type: Sequelize.INTEGER
     }
   });
 

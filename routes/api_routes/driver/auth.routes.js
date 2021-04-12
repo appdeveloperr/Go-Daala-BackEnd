@@ -23,7 +23,14 @@ module.exports = function (app) {
         "/api/driver/signupdriver", driverVerifySignUp.checkDuplicateEmailOrPhone_number,controller.signup);
 
 
+    app.post(
+        "/api/driver/verify-email", controller.varify_email
+    )
 
+    app.post("/api/driver/verify-phone-number",controller.varify_phone_number);
+
+
+    
     app.post("/api/driver/signin", controller.signin);
 
     

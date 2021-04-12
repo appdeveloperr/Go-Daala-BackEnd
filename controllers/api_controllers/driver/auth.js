@@ -8,7 +8,7 @@ var path = require('path');
 const axios = require('axios');
 var OTP = db.otp;
 
-//-------------vendor signup--------------------
+//-------------driver signup--------------------
 exports.signup = (req, res) => {
 
 
@@ -104,7 +104,9 @@ exports.signup = (req, res) => {
                     driving_license: '/public/files/uploadsFiles/driver/' + drivefilename,
                     status: "deactive",
                     account_info: "block",
-                    fcm_token: req.body.fcm_token
+                    fcm_token: req.body.fcm_token,
+                    total_rating:0,
+                    total_review:0
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret, {
@@ -148,6 +150,98 @@ exports.signup = (req, res) => {
 
     }
 };
+//-------------driver varify_ email--------------------
+exports.varify_email = (req, res) => {
+    req.checkBody('email', 'email must have value!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in varify email",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Driver.findOne({
+            where: {
+                email: req.body.email
+            }
+        })
+            .then(user => {
+
+                if (!user) {
+                    return res.status(200).send({
+                        status: 400,
+                        message: "User email  is not found.",
+                        successData: {}
+                    });
+                } else {
+                    return res.status(200).send({
+                        status: 200,
+                        message: "User email  already exist.",
+                        successData: {}
+                    });
+                }
+            }).catch(err => {
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+            });
+
+    }
+}
+
+
+//-------------driver varify phone number--------------------
+exports.varify_phone_number=(req,res)=>{
+    req.checkBody('phone_number', 'Phone number must have value!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in varify phone number",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Driver.findOne({
+            where: {
+                phone_number: req.body.phone_number
+            }
+        })
+            .then(user => {
+
+                if (!user) {
+                    return res.status(200).send({
+                        status: 200,
+                        message: "User Phone number  is not found.",
+                        successData: {}
+                    });
+                }else{
+                    return res.status(200).send({
+                        status: 400,
+                        message: "User phone number is already exist.",
+                        successData: {}
+                    });
+                }
+            }).catch(err => {
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+            });
+
+    }
+}
 
 
 //--------------vendor signin-------------------
@@ -189,9 +283,12 @@ exports.signin = (req, res) => {
                 );
 
                 if (!passwordIsValid) {
-                    return res.status(400).send({
+                    return res.status(200).send({
+                        status: 400,
                         accessToken: null,
-                        message: "Invalid user Password!"
+                        message: "Invalid user Password!",
+                        successData: {}
+
                     });
                 }
 
@@ -386,7 +483,7 @@ exports.forgot_password = (req, res) => {
             } else {
                 return res.status(200).send({
                     status: 400,
-                    message: "this phone number is exist! please do this again with currect information",
+                    message: "This phone number is exist! please do this again with currect information",
                     successData: {}
                 });
             }
@@ -476,7 +573,7 @@ exports.update_picture = (req, res) => {
                     },
                 ).then(user => {
 
-                    if (user!=null || user!='') {
+                    if (user != null || user != '') {
 
                         return res.status(200).send({
                             status: 200,
@@ -519,8 +616,8 @@ exports.update_picture = (req, res) => {
 //SendOTP
 exports.sendOTP = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
-
-
+    req.checkBody('type', 'Type must have needed value!').notEmpty();
+    
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -535,107 +632,112 @@ exports.sendOTP = (req, res) => {
     }
     else {
 
-
-        //Check User Already Exist or Not?
-        Driver.findOne({
-            where: {
-                phone_number: req.body.phone_number
-            }
-        })
-            .then(user => {
-
-                if (!user) {//new driver register for otp
-                    //User is not Exist 
-                    var val = Math.floor(1000 + Math.random() * 9000);
-                    var messageData = "Your Go Daala Verification Code is: " + val;
-                    var mobileno = req.body.phone_number;
-
-                    // axios.get('http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient='+mobileno+'&originator=99095&messagedata='+messageData)
-
-                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
-                        .then(response => {
-
-
-                            OTP.create({
-                                otp: val,
-                                phone_number: mobileno
-                            }).then(otp => {
-
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "OTP send successfully"
-                                });
-
-                            }).catch(error => {
-                                return res.status(200).send({
-                                    status: 400,
-                                    message: error
-                                });
-                            });
-
-
-                        })
-                        .catch(error => {
-                            return res.status(200).send({
-                                status: 400,
-                                message: error
-                            });
-                        });
-
-                } else {  //User is forgot password 
-
-                    //User is Exist 
-                    var val = Math.floor(1000 + Math.random() * 9000);
-                    var messageData = "Your Go Daala Verification Code is: " + val;
-                    var mobileno = req.body.phone_number;
-
-
-                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
-                        .then(response => {
-
-
-                            OTP.create({
-                                otp: val,
-                                phone_number: mobileno
-                            }).then(otp => {
-
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "OTP send successfully"
-                                });
-
-                            }).catch(error => {
-                                return res.status(200).send({
-                                    status: 400,
-                                    message: error
-                                });
-                            });
-
-
-                        })
-                        .catch(error => {
-                            return res.status(200).send({
-                                status: 400,
-                                message: error
-                            });
-                        });
-
-
+        if (req.body.type == "forget") {
+            //Check User Already Exist or Not?
+            Driver.findOne({
+                where: {
+                    phone_number: req.body.phone_number
                 }
-
-
-
-
             })
-            .catch(err => {
-                return res.status(200).send({
-                    status: 400,
-                    message: err
+                .then(user => {
+
+                    if (!user) {
+                        //User is not Exist 
+                        return res.status(200).send({
+                            status: 400,
+                            message: "This user Phone number is not found",
+                            successData: {}
+                        });
+
+                    } else {  //User is forgot password 
+
+                        //User is Exist
+
+                        var val = Math.floor(1000 + Math.random() * 9000);
+                        var messageData = "Your Go Daala Verification Code is: " + val;
+                        var mobileno = req.body.phone_number;
+
+
+                        axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                            .then(response => {
+
+
+                                OTP.create({
+                                    otp: val,
+                                    phone_number: mobileno
+                                }).then(otp => {
+
+                                    return res.status(200).send({
+                                        status: 200,
+                                        message: "OTP send successfully"
+                                    });
+
+                                }).catch(error => {
+                                    return res.status(200).send({
+                                        status: 400,
+                                        message: error
+                                    });
+                                });
+
+
+                            })
+                            .catch(error => {
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: error
+                                });
+                            });
+
+
+                    }
+                })
+                .catch(err => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: err
+                    });
                 });
-            });
 
+        }
+        if (req.body.type == "register") {
+            var val = Math.floor(1000 + Math.random() * 9000);
+            var messageData = "Your Go Daala Verification Code is: " + val;
+            var mobileno = req.body.phone_number;
+
+            // axios.get('http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient='+mobileno+'&originator=99095&messagedata='+messageData)
+
+            axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                .then(response => {
+
+
+                    OTP.create({
+                        otp: val,
+                        phone_number: mobileno
+                    }).then(otp => {
+
+                        return res.status(200).send({
+                            status: 200,
+                            message: "OTP send successfully"
+                        });
+
+                    }).catch(error => {
+                        return res.status(200).send({
+                            status: 400,
+                            message: error
+                        });
+                    });
+
+
+                })
+                .catch(error => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: error
+                    });
+                });
+
+        }
     }
-
 };
 
 //--------------------vendor Verify OTP-------------------------------------

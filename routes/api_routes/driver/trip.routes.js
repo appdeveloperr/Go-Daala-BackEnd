@@ -18,7 +18,7 @@ module.exports = function (app) {
     //------------driver receive trip Function----------------
     app.post(
         "/api/driver/receive-trip",
-        driverAuthJwt.verifyToken,
+        // driverAuthJwt.verifyToken,
         controller.receive_trip,
     );
 
@@ -32,7 +32,7 @@ module.exports = function (app) {
     //------------driver start trip Function----------------
     app.post(
         "/api/driver/start-trip",
-        driverAuthJwt.verifyToken,
+        // driverAuthJwt.verifyToken,
         controller.start_trip,
     );
 

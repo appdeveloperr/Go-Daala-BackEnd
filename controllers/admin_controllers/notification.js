@@ -2,14 +2,9 @@ const db = require("../../models/api_models");
 const Trips = db.trip;
 const Vendor = db.vendor;
 const Driver = db.driver;
-var admin = require("firebase-admin");
+var admin = require("../../config/fcm_init").isFcm;
 const notification = db.notification;
-var serviceAccount = require("../../config/go-daala-prod-firebase-adminsdk-kx7hm-c8b83fe095.json");
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://go-daala-prod-default-rtdb.firebaseio.com/"
-});
 
 //-----admin get all FAQ'S --------------------
 exports.notification_index = function (req, res) {

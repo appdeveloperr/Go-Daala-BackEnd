@@ -25,6 +25,10 @@ module.exports = function (app) {
         "/api/vendor/signup",
         vendorVerifySignUp.checkDuplicateEmailOrPhone_number,controller.signup);
 
+        app.post(
+            "/api/vendor/verify-email-and-phone-number", controller.varify_email_and_phone_number
+        )
+
 
     app.post("/api/vendor/signin", controller.signin);
     app.post('/api/vendor/update-profile',

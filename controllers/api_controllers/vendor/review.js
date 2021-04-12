@@ -3,6 +3,8 @@ const Op = db.Sequelize.Op;
 var Reviews = db.review;
 var Driver = db.driver;
 var Trip = db.trip;
+var Vendor = db.vendor;
+var Driver = db.driver;
 
 //-------------------vendor create review for trip--------------------------------
 exports.create_review = (req, res) => {
@@ -10,6 +12,7 @@ exports.create_review = (req, res) => {
     req.checkBody('discription', 'Discription must have needed!').notEmpty();
     req.checkBody('trip_id', 'Trip_id must have id required!').notEmpty();
     req.checkBody('vendor_id', 'Vendor_id must have id required!').notEmpty();
+    req.checkBody('driver_id', 'Driver_id must have id required!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -30,22 +33,60 @@ exports.create_review = (req, res) => {
             vendor_id: req.body.vendor_id,
             driver_id: null
         }).then(reviews => {
-
-            return res.status(200).send({
-                status: 200,
-                message: "Create vendor reviews   is successful",
-                successData: {
-                    review: {
-                        id: reviews.id,
-                        rating: reviews.rating,
-                        discription: reviews.discription,
-
-                        trip_id: reviews.trip_id,
-                        vendor_id: reviews.vendor_id,
-
-                    }
+            
+            Driver.findOne({
+                where: {
+                    id: req.body.driver_id
                 }
+            }).then(driver_rating => {
+
+                var total_ratings = driver_rating.dataValues.total_rating;
+                var total_reviews = driver_rating.dataValues.total_review;
+                total_rating = total_rating + req.body.rating;
+                total_review = total_review + 1;
+                Driver.update({
+                    total_rating: total_ratings,
+                    total_review: total_reviews
+                }, {
+                    where: { id: req.body.driver_id },
+                    returning: true,
+                    plain: true
+                }).then(updated_reviews => {
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Create vendor reviews   is successful",
+                        successData: {
+                            review: {
+                                id: reviews.id,
+                                rating: reviews.rating,
+                                discription: reviews.discription,
+        
+                                trip_id: reviews.trip_id,
+                                vendor_id: reviews.vendor_id,
+        
+                            }
+                        }
+                    });
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+        
+                });
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+    
             });
+
+           
 
 
         }).catch(err => {
@@ -61,6 +102,10 @@ exports.create_review = (req, res) => {
     }
 }
 
+
+
+var total_reviews = null;
+var total_trip = null;
 //--------------------vendor get driver review from trip------------------------------
 exports.get_review = (req, res) => {
     req.checkBody('trip_id', 'Trip_id must have Id needed!').notEmpty();
@@ -76,6 +121,7 @@ exports.get_review = (req, res) => {
             }
         });
     } else {
+
         Reviews.findAll({
             where: {
                 trip_id: req.body.trip_id,
@@ -95,6 +141,10 @@ exports.get_review = (req, res) => {
 
                 reviews.forEach(item => {
                     if (item.dataValues.driver_id != null) {
+
+
+
+
                         Driver.findOne({
                             where: {
                                 id: item.dataValues.driver_id
@@ -123,13 +173,13 @@ exports.get_review = (req, res) => {
                                                 reviews_list: {
                                                     review: reviews
                                                 },
-                                                driver:  drivers.dataValues,
+                                                driver: drivers.dataValues,
                                                 trip_data: trip.dataValues
 
                                             }
                                         });
-                                    
-                                    } 
+
+                                    }
                                 }).catch(err => {
 
                                     return res.status(200).send({
@@ -171,7 +221,7 @@ exports.get_review = (req, res) => {
                             delete driver.dataValues.createdAt;
                             delete driver.dataValues.updatedAt;
                             delete driver.dataValues.phone_number;
-                            
+
                             return res.status(200).send({
                                 status: 200,
                                 message: "get Vendor reviews   is successful",

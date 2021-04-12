@@ -5,6 +5,7 @@ var OTP = db.otp;
 const axios = require('axios');
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+var fs = require("fs");
 //-------------vendor signup--------------------
 exports.signup = (req, res) => {
 
@@ -13,7 +14,7 @@ exports.signup = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
-    req.checkBody('fcm_token','Please provide a fcm token needed!')
+    req.checkBody('fcm_token', 'Please provide a fcm token needed!')
 
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -73,7 +74,9 @@ exports.signup = (req, res) => {
                     password: bcrypt.hashSync(req.body.password, 8),
                     profile: '/public/files/uploadsFiles/vendor/' + filename,
                     account_info: 'unblock',
-                    fcm_token: req.body.fcm_token
+                    fcm_token: req.body.fcm_token,
+                    total_rating:0,
+                    total_review:0
                     //  
                 }).then(user => {
 
@@ -116,6 +119,106 @@ exports.signup = (req, res) => {
     }
 };
 
+//-------------vendor varify_email_and_phone_number--------------------
+exports.varify_email_and_phone_number = (req, res) => {
+    req.checkBody('email', 'email must have value!').notEmpty();
+    req.checkBody('phone_number', 'Phone number must have value!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in varify email and phone number",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Vendor.findOne({
+            where: {
+                email: req.body.email
+            }
+        })
+            .then(user => {
+
+                if (!user) {
+
+                    Vendor.findOne({
+                        where: {
+                            phone_number: req.body.phone_number
+                        }
+                    }).then(phone => {
+                        if (!phone) {
+                            return res.status(200).send({
+                                status: 200,
+                                message: "User email  and phone number is not found.",
+                                successData: {
+                                    Verification: {
+                                        email: "false",
+                                        phone_number: "false"
+                                    }
+
+                                }
+                            });
+                        } else {
+                            return res.status(200).send({
+                                status: 200,
+                                message: "User email  is not found.",
+                                successData: {
+                                    Verification: {
+                                        email: "false",
+                                        phone_number: "true"
+                                    }
+                                }
+                            });
+                        }
+                    }).catch(err => {
+                        return res.status(200).send({
+                            status: 400,
+                            message: err.message,
+                            successData: {}
+                        });
+                    });
+
+                } else {
+
+                    if (user.phone_number != req.body.phone_number) {
+                        return res.status(200).send({
+                            status: 200,
+                            message: "User email  found but phone number  is not found.",
+                            successData: {
+                                Verification: {
+                                    email: "true",
+                                    phone_number: "false"
+                                }
+                            }
+                        });
+                    } else {
+                        return res.status(200).send({
+                            status: 400,
+                            message: "User email and phone number is already exist.",
+                            successData: {
+                                Verification: {
+                                    email: "true",
+                                    phone_number: "true"
+                                }
+                            }
+                        });
+                    }
+                }
+            }).catch(err => {
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+            });
+
+    }
+}
+
+
 
 //--------------vendor signin-------------------
 exports.signin = (req, res) => {
@@ -155,7 +258,8 @@ exports.signin = (req, res) => {
                 );
 
                 if (!passwordIsValid) {
-                    return res.status(401).send({
+                    return res.status(200).send({
+                        status: 400,
                         accessToken: null,
                         message: "Invalid user Password!"
                     });
@@ -256,7 +360,7 @@ exports.update = (req, res) => {
             },
         ).then(user => {
 
-            if (user!=null|| user!='') {
+            if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                     expiresIn: 86400 // 24 hours
                 });
@@ -316,7 +420,7 @@ exports.forgot_password = function (req, res) {
             },
         ).then(user => {
 
-            if (user!=null|| user!='') {
+            if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                     expiresIn: 86400 // 24 hours
                 });
@@ -433,7 +537,7 @@ exports.update_picture = function (req, res) {
                     },
                 ).then(user => {
 
-                    if (user!=null|| user!='') {
+                    if (user != null || user != '') {
 
                         return res.status(200).send({
                             status: 200,
@@ -471,11 +575,10 @@ exports.update_picture = function (req, res) {
 }
 
 //------------------vendor SendOTP------------------------------------
-exports.sendOTP = (req, res) => {
-    // if (req.body.type.toLowerCase() == "register") {
-    req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
 
-    console.log(req.body.phone_number);
+exports.sendOTP = (req, res) => {
+    req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
+    req.checkBody('type', 'Type must have needed value!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -490,109 +593,109 @@ exports.sendOTP = (req, res) => {
     }
     else {
 
-
-        //Check User Already Exist or Not?
-        Vendor.findOne({
-            where: {
-                phone_number: req.body.phone_number
-            }
-        })
-            .then(user => {
-
-                if (!user) {
-                    //User is not Exist
-                    var val = Math.floor(1000 + Math.random() * 9000);
-                    var messageData = "Your Go Daala Verification Code is: " + val;
-                    var mobileno = req.body.phone_number;
-
-                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
-                        .then(response => {
-
-
-                            OTP.create({
-                                otp: val,
-                                phone_number: mobileno
-                            }).then(otp => {
-
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "OTP send successfully"
-                                });
-
-                            }).catch(error => {
-                                return res.status(200).send({
-                                    status: 400,
-                                    message: error
-                                });
-
-                            });
-
-
-                        })
-                        .catch(error => {
-                            return res.status(200).send({
-                                status: 400,
-                                message: error
-                            });
-                        });
-
-                } else {
-
-                    // return res.status(200).send({
-                    //     status: 400,
-                    //     message: "User Already Exist",
-                    // });
-
-                    //User is not Exist
-                    var val = Math.floor(1000 + Math.random() * 9000);
-                    var messageData = "Your Go Daala Verification Code is: " + val;
-                    var mobileno = req.body.phone_number;
-
-                    axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
-                        .then(response => {
-
-
-                            OTP.create({
-                                otp: val,
-                                phone_number: mobileno
-                            }).then(otp => {
-
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "OTP send successfully"
-                                });
-
-                            }).catch(error => {
-                                return res.status(200).send({
-                                    status: 400,
-                                    message: error
-                                });
-
-                            });
-
-
-                        })
-                        .catch(error => {
-                            return res.status(200).send({
-                                status: 400,
-                                message: error
-                            });
-                        });
-
+        if (req.body.type == "forget") {
+            //Check User Already Exist or Not?
+            Vendor.findOne({
+                where: {
+                    phone_number: req.body.phone_number
                 }
-
-
-
-
             })
-            .catch(err => {
-                return res.status(200).send({
-                    status: 400,
-                    message: err.message,
+                .then(user => {
+
+                    if (!user) {
+                        //User is not Exist 
+                        return res.status(200).send({
+                            status: 400,
+                            message: "This user phone number is not found",
+                            successData: {}
+                        });
+
+                    } else {  //User is forgot password 
+
+                        //User is Exist
+
+                        var val = Math.floor(1000 + Math.random() * 9000);
+                        var messageData = "Your Go Daala Verification Code is: " + val;
+                        var mobileno = req.body.phone_number;
+
+
+                        axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                            .then(response => {
+
+
+                                OTP.create({
+                                    otp: val,
+                                    phone_number: mobileno
+                                }).then(otp => {
+
+                                    return res.status(200).send({
+                                        status: 200,
+                                        message: "OTP send successfully"
+                                    });
+
+                                }).catch(error => {
+                                    return res.status(200).send({
+                                        status: 400,
+                                        message: error
+                                    });
+                                });
+
+
+                            })
+                            .catch(error => {
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: error
+                                });
+                            });
+
+
+                    }
+                })
+                .catch(err => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: err
+                    });
                 });
 
-            });
+        }
+        if (req.body.type == "register") {
+            var val = Math.floor(1000 + Math.random() * 9000);
+            var messageData = "Your Go Daala Verification Code is: " + val;
+            var mobileno = req.body.phone_number;
 
+            axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                .then(response => {
+
+
+                    OTP.create({
+                        otp: val,
+                        phone_number: mobileno
+                    }).then(otp => {
+
+                        return res.status(200).send({
+                            status: 200,
+                            message: "OTP send successfully"
+                        });
+
+                    }).catch(error => {
+                        return res.status(200).send({
+                            status: 400,
+                            message: error
+                        });
+                    });
+
+
+                })
+                .catch(error => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: error
+                    });
+                });
+
+        }
     }
 };
 

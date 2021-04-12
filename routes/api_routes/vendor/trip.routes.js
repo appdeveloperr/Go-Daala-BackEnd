@@ -17,7 +17,9 @@ module.exports = function (app) {
 
 
 
-
+app.get("/api/vendor/testing",
+// vendorAuthJwt.verifyToken,
+controller.test);
 
 
 
@@ -26,7 +28,7 @@ module.exports = function (app) {
     app.post(
         "/api/vendor/create-trip",
         // vendorAuthJwt.verifyToken,
-        controller.create_trip,
+        controller.create_trip
 
         // uploads.single('profile'),
     );

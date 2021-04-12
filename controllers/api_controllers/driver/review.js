@@ -10,6 +10,7 @@ exports.create_review = (req, res) => {
     req.checkBody('discription', 'Discription must have needed!').notEmpty();
     req.checkBody('trip_id', 'Trip_id must have id required!').notEmpty();
     req.checkBody('driver_id', 'Driver_id must have id required!').notEmpty();
+    req.checkBody('vendor_id', 'Driver_id must have id required!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -30,20 +31,60 @@ exports.create_review = (req, res) => {
             driver_id: req.body.driver_id,
             vendor_id: null
         }).then(reviews => {
-
-            return res.status(200).send({
-                status: 200,
-                message: "Create driver reviews   is successful",
-                successData: {
-                    review: {
-                        id: reviews.id,
-                        rating: reviews.rating,
-                        discription: reviews.discription,
-                        trip_id: reviews.trip_id,
-                        driver_id: reviews.driver_id,
-                    }
+            Vendor.findOne({
+                where: {
+                    id: req.body.vendor_id
                 }
+            }).then(vendor_rating => {
+
+                var total_ratings = vendor_rating.dataValues.total_rating;
+                var total_reviews = vendor_rating.dataValues.total_review;
+                total_rating = total_rating + req.body.rating;
+                total_review = total_review + 1;
+                Driver.update({
+                    total_rating: total_ratings,
+                    total_review: total_reviews
+                }, {
+                    where: { id: req.body.driver_id },
+                    returning: true,
+                    plain: true
+                }).then(updated_reviews => {
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Create driver reviews   is successful",
+                        successData: {
+                            review: {
+                                id: reviews.id,
+                                rating: reviews.rating,
+                                discription: reviews.discription,
+                                trip_id: reviews.trip_id,
+                                driver_id: reviews.driver_id,
+                            }
+                        }
+                    });
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+        
+                });
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+    
             });
+
+           
+
+
+           
 
 
         }).catch(err => {
