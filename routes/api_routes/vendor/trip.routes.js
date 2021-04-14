@@ -40,10 +40,28 @@ controller.test);
 
 //------------vendor cencal trip Function----------------
    app.post(
-    "/api/vendor/cencal-trip",
-    vendorAuthJwt.verifyToken,
-    controller.cencal_trip,
+    "/api/vendor/cancel-trip",
+    // vendorAuthJwt.verifyToken,
+    controller.cancel_trip,
 ); 
+
+
+
+//------------vendor all cencal trip Function----------------
+app.post(
+    "/api/vendor/all-cancel-trip",
+    // vendorAuthJwt.verifyToken,
+    controller.all_cancel_trip,
+); 
+
+
+//------------vendor all ongoing trip Function----------------
+app.post(
+    "/api/vendor/all-ongoing-trip",
+    // vendorAuthJwt.verifyToken,
+    controller.all_ongoing_trip,
+); 
+
 
     app.get('/api/vendor/test', controller.test_lat_log);
 

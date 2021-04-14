@@ -102,11 +102,11 @@ exports.signup = (req, res) => {
                     profile: '/public/files/uploadsFiles/driver/' + fileOne,
                     cnic: '/public/files/uploadsFiles/driver/' + cnicfilename,
                     driving_license: '/public/files/uploadsFiles/driver/' + drivefilename,
-                    status: "deactive",
+                    status: "active",
                     account_info: "block",
                     fcm_token: req.body.fcm_token,
-                    total_rating:0,
-                    total_review:0
+                    total_rating:"0",
+                    total_review:"0"
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret, {
@@ -339,7 +339,8 @@ exports.signin = (req, res) => {
                             driving_license: user.driving_license,
                             status: 'active',
                             account_info: user.account_info,
-                            accessToken: token
+                            accessToken: token,
+                            fcm_token : user.fcm_token
 
                         }
                     }

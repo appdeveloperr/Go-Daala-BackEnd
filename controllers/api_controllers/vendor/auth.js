@@ -75,8 +75,8 @@ exports.signup = (req, res) => {
                     profile: '/public/files/uploadsFiles/vendor/' + filename,
                     account_info: 'unblock',
                     fcm_token: req.body.fcm_token,
-                    total_rating:0,
-                    total_review:0
+                    total_rating:"0",
+                    total_review:"0"
                     //  
                 }).then(user => {
 
@@ -98,6 +98,7 @@ exports.signup = (req, res) => {
                                 phone_number: user.phone_number,
                                 profile: user.profile,
                                 account_info: user.account_info,
+                                fcm_token: user.fcm_token,
                                 accessToken: token
                             }
                         }
@@ -307,6 +308,7 @@ exports.signin = (req, res) => {
                             phone_number: user.phone_number,
                             profile: user.profile,
                             account_info: user.account_info,
+                            fcm_token:user.fcm_token,
                             accessToken: token
                         }
                     }

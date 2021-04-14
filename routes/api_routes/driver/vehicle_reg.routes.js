@@ -41,7 +41,7 @@ module.exports = function (app) {
  //------------Get driver all vehicles from admin Function----------------
     app.get(
         "/api/driver/all-vehicles",
-        driverAuthJwt.verifyToken,
+        // driverAuthJwt.verifyToken,
         controller.get_all_vehicles
     )
 

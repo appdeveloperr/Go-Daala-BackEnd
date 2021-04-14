@@ -1,20 +1,21 @@
 module.exports = (sequelize, Sequelize) => {
-    const Reviews = sequelize.define("reviews", {
-
+    const Ride_lat_long = sequelize.define("ride_lat_long", {
         id: {
             type: Sequelize.INTEGER,
+            primaryKey: true,
             allowNull: false,
             autoIncrement: true,
-            primaryKey: true,
-
         },
-        rating: {
+        latitude: {
             type: Sequelize.STRING
         },
-        discription: {
+        longitude: {
             type: Sequelize.STRING
         }
+
+
     });
 
-    return Reviews;
-};
+    return Ride_lat_long;
+
+}

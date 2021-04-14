@@ -31,10 +31,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     total_rating: {
-      type: Sequelize.INTEGER
+      type: Sequelize.STRING
     },
     total_review: {
-      type: Sequelize.INTEGER
+      type: Sequelize.STRING
     }
   });
 

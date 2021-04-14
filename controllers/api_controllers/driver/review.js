@@ -1,6 +1,7 @@
 const db = require("../../../models/api_models");
 const config = require("../../../config/auth.config");
 var Reviews = db.review;
+const Driver = db.driver;
 var Vendor = db.vendor;
 var Trip = db.trip;
 
@@ -23,6 +24,7 @@ exports.create_review = (req, res) => {
             }
         });
     } else {
+   
         // Save trips to Database
         Reviews.create({
             rating: req.body.rating,
@@ -37,10 +39,10 @@ exports.create_review = (req, res) => {
                 }
             }).then(vendor_rating => {
 
-                var total_ratings = vendor_rating.dataValues.total_rating;
-                var total_reviews = vendor_rating.dataValues.total_review;
-                total_rating = total_rating + req.body.rating;
-                total_review = total_review + 1;
+                var total_ratings = parseFloat(vendor_rating.total_rating);
+                var total_reviews = parseFloat(vendor_rating.total_review);
+                total_ratings = total_ratings + parseFloat(req.body.rating);
+                total_reviews = total_reviews + 1;
                 Driver.update({
                     total_rating: total_ratings,
                     total_review: total_reviews

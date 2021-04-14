@@ -25,6 +25,8 @@ exports.create_review = (req, res) => {
             }
         });
     } else {
+        var total_ratings=null;
+        var total_reviews=null;
         // Save Review to Database
         Reviews.create({
             rating: req.body.rating,
@@ -39,11 +41,10 @@ exports.create_review = (req, res) => {
                     id: req.body.driver_id
                 }
             }).then(driver_rating => {
-
-                var total_ratings = driver_rating.dataValues.total_rating;
-                var total_reviews = driver_rating.dataValues.total_review;
-                total_rating = total_rating + req.body.rating;
-                total_review = total_review + 1;
+                 total_ratings = parseFloat(driver_rating.total_rating);
+                 total_reviews = parseFloat(driver_rating.total_review);
+                total_ratings = total_ratings + parseFloat(req.body.rating);
+                total_reviews = total_reviews + 1;
                 Driver.update({
                     total_rating: total_ratings,
                     total_review: total_reviews

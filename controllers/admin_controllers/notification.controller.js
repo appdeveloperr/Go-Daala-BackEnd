@@ -190,7 +190,7 @@ exports.sendtoAll = (req, res) => {
                 if (all_drivers) {
 
                     all_drivers.forEach(element => {
-                        myarray.push(JSON.parse(element.fcm_token))
+                        myarray.push(try_to_parse(element.fcm_token))
                     });
 
 
@@ -214,7 +214,7 @@ exports.sendtoAll = (req, res) => {
                 if (all_vendors) {
 
                     all_vendors.forEach(element => {
-                        myarray.push(JSON.parse(element.fcm_token))
+                        myarray.push(try_to_parse(element.fcm_token))
                     });
 
 
@@ -236,8 +236,8 @@ exports.sendtoAll = (req, res) => {
         }
         if (req.body.driver == 'spacific_driver') {
 
-
-            admin.messaging().sendToDevice(JSON.parse(req.body.driver_fcm), payload, options)
+            
+            admin.messaging().sendToDevice(try_to_parse(req.body.driver_fcm), payload, options)
                 .then(function (response) {
                     console.log("Successfully sent message:", response);
                 })
@@ -254,8 +254,8 @@ exports.sendtoAll = (req, res) => {
         }
         if (req.body.vendor == 'spacific_vendor') {
 
-
-            admin.messaging().sendToDevice(JSON.parse(req.body.vendor_fcm), payload, options)
+            
+            admin.messaging().sendToDevice(try_to_parse(req.body.vendor_fcm), payload, options)
                 .then(function (response) {
                     console.log("Successfully sent message:", response);
                 })
@@ -295,7 +295,13 @@ exports.sendtoAll = (req, res) => {
 };
 
 
-
+function try_to_parse(token) {
+    try {
+        return JSON.parse(token);
+    } catch (e) {
+        return token;
+    }
+}
 
 //Get All getNotifications
 exports.getNotifications = (req, res) => {

@@ -7,6 +7,7 @@ exports.current_location = (req, res) => {
     req.checkBody('latitude', 'latitude must have needed!').notEmpty();
     req.checkBody('longitude', 'longitude must have needed!').notEmpty();
     req.checkBody('driver_id', 'driver_id must have required!').notEmpty();
+    req.checkBody('status', 'status must have required!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -29,7 +30,8 @@ exports.current_location = (req, res) => {
                 Dirver_lat_long.create({
                     latitude: req.body.latitude,
                     longitude: req.body.longitude,
-                    driver_id: req.body.driver_id
+                    driver_id: req.body.driver_id,
+                    status: req.body.status
                 }).then(driver_lat => {
                     if (driver_lat) {
                         return res.status(200).send({
@@ -39,7 +41,7 @@ exports.current_location = (req, res) => {
                                 driver_lat_long: {
                                     latitude: driver_lat.latitude,
                                     longitude: driver_lat.longitude,
-                                    driver_id: driver_lat.driver_id
+                                    driver_id: driver_lat.driver_id,
                                 }
                             }
                         });
@@ -57,7 +59,8 @@ exports.current_location = (req, res) => {
 
                 Dirver_lat_long.update({
                     latitude: req.body.latitude,
-                    longitude: req.body.longitude
+                    longitude: req.body.longitude,
+                    status: req.body.status
 
                 },
                     {

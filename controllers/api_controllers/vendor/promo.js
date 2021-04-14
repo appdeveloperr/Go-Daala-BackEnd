@@ -25,7 +25,19 @@ exports.validate_promo_code = (req, res) => {
             }
         }).then(Promos => {
             //if User not found with given ID
-            if (Promos!=null|| Promos!='') {
+            if (Promos==null|| Promos=='') {
+
+
+                console.log("track not exist in db");
+                return res.status(200).send({
+                    status: 400,
+                    message: "promo code is invalid",
+                    successData: {
+
+                    }
+                });
+            } else {
+              
                 Promos.forEach(item => {
 
                     if ((item.dataValues.publish == "on") && (req.body.exp_date <= item.dataValues.exp_date)) {
@@ -91,18 +103,9 @@ exports.validate_promo_code = (req, res) => {
                     }
                 });
 
-            } else {
-
-                return res.status(200).send({
-                    status: 400,
-                    message: "promo code is invalid",
-                    successData: {
-
-                    }
-                });
             }
         }).catch(err => {
-
+            console.log("track catch");
             return res.status(200).send({
                 status: 400,
                 message: err.message,

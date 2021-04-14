@@ -41,7 +41,7 @@ db.review = require("../api_models/review.model")(sequelize, Sequelize);
 db.driver = require("../api_models/driver.model")(sequelize, Sequelize);
 db.vehicle_reg = require("../api_models/vehicle_reg.model")(sequelize, Sequelize);
 db.driver_lat_long = require("../api_models/driver_lat_long.model")(sequelize, Sequelize);
-
+db.ride_lat_long = require("../api_models/ride_lat_long.model")(sequelize, Sequelize);
 db.contect_us = require("../api_models/contect_us.model")(sequelize, Sequelize);
 db.faqs = require("../api_models/faqs.model")(sequelize, Sequelize);
 db.otp = require("../api_models/otp.model")(sequelize, Sequelize);

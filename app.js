@@ -218,22 +218,7 @@ http.listen(PORT, () => {
 
 function initial() {
 
-  //   //---------- INSERTING DUMMY ROLES ----------
-    // Role.create({
-    //   id: 1,
-    //   name: "user"
-    // });
-   
-    // Role.create({
-    //   id: 2,
-    //   name: "moderator"
-    // });
-   
-    // Role.create({
-    //   id: 3,
-    //   name: "admin"
-    // });
-  
+
     //------ Inserting Dumy Admin Data ----
     User.create({
       username:"admin",
