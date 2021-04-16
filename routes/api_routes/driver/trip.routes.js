@@ -25,42 +25,40 @@ module.exports = function (app) {
     //------------driver cencal trip Function----------------
     app.post(
         "/api/driver/cencal-trip",
-         driverAuthJwt.verifyToken,
+        driverAuthJwt.verifyToken,
         controller.cencal_trip,
     );
 
     //------------driver start trip Function----------------
     app.post(
         "/api/driver/start-trip",
-         driverAuthJwt.verifyToken,
+        driverAuthJwt.verifyToken,
         controller.start_trip,
     );
 
 
-     //------------driver end trip Function----------------
-     app.post(
+    //------------driver end trip Function----------------
+    app.post(
         "/api/driver/end-trip",
         driverAuthJwt.verifyToken,
         controller.end_trip,
     );
 
 
-    //------------driver recent trip Function----------------
+    //------------driver Get  all  Trip  Function----------------
     app.post(
-        "/api/driver/recent-trip",
-        driverAuthJwt.verifyToken,
-        controller.recent_trip,
+        "/api/driver/get-all-trips",
+        // driverAuthJwt.verifyToken,
+        controller.get_all_trips,
     );
 
 
-
-
-
-       
-
-     
-
-     
+    //------------driver all cencal trip Function----------------
+    app.post(
+        "/api/driver/all-cancel-trip",
+        // vendorAuthJwt.verifyToken,
+        controller.all_cancel_trip,
+    );
 
 
 };

@@ -12,9 +12,6 @@ var admin = require("../../../config/fcm_init").isFcm;
 const { user } = require("../../../models/api_models");
 
 
-
-
-
 //--------------vendor create trip---------------
 exports.create_trip = (req, res) => {
     req.checkBody('pickup', 'pickup must have value!').notEmpty();
@@ -519,14 +516,14 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 
 
 
-//--------------vendor recent  all trip---------------
-exports.recent_trip = (req, res) => {
+//--------------vendor Get  all  Trip  ---------------
+exports.get_all_trips = (req, res) => {
     req.checkBody('vendor_id', 'vendor_id must have ID!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
             status: 400,
-            message: "validation error in recent Trip",
+            message: "validation error in Get vendor all  Trip",
             successData: {
                 error: {
                     error: errors
@@ -537,28 +534,26 @@ exports.recent_trip = (req, res) => {
         // Save vendor to Database
         Trip.findAll({
             where: {
-                vendor_id: req.body.vendor_id,
-                status: "end"
-            }
+                vendor_id: req.body.vendor_id
+            },
+            order: [
+              ['id', 'DESC'],
+            ],
         }).then(trip => {
             if (trip != null || trip != '') {
                 return res.status(200).send({
                     status: 200,
-                    message: "Get vendor recent  Trip",
+                    message: "Get vendor all  Trip",
                     successData: {
-                        recent_trip: {
-
-                            trips: trip
-                        }
+                         trips: trip
+                        
                     }
                 });
             } else {
                 return res.status(200).send({
                     status: 200,
-                    message: "Get vendor recent  Trip",
+                    message: "Get vendor all  Trips was not found in DB!",
                     successData: {
-                        trip: {
-                        }
                     }
                 });
 
@@ -597,16 +592,19 @@ exports.all_cancel_trip = (req, res) => {
             where: {
                 vendor_id: req.body.vendor_id,
                 status: "cencal"
-            }
+            },
+            order: [
+              ['id', 'DESC'],
+            ],
         }).then(trip => {
             if (trip != null || trip != '') {
                 return res.status(200).send({
                     status: 200,
                     message: "Get vendor recent  Trip",
                     successData: {
-                        recent_trip: {
+                        all_cancel_trip: {
 
-                            trips: trip
+                            all_cancel_trips_list: trip
                         }
                     }
                 });
@@ -643,7 +641,7 @@ exports.all_ongoing_trip = (req, res) => {
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
             status: 400,
-            message: "validation error in recent Trip",
+            message: "validation error in all_ongoing_trip ",
             successData: {
                 error: {
                     error: errors
@@ -664,16 +662,19 @@ exports.all_ongoing_trip = (req, res) => {
                     }
                     
                 ]
-            }
+            },
+            order: [
+              ['id', 'DESC'],
+            ],
         }).then(trip => {
             if (trip != null || trip != '') {
                 return res.status(200).send({
                     status: 200,
-                    message: "Get vendor recent  Trip",
+                    message: "Get vendor all_ongoing  Trip",
                     successData: {
-                        recent_trip: {
+                        all_ongoing_trip: {
 
-                            trips: trip
+                            all_ongoing_trips_list: trip
                         }
                     }
                 });
@@ -726,6 +727,7 @@ exports.cancel_trip = (req, res) => {
         },
             {
                 where: { id: req.body.trip_id },
+                
                 returning: true,
                 plain: true
             }).then(trip => {

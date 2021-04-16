@@ -1,6 +1,7 @@
 const db = require("../../models/api_models");
 
 const Driver = db.driver;
+const Vendor = db.vendor;
 const Vehicle_reg = db.vehicle_reg;
 const Trip = db.trip;
 
@@ -33,10 +34,12 @@ exports.index = function (req, res) {
   });
 }
 //--------All Register Drivers Index Function -----------------
-exports.register_drivers=function(req,res){
-  Driver.findAll({where:{
-    account_info:'unblock'
-  }}).then(all_driver => {
+exports.register_drivers = function (req, res) {
+  Driver.findAll({
+    where: {
+      account_info: 'unblock'
+    }
+  }).then(all_driver => {
     if (!all_driver) {
       console.log("no recode is exist")
     }
@@ -54,10 +57,12 @@ exports.register_drivers=function(req,res){
   });
 }
 //--------All Driver unregisters Index Function -----------------
-exports.unregister_drivers=function(req,res){
-  Driver.findAll({where:{
-    account_info:'block'
-  }}).then(all_driver => {
+exports.unregister_drivers = function (req, res) {
+  Driver.findAll({
+    where: {
+      account_info: 'block'
+    }
+  }).then(all_driver => {
     if (!all_driver) {
       console.log("no recode is exist")
     }
@@ -76,11 +81,13 @@ exports.unregister_drivers=function(req,res){
 }
 
 //--------All Driver unregisters Index Function -----------------
-exports.active_drivers=function(req,res){
-  Driver.findAll({where:{
-    account_info:'block',
-    status:'active'
-  }}).then(all_driver => {
+exports.active_drivers = function (req, res) {
+  Driver.findAll({
+    where: {
+      account_info: 'block',
+      status: 'active'
+    }
+  }).then(all_driver => {
     if (!all_driver) {
       console.log("no recode is exist")
     }
@@ -291,14 +298,42 @@ exports.unactive = function (req, res, next) {
 //--------------driver recent  all trip---------------
 exports.recent_trip = (req, res) => {
   // Save vendor to Database
-  Trip.findAll({
+  Driver.findOne({
     where: {
-      driver_id: req.params.id
+      id: req.params.id
     }
-  }).then(trip => {
-    res.render('admin/trip/driver_trip', {
-      userdata: req.user,
-      driver_trip: trip
+  }).then(driver_infor => {
+    Trip.findAll({
+      where: {
+        driver_id: req.params.id
+      }
+    }).then(trip => {
+      Vendor.findAll().then(vendor_infor => {
+        res.render('admin/trip/driver_trip', {
+          userdata: req.user,
+          driver_trip: trip,
+          driver_information: driver_infor.dataValues,
+          vendor_information: vendor_infor
+        })
+      }).catch(err => {
+
+        return res.status(200).send({
+          status: 400,
+          message: err.message,
+          successData: {}
+        });
+
+      });
+
+
+    }).catch(err => {
+
+      return res.status(200).send({
+        status: 400,
+        message: err.message,
+        successData: {}
+      });
+
     });
 
   }).catch(err => {
@@ -310,6 +345,7 @@ exports.recent_trip = (req, res) => {
     });
 
   });
+
 
 }
 

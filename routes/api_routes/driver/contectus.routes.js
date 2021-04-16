@@ -24,9 +24,9 @@ module.exports = function (app) {
     );
 
 
-    app.get(
+    app.post(
         "/api/driver/get-reply",
-        driverAuthJwt.verifyToken,
+        // driverAuthJwt.verifyToken,
         controller.get_reply,
     );
 }

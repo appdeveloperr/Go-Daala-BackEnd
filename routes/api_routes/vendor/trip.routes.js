@@ -32,10 +32,10 @@ controller.test);
 
         // uploads.single('profile'),
     );
-//--------------vendor recent all trip---------------------------//
+//--------------vendor recent all trip---------------------------//get_all_trips
     app.post(
-        "/api/vendor/recent-trip",
-        vendorAuthJwt.verifyToken, controller.recent_trip,
+        "/api/vendor/get-all-trips",
+        vendorAuthJwt.verifyToken, controller.get_all_trips,
     );
 
 //------------vendor cencal trip Function----------------

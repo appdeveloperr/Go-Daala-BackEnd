@@ -4,71 +4,70 @@ const Driver = db.driver;
 const Contect_us = db.contect_us;
 const Op = db.Sequelize.Op;
 //--------------driver contect a message to admin  ----------------------
-exports.contect_us = function (req, res, next) {
-    req.checkBody('first_name', 'First Name must have value!').notEmpty();
-    req.checkBody('last_name', 'Last Name must have value!').notEmpty();
-    req.checkBody('email', 'Email must have value!').notEmpty();
-    req.checkBody('phone', 'Phone Number must have value!').notEmpty();
-    req.checkBody('message', 'Message must have value!').notEmpty();
+// exports.contect_us = function (req, res, next) {
+//     req.checkBody('first_name', 'First Name must have value!').notEmpty();
+//     req.checkBody('last_name', 'Last Name must have value!').notEmpty();
+//     req.checkBody('email', 'Email must have value!').notEmpty();
+//     req.checkBody('phone', 'Phone Number must have value!').notEmpty();
+//     req.checkBody('message', 'Message must have value!').notEmpty();
 
 
-    var errors = req.validationErrors();
-    if (errors) {
-        return res.status(200).send({
-            status: 400,
-            message: "validation error in contect us",
-            successData: {
-                error: {
-                    error: errors
-                }
-            }
-        });
-    } else {
-        Contect_us.create({
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-            email: req.body.email,
-            phone: req.body.phone,
-            message: req.body.message,
-            driver_id: req.body.driver_id
+//     var errors = req.validationErrors();
+//     if (errors) {
+//         return res.status(200).send({
+//             status: 400,
+//             message: "validation error in contect us",
+//             successData: {
+//                 error: {
+//                     error: errors
+//                 }
+//             }
+//         });
+//     } else {
+//         Contect_us.create({
+//             first_name: req.body.first_name,
+//             last_name: req.body.last_name,
+//             email: req.body.email,
+//             phone: req.body.phone,
+//             message: req.body.message,
+//             driver_id: req.body.driver_id
 
 
-        }).then(contect => {
-            if (contect) {
-                return res.status(200).send({
-                    status: 200,
-                    message: "Contect is successfuly send",
-                    successData: {
-                        contect_us: {
-                            first_name: contect.first_name,
-                            last_name: contect.last_name,
-                            email: contect.email,
-                            phone: contect.phone,
-                            message: contect.message,
-                            driver_id: contect.driver_id
-                        }
-                    }
-                });
-            }
+//         }).then(contect => {
+//             if (contect) {
+//                 return res.status(200).send({
+//                     status: 200,
+//                     message: "Contect is successfuly send",
+//                     successData: {
+//                         contect_us: {
+//                             first_name: contect.first_name,
+//                             last_name: contect.last_name,
+//                             email: contect.email,
+//                             phone: contect.phone,
+//                             message: contect.message,
+//                             driver_id: contect.driver_id
+//                         }
+//                     }
+//                 });
+//             }
 
-        }).catch(err => {
+//         }).catch(err => {
 
-            return res.status(200).send({
-                status: 400,
-                message: err.message,
-                successData: {}
-            });
+//             return res.status(200).send({
+//                 status: 400,
+//                 message: err.message,
+//                 successData: {}
+//             });
 
-        });
-    }
-};
+//         });
+//     }
+// };
 
 //--------------driver get reply from admin  ----------------------
 exports.get_reply = function (req, res) {
     Contect_us.findAll({
         where: {
-            driver_id: req.body.driver_id,
-            admin_id: "1"
+            driver_id: req.body.driver_id,  
         }
     }).then(all_driver_record => {
         if (all_driver_record) {
@@ -104,7 +103,7 @@ exports.contact_us = function (req, res, next) {
     req.checkBody('email', 'Email must have value!').notEmpty();
     req.checkBody('phone', 'Phone Number must have value!').notEmpty();
     req.checkBody('message', 'Message must have value!').notEmpty();
-
+    req.checkBody('driver_id', 'Driver id must have id!').notEmpty();
 
     var errors = req.validationErrors();
     if (errors) {
@@ -123,8 +122,10 @@ exports.contact_us = function (req, res, next) {
             last_name: req.body.last_name,
             email: req.body.email,
             phone: req.body.phone,
+            message: req.body.message,
             driver_id:req.body.driver_id,
-            message: req.body.message
+            message_holder:'null',
+            vendor_id:'null'
 
 
         }).then(contect => {
@@ -138,7 +139,8 @@ exports.contact_us = function (req, res, next) {
                             last_name: contect.last_name,
                             email: contect.email,
                             phone: contect.phone,
-                            message: contect.message
+                            message: contect.message,
+                            driver_id:contect.driver_id
                         }
                     }
                 });

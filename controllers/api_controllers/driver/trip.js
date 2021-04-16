@@ -501,14 +501,14 @@ function try_to_parse(token) {
 }
 
 
-//--------------driver recent  all trip---------------
-exports.recent_trip = (req, res) => {
+//--------------driver Get  all  Trip ---------------
+exports.get_all_trips = (req, res) => {
     req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
             status: 400,
-            message: "validation error in recent Trip",
+            message: "validation error in get all Trips",
             successData: {
                 error: {
                     error: errors
@@ -520,19 +520,27 @@ exports.recent_trip = (req, res) => {
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id
-            }
+            },
+            order: [
+              ['id', 'DESC'],
+            ],
         }).then(trip => {
+            if(trip==null || trip==''){
+                return res.status(200).send({
+                    status: 400,
+                    message: "All trips was not found in DB!",
+                    successData: {
+                    }
+                });
+            }else{
             return res.status(200).send({
                 status: 200,
-                message: "Get driver recent  Trip",
+                message: "Get driver   all  Trip ",
                 successData: {
-                    trip_list: {
-                        trip
-
-                    }
+                    trip_list:trip   
                 }
             });
-
+        }
         }).catch(err => {
 
             return res.status(200).send({
@@ -546,3 +554,63 @@ exports.recent_trip = (req, res) => {
 
 }
 
+
+//--------------driver all cancel trips---------------
+exports.all_cancel_trip = (req, res) => {
+    req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in  driver all cancel trips",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save vendor to Database
+        Trip.findAll({
+            where: {
+                driver_id: req.body.driver_id,
+                status: "cencal"
+            },
+            order: [
+              ['id', 'DESC'],
+            ],
+        }).then(trip => {
+            if (trip != null || trip != '') {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Get all cancel driver   Trip",
+                    successData: {
+                        all_cancel_trip: {
+
+                            all_cancel_trips_list: trip
+                        }
+                    }
+                });
+            } else {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Get all cancel driver   Trip",
+                    successData: {
+                        trip: {
+                        }
+                    }
+                });
+
+            }
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+
+    }
+}

@@ -410,7 +410,14 @@ exports.update = (req, res) => {
                                 last_name: user[1].last_name,
                                 email: user[1].email,
                                 phone_number: user[1].phone_number,
-                                accessToken: token
+                                profile: user[1].profile,
+                                cnic: user[1].cnic,
+                                driving_license: user[1].driving_license,
+                                status: 'active',
+                                account_info: user.account_info,
+                                accessToken: token,
+                                fcm_token : user[1].fcm_token
+    
                             }
                         }
                     });
@@ -589,8 +596,11 @@ exports.update_picture = (req, res) => {
                                     profile: user[1].profile,
                                     cnic: user[1].cnic,
                                     driving_license: user[1].driving_license,
-                                    status: user[1].status,
-                                    account_info: user[1].account_info
+                                    status: 'active',
+                                    account_info: user[1].account_info,
+                                    accessToken: token,
+                                    fcm_token : user[1].fcm_token
+        
                                 }
                             }
                         });

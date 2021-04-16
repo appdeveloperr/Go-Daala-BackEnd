@@ -26,6 +26,8 @@ exports.index = function (req, res) {
 }
 
 
+
+
 //---------Help and Support  reply Function -----------------
 exports.reply = function (req, res) {
     Contect_us.findOne({
@@ -35,7 +37,7 @@ exports.reply = function (req, res) {
     }).then(one_contect_record => {
         //if User not found with given ID
         if (one_contect_record) {
-            if (one_contect_record.dataValues.driver_id) {
+            if (one_contect_record.dataValues.driver_id!=null || one_contect_record.dataValues.driver_id!='') {
                 Contect_us.findAll({
                     where: {
                         driver_id: one_contect_record.dataValues.driver_id
@@ -54,7 +56,7 @@ exports.reply = function (req, res) {
                         message: err.message,
                     });
                 });
-            } else if (one_contect_record.dataValues.vendor_id) {
+            } else if (one_contect_record.dataValues.vendor_id!=null ||one_contect_record.dataValues.vender_id!='') {
                 Contect_us.findAll({
                     where: {
                         vendor_id: one_contect_record.dataValues.vendor_id

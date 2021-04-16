@@ -28,7 +28,9 @@ exports.contect_us = function (req, res, next) {
             email: req.body.email,
             phone: req.body.phone,
             message: req.body.message,
-            vendor_id: req.body.vendor_id
+            vendor_id: req.body.vendor_id,
+            message_holder:'null',
+            driver_id:'null'
 
 
         }).then(contect => {

@@ -43,7 +43,7 @@
                     <tbody>
 
                     <%all_contect.forEach(function(item){%>
-                                <%if(!item.admin_id){ console.log(item.driver_id)%>
+                                <%if(!item.admin_id){ %>
                                 <tr>
                                     <td><%=a%><%a++%></td>
                                     <td><%=item.fist_name%> <%=item.last_name%></td>
@@ -52,10 +52,10 @@
                                     <td><%=item.message%> </td>
                                     <%if(item.message_holder=='outsider'){%>
                                     <td>Out Sider</td>
-                                    <%}else if(item.driver_id!='null'){%>
+                                    <%} else if(item.driver_id!='null'){%>
                                     <td>Driver </td>
                                     <%} else if(item.vendor_id!='null'){%>
-                                    <td>Vendor </td>
+                                    <td>Vendor</td>
                                     <%}%>
                                     <td><a href="/contect_us/reply/<%=item.id%>" class="mr-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

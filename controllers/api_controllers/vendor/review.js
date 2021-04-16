@@ -25,8 +25,8 @@ exports.create_review = (req, res) => {
             }
         });
     } else {
-        var total_ratings=null;
-        var total_reviews=null;
+        var total_ratings = null;
+        var total_reviews = null;
         // Save Review to Database
         Reviews.create({
             rating: req.body.rating,
@@ -35,14 +35,14 @@ exports.create_review = (req, res) => {
             vendor_id: req.body.vendor_id,
             driver_id: null
         }).then(reviews => {
-            
+
             Driver.findOne({
                 where: {
                     id: req.body.driver_id
                 }
             }).then(driver_rating => {
-                 total_ratings = parseFloat(driver_rating.total_rating);
-                 total_reviews = parseFloat(driver_rating.total_review);
+                total_ratings = parseFloat(driver_rating.total_rating);
+                total_reviews = parseFloat(driver_rating.total_review);
                 total_ratings = total_ratings + parseFloat(req.body.rating);
                 total_reviews = total_reviews + 1;
                 Driver.update({
@@ -61,10 +61,10 @@ exports.create_review = (req, res) => {
                                 id: reviews.id,
                                 rating: reviews.rating,
                                 discription: reviews.discription,
-        
+
                                 trip_id: reviews.trip_id,
                                 vendor_id: reviews.vendor_id,
-        
+
                             }
                         }
                     });
@@ -75,7 +75,7 @@ exports.create_review = (req, res) => {
                         message: err.message,
                         successData: {}
                     });
-        
+
                 });
             }).catch(err => {
 
@@ -84,10 +84,10 @@ exports.create_review = (req, res) => {
                     message: err.message,
                     successData: {}
                 });
-    
+
             });
 
-           
+
 
 
         }).catch(err => {
@@ -105,8 +105,6 @@ exports.create_review = (req, res) => {
 
 
 
-var total_reviews = null;
-var total_trip = null;
 //--------------------vendor get driver review from trip------------------------------
 exports.get_review = (req, res) => {
     req.checkBody('trip_id', 'Trip_id must have Id needed!').notEmpty();
@@ -131,12 +129,65 @@ exports.get_review = (req, res) => {
 
             if (reviews == null || reviews == '') {
 
-                return res.status(200).send({
-                    status: 200,
-                    message: "get vendor reviews  is empty successful",
-                    successData: {
+                Trip.findOne({
+                    where: {
+                        id: req.body.trip_id
                     }
-                });
+                }).then(trip => {
+                    if (trip != null || trip != '') {
+                        Driver.findOne({
+                            where: {
+                                id: trip.dataValues.driver_id
+                            }
+                        }).then(driver => {
+                            delete driver.dataValues.password;
+                            delete driver.dataValues.id;
+                            delete driver.dataValues.account_info;
+                            delete driver.dataValues.fcm_token;
+                            delete driver.dataValues.createdAt;
+                            delete driver.dataValues.updatedAt;
+                            delete driver.dataValues.phone_number;
+
+                            return res.status(200).send({
+                                status: 200,
+                                message: "get Vendor reviews   is successful",
+                                successData: {
+                                    reviews_list: {
+                                        review: reviews
+                                    },
+                                    driver: driver.dataValues
+                                    ,
+                                    trip: trip.dataValues
+
+                                }
+                            });
+                        }).catch(err => {
+
+                            return res.status(200).send({
+                                status: 400,
+                                message: err.message,
+                                successData: {}
+                            });
+
+                        })
+
+                    } else {
+                        return res.status(200).send({
+                            status: 400,
+                            message: "get Vendor reviews  from trip and trip was not found in DB",
+                            successData: {
+                            }
+                        });
+                    }
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
+                })
             } else {
 
 
@@ -175,7 +226,7 @@ exports.get_review = (req, res) => {
                                                     review: reviews
                                                 },
                                                 driver: drivers.dataValues,
-                                                trip_data: trip.dataValues
+                                                trip: trip.dataValues
 
                                             }
                                         });
@@ -248,8 +299,8 @@ exports.get_review = (req, res) => {
 
                     } else {
                         return res.status(200).send({
-                            status: 200,
-                            message: "get Vendor reviews   is successful",
+                            status: 400,
+                            message: "get Vendor reviews  from trip and trip was not found in DB",
                             successData: {
                             }
                         });

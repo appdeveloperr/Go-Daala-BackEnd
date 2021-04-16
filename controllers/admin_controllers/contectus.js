@@ -39,7 +39,10 @@ exports.get_contect_us = function (req, res, next) {
         email: req.body.email,
         phone: req.body.phone,
         message: req.body.message,
-        message_holder:'outsider'
+        message_holder:'outsider',
+        vendor_id:'null',
+        driver_id:'null'
+        
   
   
       }).then(contect => {

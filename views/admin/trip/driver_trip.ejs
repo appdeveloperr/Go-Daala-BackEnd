@@ -18,9 +18,12 @@
             <div class="col-12">
                 <!-- /.card -->
                 <div class="card">
-                    <!-- <div class="card-header">
-                        <a href="/admin/vehicle/create" class="btn btn-primary">Create Vehicle</a>
-                    </div> -->
+
+                    <div class="card-header"><%if(driver_information){%>
+                        <a href="#" >Driver <%=driver_information.first_name%> <%=driver_information.last_name%> and his trips list</a>
+                        <%}%>
+                    </div>
+                    
                     <!-- /.card-header -->
                     <%if(driver_trip){ var a=1; %>
                     <div class="card-body">
@@ -34,7 +37,7 @@
                                     <th>Estimated Distance</th>
                                     <th>Estimated Time</th>
                                     <th>Total Cost</th>
-                                    <th>Vendor Id</th>
+                                    <th>Vendor Name</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,7 +50,11 @@
                                     <td><%=item.estimated_distance%></td>
                                     <td><%=item.estimated_time%></td>
                                     <td><%=item.total_cost%></td>
-                                    <td><%=item.vendor_id%> </td>
+                                    <% vendor_information.forEach(function(element){   %>
+                                        <%if(item.vendor_id==element.id){%>
+                                     <td><%=element.first_name%> <%=element.last_name%></td>
+                                     <%}})%>
+                                    
                                 </tr>
                                 <%});%>
 
