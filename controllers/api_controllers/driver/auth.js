@@ -552,7 +552,7 @@ exports.update_picture = (req, res) => {
                     }
                 });
             } else {   ///------------------ no error exist
-
+console.log("this is tracker no 1");
                 var path_file = './public/files/uploadsFiles/driver/';
 
                 //-----------------move profile into server-------------------------------//
@@ -580,7 +580,7 @@ exports.update_picture = (req, res) => {
                         plain: true
                     },
                 ).then(user => {
-
+                    console.log("this is tracker no 2");
                     if (user != null || user != '') {
 
                         return res.status(200).send({

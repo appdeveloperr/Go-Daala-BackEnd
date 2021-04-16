@@ -40,7 +40,7 @@ module.exports = function (app) {
 
 
     app.post('/api/driver/update-picture',
-    driverAuthJwt.verifyToken,
+    // driverAuthJwt.verifyToken,
     controller.update_picture
     )
 
