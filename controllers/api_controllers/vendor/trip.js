@@ -57,8 +57,8 @@ exports.create_trip = (req, res) => {
 
         }).then(function (trip) {
 
-            var nearist_drivers_lat_long = new Array();
-            var nearist_drivers = new Array();
+            var obj = new Array();
+            var obj2 = new Array();
 
             // var centerPoint = { lat: 31.571868, lng: 74.3309312 }; // office lat long 
             // var centerPoint = { lat: 31.506432, lng: 74.32437759999999 }; // model town lat long
@@ -82,39 +82,44 @@ exports.create_trip = (req, res) => {
                             driver_lat_long.findAll({
                                 where:
                                     { status: "available" }
-                            }).then(function (Location) {
-                                if (Location != null || Location != '') {
-                                    for (var i = 0; i < Location.length; i++) {
+                            }).then(function (Loc) {
+        
+                                if (Loc != null || Loc != '') {
+                                    for (var i = 0; i < Loc.length; i++) {
                                         spacific_Vehicle.forEach(spacific_vehi => {
-                                            if ((Location[i].driver_id == spacific_vehi.driver_id) && (spacific_vehi.vehicle_type == req.body.vehicle_type)) {
-                                                var checkPoint = { lat: Location[i].latitude, lng: Location[i].longitude };
+                                            if ((Loc[i].driver_id == spacific_vehi.driver_id) && (spacific_vehi.vehicle_type == req.body.vehicle_type)) {
+                                                var checkPoint = { lat: Loc[i].latitude, lng: Loc[i].longitude };
                                                 var n = arePointsNear(checkPoint, centerPoint, 5);
-                                                if (n == true && Location[i].dataValues.driver_id != null) {
-                                                    nearist_drivers_lat_long.push(Location[i].dataValues);
+                                                if (n == true && Loc[i].dataValues.driver_id != null) {
+                                                    
+                                                    obj.push(Loc[i].dataValues);
                                                 }
                                             }
                                         });
                                     }
-                                    var unit = "K";
-                                    console.log(nearist_drivers_lat_long);
-                                    for (var i = 0; i < nearist_drivers_lat_long.length; i++) {
-                                        driver.forEach(driv => {
+                                  
 
-                                            if (nearist_drivers_lat_long[i].driver_id == driv.id) {
-                                                var n = distance(centerPoint.lat, centerPoint.lng, nearist_drivers_lat_long[i].latitude, nearist_drivers_lat_long[i].longitude, unit);
-                                                nearist_drivers_lat_long[i].distance = n;
-                                                nearist_drivers_lat_long[i].fcm_token = driv.fcm_token;
-                                                nearist_drivers.push(nearist_drivers_lat_long[i]);
+                                    var unit = "K";
+                                    for (var i = 0; i < obj.length; i++) {
+                                        driver.forEach(driv => {
+                                            if (obj[i].driver_id == driv.id) {
+                                                var n = distance(centerPoint.lat, centerPoint.lng, obj[i].latitude, obj[i].longitude, unit);
+                                                obj[i].distance = n;
+                                                obj[i].fcm_token = driv.fcm_token;
+                                                obj2.push(obj[i]);
+                    
                                             }
                                         });
                                     }
-                                    nearist_drivers.sort(function (a, b) {
+                                   
+                                    obj2.sort(function (a, b) {
                                         var alc = a.distance, blc = b.distance;
                                         return alc > blc ? 1 : alc < blc ? -1 : 0;
                                     });
-                                    console.log("Total drivers:" + nearist_drivers.length);
+   
+                                    console.log("Total drivers:" + obj2.length);
                                     console.log("trip id :" + trip.id);
-                                    if (nearist_drivers.length > 0) {
+                                    if (obj2.length > 0) {
                                         var payload = {
                                             notification: {
                                                 title: "trip_id",
@@ -130,12 +135,12 @@ exports.create_trip = (req, res) => {
                                         var temp = 1;
                                         var time = 10000;
                                         var fcm_token = null;
-                                        admin.messaging().sendToDevice(try_to_parse(nearist_drivers[0].fcm_token), payload, options)
+                                        admin.messaging().sendToDevice(try_to_parse(obj2[0].fcm_token), payload, options)
                                             .then(function (response) {
                                                 console.log("Successfully sent message:", response);
                                                 intervalObj = setInterval(function () {
 
-                                                    if (temp < nearist_drivers.length) {
+                                                    if (temp < obj2.length) {
                                                         Trip.findOne({
                                                             where: {
                                                                 id: trip.id
@@ -143,7 +148,7 @@ exports.create_trip = (req, res) => {
                                                         }).then((is_accepted_trip) => {
                                                             if (!is_accepted_trip.dataValues.driver_id) {
 
-                                                                admin.messaging().sendToDevice(try_to_parse(nearist_drivers[temp].fcm_token), payload, options)
+                                                                admin.messaging().sendToDevice(try_to_parse(obj2[temp].fcm_token), payload, options)
                                                                     .then(function (response) {
                                                                         console.log("Successfully sent message:", response);
 
@@ -162,8 +167,8 @@ exports.create_trip = (req, res) => {
 
                                                             } else {
                                                                 var check_driver_lat_long = null;
-                                                                for (var i = 0; i < nearist_drivers.length; i++) {
-                                                                    if (nearist_drivers[i].driver_id == is_accepted_trip.dataValues.driver_id) {
+                                                                for (var i = 0; i < obj2.length; i++) {
+                                                                    if (obj2[i].driver_id == is_accepted_trip.dataValues.driver_id) {
                                                                         check_driver_lat_long = i;
                                                                     }
                                                                 }
@@ -203,8 +208,8 @@ exports.create_trip = (req, res) => {
                                                                                 },
                                                                                 accepted_driver: driver_data,
                                                                                 driver_current_location: {
-                                                                                    latitude: nearist_drivers[check_driver_lat_long].latitude,
-                                                                                    longitude: nearist_drivers[check_driver_lat_long].longitude
+                                                                                    latitude: obj2[check_driver_lat_long].latitude,
+                                                                                    longitude: obj2[check_driver_lat_long].longitude
                                                                                 },
                                                                                 driver_vehicle_info: vehicle_info
 
@@ -282,8 +287,8 @@ exports.create_trip = (req, res) => {
                                                             } else {
 
                                                                 var check_driver_lat_long = null;
-                                                                for (var i = 0; i < nearist_drivers.length; i++) {
-                                                                    if (nearist_drivers[i].driver_id == checking_anyone_accept.dataValues.driver_id) {
+                                                                for (var i = 0; i < obj2.length; i++) {
+                                                                    if (obj2[i].driver_id == checking_anyone_accept.dataValues.driver_id) {
                                                                         check_driver_lat_long = i;
                                                                     }
                                                                 }
@@ -322,8 +327,8 @@ exports.create_trip = (req, res) => {
                                                                                 },
                                                                                 accepted_driver: driver_data,
                                                                                 driver_current_location: {
-                                                                                    latitude: nearist_drivers[check_driver_lat_long].latitude,
-                                                                                    longitude: nearist_drivers[check_driver_lat_long].longitude
+                                                                                    latitude: obj2[check_driver_lat_long].latitude,
+                                                                                    longitude: obj2[check_driver_lat_long].longitude
                                                                                 },
                                                                                 driver_vehicle_info: vehicle_info
 
@@ -452,32 +457,32 @@ exports.test = function (req, res) {
 
 //-------------vendor test lat long ------------
 exports.test_lat_log = function (req, res) {
-    var nearist_drivers_lat_long = new Array();
-    var nearist_drivers = new Array();
+    var obj = new Array();
+    var obj2 = new Array();
     // var centerPoint = { lat: 31.571868, lng: 74.3309312 }; // office lat long 
     var centerPoint = { lat: 31.506432, lng: 74.32437759999999 }; // model town lat long
 
-    driver_lat_long.findAll().then(Location => {
-        if (Location != null || Location != '') {
-            Location.forEach(element => {
+    driver_lat_long.findAll().then(Loc => {
+        if (Loc != null || Loc != '') {
+            Loc.forEach(element => {
                 var checkPoint = { lat: element.latitude, lng: element.longitude };
                 var n = arePointsNear(checkPoint, centerPoint, 5);
                 if (n == true) {
-                    nearist_drivers_lat_long.push(element.dataValues);
+                    obj.push(element.dataValues);
                 }
             });
             var unit = "K";
-            nearist_drivers_lat_long.forEach(item => {
+            obj.forEach(item => {
                 var n = distance(centerPoint.lat, centerPoint.lng, item.latitude, item.longitude, unit);
 
                 item.distance = n;
-                nearist_drivers.push(item);
+                obj2.push(item);
             });
-            nearist_drivers.sort(function (a, b) {
+            obj2.sort(function (a, b) {
                 var alc = a.distance, blc = b.distance;
                 return alc > blc ? 1 : alc < blc ? -1 : 0;
             });
-            console.log(nearist_drivers);
+            console.log(obj2);
 
         }
     })

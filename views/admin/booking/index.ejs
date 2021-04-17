@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-header">
                         <%var array =[];%>
-                        
+
                         <a href="/admin/booking/index" class="btn btn-primary"> ONGOING</a>
                         <a href="/booking/index/complete" onclick="complete()" class="btn btn-primary"> COMPLETED</a>
                         <a href="/booking/index/cancel" class="btn btn-primary"> CANCELLED</a>
@@ -151,16 +151,16 @@
                         <script>
 
 
-                            function getDriver(a) {
-                                if (a == 'spacific_driver') {
-                                    $("#dvtext").css("display", "block");
-                                } else if (a == 'All_drivers') {
-                                    $("#dvtext").css("display", "none");
-                                } else if (a == 'spacific_vendor') {
-                                    $("#dvtext_vendor").css("display", "block");
-                                } else if (a == 'All_vendors') {
-                                    $("#dvtext_vendor").css("display", "none");
-                                }
+                            function complete() {
+alert(all_trips);                                // if (a == 'spacific_driver') {
+                                //     $("#dvtext").css("display", "block");
+                                // } else if (a == 'All_drivers') {
+                                //     $("#dvtext").css("display", "none");
+                                // } else if (a == 'spacific_vendor') {
+                                //     $("#dvtext_vendor").css("display", "block");
+                                // } else if (a == 'All_vendors') {
+                                //     $("#dvtext_vendor").css("display", "none");
+                                // }
                             }
 
 

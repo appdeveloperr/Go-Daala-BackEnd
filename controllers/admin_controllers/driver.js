@@ -20,10 +20,12 @@ exports.index = function (req, res) {
     if (!all_driver) {
       console.log("no recode is exist")
     }
-    // console.log(all_Vehicles);
+
+
+
     res.render('./admin/driver/index', {
       userdata: req.user,
-      all_driver: all_driver
+      all_driver: all_driver,
     });
 
   }).catch(err => {
@@ -84,7 +86,7 @@ exports.unregister_drivers = function (req, res) {
 exports.active_drivers = function (req, res) {
   Driver.findAll({
     where: {
-      account_info: 'block',
+      account_info: 'unblock',
       status: 'active'
     }
   }).then(all_driver => {

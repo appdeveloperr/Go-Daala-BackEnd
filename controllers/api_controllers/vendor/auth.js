@@ -81,7 +81,6 @@ exports.signup = (req, res) => {
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret, {
-                        expiresIn: 86400 // 24 hours
                     });
 
 
@@ -274,7 +273,6 @@ exports.signin = (req, res) => {
                 }
 
                 var token = jwt.sign({ id: user.id }, config.secret, {
-                    expiresIn: 86400 // 24 hours
                 });
 
                 Vendor.update({
@@ -285,7 +283,24 @@ exports.signin = (req, res) => {
                     }
                 }).then(fcm => {
 
-
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Login Successfull.",
+                        successData: {
+                            user: {
+                                id: user.id,
+                                first_name: user.first_name,
+                                last_name: user.last_name,
+                                email: user.email,
+                                phone_number: user.phone_number,
+                                profile: user.profile,
+                                account_info: user.account_info,
+                                fcm_token:user.fcm_token,
+                                accessToken: token
+                            }
+                        }
+    
+                    });
                 }).catch(err => {
                     return res.status(200).send({
                         status: 400,
@@ -296,24 +311,7 @@ exports.signin = (req, res) => {
                 });
 
 
-                return res.status(200).send({
-                    status: 200,
-                    message: "Login Successfull.",
-                    successData: {
-                        user: {
-                            id: user.id,
-                            first_name: user.first_name,
-                            last_name: user.last_name,
-                            email: user.email,
-                            phone_number: user.phone_number,
-                            profile: user.profile,
-                            account_info: user.account_info,
-                            fcm_token:user.fcm_token,
-                            accessToken: token
-                        }
-                    }
-
-                });
+             
 
             })
             .catch(err => {
@@ -364,7 +362,6 @@ exports.update = (req, res) => {
 
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
-                    expiresIn: 86400 // 24 hours
                 });
 
                 return res.status(200).send({
@@ -379,7 +376,9 @@ exports.update = (req, res) => {
                             phone_number: user[1].phone_number,
                             profile: user[1].profile,
                             account_info: user[1].account_info,
-                            accessToken: token
+                            accessToken: token,
+                            fcm_token:user[1].fcm_token
+
                         }
                     }
                 });
@@ -424,7 +423,6 @@ exports.forgot_password = function (req, res) {
 
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
-                    expiresIn: 86400 // 24 hours
                 });
 
                 return res.status(200).send({
@@ -439,7 +437,8 @@ exports.forgot_password = function (req, res) {
                             phone_number: user[1].phone_number,
                             profile: user[1].profile,
                             account_info: user[1].account_info,
-                            accessToken: token
+                            accessToken: token,
+                            fcm_token:user[1].fcm_token,
                         }
                     }
                 });
@@ -540,7 +539,8 @@ exports.update_picture = function (req, res) {
                 ).then(user => {
 
                     if (user != null || user != '') {
-
+                        var token = jwt.sign({ id: user.id }, config.secret, {
+                        });
                         return res.status(200).send({
                             status: 200,
                             message: "Profile picture is  UPDATED is successful",
@@ -552,7 +552,9 @@ exports.update_picture = function (req, res) {
                                     email: user[1].email,
                                     phone_number: user[1].phone_number,
                                     profile: user[1].profile,
-                                    account_info: user[1].account_info
+                                    account_info: user[1].account_info,
+                                    fcm_token:user[1].fcm_token,
+                                    accessToken: token
                                 }
                             }
                         });

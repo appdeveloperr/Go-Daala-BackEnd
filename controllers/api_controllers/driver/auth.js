@@ -105,12 +105,13 @@ exports.signup = (req, res) => {
                     status: "active",
                     account_info: "block",
                     fcm_token: req.body.fcm_token,
-                    total_rating:"0",
-                    total_review:"0"
+                    total_rating: "0",
+                    total_review: "0"
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret, {
-                        expiresIn: 86400 // 24 hours
+
+
                     });
 
 
@@ -198,7 +199,7 @@ exports.varify_email = (req, res) => {
 
 
 //-------------driver varify phone number--------------------
-exports.varify_phone_number=(req,res)=>{
+exports.varify_phone_number = (req, res) => {
     req.checkBody('phone_number', 'Phone number must have value!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -225,7 +226,7 @@ exports.varify_phone_number=(req,res)=>{
                         message: "User Phone number  is not found.",
                         successData: {}
                     });
-                }else{
+                } else {
                     return res.status(200).send({
                         status: 400,
                         message: "User phone number is already exist.",
@@ -302,7 +303,8 @@ exports.signin = (req, res) => {
                 }
 
                 var token = jwt.sign({ id: user.id }, config.secret, {
-                    expiresIn: 86400 // 24 hours
+
+
                 });
 
                 Driver.update({
@@ -340,7 +342,7 @@ exports.signin = (req, res) => {
                             status: 'active',
                             account_info: user.account_info,
                             accessToken: token,
-                            fcm_token : user.fcm_token
+                            fcm_token: user.fcm_token
 
                         }
                     }
@@ -397,7 +399,8 @@ exports.update = (req, res) => {
 
                 if (user != null || user != '') {
                     var token = jwt.sign({ id: user.id }, config.secret, {
-                        expiresIn: 86400 // 24 hours
+
+
                     });
 
                     return res.status(200).send({
@@ -416,8 +419,8 @@ exports.update = (req, res) => {
                                 status: 'active',
                                 account_info: user.account_info,
                                 accessToken: token,
-                                fcm_token : user[1].fcm_token
-    
+                                fcm_token: user[1].fcm_token
+
                             }
                         }
                     });
@@ -468,7 +471,8 @@ exports.forgot_password = (req, res) => {
 
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
-                    expiresIn: 86400 // 24 hours
+
+
                 });
                 return res.status(200).send({
                     status: 200,
@@ -484,6 +488,7 @@ exports.forgot_password = (req, res) => {
                             cnic: user[1].cnic,
                             driving_license: user[1].driving_license,
                             account_info: user[1].account_info,
+                            fcm_token: user[1].fcm_token,
                             accessToken: token
                         }
                     }
@@ -552,7 +557,6 @@ exports.update_picture = (req, res) => {
                     }
                 });
             } else {   ///------------------ no error exist
-console.log("this is tracker no 1");
                 var path_file = './public/files/uploadsFiles/driver/';
 
                 //-----------------move profile into server-------------------------------//
@@ -581,31 +585,34 @@ console.log("this is tracker no 1");
                     },
                 ).then(user => {
                     console.log("this is tracker no 2");
-                    if (user != null || user != '') {
+                    var token = jwt.sign({ id: user.id }, config.secret, {
 
-                        return res.status(200).send({
-                            status: 200,
-                            message: "Profile picture is  UPDATED is successful",
-                            successData: {
-                                user: {
-                                    id: user[1].id,
-                                    first_name: user[1].first_name,
-                                    last_name: user[1].last_name,
-                                    email: user[1].email,
-                                    phone_number: user[1].phone_number,
-                                    profile: user[1].profile,
-                                    cnic: user[1].cnic,
-                                    driving_license: user[1].driving_license,
-                                    status: 'active',
-                                    account_info: user[1].account_info,
-                                    accessToken: token,
-                                    fcm_token : user[1].fcm_token
-        
-                                }
+                    });
+
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Profile picture is  UPDATED is successful",
+                        successData: {
+                            user: {
+                                id: user[1].id,
+                                first_name: user[1].first_name,
+                                last_name: user[1].last_name,
+                                email: user[1].email,
+                                phone_number: user[1].phone_number,
+                                profile: user[1].profile,
+                                cnic: user[1].cnic,
+                                driving_license: user[1].driving_license,
+                                status: 'active',
+                                account_info: user[1].account_info,
+                                accessToken: token,
+                                fcm_token: user[1].fcm_token
+
                             }
-                        });
-                    }
+                        }
+                    });
+
                 }).catch(err => {
+                    console.log("this is tracker no 3");
                     return res.status(200).send({
                         status: 400,
                         message: err.message,
@@ -624,11 +631,128 @@ console.log("this is tracker no 1");
     }
 }
 
+//--------------driver active status updated   ----------------------
+exports.active_status = (req, res) => {
+    req.checkBody('driver_id', 'id must have ID!').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in active status",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Driver.update({
+            status: 'active'
+        },
+            {
+                where: {
+                    id: req.body.driver_id
+                },
+                returning: true,
+                plain: true
+            },
+        ).then(user => {
+            var token = jwt.sign({ id: user.id }, config.secret, {});
+
+            return res.status(200).send({
+                status: 200,
+                message: "active Status updated is successful",
+                successData: {
+                    user: {
+                        id: user[1].id,
+                        first_name: user[1].first_name,
+                        last_name: user[1].last_name,
+                        email: user[1].email,
+                        phone_number: user[1].phone_number,
+                        profile: user[1].profile,
+                        cnic: user[1].cnic,
+                        driving_license: user[1].driving_license,
+                        status: user[1].status,
+                        account_info: user[1].account_info,
+                        accessToken: token,
+                        fcm_token: user[1].fcm_token
+
+                    }
+                }
+            });
+        }).catch(error => {
+            return res.status(200).send({
+                status: 400,
+                message: error
+            });
+        });
+    }
+}
+
+//--------------driver unactive status updated   ----------------------
+exports.unactive_status = (req, res) => {
+    req.checkBody('driver_id', 'id must have ID!').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in unactive status",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        Driver.update({
+            status: 'unactive'
+        },
+            {
+                where: {
+                    id: req.body.driver_id
+                },
+                returning: true,
+                plain: true
+            },
+        ).then(user => {
+            var token = jwt.sign({ id: user.id }, config.secret, {});
+
+            return res.status(200).send({
+                status: 200,
+                message: "unactive Status updated is successful",
+                successData: {
+                    user: {
+                        id: user[1].id,
+                        first_name: user[1].first_name,
+                        last_name: user[1].last_name,
+                        email: user[1].email,
+                        phone_number: user[1].phone_number,
+                        profile: user[1].profile,
+                        cnic: user[1].cnic,
+                        driving_license: user[1].driving_license,
+                        status: user[1].status,
+                        account_info: user[1].account_info,
+                        accessToken: token,
+                        fcm_token: user[1].fcm_token
+
+                    }
+                }
+            });
+        }).catch(error => {
+            return res.status(200).send({
+                status: 400,
+                message: error
+            });
+        });
+    }
+}
 //SendOTP
 exports.sendOTP = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
     req.checkBody('type', 'Type must have needed value!').notEmpty();
-    
+
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
