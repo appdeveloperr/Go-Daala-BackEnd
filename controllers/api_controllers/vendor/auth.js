@@ -80,8 +80,7 @@ exports.signup = (req, res) => {
                     //  
                 }).then(user => {
 
-                    var token = jwt.sign({ id: user.id }, config.secret, {
-                    });
+                    var token = jwt.sign({ id: user.id }, config.secret);
 
 
 
@@ -280,22 +279,24 @@ exports.signin = (req, res) => {
                 }, {
                     where: {
                         id: user.id
-                    }
-                }).then(fcm => {
+                    },
+                returning: true,
+                plain: true
+                }).then(user => {
 
                     return res.status(200).send({
                         status: 200,
                         message: "Login Successfull.",
                         successData: {
                             user: {
-                                id: user.id,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                email: user.email,
-                                phone_number: user.phone_number,
-                                profile: user.profile,
-                                account_info: user.account_info,
-                                fcm_token:user.fcm_token,
+                                id: user[1].id,
+                                first_name: user[1].first_name,
+                                last_name: user[1].last_name,
+                                email: user[1].email,
+                                phone_number: user[1].phone_number,
+                                profile: user[1].profile,
+                                account_info: user[1].account_info,
+                                fcm_token:user[1].fcm_token,
                                 accessToken: token
                             }
                         }

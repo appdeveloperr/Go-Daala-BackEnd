@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
-    req.checkBody('fcm_token', 'Please provide a fcm token needed!')
+    req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
 
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -114,25 +114,15 @@ exports.signup = (req, res) => {
 
                     });
 
-
-
+	delete	user.dataValues.password;
+	user.dataValues.accessToken=token;
                     return res.status(200).send({
                         status: 200,
                         message: "Signing Up is successful",
                         successData: {
-                            user: {
-                                id: user.id,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                email: user.email,
-                                phone_number: user.phone_number,
-                                profile: user.profile,
-                                cnic: user.cnic,
-                                driving_license: user.driving_license,
-                                status: user.status,
-                                account_info: user.account_info,
-                                accessToken: token
-                            }
+                            user: user,
+                               
+                      
                         }
                     });
 
@@ -313,10 +303,21 @@ exports.signin = (req, res) => {
                 },
                     {
                         where: { id: user.id },
+                    returning: true,
+                    plain: true
 
                     },
-                ).then(update => {
+                ).then(user => {
+					delete user[1].dataValues.password;
+					user[1].dataValues.accessToken=token;
+ return res.status(200).send({
+                    status: 200,
+                    message: "Login Successfull.",
+                    successData: {
+                        user: user[1]
+                    }
 
+                });
                 }).catch(err => {
                     return res.status(200).send({
                         status: 400,
@@ -326,28 +327,7 @@ exports.signin = (req, res) => {
                 });
 
 
-                return res.status(200).send({
-                    status: 200,
-                    message: "Login Successfull.",
-                    successData: {
-                        user: {
-                            id: user.id,
-                            first_name: user.first_name,
-                            last_name: user.last_name,
-                            email: user.email,
-                            phone_number: user.phone_number,
-                            profile: user.profile,
-                            cnic: user.cnic,
-                            driving_license: user.driving_license,
-                            status: 'active',
-                            account_info: user.account_info,
-                            accessToken: token,
-                            fcm_token: user.fcm_token
-
-                        }
-                    }
-
-                });
+               
 
             })
             .catch(err => {
@@ -402,26 +382,13 @@ exports.update = (req, res) => {
 
 
                     });
-
+					delete user[1].dataValues.password;
+user[1].dataValues.accessToken=token;
                     return res.status(200).send({
                         status: 200,
                         message: "UPDATED is successful",
                         successData: {
-                            user: {
-                                id: user[1].id,
-                                first_name: user[1].first_name,
-                                last_name: user[1].last_name,
-                                email: user[1].email,
-                                phone_number: user[1].phone_number,
-                                profile: user[1].profile,
-                                cnic: user[1].cnic,
-                                driving_license: user[1].driving_license,
-                                status: 'active',
-                                account_info: user.account_info,
-                                accessToken: token,
-                                fcm_token: user[1].fcm_token
-
-                            }
+                            user: user[1].dataValues
                         }
                     });
                 }
@@ -470,27 +437,14 @@ exports.forgot_password = (req, res) => {
         ).then(user => {
 
             if (user != null || user != '') {
-                var token = jwt.sign({ id: user.id }, config.secret, {
-
-
-                });
+                var token = jwt.sign({ id: user.id }, config.secret);
+				user[1].dataValues.accessToken=token;
+				delete user[1].dataValues.password;
                 return res.status(200).send({
                     status: 200,
                     message: "Password UPDATED is successful",
                     successData: {
-                        user: {
-                            id: user[1].id,
-                            first_name: user[1].first_name,
-                            last_name: user[1].last_name,
-                            email: user[1].email,
-                            phone_number: user[1].phone_number,
-                            profile: user[1].profile,
-                            cnic: user[1].cnic,
-                            driving_license: user[1].driving_license,
-                            account_info: user[1].account_info,
-                            fcm_token: user[1].fcm_token,
-                            accessToken: token
-                        }
+                        user: user[1].dataValues
                     }
                 });
             } else {
@@ -585,29 +539,14 @@ exports.update_picture = (req, res) => {
                     },
                 ).then(user => {
                     console.log("this is tracker no 2");
-                    var token = jwt.sign({ id: user.id }, config.secret, {
-
-                    });
-
+                    var token = jwt.sign({ id: user.id }, config.secret);
+user.dataValues.accessToken=token;
+delete user.dataValues.password;
                     return res.status(200).send({
                         status: 200,
                         message: "Profile picture is  UPDATED is successful",
                         successData: {
-                            user: {
-                                id: user[1].id,
-                                first_name: user[1].first_name,
-                                last_name: user[1].last_name,
-                                email: user[1].email,
-                                phone_number: user[1].phone_number,
-                                profile: user[1].profile,
-                                cnic: user[1].cnic,
-                                driving_license: user[1].driving_license,
-                                status: 'active',
-                                account_info: user[1].account_info,
-                                accessToken: token,
-                                fcm_token: user[1].fcm_token
-
-                            }
+                            user: user[1].dataValues
                         }
                     });
 
@@ -658,27 +597,14 @@ exports.active_status = (req, res) => {
                 plain: true
             },
         ).then(user => {
-            var token = jwt.sign({ id: user.id }, config.secret, {});
-
+            var token = jwt.sign({ id: user.id }, config.secret);
+user[1].dataValues.accessToken=token;
+delete user[1].dataValues.password;
             return res.status(200).send({
                 status: 200,
                 message: "active Status updated is successful",
                 successData: {
-                    user: {
-                        id: user[1].id,
-                        first_name: user[1].first_name,
-                        last_name: user[1].last_name,
-                        email: user[1].email,
-                        phone_number: user[1].phone_number,
-                        profile: user[1].profile,
-                        cnic: user[1].cnic,
-                        driving_license: user[1].driving_license,
-                        status: user[1].status,
-                        account_info: user[1].account_info,
-                        accessToken: token,
-                        fcm_token: user[1].fcm_token
-
-                    }
+                    user: user[1]
                 }
             });
         }).catch(error => {
@@ -718,27 +644,14 @@ exports.unactive_status = (req, res) => {
             },
         ).then(user => {
             var token = jwt.sign({ id: user.id }, config.secret, {});
-
+user[1].dataValues.accessToken=token;
+delete user[1].dataValues.password;
             return res.status(200).send({
                 status: 200,
                 message: "unactive Status updated is successful",
                 successData: {
-                    user: {
-                        id: user[1].id,
-                        first_name: user[1].first_name,
-                        last_name: user[1].last_name,
-                        email: user[1].email,
-                        phone_number: user[1].phone_number,
-                        profile: user[1].profile,
-                        cnic: user[1].cnic,
-                        driving_license: user[1].driving_license,
-                        status: user[1].status,
-                        account_info: user[1].account_info,
-                        accessToken: token,
-                        fcm_token: user[1].fcm_token
-
-                    }
-                }
+                    user: user[1]
+					}
             });
         }).catch(error => {
             return res.status(200).send({

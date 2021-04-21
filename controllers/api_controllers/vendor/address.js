@@ -156,7 +156,22 @@ exports.delete_address = (req, res) => {
 
 //--------------vendor get all address------------
 exports.index_address = (req, res) => {
-    Address.findAll().then(all_address => {
+	req.checkBody('vendor_id', 'Vendor id must have value!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in all address",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+    Address.findAll({
+		where:{vendor_id:req.body.vendor_id}
+	}).then(all_address => {
         if (!all_address) {
             return res.status(200).send({
                 responsecode: 400,
@@ -184,4 +199,5 @@ exports.index_address = (req, res) => {
             message: err.message,
         });
     });
+	}
 }

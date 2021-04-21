@@ -47,7 +47,7 @@ module.exports = function (app) {
 );
 
  //------------Vendor index address Function----------------
-app.get(
+app.post(
     "/api/vendor/index-address",
     vendorAuthJwt.verifyToken,
     controller.index_address
