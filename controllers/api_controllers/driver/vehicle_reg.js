@@ -100,8 +100,10 @@ exports.create_vehicle_reg = (req, res) => {
 
 
                 }).then(vehicle_reg => {
-
-                    return res.status(200).send({
+					Vehicle.findOne({where:{vehicle_type:vehicle_reg.vehicle_type}}).then(vehicles=>{
+				
+						
+					  return res.status(200).send({
                         status: 200,
                         message: "Driver create Vehicle register is successful",
                         successData: {
@@ -116,10 +118,15 @@ exports.create_vehicle_reg = (req, res) => {
                                 frint_image: vehicle_reg.frint_image,
                                 back_image: vehicle_reg.back_image,
                                 status: vehicle_reg.status,
-                                driver_id: vehicle_reg.driver_id
+                                driver_id: vehicle_reg.driver_id,
+								service:vehicles.service,
+								distance:vehicles.distance,
+								time: vehicles.time
                             }
                         }
-                    });
+                    });	
+					})
+                  
 
                 })
                     .catch(err => {

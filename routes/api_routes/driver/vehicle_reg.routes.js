@@ -22,7 +22,7 @@ module.exports = function (app) {
     app.post(
         "/api/driver/create-vehicle",
      driverVerifyNumberPlate.checkDuplicatePlate,
-        driverAuthJwt.verifyToken,
+       // driverAuthJwt.verifyToken,
        controller.create_vehicle_reg
 
     );
@@ -41,7 +41,7 @@ module.exports = function (app) {
  //------------Get driver all vehicles from admin Function----------------
     app.get(
         "/api/driver/all-vehicles",
-        driverAuthJwt.verifyToken,
+       // driverAuthJwt.verifyToken,
         controller.get_all_vehicles
     )
 

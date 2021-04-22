@@ -186,7 +186,7 @@ exports.create_trip = (req, res) => {
                                                                     }).then(vehicle_info => {
                                                                         return res.status(200).send({
                                                                             status: 200,
-                                                                            message: "Create Trip with accepted drivers  is successful",
+                                                                            message: "Create Trip with accepted drivers is successful",
                                                                             successData: {
                                                                                 request_trip: {
                                                                                     id: trip.id,
@@ -272,7 +272,7 @@ exports.create_trip = (req, res) => {
 
                                                                     return res.status(200).send({
                                                                         status: 400,
-                                                                        message: "All the representative driver busy with other users please try again",
+                                                                        message: "All the drivers are busy please try again",
                                                                         successData: {}
                                                                     });
 
