@@ -5,7 +5,7 @@ const fs = require('fs')
 //--------Banner create Function -----------------
 exports.create = function (req, res, next) {
   var fileinfo = req.file;
-  console.log("this is banner Fileuploading testing : "+fileinfo);
+  console.log("this is banner Fileuploading testing : "+fileinfo.filename);
   if (fileinfo) {//image exist
     var filename = fileinfo.filename;
     var type = req.body.type;
