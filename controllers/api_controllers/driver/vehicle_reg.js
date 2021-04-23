@@ -60,7 +60,7 @@ exports.create_vehicle_reg = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = './public/files/uploadsFiles/driver/';
+                var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
 
 
                 //-----------------move vehicle document into server-------------------------------//
@@ -261,7 +261,7 @@ exports.update_vehicle_reg=(req,res)=>{
 
 
 
-                        var path_file = './public/files/uploadsFiles/driver/';
+                        var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
 
 
                         //-----------------move vehicle document into server-------------------------------//

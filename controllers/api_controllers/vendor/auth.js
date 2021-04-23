@@ -57,7 +57,7 @@ exports.signup = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = './public/files/uploadsFiles/vendor/';
+                var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/vendor/';
                 var filename = 'profile-1' + Date.now() + req.files.profile.name;
                 req.files.profile.mv(path_file + '' + filename, function (err) {
                     if (err) console.log("error occured");
@@ -507,7 +507,7 @@ exports.update_picture = function (req, res) {
 
 
 
-                var path_file = './public/files/uploadsFiles/vendor/';
+                var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/vendor/';
 
                 var file = req.files.new_profile;
 
