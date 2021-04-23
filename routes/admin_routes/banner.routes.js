@@ -48,7 +48,7 @@ module.exports = function (app) {
 
   //Storage Engine
 const storage = multer.diskStorage({
-  destination: './public/files/uploadsFiles',
+  destination: './Go-Daala-BackEnd/public/files/uploadsFiles',
   filename: (req, file, cb) => {
       return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
   }
