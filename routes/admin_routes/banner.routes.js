@@ -69,9 +69,9 @@ const upload = multer({
 
 
 
-  app.use('/myFile', express.static('./public/files/uploadsFiles/'));
+  // app.use('/myFile', express.static('./public/files/uploadsFiles/'));
   app.post("/admin/banner/upload", 
-  isAdmin,
+  // isAdmin,
    upload.single('myFile'), 
    banner_controller.create
    );
