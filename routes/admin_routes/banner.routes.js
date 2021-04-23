@@ -37,13 +37,13 @@ module.exports = function (app) {
   //   }
   // });
 
-  // const fileFilter = (req, file, cb) => {
-  //   if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png' || file.mimetype == 'image/jpg') {
-  //     cb(null, true);
-  //   } else {
-  //     cb(null, false);
-  //   }
-  // }
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png' || file.mimetype == 'image/jpg') {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  }
 
 
   //Storage Engine
@@ -54,9 +54,9 @@ const storage = multer.diskStorage({
   }
 })
 
-const upload = multer({
-  storage: storage,
-});
+// const upload = multer({
+//   storage: storage,
+// });
 
 
 
@@ -65,7 +65,7 @@ const upload = multer({
 
 
 
-  // const uploads = multer({ storage: storage, fileFilter: fileFilter });
+   const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 
 
