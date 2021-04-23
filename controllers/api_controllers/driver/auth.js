@@ -114,15 +114,15 @@ exports.signup = (req, res) => {
 
                     });
 
-	delete	user.dataValues.password;
-	user.dataValues.accessToken=token;
+                    delete user.dataValues.password;
+                    user.dataValues.accessToken = token;
                     return res.status(200).send({
                         status: 200,
                         message: "Signing Up is successful",
                         successData: {
                             user: user,
-                               
-                      
+
+
                         }
                     });
 
@@ -303,21 +303,21 @@ exports.signin = (req, res) => {
                 },
                     {
                         where: { id: user.id },
-                    returning: true,
-                    plain: true
+                        returning: true,
+                        plain: true
 
                     },
                 ).then(user => {
-					delete user[1].dataValues.password;
-					user[1].dataValues.accessToken=token;
- return res.status(200).send({
-                    status: 200,
-                    message: "Login Successfull.",
-                    successData: {
-                        user: user[1]
-                    }
+                    delete user[1].dataValues.password;
+                    user[1].dataValues.accessToken = token;
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Login Successfull.",
+                        successData: {
+                            user: user[1]
+                        }
 
-                });
+                    });
                 }).catch(err => {
                     return res.status(200).send({
                         status: 400,
@@ -327,7 +327,7 @@ exports.signin = (req, res) => {
                 });
 
 
-               
+
 
             })
             .catch(err => {
@@ -382,8 +382,8 @@ exports.update = (req, res) => {
 
 
                     });
-					delete user[1].dataValues.password;
-user[1].dataValues.accessToken=token;
+                    delete user[1].dataValues.password;
+                    user[1].dataValues.accessToken = token;
                     return res.status(200).send({
                         status: 200,
                         message: "UPDATED is successful",
@@ -438,8 +438,8 @@ exports.forgot_password = (req, res) => {
 
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret);
-				user[1].dataValues.accessToken=token;
-				delete user[1].dataValues.password;
+                user[1].dataValues.accessToken = token;
+                delete user[1].dataValues.password;
                 return res.status(200).send({
                     status: 200,
                     message: "Password UPDATED is successful",
@@ -540,13 +540,13 @@ exports.update_picture = (req, res) => {
                 ).then(user => {
                     console.log("this is tracker no 2");
                     var token = jwt.sign({ id: user.id }, config.secret);
-user.dataValues.accessToken=token;
-delete user.dataValues.password;
+                    user[1].dataValues.accessToken = token;
+                    delete user[1].dataValues.password;
                     return res.status(200).send({
                         status: 200,
                         message: "Profile picture is  UPDATED is successful",
                         successData: {
-                            user: user[1].dataValues
+                            user: user[1]
                         }
                     });
 
@@ -598,8 +598,8 @@ exports.active_status = (req, res) => {
             },
         ).then(user => {
             var token = jwt.sign({ id: user.id }, config.secret);
-user[1].dataValues.accessToken=token;
-delete user[1].dataValues.password;
+            user[1].dataValues.accessToken = token;
+            delete user[1].dataValues.password;
             return res.status(200).send({
                 status: 200,
                 message: "active Status updated is successful",
@@ -611,7 +611,7 @@ delete user[1].dataValues.password;
             return res.status(200).send({
                 status: 400,
                 message: "driver not found! ",
-                successData:{}
+                successData: {}
             });
         });
     }
@@ -645,14 +645,14 @@ exports.unactive_status = (req, res) => {
             },
         ).then(user => {
             var token = jwt.sign({ id: user.id }, config.secret, {});
-user[1].dataValues.accessToken=token;
-delete user[1].dataValues.password;
+            user[1].dataValues.accessToken = token;
+            delete user[1].dataValues.password;
             return res.status(200).send({
                 status: 200,
                 message: "unactive Status updated is successful",
                 successData: {
                     user: user[1]
-					}
+                }
             });
         }).catch(error => {
             return res.status(200).send({
