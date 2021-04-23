@@ -64,7 +64,7 @@ exports.signup = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles';
+                var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
                 var fileOne = 'profile-1' + Date.now() + req.files.profile.name;
                 //-----------------move profile into server-------------------------------//
                 req.files.profile.mv(path_file + '' + fileOne, function (err) {
