@@ -48,7 +48,7 @@ module.exports = function (app) {
 
   //Storage Engine
 const storage = multer.diskStorage({
-  destination: './upload/images/userProfile',
+  destination: './public/files/uploadsFiles',
   filename: (req, file, cb) => {
       return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
   }
@@ -69,9 +69,7 @@ const upload = multer({
 
 
 
-  app.use('/profile', express.static('upload/images/userProfile'));
-
-
+  app.use('/myFile', express.static('./public/files/uploadsFiles/'));
   app.post("/admin/banner/upload", 
   isAdmin,
    upload.single('myFile'), 
