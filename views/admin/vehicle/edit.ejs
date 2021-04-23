@@ -65,9 +65,8 @@
                                     <div class="form-group">
                                         <input type="file" class="form-control" name="myFile" id="img">
                                         <img src="#" id="imagePreview" alt="">
-                                        <%var image=data.image_path; var img_length=image.length; var img=image.slice(8,
-                                            img_length);%>
-                                            <img src="<%=img%>" id="imagePreview" alt="">
+                                        
+                                            <img src="<%=data.image_path%>" id="imagePreview" alt="">
                                     </div>
                                     <input type="hidden" name="id" value="<%=data.id%>">
                                     <input type="hidden" name="Data" value="<%=data%>">

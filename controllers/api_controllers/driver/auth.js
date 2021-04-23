@@ -610,7 +610,8 @@ delete user[1].dataValues.password;
         }).catch(error => {
             return res.status(200).send({
                 status: 400,
-                message: error
+                message: "driver not found! ",
+                successData:{}
             });
         });
     }
