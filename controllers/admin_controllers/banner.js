@@ -10,7 +10,8 @@ exports.create = function (req, res, next) {
     var type = req.body.type;
 
 
-    var destination = fileinfo.destination
+    var destination = "/files/uploadsFiles/";
+  
 
     if (!type) {
       req.flash('danger', 'Selected type must needed!');
@@ -80,7 +81,7 @@ exports.edit = function (req, res) {
       }
     }).catch(err => {
       return res.status(200).send({
-        responsecode: 400,
+        status: 400,
         message: err.message,
       });
     });
@@ -108,7 +109,7 @@ exports.update = function (req, res, next) {
         console.log("file deleted!")
       }
     })
-    var destination = fileinfo.destination
+    var destination = "/files/uploadsFiles/";
     Banner.update({
       banner_type: req.body.type,
       image_path: destination + "" + filename

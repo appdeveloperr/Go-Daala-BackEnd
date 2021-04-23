@@ -89,13 +89,13 @@ exports.create_vehicle_reg = (req, res) => {
                 Vehicle_reg.create({
                     driver_id: req.body.driver_id,
                     vehicle_type: req.body.vehicle_type,
-                    vehicle_document: '/public/files/uploadsFiles/driver/' + docfilename,
+                    vehicle_document: '/files/uploadsFiles/driver/' + docfilename,
                     brand: req.body.brand,
                     model: req.body.model,
                     number_plate: req.body.number_plate,
                     color: req.body.color,
-                    frint_image: '/public/files/uploadsFiles/driver/' + frintfilename,
-                    back_image: '/public/files/uploadsFiles/driver/' + backfilename,
+                    frint_image: '/files/uploadsFiles/driver/' + frintfilename,
+                    back_image: '/files/uploadsFiles/driver/' + backfilename,
                     status: "deactive",
 
 
@@ -290,13 +290,13 @@ exports.update_vehicle_reg=(req,res)=>{
                         Vehicle_reg.update({
                             driver_id: req.body.driver_id,
                             vehicle_type: req.body.vehicle_type,
-                            vehicle_document: '/public/files/uploadsFiles/driver/' + docfilename,
+                            vehicle_document: '/files/uploadsFiles/driver/' + docfilename,
                             brand: req.body.brand,
                             model: req.body.model,
                             number_plate: req.body.number_plate,
                             color: req.body.color,
-                            frint_image: '/public/files/uploadsFiles/driver/' + frintfilename,
-                            back_image: '/public/files/uploadsFiles/driver/' + backfilename,
+                            frint_image: '/files/uploadsFiles/driver/' + frintfilename,
+                            back_image: '/files/uploadsFiles/driver/' + backfilename,
                             status: "deactive",
         
         

@@ -30,7 +30,7 @@ exports.create = function (req, res, next) {
       var service_charges= req.body.service_charges;
       var distance= req.body.distance;
       var time = req.body.time;
-      var destination = fileinfo.destination
+      var destination = "/files/uploadsFiles/";
       Vehicle.create({
         vehicle_type: type,
         service:service_charges,
@@ -136,7 +136,7 @@ exports.update = function (req, res, next) {
           console.log("file deleted!")
         }
       })
-      var destination = fileinfo.destination
+      var destination = "/files/uploadsFiles/";
       Vehicle.update({
         vehicle_type: req.body.type,
         service:req.body.service_charges,

@@ -99,9 +99,9 @@ exports.signup = (req, res) => {
                     email: req.body.email,
                     phone_number: req.body.phone_number,
                     password: bcrypt.hashSync(req.body.password, 8),
-                    profile: '/public/files/uploadsFiles/driver/' + fileOne,
-                    cnic: '/public/files/uploadsFiles/driver/' + cnicfilename,
-                    driving_license: '/public/files/uploadsFiles/driver/' + drivefilename,
+                    profile: '/files/uploadsFiles/driver/' + fileOne,
+                    cnic: '/files/uploadsFiles/driver/' + cnicfilename,
+                    driving_license: '/files/uploadsFiles/driver/' + drivefilename,
                     status: "active",
                     account_info: "block",
                     fcm_token: req.body.fcm_token,
@@ -530,7 +530,7 @@ exports.update_picture = (req, res) => {
                     }
                 })
                 Driver.update({
-                    profile: '/public/files/uploadsFiles/driver/' + filename
+                    profile: '/files/uploadsFiles/driver/' + filename
                 },
                     {
                         where: { id: req.body.id },

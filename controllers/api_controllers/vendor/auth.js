@@ -72,7 +72,7 @@ exports.signup = (req, res) => {
                     email: req.body.email,
                     phone_number: req.body.phone_number,
                     password: bcrypt.hashSync(req.body.password, 8),
-                    profile: '/public/files/uploadsFiles/vendor/' + filename,
+                    profile: '/files/uploadsFiles/vendor/' + filename,
                     account_info: 'unblock',
                     fcm_token: req.body.fcm_token,
                     total_rating:"0",
@@ -530,7 +530,7 @@ exports.update_picture = function (req, res) {
                     }
                 })
                 Vendor.update({
-                    profile: '/public/files/uploadsFiles/vendor/' + filename
+                    profile: '/files/uploadsFiles/vendor/' + filename
                 },
                     {
                         where: { id: req.body.id },
