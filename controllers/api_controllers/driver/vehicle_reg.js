@@ -235,7 +235,7 @@ exports.update_vehicle_reg=(req,res)=>{
                    
                     if(result!=null|| result!=''){
 
-                        fs.unlink('.' + result.dataValues.vehicle_document, function (err) {
+                        fs.unlink('./Go-Daala-BackEnd/public' + result.dataValues.vehicle_document, function (err) {
                             if (err) {
                                 console.log("err occer file not deleted");
                             } else {
@@ -243,7 +243,7 @@ exports.update_vehicle_reg=(req,res)=>{
                             }
                         })
 
-                        fs.unlink('.' + result.dataValues.frint_image, function (err) {
+                        fs.unlink('./Go-Daala-BackEnd/public' + result.dataValues.frint_image, function (err) {
                             if (err) {
                                 console.log("err occer file not deleted");
                             } else {
@@ -251,7 +251,7 @@ exports.update_vehicle_reg=(req,res)=>{
                             }
                         })
 
-                        fs.unlink('.' + result.dataValues.back_image, function (err) {
+                        fs.unlink('./Go-Daala-BackEnd/public' + result.dataValues.back_image, function (err) {
                             if (err) {
                                 console.log("err occer file not deleted");
                             } else {

@@ -522,7 +522,7 @@ exports.update_picture = (req, res) => {
 
 
 
-                fs.unlink('.' + req.body.file, function (err) {
+                fs.unlink('./Go-Daala-BackEnd/public' + req.body.file, function (err) {
                     if (err) {
                         console.log("err occer file not deleted");
                     } else {
