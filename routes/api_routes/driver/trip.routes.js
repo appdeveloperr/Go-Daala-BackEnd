@@ -3,6 +3,13 @@ const { driverAuthJwt } = require("../../../middleware");
 
 const controller = require("../../../controllers/api_controllers/driver/trip");
 
+const formatMessage = require('../utils/messages');
+const {
+    userJoin,
+    getCurrentUser,
+    userLeave,
+    getRoomUsers
+} = require('../utils/users');
 
 
 module.exports = function (app) {
@@ -18,8 +25,8 @@ module.exports = function (app) {
     //------------driver receive trip Function----------------
     app.post(
         "/api/driver/receive-trip",
-        // driverAuthJwt.verifyToken,
-        controller.receive_trip,
+         driverAuthJwt.verifyToken,
+        controller.receive_trip
     );
 
     //------------driver cencal trip Function----------------
@@ -61,4 +68,10 @@ module.exports = function (app) {
     );
 
 
+
+
+
+
+
 };
+

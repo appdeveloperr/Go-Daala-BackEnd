@@ -10,11 +10,8 @@ const cors = require("cors");
 const app = express();
 var bcrypt = require("bcryptjs");
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
-
-// var multer = require('multer');
-// var upload = multer();
-
+var io = require('socket.io')(http);
+var socket_io = require('./config/socket.chat').socket_io(io);
 
 var corsOptions = {
   origin: "*",
@@ -40,7 +37,7 @@ app.set('view engine', 'ejs');
 //Set public Folder
 // app.use(express.static(path.join(__dirname, '/public/')));
 //Set Global  errors variable 
-app.locals.errors=null;
+app.locals.errors = null;
 
 
 // parse requests of content-type - application/json
@@ -57,12 +54,12 @@ app.use(express.static(path.join(__dirname, '/public/')));
 // database
 const db = require("./models/api_models");
 // const Role = db.role;
-  const User = db.user;
+const User = db.user;
 
 // // force: true will drop the table if it already exists
 //db.sequelize.sync({force: true}).then(() => {
 //  console.log('Drop and Resync Database with { force: true }');
- // initial();
+// initial();
 //});
 
 
@@ -70,10 +67,10 @@ const db = require("./models/api_models");
 
 app.set('trust proxy', 1)
 app.use(session({
-    secret: 'max',
-    resave: true,
-    saveUninitialized: true,
-     cookie: { secure: false }
+  secret: 'max',
+  resave: true,
+  saveUninitialized: true,
+  cookie: { secure: false }
 }));
 
 
@@ -116,8 +113,8 @@ app.use(expressValidator({
 //express messages middelware
 app.use(require('connect-flash')());
 app.use(function (req, res, next) {
-    res.locals.messages = require('express-messages')(req, res);
-    next();
+  res.locals.messages = require('express-messages')(req, res);
+  next();
 });
 
 app.get('*', function (req, res, next) {
@@ -136,24 +133,6 @@ app.use(passport.session());
 
 
 
-io.sockets.on('connection', function(socket) {
-  socket.on('username', function(username,room) {
-      socket.username = username;
-      socket.room = room;
-      io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
-  });
-
-  socket.on('disconnect', function(username) {
-      io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i> ');
-  })
-
-  socket.on('chat_message', function(message) {
-    
-      io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
-      console.log('username: ',socket.username,' and message: ',message);
-  });
-
-});
 
 //simple route
 // app.get("/", (req, res) => {
@@ -175,7 +154,7 @@ require('./routes/admin_routes/faq.routes')(app);
 require('./routes/admin_routes/notification.routes')(app);
 require('./routes/admin_routes/logout.routes')(app);
 require('./routes/admin_routes/contectus.routes')(app);
-require('./routes/admin_routes/chats.routes')(app);
+
 
 
 //----------- API Routes --------------------
@@ -219,12 +198,11 @@ http.listen(PORT, () => {
 function initial() {
 
 
-    //------ Inserting Dumy Admin Data ----
-    User.create({
-      username:"admin",
-      email:"admin@godaala.com",
-      password:bcrypt.hashSync("admin@godaala", 8)
-    })
-  
-  };
-  
+  //------ Inserting Dumy Admin Data ----
+  User.create({
+    username: "admin",
+    email: "admin@godaala.com",
+    password: bcrypt.hashSync("admin@godaala", 8)
+  })
+
+};
