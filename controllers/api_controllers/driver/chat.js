@@ -20,8 +20,7 @@ exports.get_chat = (req, res) => {
         });
     } else {
     Chat.findAll({
-        where:{trip_id:req.body.trip_id,
-                username:req.body.username}
+        where:{trip_id:req.body.trip_id}
 	}).then(all_chats => {
         if (!all_chats) {
             return res.status(200).send({
