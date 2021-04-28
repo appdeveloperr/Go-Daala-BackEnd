@@ -36,7 +36,7 @@ exports.socket_lat_long = function (io) {
 
       Dirver_lat_long.findOne({
         where: {
-          driver_id: req.body.driver_id
+          driver_id: driver.driver_id
         }
       }).then(dri => {
         if (dri == null || dri == '') {
