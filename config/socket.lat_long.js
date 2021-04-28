@@ -50,12 +50,8 @@ exports.socket_lat_long = function (io) {
               console.log('Driver current location is created successfuly');
             }
           }).catch(err => {
-
-            return res.status(200).send({
-              status: 400,
-              message: err.message,
-              successData: {}
-            });
+            console.log('Driver current location is not created ',err);
+          
 
           });
         } else {
@@ -77,21 +73,13 @@ exports.socket_lat_long = function (io) {
 
             }).catch(err => {
 
-              return res.status(200).send({
-                status: 400,
-                message: err.message,
-                successData: {}
-              });
+              console.log('Driver current location is not updated! ',err)
 
             });
         }
       }).catch(err => {
 
-        return res.status(200).send({
-          status: 400,
-          message: err.message,
-          successData: {}
-        });
+        console.log('Driver lat lon table is not exist in db! ',err)
 
       });
     });
