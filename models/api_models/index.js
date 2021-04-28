@@ -30,6 +30,9 @@ db.role = require("../api_models/role.model")(sequelize, Sequelize);
 db.banner = require("../api_models/banner.model")(sequelize, Sequelize);
 db.promo = require("../api_models/promo.model")(sequelize, Sequelize);
 db.notification = require("../api_models/notification.model")(sequelize, Sequelize);
+
+//---------------------------api models-------------------------
+db.chat = require("../api_models/chat.model")(sequelize, Sequelize);
 //---------------------------vendor models-------------------------
 db.vendor = require("../api_models/vendor.model")(sequelize, Sequelize);
 db.address = require("../api_models/address.model")(sequelize, Sequelize);
@@ -124,6 +127,12 @@ db.notification.belongsTo(db.driver, {
 
 db.notification.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
+});
+
+
+//--------------chat with trip----------------//
+db.chat.belongsTo(db.trip,{
+  foreignKey: "trip_id"
 });
 
 

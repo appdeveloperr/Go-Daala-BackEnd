@@ -3,13 +3,6 @@ const { driverAuthJwt } = require("../../../middleware");
 
 const controller = require("../../../controllers/api_controllers/driver/trip");
 
-const formatMessage = require('../utils/messages');
-const {
-    userJoin,
-    getCurrentUser,
-    userLeave,
-    getRoomUsers
-} = require('../utils/users');
 
 
 module.exports = function (app) {

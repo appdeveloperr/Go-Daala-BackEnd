@@ -1,4 +1,5 @@
 const users = [];
+const drivers= [];
 
 // Join user to chat
 function userJoin(id, username, room) {
@@ -28,9 +29,30 @@ function getRoomUsers(room) {
   return users.filter(user => user.room === room);
 }
 
+function get_lat_long(id, driver_id, lat , long) {
+  const driver = { id, driver_id, lat , long };
+
+  drivers.push(driver);
+
+  return drivers;
+}
+
+
+function get_lat_long_room(id, room , driver_id, lat , long) {
+  const driver = { id, room , driver_id, lat , long };
+
+  drivers.push(driver);
+
+  return driver;
+}
+
+
+
 module.exports = {
   userJoin,
   getCurrentUser,
   userLeave,
-  getRoomUsers
+  getRoomUsers,
+  get_lat_long,
+  get_lat_long_room
 };

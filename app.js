@@ -8,10 +8,12 @@ const Strategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 const cors = require("cors");
 const app = express();
-var bcrypt = require("bcryptjs");
-const http = require('http').Server(app);
+var bcrypt = require("bcrypt");
+var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var socket_io = require('./config/socket.chat').socket_io(io);
+
+ var socket_io = require('./config/socket.chats').socket_io(io);
+ var socket_lat_long = require('./config/socket.lat_long').socket_lat_long(io);
 
 var corsOptions = {
   origin: "*",
@@ -57,10 +59,10 @@ const db = require("./models/api_models");
 const User = db.user;
 
 // // force: true will drop the table if it already exists
-//db.sequelize.sync({force: true}).then(() => {
-//  console.log('Drop and Resync Database with { force: true }');
-// initial();
-//});
+db.sequelize.sync({force: true}).then(() => {
+ console.log('Drop and Resync Database with { force: true }');
+initial();
+});
 
 
 
