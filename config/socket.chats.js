@@ -94,7 +94,7 @@ exports.socket_io = function (io) {
             Chat.create({
                 mobile_no: mobile_no,
                 username: user_format.username,
-                message: user_format.text.message,
+                message: msg,
                 time: user_format.time,
                 trip_id: user_format.text.room
             }).then(chating => {

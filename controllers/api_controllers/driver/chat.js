@@ -6,7 +6,6 @@ const Chat = db.chat;
 //--------------driver get all chats------------
 exports.get_chat = (req, res) => {
     req.checkBody('trip_id', 'Trip id must have required!').notEmpty();
-    req.checkBody('username', 'Driver username must have need!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
