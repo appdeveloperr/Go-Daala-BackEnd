@@ -84,21 +84,21 @@ exports.socket_io = function (io) {
         });
 
         // Listen for chatMessage
-        socket.on('send_message', msg ,mobile_no => {
+        socket.on('send_message', (message ,mobile_no) => {
             const user = getCurrentUser(socket.id);
             console.log("this is user id :    " + socket.id);
             console.log("this is user room :    " + user.room)
-            io.to(user.room).emit('send_message', formatMessage(user.username, msg));
-            console.log(formatMessage(user.username, msg));
-            const user_format = formatMessage(user.username, msg);
+            io.to(user.room).emit('send_message', formatMessage(user.username, message));
+            console.log(formatMessage(user.username, message));
+            const user_format = formatMessage(user.username, message);
             Chat.create({
                 mobile_no: mobile_no,
-                username: user_format.username,
-                message: msg,
+                username: user_format.text.username,
+                message: user_format.text.message,
                 time: user_format.time,
                 trip_id: user_format.text.room
             }).then(chating => {
-                console.log('chat is saved :' + chating);
+                console.log('chat is saved ');
             }).catch(err => {
                 console.log('chat is not saved :' + err);
                
