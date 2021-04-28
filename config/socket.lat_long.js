@@ -36,15 +36,15 @@ exports.socket_lat_long = function (io) {
 console.log("this is driver data: "+driver);
       Dirver_lat_long.findOne({
         where: {
-          driver_id: driver.driver_id
+          driver_id: driver[0].driver_id
         }
       }).then(dri => {
         console.log(dri);
         if (dri == null || dri == '') {
           Dirver_lat_long.create({
-            latitude: driver.lat,
-            longitude: driver.long,
-            driver_id: driver.driver_id,
+            latitude: driver[0].lat,
+            longitude: driver[0].long,
+            driver_id: driver[0].driver_id,
             status: 'available'
           }).then(driver_lat => {
             if (driver_lat) {
@@ -58,13 +58,13 @@ console.log("this is driver data: "+driver);
         } else {
 
           Dirver_lat_long.update({
-            latitude: driver.lat,
-            longitude: driver.long,
+            latitude: driver[0].lat,
+            longitude: driver[0].long,
             status: 'available'
 
           },
             {
-              where: { driver_id: driver.driver_id },
+              where: { driver_id: driver[0].driver_id },
               returning: true,
               plain: true
             }).then(update_lat_long => {
