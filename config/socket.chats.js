@@ -72,15 +72,11 @@ exports.socket_io = function (io) {
                     plain: true
                 }).then(update_lat_long => {
 
-                    console.log('connect driver room  current location is updated successfuly')
+                    console.log('connect driver room  current location is updated successfuly');
 
                 }).catch(err => {
 
-                    return res.status(200).send({
-                        status: 400,
-                        message: err.message,
-                        successData: {}
-                    });
+                    console.log('connect driver room  current location is not updated! :'+ err);
 
                 });
 
@@ -103,12 +99,8 @@ exports.socket_io = function (io) {
             }).then(chating => {
                 console.log('chat is saved :' + chating);
             }).catch(err => {
-
-                return res.status(200).send({
-                    status: 400,
-                    message: err.message,
-                    successData: {}
-                });
+                console.log('chat is not saved :' + err);
+               
 
             });
 

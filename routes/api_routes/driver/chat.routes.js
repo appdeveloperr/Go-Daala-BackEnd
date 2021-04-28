@@ -19,7 +19,7 @@ module.exports = function (app) {
    //------------driver get chat Function----------------
    app.post(
     "/api/driver/get-chat",
-    vendorAuthJwt.verifyToken,
+    driverAuthJwt.verifyToken,
     controller.get_chat
 );
 
