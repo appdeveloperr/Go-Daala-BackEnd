@@ -84,7 +84,7 @@ exports.socket_io = function (io) {
         });
 
         // Listen for chatMessage
-        socket.on('send_message', msg => {
+        socket.on('send_message', msg ,mobile_no => {
             const user = getCurrentUser(socket.id);
             console.log("this is user id :    " + socket.id);
             console.log("this is user room :    " + user.room)
@@ -92,6 +92,7 @@ exports.socket_io = function (io) {
             console.log(formatMessage(user.username, msg));
             const user_format = formatMessage(user.username, msg);
             Chat.create({
+                mobile_no: mobile_no,
                 username: user_format.username,
                 message: user_format.text.message,
                 time: user_format.time,

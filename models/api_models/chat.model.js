@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
             autoIncrement: true,
         },
+        mobile_no: {
+            type: Sequelize.STRING
+        },
         username: {
             type: Sequelize.STRING
         },
