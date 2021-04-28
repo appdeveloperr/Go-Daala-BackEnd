@@ -40,16 +40,10 @@
                                     <tbody>
 
                                         <tr>
-                                            <%var image=one_drivers.profile; var img_length=image.length; var
-                                                img=image.slice(7, img_length);%>
-                                                <%var image=one_drivers.cnic; var img_length=image.length; var
-                                                    cnic=image.slice(7, img_length); %>
-                                                    <%var image=one_drivers.driving_license; var
-                                                        img_length=image.length; var licence=image.slice(7, img_length);
-                                                        %>
-                                                        <td><img src="<%=img%>" width="200" height="100"></td>
-                                                        <td><img src="<%=cnic%>" width="200" height="100"></td>
-                                                        <td><img src="<%=licence%>" width="200" height="100"></td>
+                                        
+                                                        <td><img src="<%=one_drivers.profile%>" width="200" height="100"></td>
+                                                        <td><img src="<%=one_drivers.cnic%>" width="200" height="100"></td>
+                                                        <td><img src="<%=one_drivers.driving_license%>" width="200" height="100"></td>
 
                                                         <td>
                                                             <a href="/driver/all_trips/<%=one_drivers.id%>"
