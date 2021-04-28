@@ -93,9 +93,9 @@ exports.socket_io = function (io) {
             const user_format = formatMessage(user.username, msg);
             Chat.create({
                 username: user_format.username,
-                message: user_format.text,
+                message: user_format.text.message,
                 time: user_format.time,
-                trip_id: user.room
+                trip_id: user_format.text.room
             }).then(chating => {
                 console.log('chat is saved :' + chating);
             }).catch(err => {
