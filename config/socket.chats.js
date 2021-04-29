@@ -92,7 +92,7 @@ exports.socket_io = function (io) {
             console.log(formatMessage(user.username, message));
             const user_format = formatMessage(user.username, message);
             Chat.create({
-                mobile_no: mobile_no,
+                mobile_no: user_format.text.mobile_no,
                 username: user_format.text.username,
                 message: user_format.text.message,
                 time: user_format.time,
