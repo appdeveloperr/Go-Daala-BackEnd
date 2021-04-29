@@ -39,7 +39,7 @@ exports.socket_lat_long = function (io) {
           driver_id: driver[0].driver_id
         }
       }).then(dri => {
-        console.log("after finding the driver Data: "+dri);
+        console.log("after finding the driver Data: "+dri.dataValues);
         if (dri == null || dri == '') {
           Dirver_lat_long.create({
             latitude: driver[0].lat,
