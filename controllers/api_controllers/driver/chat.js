@@ -18,33 +18,38 @@ exports.get_chat = (req, res) => {
             }
         });
     } else {
-    Chat.findAll({
-        where:{trip_id:req.body.trip_id}
-	}).then(all_chats => {
-        if (!all_chats) {
-            return res.status(200).send({
-                responsecode: 400,
-                message: "no recode exist",
-                successData: {
+        Chat.findAll({
+            where: { 
+                trip_id: req.body.trip_id 
+            },
+            order: [
+                ['id', 'DESC'],
+            ],
+        }).then(all_chats => {
+            if (!all_chats) {
+                return res.status(200).send({
+                    responsecode: 400,
+                    message: "no recode exist",
+                    successData: {
 
+                    }
+                });
+            }
+            return res.status(200).send({
+                status: 200,
+                message: "Get all driver chats",
+                successData: {
+                    all_chats: all_chats
                 }
             });
-        }
-        return res.status(200).send({
-            status: 200,
-            message: "Get all driver chats",
-            successData: {
-                all_chats: all_chats
-            }
+
+
+
+        }).catch(err => {
+            return res.status(200).send({
+                responsecode: 400,
+                message: err.message,
+            });
         });
-
-
-
-    }).catch(err => {
-        return res.status(200).send({
-            responsecode: 400,
-            message: err.message,
-        });
-    });
-	}
+    }
 }
