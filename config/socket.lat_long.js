@@ -21,7 +21,7 @@ exports.socket_lat_long = function (io) {
       const driver = get_lat_long(socket.id, driver_id, lat, long);
 
       socket.join(driver.driver_id);
-      console.log(driver);
+    
 
       // Welcome current user
       socket.emit('driver_lat_long', driver);
@@ -39,7 +39,7 @@ console.log("this is driver data: "+driver);
           driver_id: driver[0].driver_id
         }
       }).then(dri => {
-        console.log(dri);
+        console.log("after finding the driver Data: "+dri);
         if (dri == null || dri == '') {
           Dirver_lat_long.create({
             latitude: driver[0].lat,
