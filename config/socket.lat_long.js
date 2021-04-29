@@ -25,7 +25,7 @@ exports.socket_lat_long = function (io) {
 
       // Welcome current user
       socket.emit('driver_lat_long', driver);
-
+      console.log("this is driver data: "+driver);
       // Broadcast when a user connects
       socket.broadcast
         .to(driver.driver_id)
@@ -33,7 +33,7 @@ exports.socket_lat_long = function (io) {
           'driver_lat_long',
           driver
         );
-console.log("this is driver data: "+driver);
+
       Dirver_lat_long.findOne({
         where: {
           driver_id: driver[0].driver_id
