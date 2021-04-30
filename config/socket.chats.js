@@ -51,14 +51,14 @@ exports.socket_io = function (io) {
         });
 
         //on connect user   
-        socket.on('connect_driver_lat_long_room', ({ room, driver_id, lat, long,rotaion }) => {
-            console.log('connect room driver lat long : ' + room, driver_id, lat, long ,rotaion);
-            const user = get_lat_long_room(socket.id, room, driver_id, lat, long ,rotaion );
+        socket.on('connect_driver_lat_long_room', ({ room, driver_id, lat, long,rotation }) => {
+            console.log('connect room driver lat long : ' + room, driver_id, lat, long ,rotation);
+            const user = get_lat_long_room(socket.id, room, driver_id, lat, long ,rotation );
             socket.join(user.room);
             //console.log(user);
 
-            io.to(user.room).emit('connect_driver_lat_long_room', formatLatLong(room, driver_id, lat, long,rotaion));
-            console.log(formatLatLong(room, driver_id, lat, long,rotaion))
+            io.to(user.room).emit('connect_driver_lat_long_room', formatLatLong(room, driver_id, lat, long,rotation));
+            console.log(formatLatLong(room, driver_id, lat, long,rotation))
 
             Dirver_lat_long.update({
                 latitude: user.lat,
