@@ -38,8 +38,8 @@ function get_lat_long(id, driver_id, lat , long) {
 }
 
 
-function get_lat_long_room(id, room , driver_id, lat , long) {
-  const driver = { id, room , driver_id, lat , long };
+function get_lat_long_room(id, room , driver_id, lat , long , rotaion) {
+  const driver = { id, room , driver_id, lat , long ,rotaion};
 
   drivers.push(driver);
 
