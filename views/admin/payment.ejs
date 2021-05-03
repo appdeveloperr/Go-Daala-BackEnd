@@ -1,0 +1,44 @@
+<script>
+        function submitForm() {
+            document.jsform.submit();
+        }
+    </script>
+<!-- localhost:8080/payment_get_way -->
+    <form name="jsform" method="post" action="https://sandbox.jazzcash.com.pk/ApplicationAPI/API/Payment/DoTransaction">
+        <input type="hidden" name="pp_Version" value="1.1">
+        <input type="hidden" name="pp_TxnType" value="MWALLET">
+        <input type="hidden" name="pp_Language" value="EN">
+        <input type="hidden" name="pp_MerchantID" value="MC18517">
+        <input type="hidden" name="pp_SubMerchantID" value="">
+        <input type="hidden" name="pp_Password" value="null">
+        <input type="hidden" name="pp_BankID" value="TBANK">
+        <input type="hidden" name="pp_ProductID" value="RETL">
+        <label class="">Ref Number: </label>
+        <input type="text" name="pp_TxnRefNo" value="T20210503140938">
+        
+        <label class="">Amount: </label>
+        <input type="text" name="pp_Amount" value="1000">
+        
+        <input type="hidden" name="pp_TxnCurrency" value="PKR">
+        <input type="hidden" name="pp_TxnDateTime" value="20210503141008">
+        <label class="">Bill Reference: </label>
+        <input type="text" name="pp_BillReference" value="billRef">
+        
+        <label class="">Description: </label>
+        <input type="text" name="pp_Description" value="Description of transaction">
+        
+        <input type="hidden" name="pp_TxnExpiryDateTime" value="20210504141008">
+        <label class="">Return URL: </label>
+        <input type="text" name="pp_ReturnURL" value="localhost:8080/payment_get_way">
+        
+        <input type="hidden" name="pp_SecureHash" value="A0E6B883B2A2CEA95919CCE5F0D117DF5340120CFD5A9AED810F412520AEAA21">
+        <input type="hidden" name="ppmpf_1" value="">
+        <input type="hidden" name="ppmpf_2" value="2">
+        <input type="hidden" name="ppmpf_3" value="3">
+        <input type="hidden" name="ppmpf_4" value="4">
+        <input type="hidden" name="ppmpf_5" value="5">
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+                                    
+                                    
+    

@@ -1,6 +1,8 @@
 const db = require("../../../models/api_models");
 const config = require("../../../config/auth.config");
 const Driver = db.driver;
+const Vehicla_reg = db.vehicle_reg;
+
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require('fs');
@@ -308,16 +310,32 @@ exports.signin = (req, res) => {
 
                     },
                 ).then(user => {
-                    delete user[1].dataValues.password;
-                    user[1].dataValues.accessToken = token;
-                    return res.status(200).send({
-                        status: 200,
-                        message: "Login Successfull.",
-                        successData: {
-                            user: user[1]
-                        }
 
+                    delete user[1].dataValues.password;       
+                    user[1].dataValues.accessToken = token;
+                    Vehicla_reg.findOne({
+                        where:{
+                            driver_id:user[1].dataValues.id
+                        }
+                    }).then(vehicle_info=>{
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Login Successfull.",
+                            successData: {
+                                user: user[1],
+                                vehicle_info:vehicle_info
+                            }
+    
+                        });
+                    }).catch(err => {
+                        return res.status(200).send({
+                            status: 400,
+                            message: "error from get vehicle information "+err.message,
+                            successData: {}
+                        });
                     });
+             
+                 
                 }).catch(err => {
                     return res.status(200).send({
                         status: 400,

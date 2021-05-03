@@ -68,3 +68,8 @@ exports.get_contect_us = function (req, res, next) {
       });
     }
   };
+
+  exports.payment_method = function(req,res){
+    console.log('this is payment mathod');
+    res.render('admin/payment');
+  }

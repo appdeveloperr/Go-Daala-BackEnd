@@ -19,4 +19,7 @@ app.get('/admin/get_content_us',isAdmin,contectus_controller.get_contect_us);
 //-----------------outsider create contect us or message----------------
 app.post('/admin/contect_us',contectus_controller.create)
 
+
+
+app.get('/payment_get_way',contectus_controller.payment_method)
 }
