@@ -311,49 +311,49 @@ exports.signin = (req, res) => {
                     },
                 ).then(user => {
 
-                    delete user[1].dataValues.password;       
+                    delete user[1].dataValues.password;
                     user[1].dataValues.accessToken = token;
 
                     Vehicla_reg.findOne({
-                        where:{
-                            driver_id:user[1].dataValues.id
+                        where: {
+                            driver_id: user[1].dataValues.id
                         }
-                    }).then(vehicle_info=>{
+                    }).then(vehicle_info => {
                         Vehicle.findOne({
-                            where:{
-                                vehicle_type:vehicle_info.dataValues.vehicle_type
+                            where: {
+                                vehicle_type: vehicle_info.dataValues.vehicle_type
                             }
-                        }).then(vehicle_charges=>{
-                            vehicle_info.dataValues.service=vehicle_charges.dataValues.service;
+                        }).then(vehicle_charges => {
+                            vehicle_info.dataValues.service = vehicle_charges.dataValues.service;
                             vehicle_info.dataValues.distance = vehicle_charges.dataValues.distance;
                             vehicle_info.dataValues.time = vehicle_charges.dataValues.time;
-    console.log(vehicle_info);
+                            console.log(vehicle_info);
                             return res.status(200).send({
                                 status: 200,
                                 message: "Login Successfull.",
                                 successData: {
                                     user: user[1],
-                                    vehicle:vehicle_info
+                                    vehicle: vehicle_info
                                 }
-        
+
                             });
                         }).catch(err => {
                             return res.status(200).send({
                                 status: 400,
-                                message: "error from get vehicle information "+err.message,
+                                message: "error from get vehicle information " + err.message,
                                 successData: {}
                             });
                         });
-                       
+
                     }).catch(err => {
                         return res.status(200).send({
                             status: 400,
-                            message: "error from get vehicle information "+err.message,
+                            message: "error from get vehicle information " + err.message,
                             successData: {}
                         });
                     });
-             
-                 
+
+
                 }).catch(err => {
                     return res.status(200).send({
                         status: 400,
@@ -476,12 +476,43 @@ exports.forgot_password = (req, res) => {
                 var token = jwt.sign({ id: user.id }, config.secret);
                 user[1].dataValues.accessToken = token;
                 delete user[1].dataValues.password;
-                return res.status(200).send({
-                    status: 200,
-                    message: "Password UPDATED is successful",
-                    successData: {
-                        user: user[1].dataValues
+                Vehicla_reg.findOne({
+                    where: {
+                        driver_id: user[1].dataValues.id
                     }
+                }).then(vehicle_info => {
+                    Vehicle.findOne({
+                        where: {
+                            vehicle_type: vehicle_info.dataValues.vehicle_type
+                        }
+                    }).then(vehicle_charges => {
+                        vehicle_info.dataValues.service = vehicle_charges.dataValues.service;
+                        vehicle_info.dataValues.distance = vehicle_charges.dataValues.distance;
+                        vehicle_info.dataValues.time = vehicle_charges.dataValues.time;
+                
+
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Password UPDATED is successful",
+                            successData: {
+                                user: user[1].dataValues,
+                                vehicle:vehicle_info
+                            }
+                        });
+                    }).catch(err => {
+                        return res.status(200).send({
+                            status: 400,
+                            message: "error from get vehicle information " + err.message,
+                            successData: {}
+                        });
+                    });
+
+                }).catch(err => {
+                    return res.status(200).send({
+                        status: 400,
+                        message: "error from get vehicle information " + err.message,
+                        successData: {}
+                    });
                 });
             } else {
                 return res.status(200).send({
