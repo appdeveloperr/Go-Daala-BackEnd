@@ -313,6 +313,7 @@ exports.signin = (req, res) => {
 
                     delete user[1].dataValues.password;       
                     user[1].dataValues.accessToken = token;
+
                     Vehicla_reg.findOne({
                         where:{
                             driver_id:user[1].dataValues.id
@@ -323,13 +324,16 @@ exports.signin = (req, res) => {
                                 vehicle_type:vehicle_info.dataValues.vehicle_type
                             }
                         }).then(vehicle_charges=>{
+                            vehicle_info.dataValues.service=vehicle_charges.dataValues.service;
+                            vehicle_info.dataValues.distance = vehicle_charges.dataValues.distance;
+                            vehicle_info.dataValues.time = vehicle_charges.dataValues.time;
+    console.log(vehicle_info);
                             return res.status(200).send({
                                 status: 200,
                                 message: "Login Successfull.",
                                 successData: {
                                     user: user[1],
-                                    vehicle_info:vehicle_info,
-                                    vehicle_charges:vehicle_charges.dataValues
+                                    vehicle:vehicle_info
                                 }
         
                             });
