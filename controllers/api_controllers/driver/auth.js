@@ -2,7 +2,7 @@ const db = require("../../../models/api_models");
 const config = require("../../../config/auth.config");
 const Driver = db.driver;
 const Vehicla_reg = db.vehicle_reg;
-
+const Vehicle = db.vehicle;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require('fs');
@@ -318,15 +318,29 @@ exports.signin = (req, res) => {
                             driver_id:user[1].dataValues.id
                         }
                     }).then(vehicle_info=>{
-                        return res.status(200).send({
-                            status: 200,
-                            message: "Login Successfull.",
-                            successData: {
-                                user: user[1],
-                                vehicle_info:vehicle_info
+                        Vehicle.findOne({
+                            where:{
+                                vehicle_type:vehicle_info.dataValues.vehicle_type
                             }
-    
+                        }).then(vehicle_charges=>{
+                            return res.status(200).send({
+                                status: 200,
+                                message: "Login Successfull.",
+                                successData: {
+                                    user: user[1],
+                                    vehicle_info:vehicle_info,
+                                    vehicle_charges:vehicle_charges.dataValues
+                                }
+        
+                            });
+                        }).catch(err => {
+                            return res.status(200).send({
+                                status: 400,
+                                message: "error from get vehicle information "+err.message,
+                                successData: {}
+                            });
                         });
+                       
                     }).catch(err => {
                         return res.status(200).send({
                             status: 400,
