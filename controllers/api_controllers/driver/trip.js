@@ -149,61 +149,61 @@ exports.receive_trip = (req, res, next) => {
 }
 
 //--------------driver fair_calculation  trip---------------
-exports.fair_calculation = (req, res)=>{
-req.checkBody('description','description must have needed!').notEmpty();
-req.checkBody('total_cost','total_cost must have needed!').notEmpty();
-req.checkBody('trip_id', 'please provide trip id!').notEmpty();
-var errors = req.validationErrors();
-if (errors) {                    //////////------input text validation error
-    return res.status(200).send({
-        status: 400,
-        message: "validation error in fair calculation Trip",
-        successData: {
-            error: {
-                error: errors
-            }
-        }
-    });
-} else {
-
-    Trip.update({
-        description: req.body.description,
-        total_cost:req.body.total_cost
-
-    },
-        {
-            where: { id: req.body.trip_id },
-            returning: true,
-            plain: true
-        }).then(trip => {
-
-            return res.status(200).send({
-                status: 200,
-                message: "fair calculation is successfully",
-                successData: {
-                    trip: trip[1]
+exports.fair_calculation = (req, res) => {
+    req.checkBody('description', 'description must have needed!').notEmpty();
+    req.checkBody('total_cost', 'total_cost must have needed!').notEmpty();
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in fair calculation Trip",
+            successData: {
+                error: {
+                    error: errors
                 }
-            });
-
-        }).catch(err => {
-
-            return res.status(200).send({
-                status: 400,
-                message: "error in fair calculations apis:"+err.message,
-                successData: {}
-            });
-
+            }
         });
+    } else {
+
+        Trip.update({
+            description: req.body.description,
+            total_cost: req.body.total_cost
+
+        },
+            {
+                where: { id: req.body.trip_id },
+                returning: true,
+                plain: true
+            }).then(trip => {
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "fair calculation is successfully",
+                    successData: {
+                        trip: trip[1]
+                    }
+                });
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: "error in fair calculations apis:" + err.message,
+                    successData: {}
+                });
+
+            });
 
 
-}
+    }
 
 
 
 }
 
 //--------------driver trip_detail  trip---------------
-exports.trip_detail = (req, res)=>{
+exports.trip_detail = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -217,40 +217,58 @@ exports.trip_detail = (req, res)=>{
             }
         });
     } else {
-    
+
         Trip.findOne(
             {
-                where: 
-                { id: req.body.trip_id }
+                where:
+                    { id: req.body.trip_id }
             }).then(trip => {
-    
-                return res.status(200).send({
-                    status: 200,
-                    message: "trip detail is successfully",
-                    successData: {
-                        trip: trip.dataValues
+                Vendor.findOne({
+                    where: {
+                        id: trip.dataValues.vendor_id
                     }
+                }).then(vendor_info => {
+                    delete vendor_info.dataValues.password;
+                    return res.status(200).send({
+                        status: 200,
+                        message: "trip detail is successfully",
+                        successData: {
+                            trip: trip.dataValues,
+                            vendor: vendor_info.dataValues
+                        }
+                    });
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: "error in trip detail apis:" + err.message,
+                        successData: {}
+                    });
+
                 });
-    
+
+
+
+
             }).catch(err => {
-    
+
                 return res.status(200).send({
                     status: 400,
-                    message: "error in trip detail apis:"+err.message,
+                    message: "error in trip detail apis:" + err.message,
                     successData: {}
                 });
-    
+
             });
-    
-    
-    }
-    
-    
-    
+
+
     }
 
 
-    
+
+}
+
+
+
 //--------------driver cencal trip---------------
 exports.cencal_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
@@ -412,20 +430,20 @@ exports.start_trip = (req, res) => {
 
                 myarray.push(try_to_parse(req.body.vendor_fcm));
                 myarray.push(try_to_parse(req.body.driver_fcm));
-        
+
                 var payload = {
                     notification: {
                         title: "Start trip",
                         body: ""
                     }
                 };
-        
+
                 var options = {
                     priority: "high",
                     timeToLive: 60 * 60 * 24
                 };
-        
-        
+
+
                 admin.messaging().sendToDevice(myarray, payload, options)
                     .then(function (response) {
                         console.log("Successfully sent message:", response);
@@ -448,8 +466,8 @@ exports.start_trip = (req, res) => {
                                     driver_id: trip[1].driver_id,
                                     vendor_id: trip[1].vendor_id,
                                     status: trip[1].status
-        
-        
+
+
                                 }
                             }
                         });
@@ -460,10 +478,10 @@ exports.start_trip = (req, res) => {
                             responsecode: 400,
                             notification: response.results[0]
                         })
-        
+
                     });
 
-             
+
 
             }).catch(err => {
 
@@ -625,25 +643,25 @@ exports.get_all_trips = (req, res) => {
                 driver_id: req.body.driver_id
             },
             order: [
-              ['id', 'DESC'],
+                ['id', 'DESC'],
             ],
         }).then(trip => {
-            if(trip==null || trip==''){
+            if (trip == null || trip == '') {
                 return res.status(200).send({
                     status: 400,
                     message: "All trips was not found in DB!",
                     successData: {
                     }
                 });
-            }else{
-            return res.status(200).send({
-                status: 200,
-                message: "Get driver   all  Trip ",
-                successData: {
-                    trip_list:trip   
-                }
-            });
-        }
+            } else {
+                return res.status(200).send({
+                    status: 200,
+                    message: "Get driver   all  Trip ",
+                    successData: {
+                        trip_list: trip
+                    }
+                });
+            }
         }).catch(err => {
 
             return res.status(200).send({
@@ -680,7 +698,7 @@ exports.all_cancel_trip = (req, res) => {
                 status: "cencal"
             },
             order: [
-              ['id', 'DESC'],
+                ['id', 'DESC'],
             ],
         }).then(trip => {
             if (trip != null || trip != '') {

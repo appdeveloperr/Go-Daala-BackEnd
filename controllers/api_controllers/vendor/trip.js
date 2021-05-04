@@ -858,15 +858,41 @@ exports.trip_detail = (req, res) => {
                 where:
                     { id: req.body.trip_id }
             }).then(trip => {
+                if (trip.dataValues.driver_id == null || trip.dataValues.driver_id == '') {
 
-                return res.status(200).send({
-                    status: 200,
-                    message: "trip detail is successfully",
-                    successData: {
-                        trip: trip.dataValues
-                    }
-                });
+                    return res.status(200).send({
+                        status: 200,
+                        message: "trip detail is successfully",
+                        successData: {
+                            trip: trip.dataValues,
+                            driver: ''
+                        }
+                    });
+                } else {
+                    Driver.findOne({
+                        where: {
+                            id: trip.dataValues.driver_id
+                        }
+                    }).then(driver_info => {
+                        return res.status(200).send({
+                            status: 200,
+                            message: "trip detail is successfully",
+                            successData: {
+                                trip: trip.dataValues,
+                                driver: driver_info.dataValues
+                            }
+                        });
+                    }).catch(err => {
 
+                        return res.status(200).send({
+                            status: 400,
+                            message: "error in trip detail apis:" + err.message,
+                            successData: {}
+                        });
+        
+                    });
+
+                }
             }).catch(err => {
 
                 return res.status(200).send({
