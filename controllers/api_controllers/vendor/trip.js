@@ -9,7 +9,7 @@ var path = require('path');
 const Op = db.Sequelize.Op;
 var admin = require("../../../config/fcm_init").isFcm;
 
-const { user } = require("../../../models/api_models");
+const { user, driver } = require("../../../models/api_models");
 
 
 //--------------vendor create trip---------------
@@ -856,7 +856,10 @@ exports.trip_detail = (req, res) => {
         Trip.findOne(
             {
                 where:
-                    { id: req.body.trip_id }
+                    { id: req.body.trip_id },
+                include: [{// Notice `include` takes an ARRAY
+                    model: driver
+                }]
             }).then(trip => {
                 if (trip.dataValues.driver_id == null || trip.dataValues.driver_id == '') {
 
@@ -889,7 +892,7 @@ exports.trip_detail = (req, res) => {
                             message: "error in trip detail apis:" + err.message,
                             successData: {}
                         });
-        
+
                     });
 
                 }
