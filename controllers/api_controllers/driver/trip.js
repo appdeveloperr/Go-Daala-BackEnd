@@ -201,6 +201,56 @@ if (errors) {                    //////////------input text validation error
 
 
 }
+
+//--------------driver trip_detail  trip---------------
+exports.trip_detail = (req, res)=>{
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in trip detail",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+    
+        Trip.findOne(
+            {
+                where: 
+                { id: req.body.trip_id }
+            }).then(trip => {
+    
+                return res.status(200).send({
+                    status: 200,
+                    message: "trip detail is successfully",
+                    successData: {
+                        trip: trip.dataValues
+                    }
+                });
+    
+            }).catch(err => {
+    
+                return res.status(200).send({
+                    status: 400,
+                    message: "error in trip detail apis:"+err.message,
+                    successData: {}
+                });
+    
+            });
+    
+    
+    }
+    
+    
+    
+    }
+
+
+    
 //--------------driver cencal trip---------------
 exports.cencal_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();

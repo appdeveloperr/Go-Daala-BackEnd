@@ -46,6 +46,12 @@ module.exports = function (app) {
         controller.fair_calculation
     )
 
+  //------------vendor trip_detail  trip Function----------------
+  app.post(
+    "/api/vendor/trip-detail",
+    vendorAuthJwt.verifyToken,
+    controller.trip_detail
+)
 
    
 

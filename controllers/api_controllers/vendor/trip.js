@@ -83,7 +83,7 @@ exports.create_trip = (req, res) => {
                                 where:
                                     { status: "available" }
                             }).then(function (Loc) {
-        
+
                                 if (Loc != null || Loc != '') {
                                     for (var i = 0; i < Loc.length; i++) {
                                         spacific_Vehicle.forEach(spacific_vehi => {
@@ -91,13 +91,13 @@ exports.create_trip = (req, res) => {
                                                 var checkPoint = { lat: Loc[i].latitude, lng: Loc[i].longitude };
                                                 var n = arePointsNear(checkPoint, centerPoint, 5);
                                                 if (n == true && Loc[i].dataValues.driver_id != null) {
-                                                    
+
                                                     obj.push(Loc[i].dataValues);
                                                 }
                                             }
                                         });
                                     }
-                                  
+
 
                                     var unit = "K";
                                     for (var i = 0; i < obj.length; i++) {
@@ -107,16 +107,16 @@ exports.create_trip = (req, res) => {
                                                 obj[i].distance = n;
                                                 obj[i].fcm_token = driv.fcm_token;
                                                 obj2.push(obj[i]);
-                    
+
                                             }
                                         });
                                     }
-                                   
+
                                     obj2.sort(function (a, b) {
                                         var alc = a.distance, blc = b.distance;
                                         return alc > blc ? 1 : alc < blc ? -1 : 0;
                                     });
-   
+
                                     console.log("Total drivers:" + obj2.length);
                                     console.log("trip id :" + trip.id);
                                     if (obj2.length > 0) {
@@ -542,7 +542,7 @@ exports.get_all_trips = (req, res) => {
                 vendor_id: req.body.vendor_id
             },
             order: [
-              ['id', 'DESC'],
+                ['id', 'DESC'],
             ],
         }).then(trip => {
             if (trip != null || trip != '') {
@@ -550,8 +550,8 @@ exports.get_all_trips = (req, res) => {
                     status: 200,
                     message: "Get vendor all  Trip",
                     successData: {
-                         trips: trip
-                        
+                        trips: trip
+
                     }
                 });
             } else {
@@ -599,7 +599,7 @@ exports.all_cancel_trip = (req, res) => {
                 status: "cencal"
             },
             order: [
-              ['id', 'DESC'],
+                ['id', 'DESC'],
             ],
         }).then(trip => {
             if (trip != null || trip != '') {
@@ -665,11 +665,11 @@ exports.all_ongoing_trip = (req, res) => {
                     {
                         status: "wait"
                     }
-                    
+
                 ]
             },
             order: [
-              ['id', 'DESC'],
+                ['id', 'DESC'],
             ],
         }).then(trip => {
             if (trip != null || trip != '') {
@@ -732,7 +732,7 @@ exports.cancel_trip = (req, res) => {
         },
             {
                 where: { id: req.body.trip_id },
-                
+
                 returning: true,
                 plain: true
             }).then(trip => {
@@ -741,7 +741,7 @@ exports.cancel_trip = (req, res) => {
                     vendor_id: req.body.vender_id,
                     driver_id: null
                 }).then(can_trip => {
-                 
+
                     driver_lat_long.update({
                         status: "available"
                     }, {
@@ -753,20 +753,20 @@ exports.cancel_trip = (req, res) => {
 
                         myarray.push(try_to_parse(req.body.vendor_fcm));
                         myarray.push(try_to_parse(req.body.driver_fcm));
-                
+
                         var payload = {
                             notification: {
                                 title: "Vendor  Cancel Trip",
                                 body: ""
                             }
                         };
-                
+
                         var options = {
                             priority: "high",
                             timeToLive: 60 * 60 * 24
                         };
-                
-                
+
+
                         admin.messaging().sendToDevice(myarray, payload, options)
                             .then(function (response) {
                                 console.log("Successfully sent message:", response);
@@ -787,8 +787,8 @@ exports.cancel_trip = (req, res) => {
                                             driver_id: trip[1].driver_id,
                                             vendor_id: trip[1].vendor_id,
                                             status: trip[1].status
-        
-        
+
+
                                         }
                                     }
                                 });
@@ -799,10 +799,10 @@ exports.cancel_trip = (req, res) => {
                                     responsecode: 400,
                                     notification: response.results[0]
                                 })
-                
+
                             });
 
-                     
+
                     }).catch(err => {
 
                         return res.status(200).send({
@@ -837,8 +837,55 @@ exports.cancel_trip = (req, res) => {
 }
 
 
- //--------------vendor fair_calculation  trip---------------
- exports.fair_calculation = (req, res) => {
+//--------------vendor trip_detail  trip---------------
+exports.trip_detail = (req, res) => {
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in trip detail",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+
+        Trip.findOne(
+            {
+                where:
+                    { id: req.body.trip_id }
+            }).then(trip => {
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "trip detail is successfully",
+                    successData: {
+                        trip: trip.dataValues
+                    }
+                });
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: "error in trip detail apis:" + err.message,
+                    successData: {}
+                });
+
+            });
+
+
+    }
+
+
+
+}
+
+//--------------vendor fair_calculation  trip---------------
+exports.fair_calculation = (req, res) => {
     req.checkBody('description', 'description must have needed!').notEmpty();
     req.checkBody('total_cost', 'total_cost must have needed!').notEmpty();
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
