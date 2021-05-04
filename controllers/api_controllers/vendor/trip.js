@@ -9,7 +9,7 @@ var path = require('path');
 const Op = db.Sequelize.Op;
 var admin = require("../../../config/fcm_init").isFcm;
 
-const { user, driver } = require("../../../models/api_models");
+const { user, driver, vendor } = require("../../../models/api_models");
 
 
 //--------------vendor create trip---------------
@@ -857,9 +857,14 @@ exports.trip_detail = (req, res) => {
             {
                 where:
                     { id: req.body.trip_id },
-                include: [{// Notice `include` takes an ARRAY
-                    model: driver
-                }]
+                include: [
+                    {
+                        model: driver
+                    },
+                    {
+                        model: vendor
+                    }
+                ]
             }).then(trip => {
                 if (trip.dataValues.driver_id == null || trip.dataValues.driver_id == '') {
 
