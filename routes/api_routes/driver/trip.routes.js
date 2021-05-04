@@ -25,7 +25,7 @@ module.exports = function (app) {
 
     app.post(
         "/api/driver/fair-calculation",
-        driverAuthJwt.verifyToken,
+       // driverAuthJwt.verifyToken,
         controller.fair_calculation
     )
     //------------driver cencal trip Function----------------
