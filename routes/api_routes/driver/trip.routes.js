@@ -22,6 +22,12 @@ module.exports = function (app) {
         controller.receive_trip
     );
 
+
+    app.post(
+        "/api/driver/fair-calculation",
+        driverAuthJwt.verifyToken,
+        controller.fair_calculation
+    )
     //------------driver cencal trip Function----------------
     app.post(
         "/api/driver/cencal-trip",

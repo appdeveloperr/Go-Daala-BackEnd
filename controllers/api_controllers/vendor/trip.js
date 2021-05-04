@@ -835,3 +835,58 @@ exports.cancel_trip = (req, res) => {
 
     }
 }
+
+
+ //--------------vendor fair_calculation  trip---------------
+ exports.fair_calculation = (req, res) => {
+    req.checkBody('description', 'description must have needed!').notEmpty();
+    req.checkBody('total_cost', 'total_cost must have needed!').notEmpty();
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in fair calculation Trip",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+
+        Trip.update({
+            description: req.body.description,
+            total_cost: req.body.total_cost
+
+        },
+            {
+                where: { id: req.body.trip_id },
+                returning: true,
+                plain: true
+            }).then(trip => {
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "fair calculation is successfully",
+                    successData: {
+                        trip: trip[1]
+                    }
+                });
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: "error in fair calculations apis:" + err.message,
+                    successData: {}
+                });
+
+            });
+
+
+    }
+
+
+
+}
