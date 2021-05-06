@@ -954,12 +954,11 @@ exports.trip_share = (req, res) => {
 
                 admin.messaging().sendToDevice(try_to_parse(user.dataValues.fcm_token), payload, options)
                     .then(function (response) {
-                        console.log("Successfully sent message:", response);
+                        console.log("FCM Successfully sent message:");
                         return res.status(200).send({
                             status: 200,
                             message: "Successfully sent message",
                             successData: {
-                                user: user.dataValues
                             }
                         });
 
@@ -975,6 +974,12 @@ exports.trip_share = (req, res) => {
 
 
 
+            }else{
+                return res.status(200).send({
+                    status: 400,
+                    message: "This user phone number is not register",
+                    successData: {}
+                });  
             }
         }).catch(err => {
             console.log('track 1 ');
