@@ -930,8 +930,7 @@ exports.trip_share = (req, res) => {
                 }).then(user => {
 
                         if (user) {
-                        
-                            console.log(user.dataValues);
+                        console.log("this is fcm : "+user.dataValues.fcm_token);
                             var payload = {
                                 notification: {
                                     title: "trip_id",
