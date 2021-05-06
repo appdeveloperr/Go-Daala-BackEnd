@@ -947,6 +947,13 @@ exports.trip_share = (req, res) => {
                             admin.messaging().sendToDevice(try_to_parse(user.dataValues.fcm_token), payload, options)
                             .then(function (response) {
                                 console.log("Successfully sent message:", response);
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: "Successfully sent message",
+                                    successData: {
+                                        user:user.dataValues
+                                    }
+                                });
 
                             })
                             .catch(function (error) {
@@ -961,8 +968,7 @@ exports.trip_share = (req, res) => {
                          
 
                         }
-                    })
-                    .catch(err => {
+                    }).catch(err => {
                         console.log('track 1 ');
                         return res.status(200).send({
                             status: 400,
