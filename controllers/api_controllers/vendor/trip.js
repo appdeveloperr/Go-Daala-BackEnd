@@ -2,13 +2,14 @@ const db = require("../../../models/api_models");
 const Trip = db.trip;
 const driver_lat_long = db.driver_lat_long;
 var Driver = db.driver;
+var Vendor = db.vendor;
 const Cancel_trip = db.cancel_trip;
 var Vehicle = db.vehicle_reg;
 var fs = require('fs');
 var path = require('path');
 const Op = db.Sequelize.Op;
 var admin = require("../../../config/fcm_init").isFcm;
-
+const axios = require('axios');
 const { user, driver, vendor } = require("../../../models/api_models");
 
 
@@ -53,10 +54,10 @@ exports.create_trip = (req, res) => {
             total_cost: req.body.total_cost,
             driver_id: null,
             vendor_id: req.body.vendor_id,
-            status: 'wait'
+            status: 'wait',
+            description: ""
 
-        }).then(function (trip) {
-
+        }).then(trip => {
             var obj = new Array();
             var obj2 = new Array();
 
@@ -216,6 +217,7 @@ exports.create_trip = (req, res) => {
                                                                             }
                                                                         });
                                                                     }).catch(err => {
+                                                                        console.log("track 1");
                                                                         return res.status(200).send({
                                                                             status: 400,
                                                                             message: err.message,
@@ -226,6 +228,7 @@ exports.create_trip = (req, res) => {
 
 
                                                                 }).catch(err => {
+                                                                    console.log("track 2");
                                                                     return res.status(200).send({
                                                                         status: 400,
                                                                         message: err.message,
@@ -242,6 +245,7 @@ exports.create_trip = (req, res) => {
 
                                                             }
                                                         }).catch(err => {
+                                                            console.log("track 3");
                                                             return res.status(200).send({
                                                                 status: 400,
                                                                 message: err.message,
@@ -278,6 +282,7 @@ exports.create_trip = (req, res) => {
 
 
                                                                 }).catch(err => {
+                                                                    console.log("track 4");
                                                                     return res.status(200).send({
                                                                         status: 400,
                                                                         message: err.message,
@@ -336,6 +341,7 @@ exports.create_trip = (req, res) => {
                                                                         });
 
                                                                     }).catch(err => {
+                                                                        console.log("track 5");
                                                                         return res.status(200).send({
                                                                             status: 400,
                                                                             message: err.message,
@@ -346,6 +352,7 @@ exports.create_trip = (req, res) => {
 
 
                                                                 }).catch(err => {
+                                                                    console.log("track 6");
                                                                     return res.status(200).send({
                                                                         status: 400,
                                                                         message: err.message,
@@ -381,7 +388,7 @@ exports.create_trip = (req, res) => {
                                     }
                                 }
                             }).catch(err => {
-
+                                console.log("track 7");
                                 return res.status(200).send({
                                     status: 400,
                                     message: err.message,
@@ -399,6 +406,7 @@ exports.create_trip = (req, res) => {
                         }
 
                     }).catch(err => {
+                        console.log("track 8");
                         return res.status(200).send({
                             status: 400,
                             message: err.message,
@@ -412,7 +420,7 @@ exports.create_trip = (req, res) => {
 
                 }
             }).catch(err => {
-
+                console.log("track 9");
                 return res.status(200).send({
                     status: 400,
                     message: err.message,
@@ -423,7 +431,7 @@ exports.create_trip = (req, res) => {
 
 
         }).catch(err => {
-
+            console.log("track 10");
             return res.status(200).send({
                 status: 400,
                 message: err.message,
@@ -860,47 +868,19 @@ exports.trip_detail = (req, res) => {
                 include: [
                     {
                         model: driver
-                    },
-                    {
-                        model: vendor
                     }
                 ]
             }).then(trip => {
-                if (trip.dataValues.driver_id == null || trip.dataValues.driver_id == '') {
+               
 
-                    return res.status(200).send({
-                        status: 200,
-                        message: "trip detail is successfully",
-                        successData: {
-                            trip: trip.dataValues,
-                            driver: ''
-                        }
-                    });
-                } else {
-                    Driver.findOne({
-                        where: {
-                            id: trip.dataValues.driver_id
-                        }
-                    }).then(driver_info => {
-                        return res.status(200).send({
-                            status: 200,
-                            message: "trip detail is successfully",
-                            successData: {
-                                trip: trip.dataValues,
-                                driver: driver_info.dataValues
-                            }
-                        });
-                    }).catch(err => {
+                return res.status(200).send({
+                    status: 200,
+                    message: "trip detail is successfully",
+                    successData: {
+                        trip: trip.dataValues
+                    }
+                });
 
-                        return res.status(200).send({
-                            status: 400,
-                            message: "error in trip detail apis:" + err.message,
-                            successData: {}
-                        });
-
-                    });
-
-                }
             }).catch(err => {
 
                 return res.status(200).send({
@@ -918,6 +898,100 @@ exports.trip_detail = (req, res) => {
 
 }
 
+
+//------------vendor share  trip to another person Function----------------
+exports.trip_share = (req, res) => {
+    req.checkBody('mobile_no', 'please provide mobile number!').notEmpty();
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in trip share",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        //------------------vendor Send message to another person for share trip ------------------------------------
+        var message = req.body.trip_id+"/" + req.body.mobile_no.toString() + "\n" + "Download App:  https://play.google.com/store/apps/details?id=com.techreneur.godaalavendor";
+        var messageData = "Track your trip by using following link: " + "\n" + " Track Your Trip : http://www.godaala.com/trip?trip_id=" + message;
+        var mobileno = req.body.mobile_no;
+
+        axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+            .then(response => {
+
+                Vendor.findOne({
+                    where: {
+                        phone_number: req.body.mobile_no
+                    }
+                })
+                    .then(user => {
+
+                        if (!user) {
+                            //User is not Exist 
+                            return res.status(200).send({
+                                status: 400,
+                                message: "This user phone number is not register in db but message was sent",
+                                successData: {}
+                            });
+
+                        } else {
+                            var payload = {
+                                notification: {
+                                    title: "trip_id",
+                                    body: req.body.trip.id.toString()
+                                }
+                            };
+
+                            var options = {
+                                priority: "high",
+                                timeToLive: 60 * 60 * 24
+                            };
+
+                            admin.messaging().sendToDevice(try_to_parse(user.dataValues.fcm_token), payload, options)
+                            .then(function (response) {
+                                console.log("Successfully sent message:", response);
+
+                            })
+                            .catch(function (error) {
+                                console.log("Error sending message:", error);
+                                return res.status(200).send({
+                                    responsecode: 400,
+                                    notification: response.results[0]
+                                })
+
+                            });
+
+                         
+
+                        }
+                    })
+                    .catch(err => {
+                        return res.status(200).send({
+                            status: 400,
+                            message: err
+                        });
+                    });
+
+                
+            })
+            .catch(error => {
+                return res.status(200).send({
+                    status: 400,
+                    message: error
+                });
+            });
+
+
+
+
+
+
+    }
+}
 //--------------vendor fair_calculation  trip---------------
 exports.fair_calculation = (req, res) => {
     req.checkBody('description', 'description must have needed!').notEmpty();

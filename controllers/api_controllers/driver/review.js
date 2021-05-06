@@ -24,7 +24,7 @@ exports.create_review = (req, res) => {
             }
         });
     } else {
-        var total_ratings =null;
+        var total_ratings = null;
         var total_reviews = null;
         // Save trips to Database
         Reviews.create({
@@ -41,13 +41,13 @@ exports.create_review = (req, res) => {
             }).then(vendor_rating => {
 
                 total_ratings = parseFloat(vendor_rating.total_rating);
-                 total_reviews = parseFloat(vendor_rating.total_review);
-               
+                total_reviews = parseFloat(vendor_rating.total_review);
+
                 total_ratings = total_ratings + parseFloat(req.body.rating);
                 total_reviews = total_reviews + 1;
 
-                console.log("this is total reviews of vendor: "+total_reviews);
-                console.log("this is total ratings of vendor: "+total_ratings);
+                console.log("this is total reviews of vendor: " + total_reviews);
+                console.log("this is total ratings of vendor: " + total_ratings);
 
                 Vendor.update({
                     total_rating: total_ratings,
@@ -134,42 +134,27 @@ exports.get_review = (req, res) => {
                 Trip.findOne({
                     where: {
                         id: req.body.trip_id
-                    }
+                    },
+                    include: [
+                        {
+                            model: db.vendor
+                        }
+                    ]
                 }).then(trip => {
                     if (trip != null || trip != '') {
-                        Vendor.findOne({
-                            where: {
-                                id: trip.dataValues.vendor_id
+                        delete trip.vendor.dataValues.password;
+                        return res.status(200).send({
+                            status: 200,
+                            message: "get driver reviews   is successful",
+                            successData: {
+                                reviews_list: {
+                                    review: reviews
+                                },
+                                trip: trip.dataValues
+
                             }
-                        }).then(vendor => {
-                            delete vendor.dataValues.password;
-                            delete vendor.dataValues.id;
-                            delete vendor.dataValues.account_info;
-                            delete vendor.dataValues.fcm_token;
-                 
+                        });
 
-                            return res.status(200).send({
-                                status: 200,
-                                message: "get driver reviews   is successful",
-                                successData: {
-                                    reviews_list: {
-                                        review: reviews
-                                    },
-                                    vendor: vendor.dataValues
-                                    ,
-                                    trip: trip.dataValues
-
-                                }
-                            });
-                        }).catch(err => {
-
-                            return res.status(200).send({
-                                status: 400,
-                                message: err.message,
-                                successData: {}
-                            });
-
-                        })
 
                     } else {
                         return res.status(200).send({
@@ -205,7 +190,7 @@ exports.get_review = (req, res) => {
                                 delete vendor.dataValues.id;
                                 delete vendor.dataValues.account_info;
                                 delete vendor.dataValues.fcm_token;
-                               
+
                                 // delete vendor.dataValues.phone_number;
 
                                 Trip.findOne({
@@ -263,42 +248,32 @@ exports.get_review = (req, res) => {
                 Trip.findOne({
                     where: {
                         id: req.body.trip_id
-                    }
+                    },
+                    include: [
+                        {
+                            model: db.vendor
+                        }
+                    ]
                 }).then(trip => {
                     if (trip != null || trip != '') {
-                        Vendor.findOne({
-                            where: {
-                                id: trip.dataValues.vendor_id
+
+                        delete trip.vendor.dataValues.password;
+
+
+
+                        return res.status(200).send({
+                            status: 200,
+                            message: "get driver reviews   is successful",
+                            successData: {
+                                reviews_list: {
+                                    review: reviews
+                                },
+
+                                trip: trip.dataValues
+
                             }
-                        }).then(vendor => {
-                            delete vendor.dataValues.password;
-                            delete vendor.dataValues.id;
-                            delete vendor.dataValues.account_info;
-                            delete vendor.dataValues.fcm_token;
+                        });
 
-
-                            return res.status(200).send({
-                                status: 200,
-                                message: "get driver reviews   is successful",
-                                successData: {
-                                    reviews_list: {
-                                        review: reviews
-                                    },
-                                    vendor: vendor.dataValues
-                                    ,
-                                    trip: trip.dataValues
-
-                                }
-                            });
-                        }).catch(err => {
-
-                            return res.status(200).send({
-                                status: 400,
-                                message: err.message,
-                                successData: {}
-                            });
-
-                        })
 
                     } else {
                         return res.status(200).send({

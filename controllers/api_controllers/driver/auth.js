@@ -307,8 +307,8 @@ exports.signin = (req, res) => {
                         where: { id: user.id },
                         returning: true,
                         plain: true
-
-                    },
+                     
+                    },  
                 ).then(user => {
 
                     delete user[1].dataValues.password;
@@ -318,6 +318,7 @@ exports.signin = (req, res) => {
                         where: {
                             driver_id: user[1].dataValues.id
                         }
+
                     }).then(vehicle_info => {
                         Vehicle.findOne({
                             where: {

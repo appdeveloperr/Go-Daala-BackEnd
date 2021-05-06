@@ -35,25 +35,31 @@ module.exports = function (app) {
     //--------------vendor recent all trip---------------------------//get_all_trips
     app.post(
         "/api/vendor/get-all-trips",
-        vendorAuthJwt.verifyToken, controller.get_all_trips,
+      //  vendorAuthJwt.verifyToken,
+         controller.get_all_trips,
     );
 
 
     //--------------vendor fair_calculation  trip---------------
     app.post(
         "/api/vendor/fair-calculation",
-        vendorAuthJwt.verifyToken,
+       // vendorAuthJwt.verifyToken,
         controller.fair_calculation
     )
 
   //------------vendor trip_detail  trip Function----------------
   app.post(
     "/api/vendor/trip-detail",
-    vendorAuthJwt.verifyToken,
+    //vendorAuthJwt.verifyToken,
     controller.trip_detail
 )
 
-   
+  //------------vendor share trip to another person Function----------------
+   app.post(
+       "/api/vendor/trip-share",
+        vendorAuthJwt.verifyToken,
+       controller.trip_share
+   )
 
     //------------vendor cencal trip Function----------------
     app.post(

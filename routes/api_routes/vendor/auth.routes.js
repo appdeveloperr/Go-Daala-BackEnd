@@ -32,7 +32,7 @@ module.exports = function (app) {
 
     app.post("/api/vendor/signin", controller.signin);
     app.post('/api/vendor/update-profile',
-        vendorAuthJwt.verifyToken,
+       // vendorAuthJwt.verifyToken,
         controller.update);
 
 

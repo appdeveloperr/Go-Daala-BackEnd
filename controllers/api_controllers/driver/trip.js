@@ -221,31 +221,25 @@ exports.trip_detail = (req, res) => {
         Trip.findOne(
             {
                 where:
-                    { id: req.body.trip_id }
-            }).then(trip => {
-                Vendor.findOne({
-                    where: {
-                        id: trip.dataValues.vendor_id
-                    }
-                }).then(vendor_info => {
-                    delete vendor_info.dataValues.password;
-                    return res.status(200).send({
-                        status: 200,
-                        message: "trip detail is successfully",
-                        successData: {
-                            trip: trip.dataValues,
-                            vendor: vendor_info.dataValues
+                    { id: req.body.trip_id },
+                    include: [
+                      
+                        {
+                            model: db.vendor
                         }
-                    });
-                }).catch(err => {
+                    ]
+            }).then(trip => {
 
-                    return res.status(200).send({
-                        status: 400,
-                        message: "error in trip detail apis:" + err.message,
-                        successData: {}
-                    });
 
+                //  delete trip.vendor.dataValues.password;
+                return res.status(200).send({
+                    status: 200,
+                    message: "trip detail is successfully",
+                    successData: {
+                        trip: trip.dataValues 
+                    }
                 });
+
 
 
 

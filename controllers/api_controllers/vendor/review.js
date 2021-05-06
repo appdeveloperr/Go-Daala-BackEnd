@@ -123,53 +123,41 @@ exports.get_review = (req, res) => {
 
         Reviews.findAll({
             where: {
-                trip_id: req.body.trip_id,
+                trip_id: req.body.trip_id
             }
         }).then(reviews => {
-
             if (reviews == null || reviews == '') {
 
                 Trip.findOne({
                     where: {
                         id: req.body.trip_id
-                    }
+
+                    },
+                    include: [
+                        {
+                            model: db.driver
+                        }
+                    ]
+
                 }).then(trip => {
-                    if (trip != null || trip != '') {
-                        Driver.findOne({
-                            where: {
-                                id: trip.dataValues.driver_id
+
+                    delete trip.driver.dataValues.password;
+                    if (trip != null || trip != '' ) {
+
+
+                        return res.status(200).send({
+                            status: 200,
+                            message: "get Vendor reviews   is successful",
+                            successData: {
+                                reviews_list: {
+                                    review: reviews
+                                },
+
+                                trip: trip.dataValues
+
                             }
-                        }).then(driver => {
-                            delete driver.dataValues.password;
-                            delete driver.dataValues.id;
-                            delete driver.dataValues.account_info;
-                            delete driver.dataValues.fcm_token;
-                            delete driver.dataValues.createdAt;
-                            delete driver.dataValues.updatedAt;
-                            delete driver.dataValues.phone_number;
+                        });
 
-                            return res.status(200).send({
-                                status: 200,
-                                message: "get Vendor reviews   is successful",
-                                successData: {
-                                    reviews_list: {
-                                        review: reviews
-                                    },
-                                    driver: driver.dataValues
-                                    ,
-                                    trip: trip.dataValues
-
-                                }
-                            });
-                        }).catch(err => {
-
-                            return res.status(200).send({
-                                status: 400,
-                                message: err.message,
-                                successData: {}
-                            });
-
-                        })
 
                     } else {
                         return res.status(200).send({
@@ -258,21 +246,17 @@ exports.get_review = (req, res) => {
                 Trip.findOne({
                     where: {
                         id: req.body.trip_id
-                    }
+                    },
+                    include:[
+                        {
+                            model: db.driver
+                        }
+                    ]
                 }).then(trip => {
                     if (trip != null || trip != '') {
-                        Driver.findOne({
-                            where: {
-                                id: trip.dataValues.driver_id
-                            }
-                        }).then(driver => {
-                            delete driver.dataValues.password;
-                            delete driver.dataValues.id;
-                            delete driver.dataValues.account_info;
-                            delete driver.dataValues.fcm_token;
-                            delete driver.dataValues.createdAt;
-                            delete driver.dataValues.updatedAt;
-                            delete driver.dataValues.phone_number;
+   
+                            delete trip.driver.dataValues.password;
+                           
 
                             return res.status(200).send({
                                 status: 200,
@@ -281,21 +265,11 @@ exports.get_review = (req, res) => {
                                     reviews_list: {
                                         review: reviews
                                     },
-                                    driver: driver.dataValues
-                                    ,
                                     trip: trip.dataValues
 
                                 }
                             });
-                        }).catch(err => {
-
-                            return res.status(200).send({
-                                status: 400,
-                                message: err.message,
-                                successData: {}
-                            });
-
-                        })
+                   
 
                     } else {
                         return res.status(200).send({

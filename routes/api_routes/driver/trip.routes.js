@@ -18,34 +18,34 @@ module.exports = function (app) {
     //------------driver receive trip Function----------------
     app.post(
         "/api/driver/receive-trip",
-         driverAuthJwt.verifyToken,
+         //driverAuthJwt.verifyToken,
         controller.receive_trip
     );
 
      //------------driver trip_detail  trip Function----------------
      app.post(
         "/api/driver/trip-detail",
-        driverAuthJwt.verifyToken,
+       // driverAuthJwt.verifyToken,
         controller.trip_detail
     )
 
   //------------driver fair-calculation  trip Function----------------
     app.post(
         "/api/driver/fair-calculation",
-        driverAuthJwt.verifyToken,
+       // driverAuthJwt.verifyToken,
         controller.fair_calculation
     )
     //------------driver cencal trip Function----------------
     app.post(
         "/api/driver/cencal-trip",
-        driverAuthJwt.verifyToken,
+       // driverAuthJwt.verifyToken,
         controller.cencal_trip,
     );
 
     //------------driver start trip Function----------------
     app.post(
         "/api/driver/start-trip",
-        driverAuthJwt.verifyToken,
+      //  driverAuthJwt.verifyToken,
         controller.start_trip,
     );
 
@@ -53,7 +53,7 @@ module.exports = function (app) {
     //------------driver end trip Function----------------
     app.post(
         "/api/driver/end-trip",
-        driverAuthJwt.verifyToken,
+      //  driverAuthJwt.verifyToken,
         controller.end_trip,
     );
 
