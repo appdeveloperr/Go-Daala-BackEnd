@@ -938,6 +938,7 @@ exports.trip_share = (req, res) => {
                             });
 
                         } else {
+                            console.log(user.dataValues);
                             var payload = {
                                 notification: {
                                     title: "trip_id",
