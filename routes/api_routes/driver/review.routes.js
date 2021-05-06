@@ -15,7 +15,6 @@ module.exports = function (app) {
     });
 
 
-
     app.post('/api/driver/review-create',
     // driverAuthJwt.verifyToken,
     controller.create_review

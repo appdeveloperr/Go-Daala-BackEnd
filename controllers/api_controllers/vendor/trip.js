@@ -930,7 +930,7 @@ exports.trip_share = (req, res) => {
                 })
                     .then(user => {
 
-                        if (!user) {
+                        if (user==null || user=="") {
                             //User is not Exist 
                             return res.status(200).send({
                                 status: 400,
@@ -972,7 +972,7 @@ exports.trip_share = (req, res) => {
                     .catch(err => {
                         return res.status(200).send({
                             status: 400,
-                            message: err
+                            message: "error in finding record in db for fcm_token: "+err
                         });
                     });
 
@@ -981,7 +981,7 @@ exports.trip_share = (req, res) => {
             .catch(error => {
                 return res.status(200).send({
                     status: 400,
-                    message: error
+                    message: "error in sending message: "+error
                 });
             });
 

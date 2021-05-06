@@ -221,7 +221,6 @@ exports.get_review = (req, res) => {
                                         });
                                     }
                                 }).catch(err => {
-
                                     return res.status(200).send({
                                         status: 400,
                                         message: err.message,
