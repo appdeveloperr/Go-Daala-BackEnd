@@ -930,13 +930,6 @@ exports.trip_share = (req, res) => {
                 }).then(user => {
 
                         if (user) {
-                            // //User is not Exist 
-                            // return res.status(200).send({
-                            //     status: 400,
-                            //     message: "This user phone number is not register",
-                            //     successData: {}
-                            // });
-
                         
                             console.log(user.dataValues);
                             var payload = {
@@ -970,6 +963,7 @@ exports.trip_share = (req, res) => {
                         }
                     })
                     .catch(err => {
+                        console.log('track 1 ');
                         return res.status(200).send({
                             status: 400,
                             message: "This user phone number is not register",
@@ -980,6 +974,7 @@ exports.trip_share = (req, res) => {
                 
             })
             .catch(error => {
+                console.log('track 2 ');
                 return res.status(200).send({
                     status: 400,
                     message: "error in sending message: "+error
