@@ -925,19 +925,19 @@ exports.trip_share = (req, res) => {
 
                 Vendor.findOne({
                     where: {
-                        phone_number: req.body.mobile_no
+                        phone_number: mobileno
                     }
                 }).then(user => {
 
-                        if (user==null || user=="") {
-                            //User is not Exist 
-                            return res.status(200).send({
-                                status: 400,
-                                message: "This user phone number is not register in db but message was sent",
-                                successData: {}
-                            });
+                        if (user) {
+                            // //User is not Exist 
+                            // return res.status(200).send({
+                            //     status: 400,
+                            //     message: "This user phone number is not register",
+                            //     successData: {}
+                            // });
 
-                        } else {
+                        
                             console.log(user.dataValues);
                             var payload = {
                                 notification: {
@@ -972,7 +972,7 @@ exports.trip_share = (req, res) => {
                     .catch(err => {
                         return res.status(200).send({
                             status: 400,
-                            message: "This user phone number is not register in db but message was sent",
+                            message: "This user phone number is not register",
                             successData: {}
                         });
                     });
