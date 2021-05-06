@@ -871,7 +871,7 @@ exports.trip_detail = (req, res) => {
                     }
                 ]
             }).then(trip => {
-               
+
 
                 return res.status(200).send({
                     status: 200,
@@ -916,74 +916,74 @@ exports.trip_share = (req, res) => {
         });
     } else {
         //------------------vendor Send message to another person for share trip ------------------------------------
-        var message = req.body.trip_id+"/" + req.body.mobile_no.toString() + "\n" + "Download App:  https://play.google.com/store/apps/details?id=com.techreneur.godaalavendor";
+        var message = req.body.trip_id + "/" + req.body.mobile_no.toString() + "\n" + "Download App:  https://play.google.com/store/apps/details?id=com.techreneur.godaalavendor";
         var messageData = "Track your trip by using following link: " + "\n" + " Track Your Trip : http://www.godaala.com/trip?trip_id=" + message;
         var mobileno = req.body.mobile_no;
 
         axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
             .then(response => {
-   console.log("massage sent is successfully"+response);
+                console.log("massage sent is successfully");
             })
             .catch(error => {
                 console.log('track 2 ');
                 return res.status(200).send({
                     status: 400,
-                    message: "error in sending message: "+error
+                    message: "error in sending message: " + error
                 });
             });
 
-            Vendor.findOne({
-                where: {
-                    phone_number: mobileno
-                }
-            }).then(user => {
+        Vendor.findOne({
+            where: {
+                phone_number: mobileno
+            }
+        }).then(user => {
 
-                    if (user) {
-                    console.log("this is fcm : "+user.dataValues.fcm_token);
-                        var payload = {
-                            notification: {
-                                title: "trip_id",
-                                body: req.body.trip.id.toString()
+            if (user) {
+                console.log("this is fcm : " + user.dataValues.fcm_token);
+                var payload = {
+                    notification: {
+                        title: "trip_id",
+                        body: req.body.trip.id.toString()
+                    }
+                };
+
+                var options = {
+                    priority: "high",
+                    timeToLive: 60 * 60 * 24
+                };
+
+                admin.messaging().sendToDevice(try_to_parse(user.dataValues.fcm_token), payload, options)
+                    .then(function (response) {
+                        console.log("Successfully sent message:", response);
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Successfully sent message",
+                            successData: {
+                                user: user.dataValues
                             }
-                        };
-
-                        var options = {
-                            priority: "high",
-                            timeToLive: 60 * 60 * 24
-                        };
-
-                        admin.messaging().sendToDevice(try_to_parse(user.dataValues.fcm_token), payload, options)
-                        .then(function (response) {
-                            console.log("Successfully sent message:", response);
-                            return res.status(200).send({
-                                status: 200,
-                                message: "Successfully sent message",
-                                successData: {
-                                    user:user.dataValues
-                                }
-                            });
-
-                        })
-                        .catch(function (error) {
-                            console.log("Error sending message:", error);
-                            return res.status(200).send({
-                                responsecode: 400,
-                                notification: response.results[0]
-                            })
-
                         });
 
-                     
+                    })
+                    .catch(function (error) {
+                        console.log("Error sending message:", error);
+                        return res.status(200).send({
+                            responsecode: 400,
+                            notification: response.results[0]
+                        })
 
-                    }
-                }).catch(err => {
-                    console.log('track 1 ');
-                    return res.status(200).send({
-                        status: 400,
-                        message: "This user phone number is not register",
-                        successData: {}
                     });
-                });
+
+
+
+            }
+        }).catch(err => {
+            console.log('track 1 ');
+            return res.status(200).send({
+                status: 400,
+                message: "This user phone number is not register",
+                successData: {}
+            });
+        });
 
 
 
