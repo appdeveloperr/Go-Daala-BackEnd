@@ -927,8 +927,7 @@ exports.trip_share = (req, res) => {
                     where: {
                         phone_number: req.body.mobile_no
                     }
-                })
-                    .then(user => {
+                }).then(user => {
 
                         if (user==null || user=="") {
                             //User is not Exist 
@@ -972,7 +971,8 @@ exports.trip_share = (req, res) => {
                     .catch(err => {
                         return res.status(200).send({
                             status: 400,
-                            message: "error in finding record in db for fcm_token: "+err
+                            message: "This user phone number is not register in db but message was sent",
+                            successData: {}
                         });
                     });
 
