@@ -763,6 +763,7 @@ exports.get_all_trips_with_cash = (req, res) => {
                     }
                 });
             } else {
+                console.log("this is total trips: "+trip);
                 var total_cash = 0;
                 trip.forEach(element => {
                     total_cash = total_cash + element.total_cost;
@@ -788,3 +789,74 @@ exports.get_all_trips_with_cash = (req, res) => {
     }
 
 }
+
+
+//--------------driver Get  all  Trip ---------------
+exports.get_selected_date_with_cash = (req, res) => {
+    req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
+    req.checkBody('start_date', 'start date must have ID!').notEmpty();
+    req.checkBody('end_date', 'end date must have ID!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in get all Trips",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save vendor to Database
+        Trip.findAndCountAll({
+            where: {
+                driver_id: req.body.driver_id,
+
+            },
+
+            where: {
+                createdAt: {
+                   [Op.between]: [startDate, endDate],
+                },
+              },
+              logging: console.log,
+              raw: true,
+              order: [['createdAt', 'DESC']],
+              // limit: count,
+            
+        }).then(trip => {
+            if (trip == null || trip == '') {
+                return res.status(200).send({
+                    status: 400,
+                    message: "Sorry no trip is here!",
+                    successData: {
+                    }
+                });
+            } else {
+                var total_cash = 0;
+                trip.forEach(element => {
+                    total_cash = total_cash + element.total_cost;
+                });
+                return res.status(200).send({
+                    status: 200,
+                    message: "Get driver   all  Trip ",
+                    successData: {
+                        total_trips: trip.count,
+                        total_cash: total_cash
+                    }
+                });
+            }
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+    }
+
+}
+
