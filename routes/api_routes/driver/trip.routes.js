@@ -83,8 +83,15 @@ module.exports = function (app) {
     );
 
 
+    
 
 
+    //------------driver get_selected_date_with_cash   Function----------------
+    app.post(
+        "/api/driver/get-selected-date-with-cash",
+        driverAuthJwt.verifyToken,
+        controller.get_selected_date_with_cash,
+    );
 
 };
 
