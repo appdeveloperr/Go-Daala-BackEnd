@@ -763,8 +763,6 @@ exports.get_all_trips_with_cash = (req, res) => {
                     }
                 });
             } else {
-                console.log("this is total trips: "+trip);
-                console.log("this is total trips: "+trip.count);
                 var total_cash = 0;
                 var total_trips = 0;
                 trip.forEach(element => {
