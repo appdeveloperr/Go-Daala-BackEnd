@@ -885,7 +885,7 @@ exports.get_single_date_with_cash = (req, res) => {
             where: {
                 driver_id: req.body.driver_id,
                 createdAt: {
-                    [Op.between]: [req.body.Date, req.body.Date+"23:59:59"],
+                    [Op.between]: [req.body.Date, req.body.Date+' 23:59:59.000 +00:00'],
                 }
              }
             //,
