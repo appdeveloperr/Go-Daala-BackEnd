@@ -6,6 +6,7 @@ var Vendor = db.vendor;
 var Cancel_trip = db.cancel_trip;
 var Trip = db.trip;
 var admin = require("../../../config/fcm_init").isFcm;
+var Sequelize = require('sequelize');
 const Op = db.Sequelize.Op;
 //--------------driver receive trip---------------
 exports.receive_trip = (req, res, next) => {
