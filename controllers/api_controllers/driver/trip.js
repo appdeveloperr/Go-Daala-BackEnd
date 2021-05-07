@@ -774,7 +774,7 @@ exports.get_all_trips_with_cash = (req, res) => {
                     status: 200,
                     message: "Get driver   all  Trips with cash ",
                     successData: {
-                        total_trips:total_trips,
+                        total_trips: total_trips,
                         total_cash: total_cash
                     }
                 });
@@ -812,15 +812,15 @@ exports.get_selected_date_with_cash = (req, res) => {
     } else {
         // Save vendor to Database
         Trip.findAll({
-           where: {
+            where: {
                 driver_id: req.body.driver_id,
                 createdAt: {
-                   [Op.between]: [req.body.start, req.body.end],
+                    [Op.between]: [req.body.start, req.body.end],
                 },
-              },
-              order: [['createdAt', 'ASC']],
-              // limit: count,
-            
+            },
+            order: [['createdAt', 'ASC']],
+            // limit: count,
+
         }).then(trip => {
             if (trip == null || trip == '') {
                 return res.status(200).send({
@@ -840,8 +840,10 @@ exports.get_selected_date_with_cash = (req, res) => {
                     status: 200,
                     message: "Get driver date from to date Trip with cash",
                     successData: {
-                        total_trips:total_trips,
-                        total_cash: total_cash
+                        dash_board_detail: {
+                            total_trips: total_trips,
+                            total_cash: total_cash
+                        }
                     }
                 });
             }
@@ -877,13 +879,15 @@ exports.get_single_date_with_cash = (req, res) => {
     } else {
         // Save vendor to Database
         Trip.findAll({
-           where: {
+            where: {
                 driver_id: req.body.driver_id,
-                createdAt: req.body.date,
-              },
-              order: [['createdAt', 'ASC']],
-              // limit: count,
-            
+                createdAt: {
+                    [Op]: [req.body.date],
+                },
+            },
+            order: [['createdAt', 'ASC']],
+            // limit: count,
+
         }).then(trip => {
             if (trip == null || trip == '') {
                 return res.status(200).send({
@@ -903,8 +907,10 @@ exports.get_single_date_with_cash = (req, res) => {
                     status: 200,
                     message: "Get driver for single date Trip with cash",
                     successData: {
-                        total_trips:total_trips,
-                        total_cash: total_cash
+                        dash_board_single_detail: {
+                            total_trips: total_trips,
+                            total_cash: total_cash
+                        }
                     }
                 });
             }
