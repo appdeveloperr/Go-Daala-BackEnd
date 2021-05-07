@@ -887,8 +887,9 @@ exports.get_single_date_with_cash = (req, res) => {
                 createdAt: {
                     [Op.eq]: [req.body.Date],
                 }
-            },
-            order: [['createdAt', 'ASC']],
+             }
+            //,
+            // order: [['createdAt', 'ASC']],
             // limit: count,
 
         }).then(trip => {
