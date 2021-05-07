@@ -765,7 +765,7 @@ exports.cancel_trip = (req, res) => {
                         var payload = {
                             notification: {
                                 title: "Vendor  Cancel Trip",
-                                body: ""
+                                body: trip[1].id.toString()
                             }
                         };
 

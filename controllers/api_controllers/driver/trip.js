@@ -313,7 +313,7 @@ exports.cencal_trip = (req, res) => {
                         var payload = {
                             notification: {
                                 title: "Driver  Cancel  The Trip",
-                                body: ""
+                                body: trip[1].id.toString()
                             }
                         };
 
@@ -428,7 +428,7 @@ exports.start_trip = (req, res) => {
                 var payload = {
                     notification: {
                         title: "Start trip",
-                        body: ""
+                        body: trip[1].id.toString()
                     }
                 };
 
@@ -518,7 +518,7 @@ exports.end_trip = (req, res) => {
         var payload = {
             notification: {
                 title: "Completed trip",
-                body: ""
+                body: req.body.trip_id.toString()
             }
         };
 
