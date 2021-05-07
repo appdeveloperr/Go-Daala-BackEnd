@@ -732,7 +732,7 @@ exports.all_cancel_trip = (req, res) => {
 }
 
 
-//--------------driver Get  all  Trip ---------------
+//--------------driver get_all_trips_with_cash   Trip ---------------
 exports.get_all_trips_with_cash = (req, res) => {
     req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
     var errors = req.validationErrors();
@@ -793,16 +793,16 @@ exports.get_all_trips_with_cash = (req, res) => {
 }
 
 
-//--------------driver Get  all  Trip ---------------
+//--------------driver get_selected_date_with_cash  Trip ---------------
 exports.get_selected_date_with_cash = (req, res) => {
     req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
-    req.checkBody('start', 'start date must have ID!').notEmpty();
-    req.checkBody('end', 'end date must have ID!').notEmpty();
+    req.checkBody('start', 'start date must have required!').notEmpty();
+    req.checkBody('end', 'end date must have required!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
             status: 400,
-            message: "validation error in get all Trips",
+            message: "validation error in get_selected_date_with_cash",
             successData: {
                 error: {
                     error: errors
@@ -858,3 +858,66 @@ exports.get_selected_date_with_cash = (req, res) => {
 
 }
 
+
+
+//--------------driver get_single_date_with_cash  Trip ---------------
+exports.get_single_date_with_cash = (req, res) => {
+    req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
+    req.checkBody('date', 'date must have needed!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in get all Trips",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        // Save vendor to Database
+        Trip.findAll({
+           where: {
+                driver_id: req.body.driver_id,
+                createdAt: req.body.date,
+              },
+              order: [['createdAt', 'ASC']],
+              // limit: count,
+            
+        }).then(trip => {
+            if (trip == null || trip == '') {
+                return res.status(200).send({
+                    status: 400,
+                    message: "Sorry no trip is here!",
+                    successData: {
+                    }
+                });
+            } else {
+                var total_cash = 0;
+                var total_trips = 0;
+                trip.forEach(element => {
+                    total_cash = total_cash + parseInt(element.total_cost);
+                    total_trips = total_trips + 1;
+                });
+                return res.status(200).send({
+                    status: 200,
+                    message: "Get driver for single date Trip with cash",
+                    successData: {
+                        total_trips:total_trips,
+                        total_cash: total_cash
+                    }
+                });
+            }
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+    }
+
+}
