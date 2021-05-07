@@ -772,10 +772,12 @@ exports.get_all_trips_with_cash = (req, res) => {
                 });
                 return res.status(200).send({
                     status: 200,
-                    message: "Get driver   all  Trips with cash ",
+                    message: "Get driver all Trips with cash ",
                     successData: {
-                        total_trips: total_trips,
-                        total_cash: total_cash
+                        dash_board_detail: {
+                            total_trips: total_trips,
+                            total_cash: total_cash
+                        }
                     }
                 });
             }
