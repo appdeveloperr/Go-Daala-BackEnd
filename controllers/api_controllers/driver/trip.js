@@ -884,9 +884,9 @@ exports.get_single_date_with_cash = (req, res) => {
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
-                createdAt: {
-                    [Op.between]: [req.body.Date, req.body.Date],
-                }
+                createdAt: 
+                    Sequelize.DATE(req.body.Date),
+                
              }
             //,
             // order: [['createdAt', 'ASC']],
