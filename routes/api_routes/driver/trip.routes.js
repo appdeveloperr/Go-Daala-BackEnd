@@ -78,7 +78,7 @@ module.exports = function (app) {
     //------------driver all trips with total cash  Function----------------
     app.post(
         "/api/driver/get-all-trips-with-cash",
-        driverAuthJwt.verifyToken,
+       // driverAuthJwt.verifyToken,
         controller.get_all_trips_with_cash,
     );
 
@@ -89,7 +89,7 @@ module.exports = function (app) {
     //------------driver get_selected_date_with_cash   Function----------------
     app.post(
         "/api/driver/get-selected-date-with-cash",
-        driverAuthJwt.verifyToken,
+        //driverAuthJwt.verifyToken,
         controller.get_selected_date_with_cash,
     );
 
