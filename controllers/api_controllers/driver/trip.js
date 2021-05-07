@@ -768,7 +768,7 @@ exports.get_all_trips_with_cash = (req, res) => {
                 var total_cash = 0;
                 var total_trips = 0;
                 trip.forEach(element => {
-                    total_cash = total_cash + element.total_cost;
+                    total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
                 });
                 return res.status(200).send({
