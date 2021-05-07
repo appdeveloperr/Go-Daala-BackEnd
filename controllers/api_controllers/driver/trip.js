@@ -880,12 +880,11 @@ exports.get_single_date_with_cash = (req, res) => {
         });
     } else {
         // Save vendor to Database
+        const TODAY = new Date(req.body.Date);
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
-                createdAt: {
-                    [Op]: [req.body.Date],
-                },
+                createdAt: TODAY
             },
             order: [['createdAt', 'ASC']],
             // limit: count,
