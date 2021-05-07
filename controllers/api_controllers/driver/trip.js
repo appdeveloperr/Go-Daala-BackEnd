@@ -6,7 +6,6 @@ var Vendor = db.vendor;
 var Cancel_trip = db.cancel_trip;
 var Trip = db.trip;
 var admin = require("../../../config/fcm_init").isFcm;
-var Sequelize = require('sequelize');
 const Op = db.Sequelize.Op;
 //--------------driver receive trip---------------
 exports.receive_trip = (req, res, next) => {
@@ -885,9 +884,9 @@ exports.get_single_date_with_cash = (req, res) => {
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
-                createdAt: 
-                    Sequelize.DATE(req.body.Date),
-                
+                createdAt: {
+                    [Op.eq]: [req.body.Date],
+                }
              }
             //,
             // order: [['createdAt', 'ASC']],
