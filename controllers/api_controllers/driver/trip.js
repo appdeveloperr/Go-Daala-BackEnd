@@ -747,7 +747,7 @@ exports.get_all_trips_with_cash = (req, res) => {
         });
     } else {
         // Save vendor to Database
-        Trip.findAllAndCountAll({
+        Trip.findAndCountAll({
             where: {
                 driver_id: req.body.driver_id
             },
