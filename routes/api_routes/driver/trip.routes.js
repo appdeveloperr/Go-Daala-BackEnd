@@ -93,5 +93,13 @@ module.exports = function (app) {
         controller.get_selected_date_with_cash,
     );
 
+
+     //------------driver get_single_date_with_cash   Function----------------
+     app.post(
+        "/api/driver/get-single-date-with-cash",
+      //  driverAuthJwt.verifyToken,
+        controller.get_single_date_with_cash,
+    );
+
 };
 
