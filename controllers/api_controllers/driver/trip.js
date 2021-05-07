@@ -865,7 +865,7 @@ exports.get_selected_date_with_cash = (req, res) => {
 //--------------driver get_single_date_with_cash  Trip ---------------
 exports.get_single_date_with_cash = (req, res) => {
     req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
-    req.checkBody('date', 'date must have required!').notEmpty();
+    req.checkBody('Date', 'date must have required!').notEmpty();
 
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -884,7 +884,7 @@ exports.get_single_date_with_cash = (req, res) => {
             where: {
                 driver_id: req.body.driver_id,
                 createdAt: {
-                    [Op]: [req.body.date],
+                    [Op]: [req.body.Date],
                 },
             },
             order: [['createdAt', 'ASC']],
