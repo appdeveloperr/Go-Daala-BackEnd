@@ -748,6 +748,8 @@ exports.get_all_trips_with_cash = (req, res) => {
         });
     } else {
         // Save vendor to Database
+        var total_cash = 0;
+        var total_trips = 0;
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id
@@ -758,14 +760,17 @@ exports.get_all_trips_with_cash = (req, res) => {
         }).then(trip => {
             if (trip == null || trip == '') {
                 return res.status(200).send({
-                    status: 400,
-                    message: "Sorry no trip is here!",
+                    status: 200,
+                    message: "Get driver all Trips with cash ",
                     successData: {
+                        dash_board_detail: {
+                            total_trips: total_trips,
+                            total_cash: total_cash
+                        }
                     }
                 });
             } else {
-                var total_cash = 0;
-                var total_trips = 0;
+              
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
@@ -812,6 +817,8 @@ exports.get_selected_date_with_cash = (req, res) => {
             }
         });
     } else {
+        var total_cash = 0;
+        var total_trips = 0;
         // Save vendor to Database
         Trip.findAll({
             where: {
@@ -826,14 +833,16 @@ exports.get_selected_date_with_cash = (req, res) => {
         }).then(trip => {
             if (trip == null || trip == '') {
                 return res.status(200).send({
-                    status: 400,
-                    message: "Sorry no trip is here!",
+                    status: 200,
+                    message: "Get driver date from to date Trip with cash",
                     successData: {
+                        dash_board_detail: {
+                            total_trips: total_trips,
+                            total_cash: total_cash
+                        }
                     }
                 });
             } else {
-                var total_cash = 0;
-                var total_trips = 0;
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
@@ -880,14 +889,15 @@ exports.get_single_date_with_cash = (req, res) => {
         });
     } else {
         // Save vendor to Database
-        
+        var total_cash = 0;
+        var total_trips = 0;
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
                 createdAt: {
-                    [Op.between]: [req.body.Date, req.body.Date+' 23:59:59.000 +00:00'],
+                    [Op.between]: [req.body.Date, req.body.Date + ' 23:59:59.000 +00:00'],
                 }
-             }
+            }
             //,
             // order: [['createdAt', 'ASC']],
             // limit: count,
@@ -895,14 +905,17 @@ exports.get_single_date_with_cash = (req, res) => {
         }).then(trip => {
             if (trip == null || trip == '') {
                 return res.status(200).send({
-                    status: 400,
-                    message: "Sorry no trip is here!",
+                    status: 200,
+                    message: "Get driver for single date Trip with cash",
                     successData: {
+                        dash_board_single_detail: {
+                            total_trips: total_trips,
+                            total_cash: total_cash
+                        }
                     }
                 });
             } else {
-                var total_cash = 0;
-                var total_trips = 0;
+
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
