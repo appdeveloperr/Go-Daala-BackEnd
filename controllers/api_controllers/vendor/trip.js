@@ -189,24 +189,7 @@ exports.create_trip = (req, res) => {
                                                                             status: 200,
                                                                             message: "Create Trip with accepted drivers is successful",
                                                                             successData: {
-                                                                                request_trip: {
-                                                                                    id: trip.id,
-                                                                                    pickup: trip.pickup,
-                                                                                    dropoff: trip.dropoff,
-
-                                                                                    dropoff_lat: trip.dropoff_lat,
-                                                                                    dropoff_long: trip.dropoff_long,
-
-
-                                                                                    pickup_lat: trip.pickup_lat,
-                                                                                    pickup_long: trip.pickup_long,
-                                                                                    vehicle_name: trip.vehicle_name,
-                                                                                    estimated_distance: trip.estimated_distance,
-                                                                                    estimated_time: trip.estimated_time,
-                                                                                    total_cost: trip.total_cost,
-                                                                                    vendor_id: trip.vendor_id,
-                                                                                    status: trip.status
-                                                                                },
+                                                                                request_trip: trip,
                                                                                 accepted_driver: driver_data,
                                                                                 driver_current_location: {
                                                                                     latitude: obj2[check_driver_lat_long].latitude,
@@ -312,24 +295,7 @@ exports.create_trip = (req, res) => {
                                                                             status: 200,
                                                                             message: "Create Trip with accepted drivers  is successful",
                                                                             successData: {
-                                                                                request_trip: {
-                                                                                    id: trip.id,
-                                                                                    pickup: trip.pickup,
-                                                                                    dropoff: trip.dropoff,
-
-                                                                                    dropoff_lat: trip.dropoff_lat,
-                                                                                    dropoff_long: trip.dropoff_long,
-
-
-                                                                                    pickup_lat: trip.pickup_lat,
-                                                                                    pickup_long: trip.pickup_long,
-                                                                                    vehicle_name: trip.vehicle_name,
-                                                                                    estimated_distance: trip.estimated_distance,
-                                                                                    estimated_time: trip.estimated_time,
-                                                                                    total_cost: trip.total_cost,
-                                                                                    vendor_id: trip.vendor_id,
-                                                                                    status: trip.status
-                                                                                },
+                                                                                request_trip: trip,
                                                                                 accepted_driver: driver_data,
                                                                                 driver_current_location: {
                                                                                     latitude: obj2[check_driver_lat_long].latitude,
