@@ -22,6 +22,8 @@ exports.socket_io = function (io) {
     io.on('connection', socket => {
 
         socket.on('connect_chat', ({ username, room }) => {
+            console.log("connect_chat Socket ID: "+socket.id);
+
             const user = userJoin(socket.id, username, room);
             socket.join(user.room);
             console.log(user);
@@ -85,6 +87,8 @@ exports.socket_io = function (io) {
 
         // Listen for chatMessage
         socket.on('send_message', (message ,mobile_no) => {
+            
+            console.log("send_message Socket ID: "+socket.id);
             const user = getCurrentUser(socket.id);
             console.log("this is user id :    " + socket.id);
             console.log("this is user room :    " + user.room)
