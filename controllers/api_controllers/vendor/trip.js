@@ -703,7 +703,7 @@ exports.cancel_trip = (req, res) => {
         Trip.update({
             vendor_id: req.body.vendor_id,
             status: "cancel",
-            who_cancel:"vendor"
+            how_cancel:"vendor"
 
         },
             {
