@@ -296,7 +296,7 @@ exports.cencal_trip = (req, res) => {
         Trip.update({
             driver_id: req.body.driver_id,
             status: "cancel",
-            how_cancel:"driver"
+            who_cancel:"driver"
 
         },
             {
