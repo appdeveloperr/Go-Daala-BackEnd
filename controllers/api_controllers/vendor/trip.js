@@ -702,7 +702,8 @@ exports.cancel_trip = (req, res) => {
         // Save vendor to Database
         Trip.update({
             vendor_id: req.body.vendor_id,
-            status: "cencal",
+            status: "cancel",
+            how_cancel:"vendor"
 
         },
             {

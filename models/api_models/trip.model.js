@@ -41,6 +41,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       description: {
         type: Sequelize.STRING
+      },
+      how_cancel:{
+        type: Sequelize.STRING
       }
 
     });

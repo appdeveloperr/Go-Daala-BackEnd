@@ -295,7 +295,8 @@ exports.cencal_trip = (req, res) => {
         // Save vendor to Database
         Trip.update({
             driver_id: req.body.driver_id,
-            status: "cencal",
+            status: "cancel",
+            how_cancel:"driver"
 
         },
             {
