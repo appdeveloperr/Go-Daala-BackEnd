@@ -227,19 +227,28 @@ exports.trip_detail = (req, res) => {
 
                     {
                         model: db.vendor
+                    },
+                    {
+                        model: db.driver
                     }
+                    
                 ]
             }).then(trip => {
 
-
-                //  delete trip.vendor.dataValues.password;
-                return res.status(200).send({
-                    status: 200,
-                    message: "trip detail is successfully",
-                    successData: {
-                        trip: trip.dataValues
-                    }
+                Cancel_trip.findOne({where:{
+                    trip_id:req.body.trip_id
+                }}).then(cencal=>{
+                    trip.dataValues.cancel_trip = cencal.dataValues;
+                    return res.status(200).send({
+                        status: 200,
+                        message: "trip detail is successfully",
+                        successData: {
+                            trip: trip.dataValues
+                        }
+                    });
                 });
+                //  delete trip.vendor.dataValues.password;
+                
 
 
 

@@ -10,7 +10,8 @@ var path = require('path');
 const Op = db.Sequelize.Op;
 var admin = require("../../../config/fcm_init").isFcm;
 const axios = require('axios');
-const { user, driver, vendor } = require("../../../models/api_models");
+const { user, driver, vendor , cencal_trip} = require("../../../models/api_models");
+
 
 
 //--------------vendor create trip---------------
@@ -833,23 +834,31 @@ exports.trip_detail = (req, res) => {
                     { id: req.body.trip_id },
                 include: [
                     {
-                        model: driver
-                        
-
+                        model:driver
                     },{
                         model:vendor
                     }
                 ]
             }).then(trip => {
 
-
-                return res.status(200).send({
-                    status: 200,
-                    message: "trip detail is successfully",
-                    successData: {
-                        trip: trip.dataValues
+                Cancel_trip.findOne({
+                    where:{
+                        trip_id:req.body.trip_id
                     }
-                });
+                }).then(cencal=>{
+                    trip.dataValues.cancel_trip = cencal.dataValues;
+                    
+                       
+                        return res.status(200).send({
+                            status: 200,
+                            message: "trip detail is successfully",
+                            successData: {
+                                trip: trip.dataValues
+                            }
+                        });
+                    
+                })
+              
 
             }).catch(err => {
 
