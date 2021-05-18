@@ -25,7 +25,8 @@ exports.socket_lat_long = function (io) {
 
       // Welcome current user
       socket.emit('driver_lat_long', driver);
-      console.log("this is driver data normal: "+driver)
+      
+      console.log("this is driver data normal: "+JSON.stringify(driver))
       console.log("this is driver data: "+driver[0].driver_id);
 
 
