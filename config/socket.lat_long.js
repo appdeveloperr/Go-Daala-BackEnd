@@ -26,8 +26,9 @@ exports.socket_lat_long = function (io) {
       // Welcome current user
       socket.emit('driver_lat_long', driver);
       
-      console.log("this is driver data normal: "+JSON.stringify(driver))
-      console.log("this is driver data: "+driver[0].driver_id);
+      console.log("this is driver Object: "+JSON.stringify(driver))
+      console.log("this is driver ID: "+driver.driver_id);
+      console.log("this is driver data: "+driver.driver_id);
 
 
       // Broadcast when a user connects
@@ -40,15 +41,15 @@ exports.socket_lat_long = function (io) {
 
       Dirver_lat_long.findOne({
         where: {
-          driver_id: driver[0].driver_id
+          driver_id: driver.driver_id
         }
       }).then(dri => {
         console.log("after finding the driver data");
         if (dri == null || dri == '') {
           Dirver_lat_long.create({
-            latitude: driver[0].lat,
-            longitude: driver[0].long,
-            driver_id: driver[0].driver_id,
+            latitude: driver.lat,
+            longitude: driver.long,
+            driver_id: driver.driver_id,
             status: 'available'
           }).then(driver_lat => {
             if (driver_lat) {
@@ -62,13 +63,13 @@ exports.socket_lat_long = function (io) {
         } else {
 
           Dirver_lat_long.update({
-            latitude: driver[0].lat,
-            longitude: driver[0].long,
+            latitude: driver.lat,
+            longitude: driver.long,
             status: 'available'
 
           },
             {
-              where: { driver_id: driver[0].driver_id },
+              where: { driver_id: driver.driver_id },
               returning: true,
               plain: true
             }).then(update_lat_long => {

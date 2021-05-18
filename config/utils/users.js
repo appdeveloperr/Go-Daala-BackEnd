@@ -32,9 +32,9 @@ function getRoomUsers(room) {
 function get_lat_long(id, driver_id, lat , long) {
   const driver = { id, driver_id, lat , long };
 
-  drivers.push(driver);
+ // drivers.push(driver);
 
-  return drivers;
+  return driver;
 }
 
 
