@@ -517,7 +517,7 @@ exports.update_picture = function (req, res) {
                 //-----------------move profile into server-------------------------------//
                 var filename = 'profile-1' + Date.now() + req.files.new_profile.name;
                 req.files.new_profile.mv(path_file + '' + filename, function (err) {
-                    if (err) console.log("error occured");
+                    if (err) console.log("error occured file not created");
                 });
 
 
