@@ -66,7 +66,7 @@ exports.signup = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
+                var path_file = './public/files/uploadsFiles/driver/';
                 var fileOne = 'profile-1' + Date.now() + req.files.profile.name;
                 //-----------------move profile into server-------------------------------//
                 req.files.profile.mv(path_file + '' + fileOne, function (err) {
@@ -579,7 +579,7 @@ exports.update_picture = (req, res) => {
                     }
                 });
             } else {   ///------------------ no error exist
-                var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
+                var path_file = './public/files/uploadsFiles/driver/';
 
                 //-----------------move profile into server-------------------------------//
                 var filename = 'profile-' + Date.now() + req.files.new_profile.name;
@@ -590,7 +590,7 @@ exports.update_picture = (req, res) => {
 
 
 
-                fs.unlink('./Go-Daala-BackEnd/public' + req.body.file, function (err) {
+                fs.unlink('./public' + req.body.file, function (err) {
                     if (err) {
                         console.log("err occer file not deleted");
                     } else {
