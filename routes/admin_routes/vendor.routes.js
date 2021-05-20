@@ -1,15 +1,9 @@
-
 var auth = require('../../controllers/admin_controllers/auth');
 var isAdmin = auth.isAdmin;
 var vendor_controller = require('../../controllers/admin_controllers/vendor');
 
-
 module.exports = function (app) {
   
-
-
-
-
   //-----------------get all Vendors admin side----------------
 app.get('/admin/vendor/index',isAdmin,vendor_controller.index);
 

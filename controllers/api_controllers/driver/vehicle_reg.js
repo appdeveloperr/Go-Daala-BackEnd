@@ -60,7 +60,7 @@ exports.create_vehicle_reg = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
+                var path_file = './public/files/uploadsFiles/driver/';
 
 
                 //-----------------move vehicle document into server-------------------------------//
@@ -235,7 +235,7 @@ exports.update_vehicle_reg=(req,res)=>{
                    
                     if(result!=null|| result!=''){
 
-                        fs.unlink('./Go-Daala-BackEnd/public' + result.dataValues.vehicle_document, function (err) {
+                        fs.unlink('./public' + result.dataValues.vehicle_document, function (err) {
                             if (err) {
                                 console.log("err occer file not deleted");
                             } else {
@@ -243,7 +243,7 @@ exports.update_vehicle_reg=(req,res)=>{
                             }
                         })
 
-                        fs.unlink('./Go-Daala-BackEnd/public' + result.dataValues.frint_image, function (err) {
+                        fs.unlink('./public' + result.dataValues.frint_image, function (err) {
                             if (err) {
                                 console.log("err occer file not deleted");
                             } else {
@@ -251,7 +251,7 @@ exports.update_vehicle_reg=(req,res)=>{
                             }
                         })
 
-                        fs.unlink('./Go-Daala-BackEnd/public' + result.dataValues.back_image, function (err) {
+                        fs.unlink('./public' + result.dataValues.back_image, function (err) {
                             if (err) {
                                 console.log("err occer file not deleted");
                             } else {
@@ -261,7 +261,7 @@ exports.update_vehicle_reg=(req,res)=>{
 
 
 
-                        var path_file = './Go-Daala-BackEnd/public/files/uploadsFiles/driver/';
+                        var path_file = './public/files/uploadsFiles/driver/';
 
 
                         //-----------------move vehicle document into server-------------------------------//

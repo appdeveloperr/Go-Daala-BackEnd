@@ -36,9 +36,9 @@ app.set('view engine', 'ejs');
 
 
 
-//Set public Folder
-// app.use(express.static(path.join(__dirname, '/public/')));
-//Set Global  errors variable 
+// Set public Folder
+app.use(express.static(path.join(__dirname, '/public/')));
+// Set Global  errors variable 
 app.locals.errors = null;
 
 
@@ -51,8 +51,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // for parsing multipart/form-data
 // app.use(upload.array()); 
+
+//app.use(express.static(path.join(__dirname, '/Go-Daala-BackEnd/public/')));
 app.use(express.static(path.join(__dirname, '/public/')));
-app.use(express.static(path.join(__dirname, '/Go-Daala-BackEnd/public/')));
+
+
 
 // database
 const db = require("./models/api_models");
