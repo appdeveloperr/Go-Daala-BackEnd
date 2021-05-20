@@ -51,7 +51,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // for parsing multipart/form-data
 // app.use(upload.array()); 
-app.use('public',express.static(path.join(__dirname, '/public/')));
+app.use(express.static(path.join(__dirname, '/public/')));
+app.use(express.static(path.join(__dirname, '/Go-Daala-BackEnd/public/')));
 
 // database
 const db = require("./models/api_models");
