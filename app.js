@@ -83,40 +83,40 @@ db.sequelize.sync({force: false}).then(() => {
 require('./middleware/session')(app);
 
 // express validater middelware
-require('./middleware/validater')(app);
+// require('./middleware/validater')(app);
 
-// app.use(expressValidator({
-//   errorFormatter: function (param, msg, value) {
-//     var namespace = param.split('.')
-//       , root = namespace.shift()
-//       , formParam = root;
+app.use(expressValidator({
+  errorFormatter: function (param, msg, value) {
+    var namespace = param.split('.')
+      , root = namespace.shift()
+      , formParam = root;
 
-//     while (namespace.length) {
-//       formParam += '[' + namespace.shift() + ']';
-//     }
-//     return {
-//       param: formParam,
-//       msg: msg,
-//       value: value
-//     };
-//   },
-//   customValidators: {
-//     isImage: function (value, filename) {
-//       var extension = (path.extname(filename)).toLowerCase();
-//       switch (extension) {
-//         case '.jpg':
-//           return '.jpg';
-//         case '.jpeg':
-//           return '.jpeg';
-//         case '.png':
-//           return '.png';
-//         case '':
-//           return '.jpg';
-//         default: return false;
-//       }
-//     }
-//   }
-// }));
+    while (namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param: formParam,
+      msg: msg,
+      value: value
+    };
+  },
+  customValidators: {
+    isImage: function (value, filename) {
+      var extension = (path.extname(filename)).toLowerCase();
+      switch (extension) {
+        case '.jpg':
+          return '.jpg';
+        case '.jpeg':
+          return '.jpeg';
+        case '.png':
+          return '.png';
+        case '':
+          return '.jpg';
+        default: return false;
+      }
+    }
+  }
+}));
 
 
 //express messages middelware
@@ -194,6 +194,7 @@ require('./routes/api_routes/customer/contectus.routes')(app);
 require('./routes/api_routes/customer/faq.routes')(app);
 require('./routes/api_routes/customer/review.routes')(app);
 require('./routes/api_routes/customer/chat.routes')(app);
+
 //-----------------driver Api routes--------------
 require('./routes/api_routes/driver/auth.routes')(app);
 require('./routes/api_routes/driver/forgot_password.routes')(app);
