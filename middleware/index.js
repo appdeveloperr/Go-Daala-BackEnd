@@ -9,7 +9,12 @@ const session = require("./session");
 const vendorAuthJwt = require("./vendor/authJwt");
 const vendorVerifySignUp = require("./vendor/verifySignUp");
 
-//-------- Vendor Imports ----------
+
+//-------- Customer Imports ----------
+const customerAuthJwt = require("./customer/authJwt");
+const customerVerifySignUp = require("./customer/verifySignUp");
+
+//-------- Driver Imports ----------
 const driverAuthJwt = require("./driver/authJwt");
 const driverVerifySignUp = require("./driver/verifySignUp");
 const driverVerifyNumberPlate = require("./driver/driverVerifyNumberPlate");
@@ -24,5 +29,8 @@ module.exports = {
   vendorVerifySignUp,
   driverAuthJwt,
   driverVerifySignUp,
-  driverVerifyNumberPlate
+  driverVerifyNumberPlate,
+  customerAuthJwt,
+  customerVerifySignUp
+
 };

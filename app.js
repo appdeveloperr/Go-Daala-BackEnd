@@ -67,49 +67,52 @@ const User = db.user;
 
 
 
-app.set('trust proxy', 1)
-app.use(session({
-  secret: 'max',
-  resave: true,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}));
+// app.set('trust proxy', 1)
+// app.use(session({
+//   secret: 'max',
+//   resave: true,
+//   saveUninitialized: true,
+//   cookie: { secure: false }
+// }));
 
-
+//-------- express session middelware -----------------
+require('./middleware/session')(app);
 
 // express validater middelware
-app.use(expressValidator({
-  errorFormatter: function (param, msg, value) {
-    var namespace = param.split('.')
-      , root = namespace.shift()
-      , formParam = root;
+require('./middleware/validater')(app);
 
-    while (namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
-    }
-    return {
-      param: formParam,
-      msg: msg,
-      value: value
-    };
-  },
-  customValidators: {
-    isImage: function (value, filename) {
-      var extension = (path.extname(filename)).toLowerCase();
-      switch (extension) {
-        case '.jpg':
-          return '.jpg';
-        case '.jpeg':
-          return '.jpeg';
-        case '.png':
-          return '.png';
-        case '':
-          return '.jpg';
-        default: return false;
-      }
-    }
-  }
-}));
+// app.use(expressValidator({
+//   errorFormatter: function (param, msg, value) {
+//     var namespace = param.split('.')
+//       , root = namespace.shift()
+//       , formParam = root;
+
+//     while (namespace.length) {
+//       formParam += '[' + namespace.shift() + ']';
+//     }
+//     return {
+//       param: formParam,
+//       msg: msg,
+//       value: value
+//     };
+//   },
+//   customValidators: {
+//     isImage: function (value, filename) {
+//       var extension = (path.extname(filename)).toLowerCase();
+//       switch (extension) {
+//         case '.jpg':
+//           return '.jpg';
+//         case '.jpeg':
+//           return '.jpeg';
+//         case '.png':
+//           return '.png';
+//         case '':
+//           return '.jpg';
+//         default: return false;
+//       }
+//     }
+//   }
+// }));
 
 
 //express messages middelware
@@ -126,6 +129,8 @@ app.get('*', function (req, res, next) {
 
 //passport Config
 require('./middleware/passport')(passport);
+
+
 //Passport Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
@@ -172,6 +177,19 @@ require('./routes/api_routes/vendor/contectus.routes')(app);
 require('./routes/api_routes/vendor/faq.routes')(app);
 require('./routes/api_routes/vendor/review.routes')(app);
 require('./routes/api_routes/vendor/chat.routes')(app);
+
+
+//-----------------Customer Api routes--------------
+require('./routes/api_routes/customer/auth.routes')(app);
+require('./routes/api_routes/customer/forgot_password.routes')(app);
+require('./routes/api_routes/customer/address.routes')(app);
+require('./routes/api_routes/customer/trip.routes')(app);
+require('./routes/api_routes/customer/validation_promo_code.routes')(app);
+require('./routes/api_routes/customer/otp.routes')(app);
+require('./routes/api_routes/customer/contectus.routes')(app);
+require('./routes/api_routes/customer/faq.routes')(app);
+require('./routes/api_routes/customer/review.routes')(app);
+require('./routes/api_routes/customer/chat.routes')(app);
 //-----------------driver Api routes--------------
 require('./routes/api_routes/driver/auth.routes')(app);
 require('./routes/api_routes/driver/forgot_password.routes')(app);
