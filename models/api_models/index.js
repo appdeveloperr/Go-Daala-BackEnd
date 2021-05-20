@@ -40,6 +40,9 @@ db.vehicle = require("../api_models/vehicle.model")(sequelize, Sequelize);
 db.trip = require("../api_models/trip.model")(sequelize, Sequelize);
 db.review = require("../api_models/review.model")(sequelize, Sequelize);
 
+db.customer = require("../api_models/customer.model")(sequelize, Sequelize);
+
+
 //----------------------driver models-------------------------------
 db.driver = require("../api_models/driver.model")(sequelize, Sequelize);
 db.vehicle_reg = require("../api_models/vehicle_reg.model")(sequelize, Sequelize);
@@ -66,6 +69,12 @@ db.address.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
+
+//---------customer save address with customer id--------//
+db.address.belongsTo(db.customer, {
+  foreignKey: "customer_id"
+});
+
 //---------vehicle register with driver id----------------------//
 db.vehicle_reg.belongsTo(db.driver, {
   foreignKey: "driver_id"
@@ -86,6 +95,10 @@ db.trip.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
+db.trip.belongsTo(db.customer, {
+  foreignKey: "customer_id"
+});
+
 //----------cancel trip relation--------------///
 db.cancel_trip.belongsTo(db.driver, {
   foreignKey: "driver_id"
@@ -93,6 +106,11 @@ db.cancel_trip.belongsTo(db.driver, {
 
 db.cancel_trip.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
+});
+
+
+db.cancel_trip.belongsTo(db.customer, {
+  foreignKey: "customer_id"
 });
 
 db.cancel_trip.belongsTo(db.trip, {
@@ -107,6 +125,11 @@ db.review.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
+db.review.belongsTo(db.customer, {
+  foreignKey: "customer_id"
+});
+
+
 db.review.belongsTo(db.trip, {
   foreignKey: "trip_id"
 });
@@ -116,6 +139,9 @@ db.used_promos.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
+db.used_promos.belongsTo(db.customer, {
+  foreignKey: "customer_id"
+});
 db.used_promos.belongsTo(db.promo, {
   foreignKey: "promo_id"
 });
@@ -128,6 +154,9 @@ db.notification.belongsTo(db.vendor, {
   foreignKey: "vendor_id"
 });
 
+db.notification.belongsTo(db.customer, {
+  foreignKey: "customer_id"
+});
 
 //--------------chat with trip----------------//
 db.chat.belongsTo(db.trip,{
