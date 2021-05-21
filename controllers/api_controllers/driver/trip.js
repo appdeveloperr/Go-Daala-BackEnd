@@ -32,12 +32,12 @@ exports.receive_trip = (req, res, next) => {
                 id: req.body.trip_id
             }
         }).then(check_trip_is_accepted => {
-            console.log("this is driver_id: " + check_trip_is_accepted.dataValues.driver_id)
+            console.log("this check_trip_is_accepted is driver_id: " + check_trip_is_accepted.dataValues.driver_id)
+
             if (check_trip_is_accepted.dataValues.driver_id == null) {
                 Trip.update({
                     driver_id: req.body.driver_id,
                     status: "wait",
-
                 },
                     {
                         where: { id: req.body.trip_id },
