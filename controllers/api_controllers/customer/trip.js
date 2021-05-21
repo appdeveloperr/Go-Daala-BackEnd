@@ -829,47 +829,74 @@ exports.trip_detail = (req, res) => {
         });
     } else {
 
-        Trip.findOne(
+
+
+        Trip.update({
+            customer_id: req.body.customer_id
+        },
             {
-                where:
-                    { id: req.body.trip_id },
-                include: [
+                where: { id: req.body.trip_id },
+                returning: true,
+                plain: true
+            }).then(updatedtrip => {
+
+
+
+                Trip.findOne(
                     {
-                        model: driver
-                    },
-                    {
-                        model: customer
-                    },
-                    {
-                        model: vendor
-                    }
-                ]
-            }).then(trip => {
+                        where:
+                            { id: req.body.trip_id },
+                        include: [
+                            {
+                                model: driver
+                            },
+                            {
+                                model: customer
+                            },
+                            {
+                                model: vendor
+                            }
+                        ]
+                    }).then(trip => {
+        
+        
+                        return res.status(200).send({
+                            status: 200,
+                            message: "trip detail is successfully",
+                            successData: {
+                                trip: trip.dataValues
+                            }
+                        });
+        
+        
+        
+                    }).catch(err => {
+        
+                        return res.status(200).send({
+                            status: 400,
+                            message: "error in trip detail apis:" + err.message,
+                            successData: {}
+                        });
+        
+                    });
+        
+        
 
 
-
-
-                return res.status(200).send({
-                    status: 200,
-                    message: "trip detail is successfully",
-                    successData: {
-                        trip: trip.dataValues
-                    }
-                });
-
-
-
+                
             }).catch(err => {
 
                 return res.status(200).send({
                     status: 400,
-                    message: "error in trip detail apis:" + err.message,
+                    message: "error in trip update apis:" + err.message,
                     successData: {}
                 });
 
             });
 
 
+
+   
     }
 
 
