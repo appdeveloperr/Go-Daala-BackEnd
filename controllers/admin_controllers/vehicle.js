@@ -11,50 +11,76 @@ exports.create = function (req, res, next) {
   req.checkBody('distance', 'Distance must have  needed!').notEmpty();
   req.checkBody('time', 'Time must have value!').notEmpty();
 
-  console.log(req);
 
   var errors = req.validationErrors();
   if (errors) {
     res.render('admin/vehicle/create', {
       errors: errors,
       userdata: req.user,
-      type: "",
-      service_charges: "",
-      distance: "",
-      time: ""
+      type: req.body.type,
+      service_charges: req.body.service_charges,
+      distance: req.body.distance,
+      time: req.body.time
 
     });
   } else {
-    var fileinfo = req.file;
-    
-    
-    if (fileinfo) {
-      //image exist
-      var filename = fileinfo.filename;
-      var type = req.body.type;
-      var service_charges = req.body.service_charges;
-      var distance = req.body.distance;
-      var time = req.body.time;
-      var destination = "/files/uploadsFiles/";
-      Vehicle.create({
-        vehicle_type: type,
-        service: service_charges,
-        distance: distance,
-        time: time,
-        image_path: destination + "" + filename
-      }).then(vehicle => {
-        req.flash('success', 'Successfuly your vehicle is  Added!');
-        res.redirect('/admin/vehicle/index');
-      }).catch(err => {
-        console.log(err);
-      });
+    if (!req.files) {
+      req.checkBody('myFile', 'Vehicle picture must have needed!').notEmpty();
+      var errors = req.validationErrors();
+      if (errors) {
 
-    } else {//image is not exist
-      req.flash('danger', 'Image file must upload needed!');
-      res.redirect('/admin/vehicle/create');
+        //////////------input file validation error
+        res.render('admin/vehicle/create', {
+          errors: errors,
+          userdata: req.user,
+          type: req.body.type,
+          service_charges: req.body.service_charges,
+          distance: req.body.distance,
+          time: req.body.time
+
+        });
+      }
+    } else {
+
+      req.checkBody('myFile', 'Vehicle picture must have needed! with anImage').isImage(req.files.myFile.name);
+
+      var errors = req.validationErrors();
+
+      if (errors) {   //////////------input file must have image validation error
+        res.render('admin/vehicle/create', {
+          errors: errors,
+          userdata: req.user,
+          type: req.body.type,
+          service_charges: req.body.service_charges,
+          distance: req.body.distance,
+          time: req.body.time
+
+        });
+      } else {   ///------------------ no error exist
+        var path_file = './public/files/uploadsFiles/';
+        var filename = 'vehicle-1' + Date.now() + req.files.myFile.name;
+        req.files.myFile.mv(path_file + '' + filename, function (err) {
+          if (err) console.log("error occured");
+        });
+
+        Vehicle.create({
+          vehicle_type: req.body.type,
+          service: req.body.service_charges,
+          distance: req.body.distance,
+          time: req.body.time,
+          image_path: "/files/uploadsFiles/" + filename
+        }).then(vehicle => {
+          req.flash('success', 'Successfuly your vehicle is  Added!');
+          res.redirect('/admin/vehicle/index');
+        }).catch(err => {
+          console.log(err);
+        });
+
+
+      }
     }
-  }
 
+  }
 
 }
 
@@ -119,52 +145,65 @@ exports.update = function (req, res, next) {
   req.checkBody('service_charges', 'Service  must have needed!')
   req.checkBody('distance', 'Distance must have  needed!').notEmpty();
   req.checkBody('time', 'Time must have value!').notEmpty();
-
+  req.checkBody('old_file', 'old file path must have value!').notEmpty();
 
   var errors = req.validationErrors();
   if (errors) {
     res.render('admin/vehicle/edit', {
       errors: errors,
       userdata: req.user,
-      data: Data
+      data: req.body.Data
     });
   } else {
-    var fileinfo = req.file;
-    if (fileinfo) {//image exist
+     if(req.files){
 
-      var filename = fileinfo.filename;
-      var old_file = req.body.old_file;
+      req.checkBody('myFile', 'Vehicle picture must have needed! with anImage').isImage(req.files.myFile.name);
+
+      var errors = req.validationErrors();
+
+      if (errors) {   //////////------input file must have image validation error
+        res.render('admin/vehicle/edit', {
+          errors: errors,
+          userdata: req.user,
+          data: req.body.Data
+        });
+      } else {   ///------------------ no error exist
+        var path_file = './public/files/uploadsFiles/';
+        var filename = 'vehicle-1' + Date.now() + req.files.myFile.name;
+        req.files.myFile.mv(path_file + '' + filename, function (err) {
+          if (err) console.log("error occured");
+        });
+
+        console.log(req.body.old_file);
+
+        fs.unlink('./public' +req.body.old_file, function (error) {
+          if (error) { console.log("err ", error) } else {
+            console.log("file deleted!")
+          }
+        });
+        Vehicle.update({
+          vehicle_type: req.body.type,
+          service: req.body.service_charges,
+          distance: req.body.distance,
+          time: req.body.time,
+          image_path: "/files/uploadsFiles/" + filename
+        }, {
+          where: {
+            id: req.body.id
+          }
+        }).then(vehicle => {
+          if (vehicle) {
+            req.flash('success', 'Successfuly your Vehicle is  Added!');
+            res.redirect('/admin/vehicle/index');
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+
+       }
+       } else {//image is not exist
 
 
-      fs.unlink(old_file, function (error) {
-        if (error) { console.log("err ", error) } else {
-          console.log("file deleted!")
-        }
-      })
-      var destination = "/files/uploadsFiles/";
-      Vehicle.update({
-        vehicle_type: req.body.type,
-        service: req.body.service_charges,
-        distance: req.body.distance,
-        time: req.body.time,
-        image_path: destination + "" + filename
-      }, {
-        where: {
-          id: req.body.id
-        }
-      }).then(vehicle => {
-        if (vehicle) {
-          req.flash('success', 'Successfuly your Vehicle is  Added!');
-          res.redirect('/admin/vehicle/index');
-        }
-      }).catch(err => {
-        console.log(err);
-      });
-
-    } else {//image is not exist
-
-
-      console.log(req.body.type);
       Vehicle.update({
         banner_type: req.body.type,
         service: req.body.service_charges,
@@ -206,7 +245,9 @@ exports.delete = function (req, res) {
   }).then(Delete => {
     //if User not found with given ID
     if (Delete) {
-      fs.unlink(Delete.dataValues.image_path, function (error) {
+      console.log(Delete.dataValues.image_path);
+      console.log(Delete.dataValues)
+      fs.unlink('./public' +Delete.dataValues.image_path, function (error) {
         if (error) { console.log("err ", error) } else {
           console.log("file deleted!")
         }

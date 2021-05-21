@@ -1,7 +1,7 @@
 // module.exports = {
 //   HOST: "localhost",
 //   USER: "postgres",
-//   PASSWORD: "0322321us",
+//   PASSWORD: "jojo786786",
 //   DB: "go_daala_db",
 //   dialect: "postgres",
 //   pool: {
