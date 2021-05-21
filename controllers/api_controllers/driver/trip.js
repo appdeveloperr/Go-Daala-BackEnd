@@ -97,7 +97,7 @@ exports.receive_trip = (req, res, next) => {
                                                 vendor_id: trip[1].customer_id,
                                                 status: trip[1].status
                                             },
-                                            vendor: vendor_info
+                                            vendor: customer_info
                                         }
                                     });
                                 }).catch(err => {
