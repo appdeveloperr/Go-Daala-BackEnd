@@ -50,6 +50,8 @@ exports.signup = (req, res) => {
                 });
             }
         } else {
+            
+            console.log(req);
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
             req.checkBody('cnic', 'cnic picture must have needed animage').isImage(req.files.cnic.name);
             req.checkBody('driving_license', 'driving_license picture must have needed animage').isImage(req.files.driving_license.name);

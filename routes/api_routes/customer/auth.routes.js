@@ -18,9 +18,6 @@ module.exports = function (app) {
     });
 
 
-
-
-
     app.post(
         "/api/customer/signup",
         customerVerifySignUp.checkDuplicateEmailOrPhone_number,

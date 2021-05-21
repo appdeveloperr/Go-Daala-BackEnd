@@ -6,6 +6,8 @@ const axios = require('axios');
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require("fs");
+
+
 //-------------vendor signup--------------------
 exports.signup = (req, res) => {
 
@@ -43,8 +45,12 @@ exports.signup = (req, res) => {
                 });
             }
         } else {
+            
+            console.log(req);
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
+            
             var errors = req.validationErrors();
+
             if (errors) {   //////////------input file must have image validation error
                 return res.status(200).send({
                     status: 400,
@@ -81,7 +87,6 @@ exports.signup = (req, res) => {
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret);
-
 
 
                     return res.status(200).send({

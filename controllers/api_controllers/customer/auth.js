@@ -28,8 +28,10 @@ exports.signup = (req, res) => {
             }
         });
     } else {
+
         if (!req.files) {
             req.checkBody('profile', 'profile picture must have needed!').notEmpty();
+        
             var errors = req.validationErrors();
             if (errors) {                    //////////------input file validation error
                 return res.status(200).send({
