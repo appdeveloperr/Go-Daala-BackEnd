@@ -12,7 +12,7 @@ var OTP = db.otp;
 
 //-------------driver signup--------------------
 exports.signup = (req, res) => {
-
+    console.log(req);
 
     req.checkBody('first_name', 'first_name must have value!').notEmpty();
     req.checkBody('last_name', 'last name must have value!').notEmpty();
@@ -23,6 +23,8 @@ exports.signup = (req, res) => {
 
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
+        console.log("DRIVER ERROR 0");
+
         return res.status(200).send({
             status: 400,
             message: "validation error in Signing Up",
@@ -34,11 +36,14 @@ exports.signup = (req, res) => {
         });
     } else {
         if (!req.files) {
+
             req.checkBody('profile', 'profile picture must have needed!').notEmpty();
             req.checkBody('cnic', 'CNIC picture must have needed!').notEmpty();
             req.checkBody('driving_license', 'Driving License picture must have needed!').notEmpty();
             var errors = req.validationErrors();
-            if (errors) {                    //////////------input file validation error
+            if (errors) {                 //////////------input file validation error
+                console.log("DRIVER ERROR 1");
+
                 return res.status(200).send({
                     status: 400,
                     message: "validation error in Signing Up",
@@ -57,6 +62,8 @@ exports.signup = (req, res) => {
             req.checkBody('driving_license', 'driving_license picture must have needed animage').isImage(req.files.driving_license.name);
             var errors = req.validationErrors();
             if (errors) {   //////////------input file must have image validation error
+                console.log("DRIVER ERROR 2");
+
                 return res.status(200).send({
                     status: 400,
                     message: "validation error in Signing Up",
