@@ -1,4 +1,3 @@
-const { customer } = require("../../models/api_models");
 const db = require("../../models/api_models");
 const ROLES = db.ROLES;
 const Customer = db.customer;
@@ -51,7 +50,6 @@ checkDuplicateEmailOrPhone_number = (req, res, next) => {
             }
 
           });
-
 
         }
 

@@ -55,10 +55,10 @@ const db = require("./models/api_models");
 const User = db.user;
 
 // // force: true will drop the table if it already exists
-//db.sequelize.sync({force: true}).then(() => {
+// db.sequelize.sync({force: true}).then(() => {
 // console.log('Drop and Resync Database with { force: true }');
 //  initial();
-//});
+// });
 
 
 
@@ -127,7 +127,7 @@ require('./middleware/passport')(passport);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(fileUpload());
 
 
 
