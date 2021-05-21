@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // for parsing multipart/form-data
-app.use(upload.array()); 
+app.use(fileUpload.array()); 
 app.use(fileUpload);
 
 //app.use(express.static(path.join(__dirname, '/Go-Daala-BackEnd/public/')));
