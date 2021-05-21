@@ -36,6 +36,10 @@ exports.receive_trip = (req, res, next) => {
             console.log("this check_trip_is_accepted is driver_id: " + check_trip_is_accepted.dataValues.driver_id)
 
             if (check_trip_is_accepted.dataValues.driver_id == null) {
+
+                console.log("TRIP ERROR 0: "+req.body.driver_id)
+
+
                 Trip.update({
                     driver_id: req.body.driver_id,
                     status: "wait",
