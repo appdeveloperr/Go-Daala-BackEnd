@@ -36,8 +36,7 @@ app.set('view engine', 'ejs');
 
 
 
-// Set public Folder
-app.use(express.static(path.join(__dirname, '/public/')));
+
 // Set Global  errors variable 
 app.locals.errors = null;
 
