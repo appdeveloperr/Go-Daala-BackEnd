@@ -11,6 +11,7 @@ const app = express();
 var bcrypt = require("bcrypt");
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+const fileUpload = require('express-fileupload');
 
  var socket_io = require('./config/socket.chats').socket_io(io);
  var socket_lat_long = require('./config/socket.lat_long').socket_lat_long(io);
@@ -26,20 +27,12 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-
-
-
-
 //View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
-
-
 // Set Global  errors variable 
 app.locals.errors = null;
-
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -47,9 +40,9 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 // for parsing multipart/form-data
-// app.use(upload.array()); 
+app.use(upload.array()); 
+app.use(fileUpload);
 
 //app.use(express.static(path.join(__dirname, '/Go-Daala-BackEnd/public/')));
 app.use(express.static(path.join(__dirname, '/public/')));
