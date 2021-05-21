@@ -53,53 +53,63 @@ exports.receive_trip = (req, res, next) => {
                         if (trip != null || trip != '') {
 
                             //Checking Who Created the Trip Customer or Vendor
-                            console.log("Checking Who Created the Trip Customer or Vendor: "+trip[1].vendor_id+" / "+trip[1].customer_id)
+                            console.log("Checking Who Created the Trip Customer or Vendor: " + trip[1].vendor_id + " / " + trip[1].customer_id)
 
                             if (trip[1].vendor_id == null || trip[1].vendor_id == '') {
 
-                              //Customer Created The Trip
-                              Customer.findOne({
-                                where: {
-                                    id: trip[1].customer_id
-                                }
-                            }).then(customer_info => {
+                                //Customer Created The Trip
+                                Customer.findOne({
+                                    where: {
+                                        id: trip[1].customer_id
+                                    }
+                                }).then(customer_info => {
 
-                                console.log("TRIP ERROR C2")
 
-                                delete customer_info.dataValues.password;
-                                Driver_lat_long.update({
-                                    status: "unavailable"
-                                }, {
-                                    where: { driver_id: req.body.driver_id },
-                                    returning: true,
-                                    plain: true
-                                }).then(update_lat_long_status => {
+                                    delete customer_info.dataValues.password;
+                                    Driver_lat_long.update({
+                                        status: "unavailable"
+                                    }, {
+                                        where: { driver_id: req.body.driver_id },
+                                        returning: true,
+                                        plain: true
+                                    }).then(update_lat_long_status => {
 
-                                    console.log("TRIP ERROR C3")
 
-                                    return res.status(200).send({
-                                        status: 200,
-                                        message: "Driver receive trip  is successful",
-                                        successData: {
-                                            trip: {
-                                                id: trip[1].id,
-                                                pickup: trip[1].pickup,
-                                                dropoff: trip[1].dropoff,
-                                                pickup_lat: trip[1].pickup_lat,
-                                                pickup_long: trip[1].pickup_long,
-                                                dropoff_lat: trip[1].dropoff_lat,
-                                                dropoff_long: trip[1].dropoff_long,
-                                                vehicle_name: trip[1].vehicle_name,
-                                                estimated_distance: trip[1].estimated_distance,
-                                                estimated_time: trip[1].estimated_time,
-                                                total_cost: trip[1].total_cost,
-                                                driver_id: trip[1].driver_id,
-                                                vendor_id: trip[1].customer_id,
-                                                status: trip[1].status
-                                            },
-                                            vendor: customer_info
-                                        }
+                                        return res.status(200).send({
+                                            status: 200,
+                                            message: "Driver receive trip  is successful",
+                                            successData: {
+                                                trip: {
+                                                    id: trip[1].id,
+                                                    pickup: trip[1].pickup,
+                                                    dropoff: trip[1].dropoff,
+                                                    pickup_lat: trip[1].pickup_lat,
+                                                    pickup_long: trip[1].pickup_long,
+                                                    dropoff_lat: trip[1].dropoff_lat,
+                                                    dropoff_long: trip[1].dropoff_long,
+                                                    vehicle_name: trip[1].vehicle_name,
+                                                    estimated_distance: trip[1].estimated_distance,
+                                                    estimated_time: trip[1].estimated_time,
+                                                    total_cost: trip[1].total_cost,
+                                                    driver_id: trip[1].driver_id,
+                                                    vendor_id: trip[1].customer_id,
+                                                    status: trip[1].status
+                                                },
+                                                customer: customer_info,
+                                                vendor: null
+                                            }
+                                        });
+                                    }).catch(err => {
+                                        console.log("this is track no 2");
+                                        return res.status(200).send({
+                                            status: 400,
+                                            message: err.message,
+                                            successData: {}
+                                        });
+
                                     });
+
+
                                 }).catch(err => {
                                     console.log("this is track no 2");
                                     return res.status(200).send({
@@ -110,25 +120,14 @@ exports.receive_trip = (req, res, next) => {
 
                                 });
 
-
-                            }).catch(err => {
-                                console.log("this is track no 2");
-                                return res.status(200).send({
-                                    status: 400,
-                                    message: err.message,
-                                    successData: {}
-                                });
-
-                            });
-
                             }
                             else {
 
                                 console.log("TRIP ERROR C1")
 
-                               
-                                   //Vendor Created The Trip
-                                   Vendor.findOne({
+
+                                //Vendor Created The Trip
+                                Vendor.findOne({
                                     where: {
                                         id: trip[1].vendor_id
                                     }
@@ -166,7 +165,8 @@ exports.receive_trip = (req, res, next) => {
                                                     vendor_id: trip[1].vendor_id,
                                                     status: trip[1].status
                                                 },
-                                                vendor: vendor_info
+                                                vendor: vendor_info,
+                                                customer: null
                                             }
                                         });
                                     }).catch(err => {

@@ -26,6 +26,7 @@ exports.create_review = (req, res) => {
     } else {
         var total_ratings = null;
         var total_reviews = null;
+
         // Save trips to Database
         Reviews.create({
             rating: req.body.rating,
@@ -124,12 +125,18 @@ exports.get_review = (req, res) => {
             }
         });
     } else {
+
+console.log("ERROR REVIEW 1")
+
         Reviews.findAll({
             where: {
                 trip_id: req.body.trip_id
             }
         }).then(reviews => {
+            console.log("ERROR REVIEW 2")
+
             if (reviews == null || reviews == '') {
+                console.log("ERROR REVIEW 3")
 
                 Trip.findOne({
                     where: {
@@ -138,11 +145,18 @@ exports.get_review = (req, res) => {
                     include: [
                         {
                             model: db.vendor
+                        },
+                        {
+                            model: db.customer
                         }
                     ]
                 }).then(trip => {
+                    console.log("ERROR REVIEW 4")
+
                     if (trip != null || trip != '') {
                         delete trip.vendor.dataValues.password;
+                        console.log("ERROR REVIEW 5")
+
                         return res.status(200).send({
                             status: 200,
                             message: "get driver reviews   is successful",
