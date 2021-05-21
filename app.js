@@ -131,7 +131,6 @@ require('./middleware/passport')(passport);
 
 
 //Passport Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -200,12 +199,6 @@ require('./routes/api_routes/driver/faq.routes')(app);
 require('./routes/api_routes/driver/review.routes')(app);
 require('./routes/api_routes/driver/contectus.routes')(app);
 require('./routes/api_routes/driver/chat.routes')(app);
-
-
-
-
-
-
 
 
 
