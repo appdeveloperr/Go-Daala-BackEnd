@@ -10,7 +10,7 @@ var path = require('path');
 const Op = db.Sequelize.Op;
 var admin = require("../../../config/fcm_init").isFcm;
 const axios = require('axios');
-const { user, driver, customer , cencal_trip} = require("../../../models/api_models");
+const { user, driver, customer, cencal_trip, vendor } = require("../../../models/api_models");
 
 
 
@@ -703,7 +703,7 @@ exports.cancel_trip = (req, res) => {
         Trip.update({
             customer_id: req.body.customer_id,
             status: "cancel",
-            how_cancel:"customer"
+            how_cancel: "customer"
 
         },
             {
@@ -835,25 +835,29 @@ exports.trip_detail = (req, res) => {
                     { id: req.body.trip_id },
                 include: [
                     {
-                        model:driver
-                    },{
-                        model:customer
+                        model: driver
+                    },
+                    {
+                        model: customer
+                    },
+                    {
+                        model: vendor
                     }
                 ]
             }).then(trip => {
 
-              
-                    
-                       
-                        return res.status(200).send({
-                            status: 200,
-                            message: "trip detail is successfully",
-                            successData: {
-                                trip: trip.dataValues
-                            }
-                        });
-                
-              
+
+
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "trip detail is successfully",
+                    successData: {
+                        trip: trip.dataValues
+                    }
+                });
+
+
 
             }).catch(err => {
 
@@ -903,7 +907,7 @@ exports.trip_share = (req, res) => {
                         phone_number: mobileno
                     }
                 }).then(user => {
-        
+
                     if (user) {
                         console.log("this is fcm : " + user.dataValues.fcm_token);
                         var payload = {
@@ -912,12 +916,12 @@ exports.trip_share = (req, res) => {
                                 body: req.body.trip_id.toString()
                             }
                         };
-        
+
                         var options = {
                             priority: "high",
                             timeToLive: 60 * 60 * 24
                         };
-        
+
                         admin.messaging().sendToDevice(try_to_parse(user.dataValues.fcm_token), payload, options)
                             .then(function (response) {
                                 console.log("FCM Successfully sent message:");
@@ -927,7 +931,7 @@ exports.trip_share = (req, res) => {
                                     successData: {
                                     }
                                 });
-        
+
                             })
                             .catch(function (error) {
                                 console.log("Error sending message:", error);
@@ -935,17 +939,17 @@ exports.trip_share = (req, res) => {
                                     responsecode: 400,
                                     notification: response.results[0]
                                 })
-        
+
                             });
-        
-        
-        
-                    }else{
+
+
+
+                    } else {
                         return res.status(200).send({
                             status: 400,
                             message: "This user phone number is not register",
                             successData: {}
-                        });  
+                        });
                     }
                 }).catch(err => {
                     console.log('track 1 ');
@@ -964,7 +968,7 @@ exports.trip_share = (req, res) => {
                 });
             });
 
-       
+
 
 
 

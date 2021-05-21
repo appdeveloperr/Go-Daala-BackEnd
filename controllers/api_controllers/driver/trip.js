@@ -321,6 +321,9 @@ exports.trip_detail = (req, res) => {
                     },
                     {
                         model: db.driver
+                    },
+                    {
+                        model: db.customer
                     }
 
                 ]
