@@ -11,7 +11,6 @@ var fs = require("fs");
 //-------------customer signup--------------------
 exports.signup = (req, res) => {
 
-    console.log(req.file);
 
     req.checkBody('first_name', 'first_name must have value!').notEmpty();
     req.checkBody('last_name', 'last name must have value!').notEmpty();
