@@ -1,7 +1,7 @@
 const { vendorVerifySignUp } = require("../../../middleware");
 const { vendorAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/vendor/promo");
+const controller = require("../../../controllers/api_controllers/customer/promo");
 
 module.exports = function (app) {
 
@@ -14,7 +14,7 @@ module.exports = function (app) {
     });
 
     app.post(
-        "/api/vendor/validate-promo-code",
+        "/api/customer/validate-promo-code",
     //   vendorAuthJwt.verifyToken,
         controller.validate_promo_code,
     );
