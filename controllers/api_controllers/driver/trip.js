@@ -565,8 +565,8 @@ exports.cencal_trip = (req, res) => {
 exports.start_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     req.checkBody('driver_id', 'please provide driver id!').notEmpty();
-    req.checkBody('vendor_fcm', 'please provide vendor_fcm!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver_fcm!').notEmpty();
+
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -591,134 +591,63 @@ exports.start_trip = (req, res) => {
                 plain: true
             }).then(trip => {
                 var myarray = [];
-                if (trip[1].customer_id != null && trip[1].customer_id != '') {
 
-                    Customer.findOne({
-                        where: {
-                            id: trip[1].customer_id
-                        }
-                    }).then(customer => {
-                        if (customer != null && customer != '') {
-                            myarray.push(try_to_parse(customer.dataValues.fcm_token));
-                            myarray.push(try_to_parse(req.body.vendor_fcm));
-                            myarray.push(try_to_parse(req.body.driver_fcm));
+                if (req.body.customer_fcm != null | req.body.customer_fcm != '') {
+                    myarray.push(try_to_parse(req.body.customer_fcm));
+                }
+                if (req.body.vendor_fcm != null | req.body.vendor_fcm != '') {
+                    myarray.push(try_to_parse(req.body.vendor_fcm));
+                }
+                myarray.push(try_to_parse(req.body.driver_fcm));
 
-                            var payload = {
-                                notification: {
-                                    title: "Start trip",
-                                    body: trip[1].id.toString()
-                                }
-                            };
+                var payload = {
+                    notification: {
+                        title: "Start trip",
+                        body: trip[1].id.toString()
+                    }
+                };
 
-                            var options = {
-                                priority: "high",
-                                timeToLive: 60 * 60 * 24
-                            };
+                var options = {
+                    priority: "high",
+                    timeToLive: 60 * 60 * 24
+                };
 
-
-                            admin.messaging().sendToDevice(myarray, payload, options)
-                                .then(function (response) {
-                                    console.log("Successfully sent message:", response);
-                                    return res.status(200).send({
-                                        status: 200,
-                                        message: "Driver start trip  is successfull",
-                                        successData: {
-                                            trip: {
-                                                id: trip[1].id,
-                                                pickup: trip[1].pickup,
-                                                dropoff: trip[1].dropoff,
-                                                pickup_lat: trip[1].pickup_lat,
-                                                pickup_long: trip[1].pickup_long,
-                                                dropoff_lat: trip[1].dropoff_lat,
-                                                dropoff_long: trip[1].dropoff_long,
-                                                vehicle_name: trip[1].vehicle_name,
-                                                estimated_distance: trip[1].estimated_distance,
-                                                estimated_time: trip[1].estimated_time,
-                                                total_cost: trip[1].total_cost,
-                                                driver_id: trip[1].driver_id,
-                                                vendor_id: trip[1].vendor_id,
-                                                status: trip[1].status
-
-
-                                            }
-                                        }
-                                    });
-                                })
-                                .catch(function (error) {
-                                    console.log("Error sending message:", error);
-                                    return res.status(200).send({
-                                        responsecode: 400,
-                                        notification: response.results[0]
-                                    })
-
-                                });
-
-                        }
-                    }).catch(err => {
-
+                admin.messaging().sendToDevice(myarray, payload, options)
+                    .then(function (response) {
+                        console.log("Successfully sent message:", response);
                         return res.status(200).send({
-                            status: 400,
-                            message: "error in finding a customer catch :" + err.message,
-                            successData: {}
+                            status: 200,
+                            message: "Driver start trip  is successfull",
+                            successData: {
+                                trip: {
+                                    id: trip[1].id,
+                                    pickup: trip[1].pickup,
+                                    dropoff: trip[1].dropoff,
+                                    pickup_lat: trip[1].pickup_lat,
+                                    pickup_long: trip[1].pickup_long,
+                                    dropoff_lat: trip[1].dropoff_lat,
+                                    dropoff_long: trip[1].dropoff_long,
+                                    vehicle_name: trip[1].vehicle_name,
+                                    estimated_distance: trip[1].estimated_distance,
+                                    estimated_time: trip[1].estimated_time,
+                                    total_cost: trip[1].total_cost,
+                                    driver_id: trip[1].driver_id,
+                                    vendor_id: trip[1].vendor_id,
+                                    status: trip[1].status
+
+                                }
+                            }
                         });
+                    })
+                    .catch(function (error) {
+                        console.log("Error sending message:", error);
+                        return res.status(200).send({
+                            responsecode: 400,
+                            notification: response.results[0]
+                        })
 
                     });
 
-                } else {
-                    myarray.push(try_to_parse(req.body.vendor_fcm));
-                    myarray.push(try_to_parse(req.body.driver_fcm));
-
-                    var payload = {
-                        notification: {
-                            title: "Start trip",
-                            body: trip[1].id.toString()
-                        }
-                    };
-
-                    var options = {
-                        priority: "high",
-                        timeToLive: 60 * 60 * 24
-                    };
-
-
-                    admin.messaging().sendToDevice(myarray, payload, options)
-                        .then(function (response) {
-                            console.log("Successfully sent message:", response);
-                            return res.status(200).send({
-                                status: 200,
-                                message: "Driver start trip  is successfull",
-                                successData: {
-                                    trip: {
-                                        id: trip[1].id,
-                                        pickup: trip[1].pickup,
-                                        dropoff: trip[1].dropoff,
-                                        pickup_lat: trip[1].pickup_lat,
-                                        pickup_long: trip[1].pickup_long,
-                                        dropoff_lat: trip[1].dropoff_lat,
-                                        dropoff_long: trip[1].dropoff_long,
-                                        vehicle_name: trip[1].vehicle_name,
-                                        estimated_distance: trip[1].estimated_distance,
-                                        estimated_time: trip[1].estimated_time,
-                                        total_cost: trip[1].total_cost,
-                                        driver_id: trip[1].driver_id,
-                                        vendor_id: trip[1].vendor_id,
-                                        status: trip[1].status
-
-
-                                    }
-                                }
-                            });
-                        })
-                        .catch(function (error) {
-                            console.log("Error sending message:", error);
-                            return res.status(200).send({
-                                responsecode: 400,
-                                notification: response.results[0]
-                            })
-
-                        });
-
-                }
 
             }).catch(err => {
 
@@ -739,8 +668,8 @@ exports.start_trip = (req, res) => {
 exports.end_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     req.checkBody('driver_id', 'please provide driver id!').notEmpty();
-    req.checkBody('vendor_fcm', 'please provide vendor_fcm!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver_fcm!').notEmpty();
+
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -755,7 +684,9 @@ exports.end_trip = (req, res) => {
     } else {
         var myarray = [];
 
-        myarray.push(try_to_parse(req.body.vendor_fcm));
+        if (req.body.vendor_fcm != null | req.body.vendor_fcm != '') {
+            myarray.push(try_to_parse(req.body.vendor_fcm));
+        }
         myarray.push(try_to_parse(req.body.driver_fcm));
 
         var payload = {
