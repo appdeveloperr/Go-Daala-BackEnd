@@ -20,7 +20,9 @@ exports.signup = (req, res) => {
     req.checkBody('fcm_token', 'Please provide a fcm token needed!')
 
     var errors = req.validationErrors();
-    if (errors) {                    //////////------input text validation error
+    if (errors) {                    
+        console.log("VENDOR ERROR 0");
+        //////////------input text validation error
         return res.status(200).send({
             status: 400,
             message: "validation error in Signing Up",
