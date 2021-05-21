@@ -70,21 +70,10 @@ db.sequelize.sync({force: false}).then(() => {
 
 
 
-
-// app.set('trust proxy', 1)
-// app.use(session({
-//   secret: 'max',
-//   resave: true,
-//   saveUninitialized: true,
-//   cookie: { secure: false }
-// }));
-
 //-------- express session middelware -----------------
 require('./middleware/session')(app);
 
 // express validater middelware
-// require('./middleware/validater')(app);
-
 app.use(expressValidator({
   errorFormatter: function (param, msg, value) {
     var namespace = param.split('.')
@@ -117,6 +106,7 @@ app.use(expressValidator({
     }
   }
 }));
+
 
 
 //express messages middelware

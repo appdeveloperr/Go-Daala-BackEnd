@@ -1,4 +1,5 @@
 var expressValidator = require('express-validator');
+var path = require('path');
 module.exports = function(app) {
 // express validater middelware
 app.use(expressValidator({

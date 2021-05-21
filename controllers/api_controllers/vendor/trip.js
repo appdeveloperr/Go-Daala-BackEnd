@@ -3,6 +3,7 @@ const Trip = db.trip;
 const driver_lat_long = db.driver_lat_long;
 var Driver = db.driver;
 var Vendor = db.vendor;
+var Customer = db.customer;
 const Cancel_trip = db.cancel_trip;
 var Vehicle = db.vehicle_reg;
 var fs = require('fs');
@@ -10,7 +11,7 @@ var path = require('path');
 const Op = db.Sequelize.Op;
 var admin = require("../../../config/fcm_init").isFcm;
 const axios = require('axios');
-const { user, driver, vendor , cencal_trip} = require("../../../models/api_models");
+const { user, driver, vendor, cencal_trip } = require("../../../models/api_models");
 
 
 
@@ -703,7 +704,7 @@ exports.cancel_trip = (req, res) => {
         Trip.update({
             vendor_id: req.body.vendor_id,
             status: "cancel",
-            how_cancel:"vendor"
+            how_cancel: "vendor"
 
         },
             {
@@ -727,57 +728,138 @@ exports.cancel_trip = (req, res) => {
                     }).then(update_lat_long_status => {
                         var myarray = [];
 
-                        myarray.push(try_to_parse(req.body.vendor_fcm));
-                        myarray.push(try_to_parse(req.body.driver_fcm));
+                        //------------ if customer id exist in trip then find the customer and  get fcm----------
+                        if (trip[1].customer_id != null && trip[1].customer_id != '') {
+                            Customer.findOne({
+                                where: {
+                                    id: trip[1].customer_id
+                                }
+                            }).then(customer => {
 
-                        var payload = {
-                            notification: {
-                                title: "Vendor  Cancel Trip",
-                                body: trip[1].id.toString()
-                            }
-                        };
+                                //------------ if customer is exist in customer table then get customer fcm ---------//
 
-                        var options = {
-                            priority: "high",
-                            timeToLive: 60 * 60 * 24
-                        };
+                                if (customer != null && customer != '') {
+                                    myarray.push(try_to_parse(customer.dataValues.fcm_token));
+                                    myarray.push(try_to_parse(req.body.vendor_fcm));
+                                    myarray.push(try_to_parse(req.body.driver_fcm));
 
-
-                        admin.messaging().sendToDevice(myarray, payload, options)
-                            .then(function (response) {
-                                console.log("Successfully sent message:", response);
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "Vendor cencal trip  is successfull",
-                                    successData: {
-                                        trip: {
-                                            id: trip[1].id,
-                                            pickup: trip[1].pickup,
-                                            dropoff: trip[1].dropoff,
-                                            pickup_latitude: trip[1].pickup_latitude,
-                                            pick_longitude: trip[1].pick_longitude,
-                                            vehicle_name: trip[1].vehicle_name,
-                                            estimated_distance: trip[1].estimated_distance,
-                                            estimated_time: trip[1].estimated_time,
-                                            total_cost: trip[1].total_cost,
-                                            driver_id: trip[1].driver_id,
-                                            vendor_id: trip[1].vendor_id,
-                                            status: trip[1].status
-
-
+                                    var payload = {
+                                        notification: {
+                                            title: "Vendor  Cancel Trip",
+                                            body: trip[1].id.toString()
                                         }
-                                    }
-                                });
-                            })
-                            .catch(function (error) {
-                                console.log("Error sending message:", error);
+                                    };
+
+                                    var options = {
+                                        priority: "high",
+                                        timeToLive: 60 * 60 * 24
+                                    };
+
+
+                                    admin.messaging().sendToDevice(myarray, payload, options)
+                                        .then(function (response) {
+                                            console.log("Successfully sent message:", response);
+                                            return res.status(200).send({
+                                                status: 200,
+                                                message: "Vendor cencal trip  is successfull",
+                                                successData: {
+                                                    trip: {
+                                                        id: trip[1].id,
+                                                        pickup: trip[1].pickup,
+                                                        dropoff: trip[1].dropoff,
+                                                        pickup_latitude: trip[1].pickup_latitude,
+                                                        pick_longitude: trip[1].pick_longitude,
+                                                        vehicle_name: trip[1].vehicle_name,
+                                                        estimated_distance: trip[1].estimated_distance,
+                                                        estimated_time: trip[1].estimated_time,
+                                                        total_cost: trip[1].total_cost,
+                                                        driver_id: trip[1].driver_id,
+                                                        vendor_id: trip[1].vendor_id,
+                                                        status: trip[1].status
+
+
+                                                    }
+                                                }
+                                            });
+                                        })
+                                        .catch(function (error) {
+                                            console.log("Error sending message:", error);
+                                            return res.status(200).send({
+                                                responsecode: 400,
+                                                notification: response.results[0]
+                                            })
+
+                                        });
+
+
+                                }
+                               
+                            }).catch(err => {
+
                                 return res.status(200).send({
-                                    responsecode: 400,
-                                    notification: response.results[0]
-                                })
+                                    status: 400,
+                                    message: "error in finding a customer catch :" + err.message,
+                                    successData: {}
+                                });
 
                             });
 
+                        }
+
+
+                        //------customer id not exit in trip table----------------
+                        else {
+                            myarray.push(try_to_parse(req.body.vendor_fcm));
+                            myarray.push(try_to_parse(req.body.driver_fcm));
+
+                            var payload = {
+                                notification: {
+                                    title: "Vendor  Cancel Trip",
+                                    body: trip[1].id.toString()
+                                }
+                            };
+
+                            var options = {
+                                priority: "high",
+                                timeToLive: 60 * 60 * 24
+                            };
+
+
+                            admin.messaging().sendToDevice(myarray, payload, options)
+                                .then(function (response) {
+                                    console.log("Successfully sent message:", response);
+                                    return res.status(200).send({
+                                        status: 200,
+                                        message: "Vendor cencal trip  is successfull",
+                                        successData: {
+                                            trip: {
+                                                id: trip[1].id,
+                                                pickup: trip[1].pickup,
+                                                dropoff: trip[1].dropoff,
+                                                pickup_latitude: trip[1].pickup_latitude,
+                                                pick_longitude: trip[1].pick_longitude,
+                                                vehicle_name: trip[1].vehicle_name,
+                                                estimated_distance: trip[1].estimated_distance,
+                                                estimated_time: trip[1].estimated_time,
+                                                total_cost: trip[1].total_cost,
+                                                driver_id: trip[1].driver_id,
+                                                vendor_id: trip[1].vendor_id,
+                                                status: trip[1].status
+
+
+                                            }
+                                        }
+                                    });
+                                })
+                                .catch(function (error) {
+                                    console.log("Error sending message:", error);
+                                    return res.status(200).send({
+                                        responsecode: 400,
+                                        notification: response.results[0]
+                                    })
+
+                                });
+                        }
 
                     }).catch(err => {
 
@@ -835,25 +917,25 @@ exports.trip_detail = (req, res) => {
                     { id: req.body.trip_id },
                 include: [
                     {
-                        model:driver
-                    },{
-                        model:vendor
+                        model: driver
+                    }, {
+                        model: vendor
                     }
                 ]
             }).then(trip => {
 
-              
-                    
-                       
-                        return res.status(200).send({
-                            status: 200,
-                            message: "trip detail is successfully",
-                            successData: {
-                                trip: trip.dataValues
-                            }
-                        });
-                
-              
+
+
+
+                return res.status(200).send({
+                    status: 200,
+                    message: "trip detail is successfully",
+                    successData: {
+                        trip: trip.dataValues
+                    }
+                });
+
+
 
             }).catch(err => {
 
@@ -898,12 +980,12 @@ exports.trip_share = (req, res) => {
             .then(response => {
                 console.log("massage sent is successfully");
 
-                Vendor.findOne({
+                Customer.findOne({
                     where: {
                         phone_number: mobileno
                     }
                 }).then(user => {
-        
+
                     if (user) {
                         console.log("this is fcm : " + user.dataValues.fcm_token);
                         var payload = {
@@ -912,40 +994,63 @@ exports.trip_share = (req, res) => {
                                 body: req.body.trip_id.toString()
                             }
                         };
-        
+
                         var options = {
                             priority: "high",
                             timeToLive: 60 * 60 * 24
                         };
-        
+
                         admin.messaging().sendToDevice(try_to_parse(user.dataValues.fcm_token), payload, options)
                             .then(function (response) {
                                 console.log("FCM Successfully sent message:");
-                                return res.status(200).send({
-                                    status: 200,
-                                    message: "Successfully sent message",
-                                    successData: {
+                                Trip.update({
+                                    where:
+                                        { id: req.body.trip_id },
+                                    returning: true,
+                                    plain: true
+                                }).then(trip => {
+                                    if (trip) {
+                                        return res.status(200).send({
+                                            status: 200,
+                                            message: "Successfully sent message",
+                                            successData: {
+                                            }
+                                        });
+                                    } else {
+                                        return res.status(200).send({
+                                            status: 200,
+                                            message: "Successfully sent message",
+                                            successData: {
+                                            }
+                                        });
                                     }
+
+                                }).catch(function (error) {
+                                    return res.status(200).send({
+                                        status: 400,
+                                        message: "Error in finding customer and send fcm notificion message: " + error,
+                                        successData: {}
+                                    });
                                 });
-        
+
                             })
                             .catch(function (error) {
                                 console.log("Error sending message:", error);
                                 return res.status(200).send({
-                                    responsecode: 400,
-                                    notification: response.results[0]
+                                    status: 400,
+                                    notification: "Error sending message: " + response.results[0]
                                 })
-        
+
                             });
-        
-        
-        
-                    }else{
+
+
+
+                    } else {
                         return res.status(200).send({
                             status: 400,
                             message: "This user phone number is not register",
                             successData: {}
-                        });  
+                        });
                     }
                 }).catch(err => {
                     console.log('track 1 ');
@@ -964,7 +1069,7 @@ exports.trip_share = (req, res) => {
                 });
             });
 
-       
+
 
 
 
