@@ -34,7 +34,9 @@ exports.signup = (req, res) => {
         if (!req.files) {
             req.checkBody('profile', 'profile picture must have needed!').notEmpty();
             var errors = req.validationErrors();
-            if (errors) {                    //////////------input file validation error
+            if (errors) {           
+                console.log("VENDOR ERROR 1");
+                //////////------input file validation error
                 return res.status(200).send({
                     status: 400,
                     message: "validation error in Signing Up",
