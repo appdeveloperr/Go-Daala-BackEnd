@@ -53,6 +53,8 @@ exports.receive_trip = (req, res, next) => {
                         if (trip != null || trip != '') {
 
                             //Checking Who Created the Trip Customer or Vendor
+                            console.log("Checking Who Created the Trip Customer or Vendor: "+trip[1].vendor_id+" / "+trip[1].customer_id)
+
                             if (trip[1].vendor_id != null || trip[1].vendor_id != '') {
 
                                 //Vendor Created The Trip
