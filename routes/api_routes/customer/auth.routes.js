@@ -22,23 +22,23 @@ module.exports = function (app) {
     app.post(
         "/api/customer/signup",
         controller.signup
-        );
+    );
 
-        app.post(
-            "/api/customer/verify-email-and-phone-number",
-             controller.varify_email_and_phone_number
-        )
+    app.post(
+        "/api/customer/verify-email-and-phone-number",
+        controller.varify_email_and_phone_number
+    )
 
 
     app.post("/api/customer/signin", controller.signin);
     app.post('/api/customer/update-profile',
-       customerAuthJwt.verifyToken,
+        customerAuthJwt.verifyToken,
         controller.update);
 
 
-        app.post('/api/customer/update-picture',
+    app.post('/api/customer/update-picture',
         customerAuthJwt.verifyToken,
         controller.update_picture
-        )
+    )
 
 };
