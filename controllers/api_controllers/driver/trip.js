@@ -54,7 +54,7 @@ exports.receive_trip = (req, res, next) => {
                         if (trip != null || trip != '') {
 
 
-                            console.log("TRIP ERROR 2")
+                            console.log("TRIP ERROR 2: "+trip[1].vendor_id)
 
                             Vendor.findOne({
                                 where: {
