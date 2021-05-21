@@ -5,21 +5,23 @@ const { vehicle } = require("../../models/api_models");
 
 //--------Vehicle create Function -----------------
 exports.create = function (req, res, next) {
+
   req.checkBody('type', 'Vehicle Type must have name!').notEmpty();
   req.checkBody('service_charges', 'Service  must have needed!')
   req.checkBody('distance', 'Distance must have  needed!').notEmpty();
   req.checkBody('time', 'Time must have value!').notEmpty();
 
+  console.log(req);
 
   var errors = req.validationErrors();
   if (errors) {
     res.render('admin/vehicle/create', {
       errors: errors,
       userdata: req.user,
-      type:"",
-      service_charges:"",
-      distance:"",
-      time:""
+      type: "",
+      service_charges: "",
+      distance: "",
+      time: ""
 
     });
   } else {
@@ -27,15 +29,15 @@ exports.create = function (req, res, next) {
     if (fileinfo) {//image exist
       var filename = fileinfo.filename;
       var type = req.body.type;
-      var service_charges= req.body.service_charges;
-      var distance= req.body.distance;
+      var service_charges = req.body.service_charges;
+      var distance = req.body.distance;
       var time = req.body.time;
       var destination = "/files/uploadsFiles/";
       Vehicle.create({
         vehicle_type: type,
-        service:service_charges,
-        distance:distance,
-        time:time,
+        service: service_charges,
+        distance: distance,
+        time: time,
         image_path: destination + "" + filename
       }).then(vehicle => {
         req.flash('success', 'Successfuly your vehicle is  Added!');
@@ -121,16 +123,16 @@ exports.update = function (req, res, next) {
     res.render('admin/vehicle/edit', {
       errors: errors,
       userdata: req.user,
-      data:Data
+      data: Data
     });
   } else {
     var fileinfo = req.file;
     if (fileinfo) {//image exist
-  
+
       var filename = fileinfo.filename;
       var old_file = req.body.old_file;
-  
-  
+
+
       fs.unlink(old_file, function (error) {
         if (error) { console.log("err ", error) } else {
           console.log("file deleted!")
@@ -139,9 +141,9 @@ exports.update = function (req, res, next) {
       var destination = "/files/uploadsFiles/";
       Vehicle.update({
         vehicle_type: req.body.type,
-        service:req.body.service_charges,
-        distance:req.body.distance,
-        time:req.body.time,
+        service: req.body.service_charges,
+        distance: req.body.distance,
+        time: req.body.time,
         image_path: destination + "" + filename
       }, {
         where: {
@@ -155,16 +157,16 @@ exports.update = function (req, res, next) {
       }).catch(err => {
         console.log(err);
       });
-  
+
     } else {//image is not exist
-  
-  
+
+
       console.log(req.body.type);
       Vehicle.update({
         banner_type: req.body.type,
         service: req.body.service_charges,
-        distance:req.body.distance,
-        time:req.body.time,
+        distance: req.body.distance,
+        time: req.body.time,
       }, {
         where: {
           id: req.body.id
@@ -180,13 +182,13 @@ exports.update = function (req, res, next) {
       }).catch(err => {
         console.log(err);
       });
-  
-     
+
+
       res.redirect('/admin/vehicle/index');
     }
   }
 
-  
+
 }
 
 
