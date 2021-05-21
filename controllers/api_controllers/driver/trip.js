@@ -848,7 +848,7 @@ exports.get_all_trips = (req, res) => {
         }).then(trip => {
             if (trip == null || trip == '') {
                 return res.status(200).send({
-                    status: 400,
+                    status: 200,
                     message: "All trips was not found in DB!",
                     successData: {
                     }
