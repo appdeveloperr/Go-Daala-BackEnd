@@ -122,12 +122,17 @@ exports.receive_trip = (req, res, next) => {
                             }
                             else {
 
+                                console.log("TRIP ERROR C1")
+
                                 //Customer Created The Trip
                                 Customer.findOne({
                                     where: {
                                         id: trip[1].customer_id
                                     }
                                 }).then(customer_info => {
+
+                                    console.log("TRIP ERROR C2")
+
                                     delete customer_info.dataValues.password;
                                     Driver_lat_long.update({
                                         status: "unavailable"
@@ -137,7 +142,7 @@ exports.receive_trip = (req, res, next) => {
                                         plain: true
                                     }).then(update_lat_long_status => {
 
-                                        console.log("TRIP ERROR 3")
+                                        console.log("TRIP ERROR C3")
 
                                         return res.status(200).send({
                                             status: 200,
