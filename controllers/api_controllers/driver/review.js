@@ -126,7 +126,7 @@ exports.get_review = (req, res) => {
         });
     } else {
 
-console.log("ERROR REVIEW 1")
+        console.log("ERROR REVIEW 1")
 
         Reviews.findAll({
             where: {
@@ -189,74 +189,142 @@ console.log("ERROR REVIEW 1")
                 });
             } else {
 
+                if (req.body.vendor_id != null || req.body.vendor_id != '') {
+                    //Vendors
+                    reviews.forEach(item => {
+                        if (item.dataValues.vendor_id != null) {//------------if vendor is gave reviews to driver ------//////
+                            Vendor.findOne({
+                                where: {
+                                    id: item.dataValues.vendor_id
+                                }
+                            }).then(vendor => {
+                                if (vendor != null || vendor != '') {
 
-                reviews.forEach(item => {
-                    if (item.dataValues.vendor_id != null) {//------------if vendor is gave reviews to driver ------//////
+                                    delete vendor.dataValues.password;
+                                    delete vendor.dataValues.id;
+                                    delete vendor.dataValues.account_info;
+                                    delete vendor.dataValues.fcm_token;
 
-                        Vendor.findOne({
-                            where: {
-                                id: item.dataValues.vendor_id
-                            }
-                        }).then(vendor => {
-                            if (vendor != null || vendor != '') {
+                                    // delete vendor.dataValues.phone_number;
 
-                                delete vendor.dataValues.password;
-                                delete vendor.dataValues.id;
-                                delete vendor.dataValues.account_info;
-                                delete vendor.dataValues.fcm_token;
+                                    Trip.findOne({
+                                        where: {
+                                            id: req.body.trip_id
+                                        }
+                                    }).then(trip => {
+                                        if (trip != null || trip != '') {
+                                            return res.status(200).send({
+                                                status: 200,
+                                                message: "get driver reviews   is successful",
+                                                successData: {
+                                                    reviews_list: {
+                                                        review: reviews
+                                                    },
+                                                    vendor: vendor.dataValues
+                                                    ,
+                                                    trip: trip.dataValues
 
-                                // delete vendor.dataValues.phone_number;
-
-                                Trip.findOne({
-                                    where: {
-                                        id: req.body.trip_id
-                                    }
-                                }).then(trip => {
-                                    if (trip != null || trip != '') {
-                                        return res.status(200).send({
-                                            status: 200,
-                                            message: "get driver reviews   is successful",
-                                            successData: {
-                                                reviews_list: {
-                                                    review: reviews
-                                                },
-                                                vendor: vendor.dataValues
-                                                ,
-                                                trip: trip.dataValues
-
-                                            }
-                                        });
-                                    } else {
+                                                }
+                                            });
+                                        } else {
+                                            return res.status(200).send({
+                                                status: 400,
+                                                message: "get driver reviews from trip was not found in DB",
+                                                successData: {
+                                                }
+                                            });
+                                        }
+                                    }).catch(err => {
                                         return res.status(200).send({
                                             status: 400,
-                                            message: "get driver reviews from trip was not found in DB",
-                                            successData: {
-                                            }
+                                            message: err.message,
+                                            successData: {}
                                         });
-                                    }
-                                }).catch(err => {
-                                    return res.status(200).send({
-                                        status: 400,
-                                        message: err.message,
-                                        successData: {}
-                                    });
 
-                                })
+                                    })
 
-                            }
-                        }).catch(err => {
+                                }
+                            }).catch(err => {
 
-                            return res.status(200).send({
-                                status: 400,
-                                message: err.message,
-                                successData: {}
-                            });
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: err.message,
+                                    successData: {}
+                                });
 
-                        })
-                    }
+                            })
+                        }
+                    });
+                } else {
 
-                });
+                    //Customer
+                    reviews.forEach(item => {
+                        if (item.dataValues.customer_id != null) {//------------if customer is gave reviews to driver ------//////
+                            Customer.findOne({
+                                where: {
+                                    id: item.dataValues.customer_id
+                                }
+                            }).then(customer => {
+                                if (customer != null || customer != '') {
 
+                                    delete customer.dataValues.password;
+                                    delete customer.dataValues.id;
+                                    delete customer.dataValues.account_info;
+                                    delete customer.dataValues.fcm_token;
+
+                                    // delete customer.dataValues.phone_number;
+
+                                    Trip.findOne({
+                                        where: {
+                                            id: req.body.trip_id
+                                        }
+                                    }).then(trip => {
+                                        if (trip != null || trip != '') {
+                                            return res.status(200).send({
+                                                status: 200,
+                                                message: "get driver reviews   is successful",
+                                                successData: {
+                                                    reviews_list: {
+                                                        review: reviews
+                                                    },
+                                                    customer: customer.dataValues
+                                                    ,
+                                                    trip: trip.dataValues
+
+                                                }
+                                            });
+                                        } else {
+                                            return res.status(200).send({
+                                                status: 400,
+                                                message: "get driver reviews from trip was not found in DB",
+                                                successData: {
+                                                }
+                                            });
+                                        }
+                                    }).catch(err => {
+                                        return res.status(200).send({
+                                            status: 400,
+                                            message: err.message,
+                                            successData: {}
+                                        });
+
+                                    })
+
+                                }
+                            }).catch(err => {
+
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: err.message,
+                                    successData: {}
+                                });
+
+                            })
+                        }
+                    });
+
+
+                }
 
                 Trip.findOne({
                     where: {
@@ -265,13 +333,16 @@ console.log("ERROR REVIEW 1")
                     include: [
                         {
                             model: db.vendor
+                        },
+                        {
+                            model: db.customer
                         }
                     ]
                 }).then(trip => {
                     if (trip != null || trip != '') {
 
                         delete trip.vendor.dataValues.password;
-
+                        delete trip.customer.dataValues.password;
 
 
                         return res.status(200).send({
