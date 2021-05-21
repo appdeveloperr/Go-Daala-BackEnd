@@ -131,6 +131,7 @@ require('./middleware/passport')(passport);
 
 
 //Passport Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
