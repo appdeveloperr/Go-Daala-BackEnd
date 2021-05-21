@@ -32,6 +32,7 @@ exports.receive_trip = (req, res, next) => {
                 id: req.body.trip_id
             }
         }).then(check_trip_is_accepted => {
+
             console.log("this check_trip_is_accepted is driver_id: " + check_trip_is_accepted.dataValues.driver_id)
 
             if (check_trip_is_accepted.dataValues.driver_id == null) {
@@ -44,7 +45,13 @@ exports.receive_trip = (req, res, next) => {
                         returning: true,
                         plain: true
                     }).then(trip => {
+                        console.log("TRIP ERROR 1")
+
                         if (trip != null || trip != '') {
+
+
+                            console.log("TRIP ERROR 2")
+
                             Vendor.findOne({
                                 where: {
                                     id: trip[1].vendor_id
@@ -58,6 +65,9 @@ exports.receive_trip = (req, res, next) => {
                                     returning: true,
                                     plain: true
                                 }).then(update_lat_long_status => {
+
+                                    console.log("TRIP ERROR 3")
+
                                     return res.status(200).send({
                                         status: 200,
                                         message: "Driver receive trip  is successful",
