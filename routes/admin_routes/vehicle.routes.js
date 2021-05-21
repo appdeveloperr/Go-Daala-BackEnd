@@ -3,8 +3,8 @@ var auth = require('../../controllers/admin_controllers/auth');
 var isAdmin = auth.isAdmin;
 var vehicle_controller = require('../../controllers/admin_controllers/vehicle');
 
-const multer = require('multer');
-var path = require('path');
+// const multer = require('multer');
+// var path = require('path');
 
 
 

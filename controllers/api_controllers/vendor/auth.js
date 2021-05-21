@@ -10,7 +10,7 @@ var fs = require("fs");
 
 //-------------vendor signup--------------------
 exports.signup = (req, res) => {
-    console.log(req.files);
+  
 
     req.checkBody('first_name', 'first_name must have value!').notEmpty();
     req.checkBody('last_name', 'last name must have value!').notEmpty();
