@@ -9,6 +9,8 @@ var fs = require("fs");
 //-------------customer signup--------------------
 exports.signup = (req, res) => {
 
+    console.log(req);
+
     req.checkBody('first_name', 'first_name must have value!').notEmpty();
     req.checkBody('last_name', 'last name must have value!').notEmpty();
     req.checkBody('email', 'email must have value!').notEmpty();
@@ -17,7 +19,9 @@ exports.signup = (req, res) => {
     req.checkBody('fcm_token', 'Please provide a fcm token needed!')
 
     var errors = req.validationErrors();
-    if (errors) {                    //////////------input text validation error
+    if (errors) {   
+        console.log("CUSTOMER ERROR 0");
+        //////////------input text validation error
         return res.status(200).send({
             status: 400,
             message: "validation error in Signing Up",
@@ -29,11 +33,14 @@ exports.signup = (req, res) => {
         });
     } else {
 
+
         if (!req.files) {
             req.checkBody('profile', 'profile picture must have needed!').notEmpty();
         
             var errors = req.validationErrors();
-            if (errors) {                    //////////------input file validation error
+            if (errors) {                    
+                console.log("CUSTOMER ERROR 1");
+                //////////------input file validation error
                 return res.status(200).send({
                     status: 400,
                     message: "validation error in Signing Up",
@@ -45,7 +52,7 @@ exports.signup = (req, res) => {
                 });
             }
         } else {
-            console.log(req);
+            console.log("CUSTOMER ERROR 2");
 
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
             var errors = req.validationErrors();
@@ -61,12 +68,16 @@ exports.signup = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
+
+                console.log("NO ERROR COMING TO CREATE-1");
+
                 var path_file = './public/files/uploadsFiles/customer/';
                 var filename = 'profile-1' + Date.now() + req.files.profile.name;
                 req.files.profile.mv(path_file + '' + filename, function (err) {
                     if (err) console.log("error occured");
                 });
 
+                console.log("NO ERROR COMING TO CREATE-2");
 
 
                 // Save customer to Database
