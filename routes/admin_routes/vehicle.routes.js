@@ -11,25 +11,25 @@ var path = require('path');
 const fs = require('fs');
 module.exports = function (app) {
   
-// SET STORAGE
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './public/files/uploadsFiles/')
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-  });
+// // SET STORAGE
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, './public/files/uploadsFiles/')
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//     }
+//   });
 
-  const fileFilter = (req, file, cb) => {
-    if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png' || file.mimetype == 'image/jpg') {
-      cb(null, true);
-    } else {
-      cb(null, false);
-    }
-  }
+//   const fileFilter = (req, file, cb) => {
+//     if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png' || file.mimetype == 'image/jpg') {
+//       cb(null, true);
+//     } else {
+//       cb(null, false);
+//     }
+//   }
 
-  const uploads = multer({ storage: storage, fileFilter: fileFilter });
+//   const uploads = multer({ storage: storage, fileFilter: fileFilter });
 
 
 
@@ -54,7 +54,7 @@ const storage = multer.diskStorage({
 
 
 //------------------post vehicle create-----------------------------------------
-  app.post("/admin/vehicle/upload", isAdmin, uploads.single('myFile'), vehicle_controller.create);
+  app.post("/admin/vehicle/upload", isAdmin, vehicle_controller.create);
 
 //------------------get vehicle edit  && redirect to get vehicle edit  To next route -----------------------------------------
   app.get("/admin/vehicle/Edit/:id", isAdmin, function (req, res) {
@@ -67,7 +67,7 @@ const storage = multer.diskStorage({
   app.get('/admin/Edit_vehicle/:id',isAdmin, vehicle_controller.edit);
 
   //------------------post vehicle update---------------------------------
-  app.post("/admin/vehicle/update", isAdmin,uploads.single('myFile'),vehicle_controller.update);
+  app.post("/admin/vehicle/update", isAdmin, vehicle_controller.update);
     
 
   //-----------------get vehicle delete ---------------------

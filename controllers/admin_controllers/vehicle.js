@@ -26,7 +26,10 @@ exports.create = function (req, res, next) {
     });
   } else {
     var fileinfo = req.file;
-    if (fileinfo) {//image exist
+    
+    
+    if (fileinfo) {
+      //image exist
       var filename = fileinfo.filename;
       var type = req.body.type;
       var service_charges = req.body.service_charges;
