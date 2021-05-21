@@ -23,6 +23,7 @@ exports.signup = (req, res) => {
 
 
     // Save customer to Database
+    var filename = "";
     Customer.create({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
