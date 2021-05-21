@@ -2,8 +2,8 @@ const { driverVerifySignUp } = require("../../../middleware");
 const { driverAuthJwt } = require("../../../middleware");
 
 const controller = require("../../../controllers/api_controllers/driver/auth");
-const multer = require('multer');
-var path = require('path');
+//const multer = require('multer');
+//var path = require('path');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
 
@@ -21,7 +21,6 @@ module.exports = function (app) {
 
     app.post(
         "/api/driver/signupdriver",
-		driverVerifySignUp.checkDuplicateEmailOrPhone_number,
 		controller.signup);
 
 

@@ -14,96 +14,17 @@ var OTP = db.otp;
 exports.signup = (req, res) => {
     console.log(req);
 
-    req.checkBody('first_name', 'first_name must have value!').notEmpty();
-    req.checkBody('last_name', 'last name must have value!').notEmpty();
-    req.checkBody('email', 'email must have value!').notEmpty();
-    req.checkBody('phone_number', 'phone number must have value!').notEmpty();
-    req.checkBody('password', 'password must have value!').notEmpty();
-    req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
-
-    var errors = req.validationErrors();
-    if (errors) {                    //////////------input text validation error
-        console.log("DRIVER ERROR 0");
-
-        return res.status(200).send({
-            status: 400,
-            message: "validation error in Signing Up",
-            successData: {
-                error: {
-                    error: errors
-                }
-            }
-        });
-    } else {
-        if (!req.files) {
-
-            req.checkBody('profile', 'profile picture must have needed!').notEmpty();
-            req.checkBody('cnic', 'CNIC picture must have needed!').notEmpty();
-            req.checkBody('driving_license', 'Driving License picture must have needed!').notEmpty();
-            var errors = req.validationErrors();
-            if (errors) {                 //////////------input file validation error
-                console.log("DRIVER ERROR 1");
-
-                return res.status(200).send({
-                    status: 400,
-                    message: "validation error in Signing Up",
-                    successData: {
-                        error: {
-                            error: errors
-                        }
-                    }
-                });
-            }
-        } else {
-            
-            console.log(req);
-            req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
-            req.checkBody('cnic', 'cnic picture must have needed animage').isImage(req.files.cnic.name);
-            req.checkBody('driving_license', 'driving_license picture must have needed animage').isImage(req.files.driving_license.name);
-            var errors = req.validationErrors();
-            if (errors) {   //////////------input file must have image validation error
-                console.log("DRIVER ERROR 2");
-
-                return res.status(200).send({
-                    status: 400,
-                    message: "validation error in Signing Up",
-                    successData: {
-                        error: {
-                            error: errors
-                        }
-                    }
-                });
-            } else {   ///------------------ no error exist
-
-                var path_file = './public/files/uploadsFiles/driver/';
-                var fileOne = 'profile-1' + Date.now() + req.files.profile.name;
-                //-----------------move profile into server-------------------------------//
-                req.files.profile.mv(path_file + '' + fileOne, function (err) {
-                    if (err) console.log("error occured");
-                });
 
 
 
-                //-----------------move cnic into server-------------------------------//
-
-                var cnicfilename = 'profile-2' + Date.now() + req.files.cnic.name;
-                req.files.cnic.mv(path_file + cnicfilename, function (err) {
-                    if (err) console.log("error occured");
-                });
-
-
-
-
-
-                //-----------------move driving_license into server-------------------------------//
-                var drivefilename = 'profile-3' + Date.now() + req.files.driving_license.name;
-                req.files.driving_license.mv(path_file + drivefilename, function (err) {
-                    if (err) console.log("error occured");
-                });
 
 
 
                 // Save vendor to Database
+                var fileOne = "";
+                var cnicfilename = "";
+                var drivefilename = "";
+
                 Driver.create({
                     first_name: req.body.first_name,
                     last_name: req.body.last_name,
@@ -147,10 +68,147 @@ exports.signup = (req, res) => {
                         });
 
                     });
-            }
-        }
 
-    }
+    // req.checkBody('first_name', 'first_name must have value!').notEmpty();
+    // req.checkBody('last_name', 'last name must have value!').notEmpty();
+    // req.checkBody('email', 'email must have value!').notEmpty();
+    // req.checkBody('phone_number', 'phone number must have value!').notEmpty();
+    // req.checkBody('password', 'password must have value!').notEmpty();
+    // req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
+
+    // var errors = req.validationErrors();
+    // if (errors) {                    //////////------input text validation error
+    //     console.log("DRIVER ERROR 0");
+
+    //     return res.status(200).send({
+    //         status: 400,
+    //         message: "validation error in Signing Up",
+    //         successData: {
+    //             error: {
+    //                 error: errors
+    //             }
+    //         }
+    //     });
+    // } else {
+    //     if (!req.files) {
+
+    //         req.checkBody('profile', 'profile picture must have needed!').notEmpty();
+    //         req.checkBody('cnic', 'CNIC picture must have needed!').notEmpty();
+    //         req.checkBody('driving_license', 'Driving License picture must have needed!').notEmpty();
+    //         var errors = req.validationErrors();
+    //         if (errors) {                 //////////------input file validation error
+    //             console.log("DRIVER ERROR 1");
+
+    //             return res.status(200).send({
+    //                 status: 400,
+    //                 message: "validation error in Signing Up",
+    //                 successData: {
+    //                     error: {
+    //                         error: errors
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     } else {
+            
+    //         console.log(req);
+    //         req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
+    //         req.checkBody('cnic', 'cnic picture must have needed animage').isImage(req.files.cnic.name);
+    //         req.checkBody('driving_license', 'driving_license picture must have needed animage').isImage(req.files.driving_license.name);
+    //         var errors = req.validationErrors();
+    //         if (errors) {   //////////------input file must have image validation error
+    //             console.log("DRIVER ERROR 2");
+
+    //             return res.status(200).send({
+    //                 status: 400,
+    //                 message: "validation error in Signing Up",
+    //                 successData: {
+    //                     error: {
+    //                         error: errors
+    //                     }
+    //                 }
+    //             });
+    //         } else {   ///------------------ no error exist
+
+    //             var path_file = './public/files/uploadsFiles/driver/';
+    //             var fileOne = 'profile-1' + Date.now() + req.files.profile.name;
+    //             //-----------------move profile into server-------------------------------//
+    //             req.files.profile.mv(path_file + '' + fileOne, function (err) {
+    //                 if (err) console.log("error occured");
+    //             });
+
+
+
+    //             //-----------------move cnic into server-------------------------------//
+
+    //             var cnicfilename = 'profile-2' + Date.now() + req.files.cnic.name;
+    //             req.files.cnic.mv(path_file + cnicfilename, function (err) {
+    //                 if (err) console.log("error occured");
+    //             });
+
+
+
+
+
+    //             //-----------------move driving_license into server-------------------------------//
+    //             var drivefilename = 'profile-3' + Date.now() + req.files.driving_license.name;
+    //             req.files.driving_license.mv(path_file + drivefilename, function (err) {
+    //                 if (err) console.log("error occured");
+    //             });
+
+
+
+    //             // Save vendor to Database
+    //             Driver.create({
+    //                 first_name: req.body.first_name,
+    //                 last_name: req.body.last_name,
+    //                 email: req.body.email,
+    //                 phone_number: req.body.phone_number,
+    //                 password: bcrypt.hashSync(req.body.password, 8),
+    //                 profile: '/files/uploadsFiles/driver/' + fileOne,
+    //                 cnic: '/files/uploadsFiles/driver/' + cnicfilename,
+    //                 driving_license: '/files/uploadsFiles/driver/' + drivefilename,
+    //                 status: "active",
+    //                 account_info: "block",
+    //                 fcm_token: req.body.fcm_token,
+    //                 total_rating: "0",
+    //                 total_review: "0"
+    //             }).then(user => {
+
+    //                 var token = jwt.sign({ id: user.id }, config.secret, {
+
+
+    //                 });
+
+    //                 delete user.dataValues.password;
+    //                 user.dataValues.accessToken = token;
+    //                 return res.status(200).send({
+    //                     status: 200,
+    //                     message: "Signing Up is successful",
+    //                     successData: {
+    //                         user: user,
+
+
+    //                     }
+    //                 });
+
+    //             })
+    //                 .catch(err => {
+
+    //                     return res.status(200).send({
+    //                         status: 400,
+    //                         message: err.message,
+    //                         successData: {}
+    //                     });
+
+    //                 });
+    //         }
+    //     }
+
+    // }
+
+
+
 };
 //-------------driver varify_ email--------------------
 exports.varify_email = (req, res) => {
