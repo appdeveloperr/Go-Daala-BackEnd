@@ -6,6 +6,8 @@ const axios = require('axios');
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require("fs");
+
+
 //-------------customer signup--------------------
 exports.signup = (req, res) => {
 

@@ -177,7 +177,6 @@ require('./routes/api_routes/vendor/faq.routes')(app);
 require('./routes/api_routes/vendor/review.routes')(app);
 require('./routes/api_routes/vendor/chat.routes')(app);
 
-
 //-----------------Customer Api routes--------------
 require('./routes/api_routes/customer/auth.routes')(app);
 require('./routes/api_routes/customer/forgot_password.routes')(app);

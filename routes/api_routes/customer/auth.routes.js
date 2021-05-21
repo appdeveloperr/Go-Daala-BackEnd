@@ -9,6 +9,7 @@ const fs = require('fs');
 
 module.exports = function (app) {
     app.use(fileUpload());
+
     app.use(function (req, res, next) {
         res.header(
             "Access-Control-Allow-Headers",
@@ -20,7 +21,6 @@ module.exports = function (app) {
 
     app.post(
         "/api/customer/signup",
-        customerVerifySignUp.checkDuplicateEmailOrPhone_number,
         controller.signup
         );
 
