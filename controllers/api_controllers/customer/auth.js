@@ -21,171 +21,119 @@ exports.signup = (req, res) => {
     req.checkBody('fcm_token', 'Please provide a fcm token needed!')
 
 
-
-    // Save customer to Database
-    var filename = "";
-    Customer.create({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        phone_number: req.body.phone_number,
-        password: bcrypt.hashSync(req.body.password, 8),
-        profile: '/files/uploadsFiles/customer/' + filename,
-        account_info: 'unblock',
-        fcm_token: req.body.fcm_token,
-        total_rating: "0",
-        total_review: "0"
-        //  
-    }).then(user => {
-
-        var token = jwt.sign({ id: user.id }, config.secret);
-
-
-
+    var errors = req.validationErrors();
+    if (errors) {
+        console.log("CUSTOMER ERROR 0");
+        //////////------input text validation error
         return res.status(200).send({
-            status: 200,
-            message: "Signing Up is successful",
+            status: 400,
+            message: "validation error in Signing Up",
             successData: {
-                user: {
-                    id: user.id,
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    email: user.email,
-                    phone_number: user.phone_number,
-                    profile: user.profile,
-                    account_info: user.account_info,
-                    fcm_token: user.fcm_token,
-                    accessToken: token
+                error: {
+                    error: errors
                 }
             }
         });
+    } else {
+        if (!req.files) {
+            req.checkBody('profile', 'profile picture must have needed!').notEmpty();
 
-    })
-        .catch(err => {
+            var errors = req.validationErrors();
+            if (errors) {
+                console.log("CUSTOMER ERROR 1");
+                //////////------input file validation error
+                return res.status(200).send({
+                    status: 400,
+                    message: "validation error in Signing Up",
+                    successData: {
+                        error: {
+                            error: errors
+                        }
+                    }
+                });
+            }
+        } else {
+            console.log("CUSTOMER ERROR 2");
 
-            return res.status(200).send({
-                status: 400,
-                message: err.message,
-                successData: {}
-            });
+            req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
+            var errors = req.validationErrors();
+            if (errors) {   //////////------input file must have image validation error
+                return res.status(200).send({
+                    status: 400,
+                    message: "validation error in Signing Up",
+                    successData: {
+                        error: {
+                            error: errors
+                        }
+                    }
+                });
+            }
 
-        });
-
-
-
-    // var errors = req.validationErrors();
-    // if (errors) {   
-    //     console.log("CUSTOMER ERROR 0");
-    //     //////////------input text validation error
-    //     return res.status(200).send({
-    //         status: 400,
-    //         message: "validation error in Signing Up",
-    //         successData: {
-    //             error: {
-    //                 error: errors
-    //             }
-    //         }
-    //     });
-    // } else {
-    //     if (!req.files) {
-    //         req.checkBody('profile', 'profile picture must have needed!').notEmpty();
-
-    //         var errors = req.validationErrors();
-    //         if (errors) {                    
-    //             console.log("CUSTOMER ERROR 1");
-    //             //////////------input file validation error
-    //             return res.status(200).send({
-    //                 status: 400,
-    //                 message: "validation error in Signing Up",
-    //                 successData: {
-    //                     error: {
-    //                         error: errors
-    //                     }
-    //                 }
-    //             });
-    //         }
-    //     } else {
-    //         console.log("CUSTOMER ERROR 2");
-
-    //         req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
-    //         var errors = req.validationErrors();
-    //         if (errors) {   //////////------input file must have image validation error
-    //             return res.status(200).send({
-    //                 status: 400,
-    //                 message: "validation error in Signing Up",
-    //                 successData: {
-    //                     error: {
-    //                         error: errors
-    //                     }
-    //                 }
-    //             });
-    //         }
-
-    //         else {   ///------------------ no error exist
+            else {   ///------------------ no error exist
 
 
-    //             console.log("NO ERROR COMING TO CREATE-1");
+                console.log("NO ERROR COMING TO CREATE-1");
 
-    //             var path_file = './public/files/uploadsFiles/customer/';
-    //             var filename = 'profile-1' + Date.now() + req.files.profile.name;
-    //             req.files.profile.mv(path_file + '' + filename, function (err) {
-    //                 if (err) console.log("error occured");
-    //             });
+                var path_file = './public/files/uploadsFiles/customer/';
+                var filename = 'profile-1' + Date.now() + req.files.profile.name;
+                req.files.profile.mv(path_file + '' + filename, function (err) {
+                    if (err) console.log("error occured");
+                });
 
-    //             console.log("NO ERROR COMING TO CREATE-2");
+                console.log("NO ERROR COMING TO CREATE-2");
 
 
-    //             // Save customer to Database
-    //             Customer.create({
-    //                 first_name: req.body.first_name,
-    //                 last_name: req.body.last_name,
-    //                 email: req.body.email,
-    //                 phone_number: req.body.phone_number,
-    //                 password: bcrypt.hashSync(req.body.password, 8),
-    //                 profile: '/files/uploadsFiles/customer/' + filename,
-    //                 account_info: 'unblock',
-    //                 fcm_token: req.body.fcm_token,
-    //                 total_rating:"0",
-    //                 total_review:"0"
-    //                 //  
-    //             }).then(user => {
+                // Save customer to Database
+                Customer.create({
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    email: req.body.email,
+                    phone_number: req.body.phone_number,
+                    password: bcrypt.hashSync(req.body.password, 8),
+                    profile: '/files/uploadsFiles/customer/' + filename,
+                    account_info: 'unblock',
+                    fcm_token: req.body.fcm_token,
+                    total_rating: "0",
+                    total_review: "0"
+                    //  
+                }).then(user => {
 
-    //                 var token = jwt.sign({ id: user.id }, config.secret);
+                    var token = jwt.sign({ id: user.id }, config.secret);
 
 
 
-    //                 return res.status(200).send({
-    //                     status: 200,
-    //                     message: "Signing Up is successful",
-    //                     successData: {
-    //                         user: {
-    //                             id: user.id,
-    //                             first_name: user.first_name,
-    //                             last_name: user.last_name,
-    //                             email: user.email,
-    //                             phone_number: user.phone_number,
-    //                             profile: user.profile,
-    //                             account_info: user.account_info,
-    //                             fcm_token: user.fcm_token,
-    //                             accessToken: token
-    //                         }
-    //                     }
-    //                 });
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Signing Up is successful",
+                        successData: {
+                            user: {
+                                id: user.id,
+                                first_name: user.first_name,
+                                last_name: user.last_name,
+                                email: user.email,
+                                phone_number: user.phone_number,
+                                profile: user.profile,
+                                account_info: user.account_info,
+                                fcm_token: user.fcm_token,
+                                accessToken: token
+                            }
+                        }
+                    });
 
-    //             })
-    //                 .catch(err => {
+                })
+                    .catch(err => {
 
-    //                     return res.status(200).send({
-    //                         status: 400,
-    //                         message: err.message,
-    //                         successData: {}
-    //                     });
+                        return res.status(200).send({
+                            status: 400,
+                            message: err.message,
+                            successData: {}
+                        });
 
-    //                 });
+                    });
 
-    //         }
-    //     }
-    // }
+            }
+        }
+    }
 };
 
 //-------------customer varify_email_and_phone_number--------------------
