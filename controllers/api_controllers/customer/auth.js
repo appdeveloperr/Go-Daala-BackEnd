@@ -45,6 +45,8 @@ exports.signup = (req, res) => {
                 });
             }
         } else {
+            console.log(req);
+
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
             var errors = req.validationErrors();
             if (errors) {   //////////------input file must have image validation error
