@@ -6,7 +6,7 @@ const controller = require("../../../controllers/api_controllers/driver/vehicle_
 
 
 module.exports = function (app) {
-    app.use(fileUpload);
+    //app.use(fileUpload);
     app.use(function (req, res, next) {
         res.header(
             "Access-Control-Allow-Headers",
