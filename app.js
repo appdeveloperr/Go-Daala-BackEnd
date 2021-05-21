@@ -71,7 +71,13 @@ db.sequelize.sync({force: false}).then(() => {
 
 
 //-------- express session middelware -----------------
-require('./middleware/session')(app);
+ app.set('trust proxy', 1)
+ app.use(session({
+   secret: 'max',
+   resave: true,
+   saveUninitialized: true,
+   cookie: { secure: false }
+ }));
 
 // express validater middelware
 app.use(expressValidator({

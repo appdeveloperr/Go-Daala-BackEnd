@@ -23,7 +23,6 @@ module.exports = {
   authJwt,
   verifySignUp,
   messages,
-  validater,
   session,
   vendorAuthJwt,
   vendorVerifySignUp,
