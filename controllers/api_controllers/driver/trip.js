@@ -600,6 +600,7 @@ exports.start_trip = (req, res) => {
                     myarray.push(try_to_parse(req.body.vendor_fcm));
                 }
                 myarray.push(try_to_parse(req.body.driver_fcm));
+                console.log("MYARRAYYYY SIZE CUSTOMER CREATED: "+myarray.length)
 
                 var payload = {
                     notification: {
