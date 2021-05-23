@@ -593,8 +593,8 @@ exports.start_trip = (req, res) => {
                 var myarray = [];
 
                 console.log("Customer FCM: "+req.body.customer_fcm+" / Vendor FCM: "+req.body.vendor_fcm +" / Driver FCM: "+req.body.driver_fcm)
-                if (req.body.customer_fcm){
-                    console.logs("CUSTOMER KO ADD KR RHA HAI")
+                if (req.body.customer_fcm !== null && req.body.customer_fcm !== "null" && req.body.customer_fcm !== ''){
+                    console.log("CUSTOMER KO ADD KR RHA HAI")
                     myarray.push(try_to_parse(req.body.customer_fcm));
                 }
 
