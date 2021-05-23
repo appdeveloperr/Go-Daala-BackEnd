@@ -592,10 +592,11 @@ exports.start_trip = (req, res) => {
             }).then(trip => {
                 var myarray = [];
 
-                if (req.body.customer_fcm != null | req.body.customer_fcm != '') {
+                console.log("Customer FCM: "+req.body.customer_fcm+" / Vendor FCM: "+req.body.vendor_fcm +" / Driver FCM: "+req.body.driver_fcm)
+                if (req.body.customer_fcm != null && req.body.customer_fcm != '') {
                     myarray.push(try_to_parse(req.body.customer_fcm));
                 }
-                if (req.body.vendor_fcm != null | req.body.vendor_fcm != '') {
+                if (req.body.vendor_fcm != null && req.body.vendor_fcm != '') {
                     myarray.push(try_to_parse(req.body.vendor_fcm));
                 }
                 myarray.push(try_to_parse(req.body.driver_fcm));
@@ -683,8 +684,9 @@ exports.end_trip = (req, res) => {
         });
     } else {
         var myarray = [];
-
-        if (req.body.vendor_fcm != null | req.body.vendor_fcm != '') {
+        
+        console.log("Customer FCM: "+req.body.customer_fcm+" / Vendor FCM: "+req.body.vendor_fcm +" / Driver FCM: "+req.body.driver_fcm)
+        if (req.body.vendor_fcm != null && req.body.vendor_fcm != '') {
             myarray.push(try_to_parse(req.body.vendor_fcm));
         }
         myarray.push(try_to_parse(req.body.driver_fcm));
