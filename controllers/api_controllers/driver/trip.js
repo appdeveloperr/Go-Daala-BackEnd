@@ -684,12 +684,14 @@ exports.end_trip = (req, res) => {
         });
     } else {
         var myarray = [];
-        
+
         console.log("Customer FCM: "+req.body.customer_fcm+" / Vendor FCM: "+req.body.vendor_fcm +" / Driver FCM: "+req.body.driver_fcm)
         if (req.body.vendor_fcm != null && req.body.vendor_fcm != '') {
             myarray.push(try_to_parse(req.body.vendor_fcm));
         }
         myarray.push(try_to_parse(req.body.driver_fcm));
+
+        console.log("MYARRAYYYY SIZE: "+myarray.length)
 
         var payload = {
             notification: {
