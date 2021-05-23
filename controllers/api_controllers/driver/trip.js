@@ -592,18 +592,18 @@ exports.start_trip = (req, res) => {
             }).then(trip => {
                 var myarray = [];
 
-                console.log("Customer FCM: "+req.body.customer_fcm+" / Vendor FCM: "+req.body.vendor_fcm +" / Driver FCM: "+req.body.driver_fcm)
-                if (req.body.customer_fcm !== null && req.body.customer_fcm !== "null" && req.body.customer_fcm !== ''){
-                    console.log("CUSTOMER KO ADD KR RHA HAI")
+                console.log("Customer FCM: " + req.body.customer_fcm + " / Vendor FCM: " + req.body.vendor_fcm + " / Driver FCM: " + req.body.driver_fcm)
+                if (req.body.customer_fcm !== null && req.body.customer_fcm !== "null" && req.body.customer_fcm !== '') {
                     myarray.push(try_to_parse(req.body.customer_fcm));
                 }
 
-                if (req.body.vendor_fcm) {
+                if (req.body.vendor_fcm !== null && req.body.vendor_fcm !== "null" && req.body.vendor_fcm !== '') {
                     myarray.push(try_to_parse(req.body.vendor_fcm));
                 }
-
-                myarray.push(try_to_parse(req.body.driver_fcm));
-                console.log("MYARRAYYYY SIZE CUSTOMER CREATED: "+myarray.length)
+                if (req.body.driver_fcm !== null && req.body.driver_fcm !== "null" && req.body.driver_fcm !== '') {
+                    myarray.push(try_to_parse(req.body.driver_fcm));
+                }
+                console.log("MYARRAYYYY SIZE CUSTOMER CREATED: " + myarray.length)
 
                 var payload = {
                     notification: {
@@ -689,13 +689,20 @@ exports.end_trip = (req, res) => {
     } else {
         var myarray = [];
 
-        console.log("Customer FCM: "+req.body.customer_fcm+" / Vendor FCM: "+req.body.vendor_fcm +" / Driver FCM: "+req.body.driver_fcm)
-        if (req.body.vendor_fcm != null && req.body.vendor_fcm != '') {
+       
+       
+        console.log("Customer FCM: " + req.body.customer_fcm + " / Vendor FCM: " + req.body.vendor_fcm + " / Driver FCM: " + req.body.driver_fcm)
+        if (req.body.customer_fcm !== null && req.body.customer_fcm !== "null" && req.body.customer_fcm !== '') {
+            myarray.push(try_to_parse(req.body.customer_fcm));
+        }
+
+        if (req.body.vendor_fcm !== null && req.body.vendor_fcm !== "null" && req.body.vendor_fcm !== '') {
             myarray.push(try_to_parse(req.body.vendor_fcm));
         }
-        myarray.push(try_to_parse(req.body.driver_fcm));
-
-        console.log("MYARRAYYYY SIZE: "+myarray.length)
+        if (req.body.driver_fcm !== null && req.body.driver_fcm !== "null" && req.body.driver_fcm !== '') {
+            myarray.push(try_to_parse(req.body.driver_fcm));
+        }
+        console.log("MYARRAYYYY SIZE: " + myarray.length)
 
         var payload = {
             notification: {
