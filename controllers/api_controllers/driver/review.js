@@ -34,7 +34,8 @@ exports.create_review = (req, res) => {
             discription: req.body.discription,
             trip_id: req.body.trip_id,
             driver_id: req.body.driver_id,
-            vendor_id: null
+            vendor_id: null,
+            customer_id:null
         }).then(reviews => {
             if (req.body.vendor_id != 'null' || req.body.vendor_id != null) {
                 Vendor.findOne({
