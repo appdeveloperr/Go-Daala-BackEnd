@@ -412,7 +412,9 @@ exports.cencal_trip = (req, res) => {
                                 if (customer != null && customer != '') {
                                     //-------------- if customer table is exit in customer table and get customer fcm ------------------------//////
                                     myarray.push(try_to_parse(customer.dataValues.fcm_token));
-                                    myarray.push(try_to_parse(req.body.vendor_fcm));
+                                    if (req.body.vendor_fcm !== null && req.body.vendor_fcm !== "null" && req.body.vendor_fcm !== '') {
+                                        myarray.push(try_to_parse(req.body.vendor_fcm));
+                                    }
                                     myarray.push(try_to_parse(req.body.driver_fcm));
 
                                     var payload = {
