@@ -113,14 +113,11 @@ exports.create_review = (req, res) => {
                     Customer.update({
                         total_rating: total_ratings,
                         total_review: total_reviews
-                    },
-                        {
-                            where: { id: req.body.customer_id },
-                            returning: true,
-                            plain: true
-
-                        },
-                    ).then(updated_reviews => {
+                    }, {
+                        where: { id: req.body.customer_id },
+                        returning: true,
+                        plain: true
+                    }).then(updated_reviews => {
                         console.log("this is response review data" + updated_reviews[1]);
                         return res.status(200).send({
                             status: 200,
