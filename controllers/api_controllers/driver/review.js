@@ -28,7 +28,7 @@ exports.create_review = (req, res) => {
 
         var total_ratings = null;
         var total_reviews = null;
-        // Save trips to Database
+        //--- review for vendor--------------------------//
         if (req.body.vendor_id!="null") {
             Reviews.create({
                 rating: req.body.rating,
@@ -104,7 +104,7 @@ exports.create_review = (req, res) => {
             });
         }
 
-
+        //--- review for Customer--------------------------//
          if (req.body.customer_id!="null") {
 
 
