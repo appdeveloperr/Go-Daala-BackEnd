@@ -732,7 +732,7 @@ exports.cancel_trip = (req, res) => {
 
                         var payload = {
                             notification: {
-                                title: "Customer  Cancel Trip",
+                                title: "Customer Cancel Trip",
                                 body: trip[1].id.toString()
                             }
                         };

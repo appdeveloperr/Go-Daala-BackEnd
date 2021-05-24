@@ -745,7 +745,7 @@ exports.cancel_trip = (req, res) => {
 
                                     var payload = {
                                         notification: {
-                                            title: "Vendor  Cancel Trip",
+                                            title: "Vendor Cancel Trip",
                                             body: trip[1].id.toString()
                                         }
                                     };
@@ -814,7 +814,7 @@ exports.cancel_trip = (req, res) => {
 
                             var payload = {
                                 notification: {
-                                    title: "Vendor  Cancel Trip",
+                                    title: "Vendor Cancel Trip",
                                     body: trip[1].id.toString()
                                 }
                             };
@@ -1004,6 +1004,8 @@ exports.trip_share = (req, res) => {
                             .then(function (response) {
                                 console.log("FCM Successfully sent message:");
                                 Trip.update({
+                                    customer_id: user.dataValues.id
+                                },{
                                     where:
                                         { id: req.body.trip_id },
                                     returning: true,

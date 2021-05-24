@@ -3,6 +3,7 @@ const config = require("../../../config/auth.config");
 var Reviews = db.review;
 const Driver = db.driver;
 var Vendor = db.vendor;
+const Customer = db.customer;
 var Trip = db.trip;
 
 //-------------------vendor create review for trip--------------------------------
@@ -11,7 +12,7 @@ exports.create_review = (req, res) => {
     req.checkBody('discription', 'Discription must have needed!').notEmpty();
     req.checkBody('trip_id', 'Trip_id must have id required!').notEmpty();
     req.checkBody('driver_id', 'Driver_id must have id required!').notEmpty();
-    req.checkBody('vendor_id', 'Driver_id must have id required!').notEmpty();
+    // req.checkBody('vendor_id', 'Driver_id must have id required!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -35,6 +36,7 @@ exports.create_review = (req, res) => {
             driver_id: req.body.driver_id,
             vendor_id: null
         }).then(reviews => {
+            if(req.body.vendor_id!=null){
             Vendor.findOne({
                 where: {
                     id: req.body.vendor_id
@@ -60,7 +62,7 @@ exports.create_review = (req, res) => {
                 }).then(updated_reviews => {
                     return res.status(200).send({
                         status: 200,
-                        message: "Create driver reviews   is successful",
+                        message: "Create driver reviews is successful",
                         successData: {
                             review: {
                                 id: reviews.id,
@@ -95,7 +97,68 @@ exports.create_review = (req, res) => {
 
 
 
+        }
+        else{
+            Customer.findOne({
+                where: {
+                    id: req.body.customer_id
+                }
+            }).then(customer_rating => {
 
+                total_ratings = parseFloat(customer_rating.total_rating);
+                total_reviews = parseFloat(customer_rating.total_review);
+
+                total_ratings = total_ratings + parseFloat(req.body.rating);
+                total_reviews = total_reviews + 1;
+
+                console.log("this is total reviews of customer: " + total_reviews);
+                console.log("this is total ratings of customer: " + total_ratings);
+
+                Customer.update({
+                    total_rating: total_ratings,
+                    total_review: total_reviews
+                }, {
+                    where: { id: req.body.customer_id },
+                    returning: true,
+                    plain: true
+                }).then(updated_reviews => {
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Create driver reviews is successful",
+                        successData: {
+                            review: {
+                                id: reviews.id,
+                                rating: reviews.rating,
+                                discription: reviews.discription,
+                                trip_id: reviews.trip_id,
+                                driver_id: reviews.driver_id,
+                            }
+                        }
+                    });
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
+                });
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+
+            });
+
+
+
+
+ 
+        }
         }).catch(err => {
 
             return res.status(200).send({
