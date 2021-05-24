@@ -4,34 +4,41 @@ const fs = require('fs')
 
 //--------Banner create Function -----------------
 exports.create = function (req, res, next) {
-  var fileinfo = req.file;
-  console.log("this is banner Fileuploading testing : "+fileinfo.filename);
-  if (fileinfo) {//image exist
-    var filename = fileinfo.filename;
-    var type = req.body.type;
-
-
-    var destination = "/files/uploadsFiles/";
-  
-
-    if (!type) {
-      req.flash('danger', 'Selected type must needed!');
+  if (!req.body.type) {
+    req.flash('danger', 'Selected type must needed!');
+    res.redirect('/admin/banner/create');
+  } else {
+    if (!req.files) {
+      req.flash('danger', 'Banner Image file must needed!');
       res.redirect('/admin/banner/create');
     } else {
-      Banner.create({
-        banner_type: type,
-        image_path: destination + "" + filename
-      }).then(banner => {
-        req.flash('success', 'Successfuly your banner is  Added!');
-        res.redirect('/admin/banner/index');
-      }).catch(err => {
-        console.log(err);
-      });
+      req.checkBody('myFile', 'Bannar picture must have needed! with anImage').isImage(req.files.myFile.name);
+      var errors = req.validationErrors();
+
+      if (errors) {   //////////------input file must have image validation error
+        res.render('admin/banner/create', {
+          errors: errors,
+        });
+      } else {   ///------------------ no error exist
+        var path_file = './public/files/uploadsFiles/';
+        var filename = 'Banner-1' + Date.now() + req.files.myFile.name;
+        req.files.myFile.mv(path_file + '' + filename, function (err) {
+          if (err) console.log("error occured");
+        });
+        Banner.create({
+          banner_type: req.body.type,
+          image_path: "/files/uploadsFiles/" + filename
+        }).then(banner => {
+          req.flash('success', 'Successfuly your banner is  Added!');
+          res.redirect('/admin/banner/index');
+        }).catch(err => {
+          console.log(err);
+        });
+      }
+
     }
-  } else {//image is not exist
-    req.flash('danger', 'Image file must upload needed!');
-    res.redirect('/admin/banner/create');
   }
+
 }
 
 
@@ -97,110 +104,111 @@ exports.edit = function (req, res) {
 //---------- Update Banner Function ----------------------
 exports.update = function (req, res, next) {
 
-
-  var fileinfo = req.file;
-  if (fileinfo) {//image exist
-
-    var filename = fileinfo.filename;
-    var old_file = req.body.old_file;
-
-
-    fs.unlink(old_file, function (error) {
-      if (error) { console.log("err ", error) } else {
-        console.log("file deleted!")
-      }
-    })
-    var destination = "/files/uploadsFiles/";
-    Banner.update({
-      banner_type: req.body.type,
-      image_path: destination + "" + filename
-    }, {
-      where: {
-        id: req.body.id
-      }
-    }).then(banner => {
-      if (banner) {
-        req.flash('success', 'Successfuly your banner is  Added!');
-        res.redirect('/admin/banner/index');
-      }
-    }).catch(err => {
-      console.log(err);
+  req.checkBody('type', 'Selected type must have needed!').notEmpty();
+  var errors = req.validationErrors();
+  if (errors) {
+    res.render('admin/banner/edit', {
+      errors: errors,
+      data: req.body.data
     });
+  } else {
+    if (!req.files) {
+      Banner.update({
+        banner_type: req.body.type
+      }, {
+        where: {
+          id: req.body.id
+        }
+      }).then(banner => {
+        if (banner) {
+          req.flash('success', 'Successfuly your banner is  Added!');
+          res.redirect('/admin/banner/index');
+        }
+      }).catch(err => {
+        console.log(err);
+      });
 
-  } else {//image is not exist
+    } else {
+      var path_file = './public/files/uploadsFiles/';
+      var filename = 'Banner-1' + Date.now() + req.files.myFile.name;
+      req.files.myFile.mv(path_file + '' + filename, function (err) {
+        if (err) console.log("error occured");
+      });
 
+      fs.unlink('./public' + req.body.old_file, function (error) {
+        if (error) { console.log("err ", error) } else {
+          console.log("file deleted!")
+        }
+      });
 
-    console.log(req.body.type);
-    Banner.update({
-      banner_type: req.body.type
-    }, {
-      where: {
-        id: req.body.id
-      },
-      order: [
-        'id', 'DESC',
-      ],
-    }).then(banner => {
-      if (banner) {
-        req.flash('success', 'Successfuly your banner is  Added!');
-        res.redirect('/admin/banner/index');
-      }
-    }).catch(err => {
-      console.log(err);
-    });
-
-    // req.flash('danger', 'Image file must upload needed!');
-    res.redirect('/admin/banner/index');
+      Banner.update({
+        banner_type: req.body.type,
+        image_path: "/files/uploadsFiles/" + filename
+      }, {
+        where: {
+          id: req.body.id
+        }
+      }).then(banner => {
+        if (banner) {
+          req.flash('success', 'Successfuly your banner is updated!');
+          res.redirect('/admin/banner/index');
+        }
+      }).catch(err => {
+        console.log(err);
+      });
+    }
   }
 }
 
 
 
 //-----------------------delete bannar Function---------------------
-exports.delete = function (req, res) {
+exports.delete = (req, res) => {
 
+  var id = req.params.id;
+  //var id = 1;
   Banner.findOne({
     where: {
-      id: req.params.id
+      id: id
     }
   }).then(Delete => {
-    //if User not found with given ID
-    if (Delete) {
-      fs.unlink(Delete.dataValues.image_path, function (error) {
-        if (error) { console.log("err ", error) } else {
-          console.log("file deleted!")
-        }
-      });
-    } else {
-      console.log("if User not found with given ID");
-    }
-  }).catch(err => {
-    return res.status(200).send({
-      responsecode: 400,
-      message: err.message,
+
+    fs.unlink('./public' + Delete.dataValues.image_path, function (error) {
+      if (error) { console.log("err ", error) } else {
+        console.log("file deleted!")
+      }
     });
-  },
+
     Banner.destroy({
       where: {
-         id: req.params.id
+        id: req.params.id
       }
     }).then(banner => {
 
       if (!banner) {
-          return res.status(200).send({
-              responsecode: 400,
-              message: "Contacts not found",
-          });
+        return res.status(200).send({
+          responsecode: 400,
+          message: "Contacts not found",
+        });
       }
-         
+
       req.flash('success', 'Successfuly your banner is  Deleted!');
       res.redirect('/admin/banner/index');
 
     }).catch(err => {
       return res.status(200).send({
-          responsecode: 400,
-          message: err.message,
+        responsecode: 400,
+        message: err.message,
       });
-    }));
+    });
 
-  }
+
+  }).catch(err => {
+    return res.status(200).send({
+      responsecode: 400,
+      message: err.message,
+    });
+  })
+
+
+}

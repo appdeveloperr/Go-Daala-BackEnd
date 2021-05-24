@@ -174,7 +174,7 @@ exports.update = function (req, res, next) {
           if (err) console.log("error occured");
         });
 
-        console.log(req.body.old_file);
+        
 
         fs.unlink('./public' +req.body.old_file, function (error) {
           if (error) { console.log("err ", error) } else {

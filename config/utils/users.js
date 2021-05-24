@@ -1,8 +1,11 @@
 const users = [];
 const drivers= [];
+const db = require("../../models/api_models");
+const Trip = db.trip;
 
 // Join user to chat
 function userJoin(id, username, room) {
+  
   const user = { id, username, room };
 
   users.push(user);

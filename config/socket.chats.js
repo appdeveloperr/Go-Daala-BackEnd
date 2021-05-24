@@ -86,15 +86,38 @@ exports.socket_io = function (io) {
         });
 
         // Listen for chatMessage
-        socket.on('send_message', (message ,mobile_no) => {
+        socket.on('send_message', (message ,fcm_token,mobile_no) => {
             
             console.log("send_message Socket ID: "+socket.id);
             const user = getCurrentUser(socket.id);
             console.log("this is user id :    " + socket.id);
-            console.log("this is user room :    " + user.room)
+            console.log("this is user room :    " + user.room);
+            const user_format = formatMessage(user.username, message);
+            
+            var payload = {
+                notification: {
+                    title: user_format.text.username,
+                    body: message
+                }
+            };
+
+            var options = {
+                priority: "high",
+                timeToLive: 60 * 60 * 24
+            };
+           
+
+            admin.messaging().sendToDevice(try_to_parse(fcm_token), payload, options)
+                .then(function (response) {
+                    console.log("Successfully sent message:", response);
+                })
+                .catch(function (error) {
+                    console.log("Error sending fcm message in chat:", error);
+                });
+
+
             io.to(user.room).emit('send_message', formatMessage(user.username, message));
             console.log(formatMessage(user.username, message));
-            const user_format = formatMessage(user.username, message);
             Chat.create({
                 mobile_no: user_format.text.mobile_no,
                 username: user_format.text.username,
@@ -131,4 +154,12 @@ exports.socket_io = function (io) {
             }
         });
     });
+}
+
+function try_to_parse(token) {
+    try {
+        return JSON.parse(token);
+    } catch (e) {
+        return token;
+    }
 }
