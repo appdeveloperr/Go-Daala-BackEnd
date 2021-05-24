@@ -189,6 +189,7 @@ exports.create_review = (req, res) => {
 //--------------------driver get vendor review from trip------------------------------
 exports.get_review = (req, res) => {
     req.checkBody('trip_id', 'Trip_id must have Id needed!').notEmpty();
+    req.checkBody('driver_id', 'driver_id must have Id needed!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -206,7 +207,8 @@ exports.get_review = (req, res) => {
 
         Reviews.findAll({
             where: {
-                trip_id: req.body.trip_id
+                trip_id: req.body.trip_id,
+                driver_id: req.body.driver_id
             }
         }).then(reviews => {
             console.log("ERROR REVIEW 2")
@@ -265,7 +267,7 @@ exports.get_review = (req, res) => {
                 });
             } else {
 
-                if (req.body.vendor_id != null || req.body.vendor_id != '') {
+                if (req.body.vendor_id != "null") {
                     //Vendors
                     reviews.forEach(item => {
                         if (item.dataValues.vendor_id != null) {//------------if vendor is gave reviews to driver ------//////
@@ -331,7 +333,7 @@ exports.get_review = (req, res) => {
                             })
                         }
                     });
-                } else {
+                } if(req.body.customer_id!="null") {
 
                     //Customer
                     reviews.forEach(item => {
