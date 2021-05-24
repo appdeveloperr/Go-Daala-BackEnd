@@ -36,42 +36,51 @@ exports.create_review = (req, res) => {
             driver_id: req.body.driver_id,
             vendor_id: null
         }).then(reviews => {
-            if(req.body.vendor_id!="empty"){
-            Vendor.findOne({
-                where: {
-                    id: req.body.vendor_id
-                }
-            }).then(vendor_rating => {
+            if (req.body.vendor_id != 'null' || req.body.vendor_id != null) {
+                Vendor.findOne({
+                    where: {
+                        id: req.body.vendor_id
+                    }
+                }).then(vendor_rating => {
 
-                total_ratings = parseFloat(vendor_rating.total_rating);
-                total_reviews = parseFloat(vendor_rating.total_review);
+                    total_ratings = parseFloat(vendor_rating.total_rating);
+                    total_reviews = parseFloat(vendor_rating.total_review);
 
-                total_ratings = total_ratings + parseFloat(req.body.rating);
-                total_reviews = total_reviews + 1;
+                    total_ratings = total_ratings + parseFloat(req.body.rating);
+                    total_reviews = total_reviews + 1;
 
-                console.log("this is total reviews of vendor: " + total_reviews);
-                console.log("this is total ratings of vendor: " + total_ratings);
+                    console.log("this is total reviews of vendor: " + total_reviews);
+                    console.log("this is total ratings of vendor: " + total_ratings);
 
-                Vendor.update({
-                    total_rating: total_ratings,
-                    total_review: total_reviews
-                }, {
-                    where: { id: req.body.vendor_id },
-                    returning: true,
-                    plain: true
-                }).then(updated_reviews => {
-                    return res.status(200).send({
-                        status: 200,
-                        message: "Create driver reviews is successful",
-                        successData: {
-                            review: {
-                                id: reviews.id,
-                                rating: reviews.rating,
-                                discription: reviews.discription,
-                                trip_id: reviews.trip_id,
-                                driver_id: reviews.driver_id,
+                    Vendor.update({
+                        total_rating: total_ratings,
+                        total_review: total_reviews
+                    }, {
+                        where: { id: req.body.vendor_id },
+                        returning: true,
+                        plain: true
+                    }).then(updated_reviews => {
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Create driver reviews is successful",
+                            successData: {
+                                review: {
+                                    id: reviews.id,
+                                    rating: reviews.rating,
+                                    discription: reviews.discription,
+                                    trip_id: reviews.trip_id,
+                                    driver_id: reviews.driver_id,
+                                }
                             }
-                        }
+                        });
+                    }).catch(err => {
+
+                        return res.status(200).send({
+                            status: 400,
+                            message: err.message,
+                            successData: {}
+                        });
+
                     });
                 }).catch(err => {
 
@@ -82,53 +91,53 @@ exports.create_review = (req, res) => {
                     });
 
                 });
-            }).catch(err => {
+            }
 
-                return res.status(200).send({
-                    status: 400,
-                    message: err.message,
-                    successData: {}
-                });
+            if (req.body.customer_id != 'null' || req.body.customer_id != null) {
+                Customer.findOne({
+                    where: {
+                        id: req.body.customer_id
+                    }
+                }).then(customer_rating => {
 
-            });
-        }
+                    total_ratings = parseFloat(customer_rating.total_rating);
+                    total_reviews = parseFloat(customer_rating.total_review);
 
-        if(req.body.customer_id!='empty'){
-            Customer.findOne({
-                where: {
-                    id: req.body.customer_id
-                }
-            }).then(customer_rating => {
+                    total_ratings = total_ratings + parseFloat(req.body.rating);
+                    total_reviews = total_reviews + 1;
 
-                total_ratings = parseFloat(customer_rating.total_rating);
-                total_reviews = parseFloat(customer_rating.total_review);
+                    console.log("this is total reviews of customer: " + total_reviews);
+                    console.log("this is total ratings of customer: " + total_ratings);
 
-                total_ratings = total_ratings + parseFloat(req.body.rating);
-                total_reviews = total_reviews + 1;
-
-                console.log("this is total reviews of customer: " + total_reviews);
-                console.log("this is total ratings of customer: " + total_ratings);
-
-                Customer.update({
-                    total_rating: total_ratings,
-                    total_review: total_reviews
-                }, {
-                    where: { id: req.body.customer_id },
-                    returning: true,
-                    plain: true
-                }).then(updated_reviews => {
-                    return res.status(200).send({
-                        status: 200,
-                        message: "Create driver reviews is successful",
-                        successData: {
-                            review: {
-                                id: reviews.id,
-                                rating: reviews.rating,
-                                discription: reviews.discription,
-                                trip_id: reviews.trip_id,
-                                driver_id: reviews.driver_id,
+                    Customer.update({
+                        total_rating: total_ratings,
+                        total_review: total_reviews
+                    }, {
+                        where: { id: req.body.customer_id },
+                        returning: true,
+                        plain: true
+                    }).then(updated_reviews => {
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Create driver reviews is successful",
+                            successData: {
+                                review: {
+                                    id: reviews.id,
+                                    rating: reviews.rating,
+                                    discription: reviews.discription,
+                                    trip_id: reviews.trip_id,
+                                    driver_id: reviews.driver_id,
+                                }
                             }
-                        }
+                        });
+                    }).catch(err => {
+
+                        return res.status(200).send({
+                            status: 400,
+                            message: err.message,
+                            successData: {}
+                        });
+
                     });
                 }).catch(err => {
 
@@ -139,21 +148,12 @@ exports.create_review = (req, res) => {
                     });
 
                 });
-            }).catch(err => {
-
-                return res.status(200).send({
-                    status: 400,
-                    message: err.message,
-                    successData: {}
-                });
-
-            });
 
 
 
 
- 
-        }
+
+            }
         }).catch(err => {
 
             return res.status(200).send({
