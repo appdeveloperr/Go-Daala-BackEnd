@@ -26,32 +26,28 @@ exports.create_review = (req, res) => {
         });
     } else {
 
-
+        var total_ratings = null;
+        var total_reviews = null;
         // Save trips to Database
-        Reviews.create({
-            rating: req.body.rating,
-            discription: req.body.discription,
-            trip_id: req.body.trip_id,
-            driver_id: req.body.driver_id,
-            vendor_id: null,
-            customer_id: null
-        }).then(reviews => {
-            if (req.body.vendor_id != 'null' || req.body.vendor_id != null) {
+        if (req.body.vendor_id != null || req.body.vendor_id!='null') {
+            Reviews.create({
+                rating: req.body.rating,
+                discription: req.body.discription,
+                trip_id: req.body.trip_id,
+                vendor_id: null,
+                customer_id:null,
+                driver_id: req.body.driver_id
+            }).then(reviews => {
+
                 Vendor.findOne({
                     where: {
                         id: req.body.vendor_id
                     }
                 }).then(vendor_rating => {
-
-                    var total_ratings = parseFloat(vendor_rating.total_rating);
-                    var total_reviews = parseFloat(vendor_rating.total_review);
-
+                    total_ratings = parseFloat(vendor_rating.total_rating);
+                    total_reviews = parseFloat(vendor_rating.total_review);
                     total_ratings = total_ratings + parseFloat(req.body.rating);
                     total_reviews = total_reviews + 1;
-
-                    console.log("this is total reviews of vendor: " + total_reviews);
-                    console.log("this is total ratings of vendor: " + total_ratings);
-
                     Vendor.update({
                         total_rating: total_ratings,
                         total_review: total_reviews
@@ -60,22 +56,23 @@ exports.create_review = (req, res) => {
                         returning: true,
                         plain: true
                     }).then(updated_reviews => {
-                        console.log(updated_reviews);
                         return res.status(200).send({
                             status: 200,
-                            message: "Create driver reviews is successful",
+                            message: "Create driver review for vendor is successful",
                             successData: {
                                 review: {
                                     id: reviews.id,
                                     rating: reviews.rating,
                                     discription: reviews.discription,
+
                                     trip_id: reviews.trip_id,
                                     driver_id: reviews.driver_id,
+
                                 }
                             }
                         });
                     }).catch(err => {
-                        console.log("track 1");
+
                         return res.status(200).send({
                             status: 400,
                             message: err.message,
@@ -84,7 +81,7 @@ exports.create_review = (req, res) => {
 
                     });
                 }).catch(err => {
-                    console.log("track 2");
+
                     return res.status(200).send({
                         status: 400,
                         message: err.message,
@@ -92,24 +89,44 @@ exports.create_review = (req, res) => {
                     });
 
                 });
-            }
 
-            if (req.body.customer_id != 'null' || req.body.customer_id != null) {
+
+
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+
+            });
+        }
+
+
+        if (req.body.customer_id != 'null' || req.body.customer_id != null) {
+
+
+            // Save Review to Database
+            Reviews.create({
+                rating: req.body.rating,
+                discription: req.body.discription,
+                trip_id: req.body.trip_id,
+                vendor_id: null,
+                customer_id:null,
+                driver_id: req.body.driver_id,
+            }).then(reviews => {
+
                 Customer.findOne({
                     where: {
                         id: req.body.customer_id
                     }
                 }).then(customer_rating => {
-
-                    var total_ratings = parseFloat(customer_rating.dataValues.total_rating);
-                    var total_reviews = parseFloat(customer_rating.dataValues.total_review);
-
+                    total_ratings = parseFloat(customer_rating.total_rating);
+                    total_reviews = parseFloat(customer_rating.total_review);
                     total_ratings = total_ratings + parseFloat(req.body.rating);
                     total_reviews = total_reviews + 1;
-
-                    console.log("this is total reviews of customer: " + total_reviews);
-                    console.log("this is total ratings of customer: " + total_ratings);
-
                     Customer.update({
                         total_rating: total_ratings,
                         total_review: total_reviews
@@ -118,52 +135,56 @@ exports.create_review = (req, res) => {
                         returning: true,
                         plain: true
                     }).then(updated_reviews => {
-                        console.log("this is response review data" + updated_reviews[1]);
                         return res.status(200).send({
                             status: 200,
-                            message: "Create driver reviews is successful",
+                            message: "Create vendor reviews   is successful",
                             successData: {
                                 review: {
                                     id: reviews.id,
                                     rating: reviews.rating,
                                     discription: reviews.discription,
+
                                     trip_id: reviews.trip_id,
                                     driver_id: reviews.driver_id,
+
                                 }
                             }
-                        })
-                    }).catch(error => {
-                        console.log("track 3");
+                        });
+                    }).catch(err => {
+
                         return res.status(200).send({
                             status: 400,
-                            message: error.message,
+                            message: err.message,
                             successData: {}
                         });
 
                     });
-                }).catch(error => {
-                    console.log("track 4");
+                }).catch(err => {
+
                     return res.status(200).send({
                         status: 400,
-                        message: error.message,
+                        message: err.message,
                         successData: {}
                     });
 
                 });
-            }
-        }).catch(error => {
-            console.log("track 5");
-            return res.status(200).send({
-                status: 400,
-                message: error.message,
-                successData: {}
+
+
+
+
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+
             });
 
-        });
-
+        }
     }
 }
-
 
 //--------------------driver get vendor review from trip------------------------------
 exports.get_review = (req, res) => {
