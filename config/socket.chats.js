@@ -92,12 +92,18 @@ exports.socket_io = function (io) {
             const user = getCurrentUser(socket.id);
             console.log("this is user id :    " + socket.id);
             console.log("this is user room :    " + user.room);
-            const user_format = formatMessage(user.username, message);
+           
+    
 
+
+            io.to(user.room).emit('send_message', formatMessage(user.username, message));
+            console.log(formatMessage(user.username, message));
+            const user_format = formatMessage(user.username, message);
+            
             var payload = {
                 notification: {
                     title: user_format.text.username,
-                    body: message
+                    body: user_format.text.message
                 }
             };
 
@@ -116,8 +122,6 @@ exports.socket_io = function (io) {
                 });
 
 
-            io.to(user.room).emit('send_message', formatMessage(user.username, message));
-            console.log(formatMessage(user.username, message));
             Chat.create({
                 mobile_no: user_format.text.mobile_no,
                 username: user_format.text.username,

@@ -36,7 +36,7 @@ exports.create_review = (req, res) => {
             driver_id: req.body.driver_id,
             vendor_id: null
         }).then(reviews => {
-            if(req.body.vendor_id!=null){
+            if(req.body.vendor_id!="empty"){
             Vendor.findOne({
                 where: {
                     id: req.body.vendor_id
@@ -91,14 +91,9 @@ exports.create_review = (req, res) => {
                 });
 
             });
-
-
-
-
-
-
         }
-        else{
+
+        if(req.body.customer_id!='empty'){
             Customer.findOne({
                 where: {
                     id: req.body.customer_id
