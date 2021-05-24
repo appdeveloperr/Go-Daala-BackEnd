@@ -25,7 +25,7 @@ exports.create_review = (req, res) => {
             }
         });
     } else {
- 
+
 
         // Save trips to Database
         Reviews.create({
@@ -34,7 +34,7 @@ exports.create_review = (req, res) => {
             trip_id: req.body.trip_id,
             driver_id: req.body.driver_id,
             vendor_id: null,
-            customer_id:null
+            customer_id: null
         }).then(reviews => {
             if (req.body.vendor_id != 'null' || req.body.vendor_id != null) {
                 Vendor.findOne({
@@ -43,8 +43,8 @@ exports.create_review = (req, res) => {
                     }
                 }).then(vendor_rating => {
 
-                 var  total_ratings = parseFloat(vendor_rating.total_rating);
-                    var total_reviews  = parseFloat(vendor_rating.total_review);
+                    var total_ratings = parseFloat(vendor_rating.total_rating);
+                    var total_reviews = parseFloat(vendor_rating.total_review);
 
                     total_ratings = total_ratings + parseFloat(req.body.rating);
                     total_reviews = total_reviews + 1;
@@ -101,8 +101,8 @@ exports.create_review = (req, res) => {
                     }
                 }).then(customer_rating => {
 
-                var     total_ratings = parseFloat(customer_rating.dataValues.total_rating);
-                   var  total_reviews = parseFloat(customer_rating.dataValues.total_review);
+                    var total_ratings = parseFloat(customer_rating.dataValues.total_rating);
+                    var total_reviews = parseFloat(customer_rating.dataValues.total_review);
 
                     total_ratings = total_ratings + parseFloat(req.body.rating);
                     total_reviews = total_reviews + 1;
@@ -118,10 +118,10 @@ exports.create_review = (req, res) => {
                             where: { id: req.body.customer_id },
                             returning: true,
                             plain: true
-                         
+
                         },
-                        ).then(updated_reviews => {
-                        console.log("this is response review data"+updated_reviews[1]);
+                    ).then(updated_reviews => {
+                        console.log("this is response review data" + updated_reviews[1]);
                         return res.status(200).send({
                             status: 200,
                             message: "Create driver reviews is successful",
@@ -135,35 +135,30 @@ exports.create_review = (req, res) => {
                                 }
                             }
                         })
-                    }).catch(err => {
+                    }).catch(error => {
                         console.log("track 3");
                         return res.status(200).send({
                             status: 400,
-                            message: err.message,
+                            message: error.message,
                             successData: {}
                         });
 
                     });
-                }).catch(err => {
+                }).catch(error => {
                     console.log("track 4");
                     return res.status(200).send({
                         status: 400,
-                        message: err.message,
+                        message: error.message,
                         successData: {}
                     });
 
                 });
-
-
-
-
-
             }
-        }).catch(err => {
+        }).catch(error => {
             console.log("track 5");
             return res.status(200).send({
                 status: 400,
-                message: err.message,
+                message: error.message,
                 successData: {}
             });
 
