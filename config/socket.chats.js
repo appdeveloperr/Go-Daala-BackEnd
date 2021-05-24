@@ -91,15 +91,10 @@ exports.socket_io = function (io) {
             console.log("send_message Socket ID: "+socket.id);
             const user = getCurrentUser(socket.id);
             console.log("this is user id :    " + socket.id);
-            console.log("this is user room :    " + user.room);
-           
-    
-
-
+            console.log("this is user room :    " + user.room)
             io.to(user.room).emit('send_message', formatMessage(user.username, message));
             console.log(formatMessage(user.username, message));
             const user_format = formatMessage(user.username, message);
-            
             var payload = {
                 notification: {
                     title: user_format.text.username,
@@ -120,7 +115,6 @@ exports.socket_io = function (io) {
                 .catch(function (error) {
                     console.log("Error sending fcm message in chat:", error);
                 });
-
 
             Chat.create({
                 mobile_no: user_format.text.mobile_no,
@@ -159,6 +153,7 @@ exports.socket_io = function (io) {
         });
     });
 }
+
 
 function try_to_parse(token) {
     try {
