@@ -29,83 +29,83 @@ exports.create_review = (req, res) => {
         var total_ratings = null;
         var total_reviews = null;
         // Save trips to Database
-        if (req.body.vendor_id != null || req.body.vendor_id!='null') {
-            Reviews.create({
-                rating: req.body.rating,
-                discription: req.body.discription,
-                trip_id: req.body.trip_id,
-                vendor_id: null,
-                customer_id:null,
-                driver_id: req.body.driver_id
-            }).then(reviews => {
+        // if (req.body.vendor_id != null || req.body.vendor_id!='null') {
+        //     Reviews.create({
+        //         rating: req.body.rating,
+        //         discription: req.body.discription,
+        //         trip_id: req.body.trip_id,
+        //         vendor_id: null,
+        //         customer_id:null,
+        //         driver_id: req.body.driver_id
+        //     }).then(reviews => {
 
-                Vendor.findOne({
-                    where: {
-                        id: req.body.vendor_id
-                    }
-                }).then(vendor_rating => {
-                    total_ratings = parseFloat(vendor_rating.total_rating);
-                    total_reviews = parseFloat(vendor_rating.total_review);
-                    total_ratings = total_ratings + parseFloat(req.body.rating);
-                    total_reviews = total_reviews + 1;
-                    Vendor.update({
-                        total_rating: total_ratings,
-                        total_review: total_reviews
-                    }, {
-                        where: { id: req.body.vendor_id },
-                        returning: true,
-                        plain: true
-                    }).then(updated_reviews => {
-                        return res.status(200).send({
-                            status: 200,
-                            message: "Create driver review for vendor is successful",
-                            successData: {
-                                review: {
-                                    id: reviews.id,
-                                    rating: reviews.rating,
-                                    discription: reviews.discription,
+        //         Vendor.findOne({
+        //             where: {
+        //                 id: req.body.vendor_id
+        //             }
+        //         }).then(vendor_rating => {
+        //             total_ratings = parseFloat(vendor_rating.total_rating);
+        //             total_reviews = parseFloat(vendor_rating.total_review);
+        //             total_ratings = total_ratings + parseFloat(req.body.rating);
+        //             total_reviews = total_reviews + 1;
+        //             Vendor.update({
+        //                 total_rating: total_ratings,
+        //                 total_review: total_reviews
+        //             }, {
+        //                 where: { id: req.body.vendor_id },
+        //                 returning: true,
+        //                 plain: true
+        //             }).then(updated_reviews => {
+        //                 return res.status(200).send({
+        //                     status: 200,
+        //                     message: "Create driver review for vendor is successful",
+        //                     successData: {
+        //                         review: {
+        //                             id: reviews.id,
+        //                             rating: reviews.rating,
+        //                             discription: reviews.discription,
 
-                                    trip_id: reviews.trip_id,
-                                    driver_id: reviews.driver_id,
+        //                             trip_id: reviews.trip_id,
+        //                             driver_id: reviews.driver_id,
 
-                                }
-                            }
-                        });
-                    }).catch(err => {
+        //                         }
+        //                     }
+        //                 });
+        //             }).catch(err => {
 
-                        return res.status(200).send({
-                            status: 400,
-                            message: err.message,
-                            successData: {}
-                        });
+        //                 return res.status(200).send({
+        //                     status: 400,
+        //                     message: err.message,
+        //                     successData: {}
+        //                 });
 
-                    });
-                }).catch(err => {
+        //             });
+        //         }).catch(err => {
 
-                    return res.status(200).send({
-                        status: 400,
-                        message: err.message,
-                        successData: {}
-                    });
+        //             return res.status(200).send({
+        //                 status: 400,
+        //                 message: err.message,
+        //                 successData: {}
+        //             });
 
-                });
-
-
+        //         });
 
 
-            }).catch(err => {
-
-                return res.status(200).send({
-                    status: 400,
-                    message: err.message,
-                    successData: {}
-                });
-
-            });
-        }
 
 
-        if (req.body.customer_id != 'null' || req.body.customer_id != null) {
+        //     }).catch(err => {
+
+        //         return res.status(200).send({
+        //             status: 400,
+        //             message: err.message,
+        //             successData: {}
+        //         });
+
+        //     });
+        // }
+
+
+        // if (req.body.customer_id != 'null' || req.body.customer_id != null) {
 
 
             // Save Review to Database
@@ -184,7 +184,7 @@ exports.create_review = (req, res) => {
 
         }
     }
-}
+// }
 
 //--------------------driver get vendor review from trip------------------------------
 exports.get_review = (req, res) => {
