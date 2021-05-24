@@ -29,7 +29,7 @@ exports.create_review = (req, res) => {
         var total_ratings = null;
         var total_reviews = null;
         // Save trips to Database
-        if (req.body.vendor_id) {
+        if (req.body.vendor_id!="null") {
             Reviews.create({
                 rating: req.body.rating,
                 discription: req.body.discription,
@@ -105,7 +105,7 @@ exports.create_review = (req, res) => {
         }
 
 
-         if (req.body.customer_id ) {
+         if (req.body.customer_id!="null") {
 
 
             // Save Review to Database
