@@ -362,9 +362,8 @@ exports.trip_detail = (req, res) => {
 exports.cencal_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     req.checkBody('driver_id', 'please provide driver id!').notEmpty();
-
-    req.checkBody('vendor_fcm', 'please provide vendor fcm!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver fcm!').notEmpty();
+
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -689,8 +688,8 @@ exports.end_trip = (req, res) => {
     } else {
         var myarray = [];
 
-       
-       
+
+
         console.log("Customer FCM: " + req.body.customer_fcm + " / Vendor FCM: " + req.body.vendor_fcm + " / Driver FCM: " + req.body.driver_fcm)
         if (req.body.customer_fcm !== null && req.body.customer_fcm !== "null" && req.body.customer_fcm !== '') {
             myarray.push(try_to_parse(req.body.customer_fcm));
@@ -729,6 +728,7 @@ exports.end_trip = (req, res) => {
                 })
 
             });
+
         // Save vendor to Database
         Trip.update({
             driver_id: req.body.driver_id,
@@ -755,6 +755,7 @@ exports.end_trip = (req, res) => {
                                 id: trip[1].customer_id
                             }
                         }).then(customer => {
+                            
                             admin.messaging().sendToDevice(try_to_parse(customer.dataValues.fcm_token), payload, options)
                                 .then(function (response) {
                                     console.log("Successfully sent message:", response);
@@ -890,6 +891,7 @@ exports.get_all_trips = (req, res) => {
                     status: 200,
                     message: "All trips was not found in DB!",
                     successData: {
+                        trip_list: []
                     }
                 });
             } else {
