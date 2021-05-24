@@ -1004,6 +1004,8 @@ exports.trip_share = (req, res) => {
                             .then(function (response) {
                                 console.log("FCM Successfully sent message:");
                                 Trip.update({
+                                    customer_id: user.dataValues.id
+                                },{
                                     where:
                                         { id: req.body.trip_id },
                                     returning: true,
