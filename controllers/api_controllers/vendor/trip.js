@@ -745,7 +745,7 @@ exports.cancel_trip = (req, res) => {
 
                                     var payload = {
                                         notification: {
-                                            title: "Vendor  Cancel Trip",
+                                            title: "Vendor Cancel Trip",
                                             body: trip[1].id.toString()
                                         }
                                     };
@@ -814,7 +814,7 @@ exports.cancel_trip = (req, res) => {
 
                             var payload = {
                                 notification: {
-                                    title: "Vendor  Cancel Trip",
+                                    title: "Vendor Cancel Trip",
                                     body: trip[1].id.toString()
                                 }
                             };
