@@ -60,6 +60,7 @@ exports.create_review = (req, res) => {
                         returning: true,
                         plain: true
                     }).then(updated_reviews => {
+                        console.log(updated_reviews);
                         return res.status(200).send({
                             status: 200,
                             message: "Create driver reviews is successful",
