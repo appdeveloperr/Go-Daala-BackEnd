@@ -97,8 +97,8 @@ exports.socket_io = function (io) {
             const user_format = formatMessage(user.username, message);
             var payload = {
                 notification: {
-                    title: "GO DAALA",
-                    body: user_format.text.username+" "+user_format.text.message
+                    title: user_format.text.username,
+                    body: user_format.text.message
                 }
             };
 
