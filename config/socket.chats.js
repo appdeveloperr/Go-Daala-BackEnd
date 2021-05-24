@@ -115,7 +115,7 @@ exports.socket_io = function (io) {
                 trip_id: user_format.text.room
             }).then(chating => {
 
-                admin.messaging().sendToDevice(try_to_parse(fcm_token), payload, options)
+                admin.messaging().sendToDevice(try_to_parse(user_format.text.fcm_token), payload, options)
                     .then(function (response) {
                         console.log("Successfully fcm sent message chat:", response);
                         console.log('chat is saved ');
