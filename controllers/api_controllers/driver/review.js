@@ -25,8 +25,7 @@ exports.create_review = (req, res) => {
             }
         });
     } else {
-        var total_ratings = null;
-        var total_reviews = null;
+ 
 
         // Save trips to Database
         Reviews.create({
@@ -44,8 +43,8 @@ exports.create_review = (req, res) => {
                     }
                 }).then(vendor_rating => {
 
-                    total_ratings = parseFloat(vendor_rating.total_rating);
-                    total_reviews = parseFloat(vendor_rating.total_review);
+                 var  total_ratings = parseFloat(vendor_rating.total_rating);
+                    var total_reviews  = parseFloat(vendor_rating.total_review);
 
                     total_ratings = total_ratings + parseFloat(req.body.rating);
                     total_reviews = total_reviews + 1;
@@ -101,8 +100,8 @@ exports.create_review = (req, res) => {
                     }
                 }).then(customer_rating => {
 
-                    total_ratings = parseFloat(customer_rating.dataValues.total_rating);
-                    total_reviews = parseFloat(customer_rating.dataValues.total_review);
+                var     total_ratings = parseFloat(customer_rating.dataValues.total_rating);
+                   var  total_reviews = parseFloat(customer_rating.dataValues.total_review);
 
                     total_ratings = total_ratings + parseFloat(req.body.rating);
                     total_reviews = total_reviews + 1;
@@ -130,7 +129,7 @@ exports.create_review = (req, res) => {
                                     driver_id: reviews.driver_id,
                                 }
                             }
-                        });
+                        })
                     }).catch(err => {
                         console.log("track 3");
                         return res.status(200).send({
