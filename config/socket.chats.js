@@ -1,7 +1,7 @@
 const db = require("../models/api_models");
 const Dirver_lat_long = db.driver_lat_long;
 const Chat = db.chat;
-
+var admin = require("../config/fcm_init").isFcm;
 const formatMessage = require('./utils/messages');
 const formatLatLong = require('./utils/lat_long');
 const {
@@ -93,7 +93,7 @@ exports.socket_io = function (io) {
             console.log("this is user id :    " + socket.id);
             console.log("this is user room :    " + user.room);
             const user_format = formatMessage(user.username, message);
-            
+
             var payload = {
                 notification: {
                     title: user_format.text.username,
