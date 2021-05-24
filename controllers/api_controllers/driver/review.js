@@ -131,14 +131,6 @@ exports.create_review = (req, res) => {
                                 }
                             }
                         })
-                    }).catch(err => {
-                        console.log("track 3");
-                        return res.status(200).send({
-                            status: 400,
-                            message: err.message,
-                            successData: {}
-                        });
-
                     });
                 }).catch(err => {
                     console.log("track 4");
