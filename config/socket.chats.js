@@ -22,7 +22,7 @@ exports.socket_io = function (io) {
     io.on('connection', socket => {
 
         socket.on('connect_chat', ({ username, room }) => {
-            console.log("connect_chat Socket ID: "+socket.id);
+            console.log("connect_chat Socket ID: " + socket.id);
 
             const user = userJoin(socket.id, username, room);
             socket.join(user.room);
@@ -53,14 +53,14 @@ exports.socket_io = function (io) {
         });
 
         //on connect user   
-        socket.on('connect_driver_lat_long_room', ({ room, driver_id, lat, long,rotation }) => {
-            console.log('connect room driver lat long : ' + room, driver_id, lat, long ,rotation);
-            const user = get_lat_long_room(socket.id, room, driver_id, lat, long ,rotation );
+        socket.on('connect_driver_lat_long_room', ({ room, driver_id, lat, long, rotation }) => {
+            console.log('connect room driver lat long : ' + room, driver_id, lat, long, rotation);
+            const user = get_lat_long_room(socket.id, room, driver_id, lat, long, rotation);
             socket.join(user.room);
             console.log(user);
 
-            io.to(user.room).emit('connect_driver_lat_long_room', formatLatLong(room, driver_id, lat, long,rotation));
-            console.log(formatLatLong(room, driver_id, lat, long,rotation))
+            io.to(user.room).emit('connect_driver_lat_long_room', formatLatLong(room, driver_id, lat, long, rotation));
+            console.log(formatLatLong(room, driver_id, lat, long, rotation))
 
             Dirver_lat_long.update({
                 latitude: user.lat,
@@ -78,7 +78,7 @@ exports.socket_io = function (io) {
 
                 }).catch(err => {
 
-                    console.log('connect driver room  current location is not updated! :'+ err);
+                    console.log('connect driver room  current location is not updated! :' + err);
 
                 });
 
@@ -86,9 +86,9 @@ exports.socket_io = function (io) {
         });
 
         // Listen for chatMessage
-        socket.on('send_message', (message ,fcm_token,mobile_no) => {
-            
-            console.log("send_message Socket ID: "+socket.id);
+        socket.on('send_message', (message, fcm_token, mobile_no) => {
+
+            console.log("send_message Socket ID: " + socket.id);
             const user = getCurrentUser(socket.id);
             console.log("this is user id :    " + socket.id);
             console.log("this is user room :    " + user.room)
@@ -106,15 +106,6 @@ exports.socket_io = function (io) {
                 priority: "high",
                 timeToLive: 60 * 60 * 24
             };
-           
-
-            admin.messaging().sendToDevice(try_to_parse(fcm_token), payload, options)
-                .then(function (response) {
-                    console.log("Successfully sent message:", response);
-                })
-                .catch(function (error) {
-                    console.log("Error sending fcm message in chat:", error);
-                });
 
             Chat.create({
                 mobile_no: user_format.text.mobile_no,
@@ -123,10 +114,19 @@ exports.socket_io = function (io) {
                 time: user_format.time,
                 trip_id: user_format.text.room
             }).then(chating => {
-                console.log('chat is saved ');
+
+                admin.messaging().sendToDevice(try_to_parse(fcm_token), payload, options)
+                    .then(function (response) {
+                        console.log("Successfully fcm sent message chat:", response);
+                        console.log('chat is saved ');
+                    })
+                    .catch(function (error) {
+                        console.log("Error sending fcm message in chat:", error);
+                    });
+
             }).catch(err => {
                 console.log('chat is not saved :' + err);
-               
+
 
             });
 
