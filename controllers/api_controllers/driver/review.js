@@ -75,7 +75,7 @@ exports.create_review = (req, res) => {
                             }
                         });
                     }).catch(err => {
-
+                        console.log("track 1");
                         return res.status(200).send({
                             status: 400,
                             message: err.message,
@@ -84,7 +84,7 @@ exports.create_review = (req, res) => {
 
                     });
                 }).catch(err => {
-
+                    console.log("track 2");
                     return res.status(200).send({
                         status: 400,
                         message: err.message,
@@ -101,8 +101,8 @@ exports.create_review = (req, res) => {
                     }
                 }).then(customer_rating => {
 
-                    total_ratings = parseFloat(customer_rating.total_rating);
-                    total_reviews = parseFloat(customer_rating.total_review);
+                    total_ratings = parseFloat(customer_rating.dataValues.total_rating);
+                    total_reviews = parseFloat(customer_rating.dataValues.total_review);
 
                     total_ratings = total_ratings + parseFloat(req.body.rating);
                     total_reviews = total_reviews + 1;
@@ -132,7 +132,7 @@ exports.create_review = (req, res) => {
                             }
                         });
                     }).catch(err => {
-
+                        console.log("track 3");
                         return res.status(200).send({
                             status: 400,
                             message: err.message,
@@ -141,7 +141,7 @@ exports.create_review = (req, res) => {
 
                     });
                 }).catch(err => {
-
+                    console.log("track 4");
                     return res.status(200).send({
                         status: 400,
                         message: err.message,
@@ -156,7 +156,7 @@ exports.create_review = (req, res) => {
 
             }
         }).catch(err => {
-
+            console.log("track 5");
             return res.status(200).send({
                 status: 400,
                 message: err.message,
