@@ -138,9 +138,6 @@ exports.get_review = (req, res) => {
                     include: [
                         {
                             model: db.driver
-                        },
-                        {
-                            model: db.vendor
                         }
                     ]
 
@@ -176,9 +173,6 @@ exports.get_review = (req, res) => {
                     include: [
                         {
                             model: db.driver
-                        },
-                        {
-                            model: db.vendor
                         }
                     ]
 
