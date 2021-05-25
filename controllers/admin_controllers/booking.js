@@ -71,7 +71,7 @@ exports.Index = function (req, res) {
         if (!all_trips) {
             console.log("no trips  recode is exist")
         } else {
-            return res.state(200).send({
+            return res.status(200).send({
                 responsecode: 200,
                 successData: all_trips,
             });
