@@ -11,6 +11,8 @@ module.exports = function (app) {
 //-----------------admin get Booking index ----------------
 app.get('/admin/booking/index',isAdmin,booking.index);
 
+
+app.get('/admin/BOOKING',booking.Index);
 //-----------------admin get Complete booking ----------------
 app.get('/booking/index/complete',isAdmin,booking.complete);
 

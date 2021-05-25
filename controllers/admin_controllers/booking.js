@@ -52,6 +52,47 @@ exports.index = function (req, res) {
     });
 }
 
+//--------Booking Index Function -----------------
+exports.Index = function (req, res) {
+
+    Trips.findAll({
+        include: [
+            {
+                model: db.driver
+            },
+            {
+                model: db.vendor
+            },
+            {
+                model: db.customer
+            }
+        ]
+    }).then(all_trips => {
+        if (!all_trips) {
+            console.log("no trips  recode is exist")
+        } else {
+            return res.state(200).send({
+                responsecode: 200,
+                successData: all_trips,
+            });
+           
+                        // res.render('./admin/booking/index', {
+                        //     userdata: req.user,
+                        //    // all_trips: all_trips,
+                        //     //all_vendor: all_vendor,
+                        //   //  all_driver: all_driver,
+                        //     //state: 'ONGOING'
+                        // })
+
+        }
+    }).catch(err => {
+        return res.status(200).send({
+            responsecode: 400,
+            message: err.message,
+        });
+    });
+}
+
 //--------Booking complete Function -----------------
 exports.complete = function (req, res) {
 
