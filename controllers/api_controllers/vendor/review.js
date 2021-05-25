@@ -148,7 +148,7 @@ exports.get_review = (req, res) => {
                             status: 200,
                             message: "get Vendor reviews   is successful",
                             successData: {
-                                review:'null',
+                                review: null,
                                 trip: trip.dataValues
 
                             }
