@@ -108,6 +108,7 @@ exports.create_review = (req, res) => {
 //--------------------customer get driver review from trip------------------------------
 exports.get_review = (req, res) => {
     req.checkBody('trip_id', 'Trip_id must have Id needed!').notEmpty();
+    req.checkBody('customer_id', 'customer_id must have Id needed!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -121,9 +122,10 @@ exports.get_review = (req, res) => {
         });
     } else {
 
-        Reviews.findAll({
+        Reviews.findOne({
             where: {
-                trip_id: req.body.trip_id
+                trip_id: req.body.trip_id,
+                customer_id:req.body.customer_id
             }
         }).then(reviews => {
             if (reviews == null || reviews == '') {
@@ -136,37 +138,25 @@ exports.get_review = (req, res) => {
                     include: [
                         {
                             model: db.driver
+                        },
+                        {
+                            model: db.vendor
                         }
                     ]
 
                 }).then(trip => {
 
-                    delete trip.driver.dataValues.password;
-                    if (trip != null || trip != '' ) {
-
 
                         return res.status(200).send({
                             status: 200,
-                            message: "get Customer reviews   is successful",
+                            message: "get Customer reviews is successful",
                             successData: {
-                                reviews_list: {
-                                    review: reviews
-                                },
-
+                                reviews:'null',
                                 trip: trip.dataValues
 
                             }
                         });
-
-
-                    } else {
-                        return res.status(200).send({
-                            status: 400,
-                            message: "get Customer reviews  from trip and trip was not found in DB",
-                            successData: {
-                            }
-                        });
-                    }
+                 
                 }).catch(err => {
 
                     return res.status(200).send({
@@ -178,107 +168,33 @@ exports.get_review = (req, res) => {
                 })
             } else {
 
-
-                reviews.forEach(item => {
-                    if (item.dataValues.driver_id != null) {
-
-
-
-
-                        Driver.findOne({
-                            where: {
-                                id: item.dataValues.driver_id
-                            }
-                        }).then(drivers => {
-                            if (drivers != null || drivers != '') {
-                                delete drivers.dataValues.password;
-                                delete drivers.dataValues.id;
-                                delete drivers.dataValues.account_info;
-                                delete drivers.dataValues.fcm_token;
-                                delete drivers.dataValues.createdAt;
-                                delete drivers.dataValues.updatedAt;
-                                delete drivers.dataValues.phone_number;
-
-
-                                Trip.findOne({
-                                    where: {
-                                        id: req.body.trip_id
-                                    }
-                                }).then(trip => {
-                                    if (trip != null || trip != '') {
-                                        return res.send({
-                                            status: 200,
-                                            message: "get  reviews   is successful",
-                                            successData: {
-                                                reviews_list: {
-                                                    review: reviews
-                                                },
-                                                driver: drivers.dataValues,
-                                                trip: trip.dataValues
-
-                                            }
-                                        });
-
-                                    }
-                                }).catch(err => {
-
-                                    return res.status(200).send({
-                                        status: 400,
-                                        message: err.message,
-                                        successData: {}
-                                    });
-
-                                })
-                            }
-                        }).catch(err => {
-
-                            return res.status(200).send({
-                                status: 400,
-                                message: err.message,
-                                successData: {}
-                            });
-
-                        })
-                    }
-                });
-
-
                 Trip.findOne({
                     where: {
                         id: req.body.trip_id
+
                     },
-                    include:[
+                    include: [
                         {
                             model: db.driver
+                        },
+                        {
+                            model: db.vendor
                         }
                     ]
+
                 }).then(trip => {
-                    if (trip != null || trip != '') {
-   
-                            delete trip.driver.dataValues.password;
-                           
 
-                            return res.status(200).send({
-                                status: 200,
-                                message: "get Customer reviews   is successful",
-                                successData: {
-                                    reviews_list: {
-                                        review: reviews
-                                    },
-                                    trip: trip.dataValues
 
-                                }
-                            });
-                   
-
-                    } else {
                         return res.status(200).send({
-                            status: 400,
-                            message: "get Customer reviews  from trip and trip was not found in DB",
+                            status: 200,
+                            message: "get Customer reviews   is successful",
                             successData: {
+                                review :reviews.dataValues,
+                                trip: trip.dataValues
+
                             }
                         });
-                    }
+                 
                 }).catch(err => {
 
                     return res.status(200).send({
@@ -288,6 +204,7 @@ exports.get_review = (req, res) => {
                     });
 
                 })
+
             }
         }).catch(err => {
 

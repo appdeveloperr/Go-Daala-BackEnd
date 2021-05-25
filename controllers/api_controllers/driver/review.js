@@ -234,11 +234,12 @@ exports.get_review = (req, res) => {
 
                     if (trip != null || trip != '') {
                         console.log("ERROR REVIEW 5")
-
+                     
                         return res.status(200).send({
                             status: 200,
                             message: "get driver reviews   is successful",
                             successData: {
+                                reviews:'null',
                                 trip: trip.dataValues
 
                             }
