@@ -265,7 +265,6 @@ exports.get_review = (req, res) => {
             } else {
                 //------------------if driver give review for Vendor---------/////////
                 //Vendors
-                if (req.body.vendor_id != "null") {
                     Trip.findOne({
                         where: {
                             id: req.body.trip_id
@@ -314,58 +313,8 @@ exports.get_review = (req, res) => {
                     });
 
                 }
-                 if(req.body.customer_id!="null") {
-                //     //Customer
-                Trip.findOne({
-                    where: {
-                        id: req.body.trip_id
-                    },
-                    include: [
-                        {
-                            model: db.vendor
-                        },
-                        {
-                            model: db.customer
-                        }
-                    ]
-                }).then(trip => {
-                    console.log("ERROR REVIEW 4")
-
-                    if (trip != null || trip != '') {
-                        console.log("ERROR REVIEW 5")
-
-                        return res.status(200).send({
-                            status: 200,
-                            message: "get driver reviews   is successful",
-                            successData: {
-                                reviews: reviews.dataValues,
-                                trip: trip.dataValues
-
-                            }
-                        });
-
-
-                    } else {
-                        return res.status(200).send({
-                            status: 400,
-                            message: "get driver reviews from trip and trip was not found in DB",
-                            successData: {
-                            }
-                        });
-                    }
-                }).catch(err => {
-
-                    return res.status(200).send({
-                        status: 400,
-                        message: err.message,
-                        successData: {}
-                    });
-
-                });
-
-
-                 }
-            }
+                
+            
         }).catch(err => {
 
             return res.status(200).send({
