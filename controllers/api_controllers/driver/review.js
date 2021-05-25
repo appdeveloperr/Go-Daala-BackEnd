@@ -239,7 +239,6 @@ exports.get_review = (req, res) => {
                             status: 200,
                             message: "get driver reviews   is successful",
                             successData: {
-                                reviews: reviews.dataValues,
                                 trip: trip.dataValues
 
                             }
