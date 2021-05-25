@@ -146,6 +146,7 @@ require('./routes/admin_routes/banner.routes')(app);
 require('./routes/admin_routes/promo.routes')(app);
 require('./routes/admin_routes/vehicle.routes')(app);
 require('./routes/admin_routes/vendor.routes')(app);
+require('./routes/admin_routes/customer.routes')(app);
 require('./routes/admin_routes/driver.routes')(app);
 require('./routes/admin_routes/booking.routes')(app);
 require('./routes/admin_routes/help_and_support.routes')(app);
