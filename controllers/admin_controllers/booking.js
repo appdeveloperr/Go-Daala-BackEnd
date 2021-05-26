@@ -28,14 +28,10 @@ exports.ongoing = function (req, res) {
             console.log("no trips  recode is exist")
         } else {
 
-            return res.status(200).send({
-                responsecode: 200,
-                message: all_trip,
-            });
-            // res.render('./admin/booking/index', {
-            //     all_trips: all_trip,
-            //     state:"start"
-            // })
+            res.render('./admin/booking/index', {
+                all_trips: all_trip,
+                state:"start"
+            })
 
         }
     }).catch(err => {
@@ -106,14 +102,10 @@ exports.complete = function (req, res) {
             console.log("no trips  recode is exist")
         } else {
 
-            return res.status(200).send({
-                responsecode: 200,
-                message: all_trip,
-            });
-            // res.render('./admin/booking/index', {
-            //     all_trips: all_trip,
-            //     state:"end"
-            // })
+            res.render('./admin/booking/index', {
+                all_trips: all_trip,
+                state:"end"
+            })
 
         }
     }).catch(err => {
@@ -145,14 +137,11 @@ exports.cancel = function (req, res) {
             console.log("no trips  recode is exist")
         } else {
 
-            return res.status(200).send({
-                responsecode: 200,
-                message: all_trip,
-            });
-            // res.render('./admin/booking/cancel_booking', {
-            //     all_trips: all_trip,
-            //     state:"cancel"
-            // })
+        
+            res.render('./admin/booking/cancel_booking', {
+                all_trips: all_trip,
+                state:"cancel"
+            })
 
         }
     }).catch(err => {
