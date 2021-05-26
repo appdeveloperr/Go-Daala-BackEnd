@@ -13,7 +13,7 @@ app.get('/admin/booking/index',isAdmin,booking.index);
 
 app.get('/admin/booking/ongoing',isAdmin,booking.ongoing);
 
-app.get('/admin/BOOKING',booking.Index);
+
 //-----------------admin get Complete booking ----------------
 app.get('/booking/index/complete',isAdmin,booking.complete);
 
