@@ -1,7 +1,7 @@
 const db = require("../../models/api_models");
 const Trips = db.trip;
 const Sequelize = require('sequelize');
-const op = Sequelize.Op;
+const Op = Sequelize.Op;
 //--------Booking Ongoing Function -----------------
 exports.ongoing = function (req, res) {
 
