@@ -21,7 +21,8 @@
                         <div class="card-header">
                             <%var array=[];%>
 
-                                <a href="/admin/booking/index" class="btn btn-primary"> ONGOING</a>
+                                <a href="/admin/booking/index" class="btn btn-primary"> ALL Booking</a>
+                                <a href="/admin/booking/ongoing" class="btn btn-primary"> ONGOING</a>
                                 <a href="/booking/index/complete" onclick="complete()" class="btn btn-primary">
                                     COMPLETED</a>
                                 <a href="/booking/index/cancel" class="btn btn-primary"> CANCELLED</a>
@@ -101,6 +102,108 @@
                                                     <%}%>
                                                   
 
+                                                <!----------start or ongoing trip-->
+                                                    <%if(state=='start'){%>
+
+                                                        <td><%=a%><%a++%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.pickup%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.dropoff%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.vehicle_name%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.estimated_distance%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.estimated_time%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.total_cost%>
+                                                        </td>
+                                                        <td>
+                                                            <%=item.status%>
+                                                        </td>
+                                                        <%if(item.vendor==null){%>
+                                                            <td></td>
+                                                        <%}else{%>
+                                                            <td>
+                                                                    <%=item.vendor.first_name%> <%=item.vendor.last_name%>
+                                                            </td>
+                                                        <%}%>
+                                                         <%if(item.driver==null){%>
+                                                            <td></td>
+                                                    <%}else{%>  
+                                                        <td> <%=item.driver.first_name%> <%=item.driver.last_name%> </td>
+                                                        <%}%>   
+                                                    </td>
+    
+                                                         <%if(item.customer==null){%>
+                                                        <td></td>
+                                                            
+                                                        <%}else{%>
+                                                        <td>
+                                                        <%=item.customer.first_name%> <%=item.customer.last_name%>
+                                                        </td>
+                                                        <%}%>
+    
+                                                        <%}%>
+    
+                                                <!----------complite trip-->
+                                                        <%if(state=='end'){%>
+
+                                                            <td><%=a%><%a++%>
+                                                            </td>
+                                                            <td>
+                                                                <%=item.pickup%>
+                                                            </td>
+                                                            <td>
+                                                                <%=item.dropoff%>
+                                                            </td>
+                                                            <td>
+                                                                <%=item.vehicle_name%>
+                                                            </td>
+                                                            <td>
+                                                                <%=item.estimated_distance%>
+                                                            </td>
+                                                            <td>
+                                                                <%=item.estimated_time%>
+                                                            </td>
+                                                            <td>
+                                                                <%=item.total_cost%>
+                                                            </td>
+                                                            <td>
+                                                                <%=item.status%>
+                                                            </td>
+                                                            <%if(item.vendor==null){%>
+                                                                <td></td>
+                                                            <%}else{%>
+                                                                <td>
+                                                                        <%=item.vendor.first_name%> <%=item.vendor.last_name%>
+                                                                </td>
+                                                            <%}%>
+                                                             <%if(item.driver==null){%>
+                                                                <td></td>
+                                                        <%}else{%>  
+                                                            <td> <%=item.driver.first_name%> <%=item.driver.last_name%> </td>
+                                                            <%}%>   
+                                                        </td>
+        
+                                                             <%if(item.customer==null){%>
+                                                            <td></td>
+                                                                
+                                                            <%}else{%>
+                                                            <td>
+                                                            <%=item.customer.first_name%> <%=item.customer.last_name%>
+                                                            </td>
+                                                            <%}%>
+        
+                                                            <%}%>
+        
                                                                     
                                         </tr>
                                      
