@@ -73,34 +73,35 @@
                                                     <%if(item.vendor==null){%>
                                                         <td></td>
                                                     <%}else{%>
-                                                            <td>
+                                                        <td>
                                                                 <%=item.vendor.first_name%> <%=item.vendor.last_name%>
-                                                            </td>
-                                                            <%}%>
-                                                                <td>
-                                                                    <%=item.driver.first_name%> <%=item.driver.last_name%>
-                                                                </td>
+                                                        </td>
+                                                    <%}%>
+                                                     <td>
+                                                    <%=item.driver.first_name%> <%=item.driver.last_name%>
+                                                     </td>
 
-                                                                <%if(item.customer==null){%>
-                                                                    <td></td>
+                                                     <%if(item.customer==null){%>
+                                                    <td></td>
                                                         
-                                                                <%}else{%>
-                                                                    <td>
-                                                                        <%=item.customer.first_name%> <%=item.customer.last_name%>
-                                                                    </td>
-                                                                    <%}%>
+                                                    <%}else{%>
+                                                    <td>
+                                                    <%=item.customer.first_name%> <%=item.customer.last_name%>
+                                                    </td>
+                                                    <%}%>
 
-                                                                    <%}%>
-                                                                    <%})%>
+                                                    <%}%>
+                                                    <%})%>
 
                                                                     
                                         </tr>
-                                        <%}%>
+                                     
 
 
                                     </tbody>
                                     <tfoot>
                                         <tr>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
