@@ -11,7 +11,7 @@ exports.ongoing = function (req, res) {
             [Op.or]: ['wait','start']
             }
         }
-    },{
+    ,
         include: [
             {
                 model: db.driver
@@ -89,7 +89,7 @@ exports.complete = function (req, res) {
         where:{
             status:'end'
         }
-    },{
+    ,
         include: [
             {
                 model: db.driver
@@ -128,7 +128,7 @@ exports.complete = function (req, res) {
 exports.cancel = function (req, res) {
     Trips.findAll({where:{
         status:'cancel'
-    }},{
+    },
         include: [
             {
                 model: db.driver
