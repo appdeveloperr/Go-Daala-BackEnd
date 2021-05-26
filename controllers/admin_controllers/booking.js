@@ -8,7 +8,7 @@ const Cancel_trip = db.cancel_trip;
 
 
 //--------Booking Index Function -----------------
-exports.index = function (req, res) {
+exports.Index = function (req, res) {
 
     Trips.findAll().then(all_trips => {
         if (!all_trips) {
@@ -53,7 +53,7 @@ exports.index = function (req, res) {
 }
 
 //--------Booking Index Function -----------------
-exports.Index = function (req, res) {
+exports.index = function (req, res) {
 
     Trips.findAll({
         include: [
@@ -67,22 +67,16 @@ exports.Index = function (req, res) {
                 model: db.customer
             }
         ]
-    }).then(all_trips => {
-        if (!all_trips) {
+    }).then(all_trip => {
+        if (!all_trip) {
             console.log("no trips  recode is exist")
         } else {
-            return res.status(200).send({
-                responsecode: 200,
-                successData: all_trips,
-            });
-           
-                        // res.render('./admin/booking/index', {
-                        //     userdata: req.user,
-                        //    // all_trips: all_trips,
-                        //     //all_vendor: all_vendor,
-                        //   //  all_driver: all_driver,
-                        //     //state: 'ONGOING'
-                        // })
+
+
+            res.render('./admin/booking/index', {
+                all_trips: all_trip,
+                state:"all"
+            })
 
         }
     }).catch(err => {
@@ -96,9 +90,11 @@ exports.Index = function (req, res) {
 //--------Booking complete Function -----------------
 exports.complete = function (req, res) {
 
-    Trips.findAll({where:{
-        status:"end"
-    }}).then(all_trips => {
+    Trips.findAll({
+        where: {
+            status: "end"
+        }
+    }).then(all_trips => {
 
         if (!all_trips) {
             console.log("no trips  recode is exist")
@@ -142,19 +138,19 @@ exports.complete = function (req, res) {
 
 //--------Booking cancel Function -----------------
 exports.cancel = function (req, res) {
-   
-            Trips.findAll({
-                where: {
-                    status: 'cencal'
-                }
-            }).then(all_trips => {
-                if (!all_trips) {
-                    console.log("no trips  recode is exist")
+
+    Trips.findAll({
+        where: {
+            status: 'cencal'
+        }
+    }).then(all_trips => {
+        if (!all_trips) {
+            console.log("no trips  recode is exist")
+        } else {
+            Cancel_trip.findAll().then(all_cancel_trip => {
+                if (!all_cancel_trip) {
+                    console.log("cancel trip is not exist")
                 } else {
-                    Cancel_trip.findAll().then(all_cancel_trip => {
-                        if (!all_cancel_trip) {
-                          console.log("cancel trip is not exist")
-                        } else {
                     Vendor.findAll().then(all_vendor => {
                         if (!all_vendor) {
                             console.log("no vendor recode is exist")
@@ -162,7 +158,7 @@ exports.cancel = function (req, res) {
                             Driver.findAll().then(all_driver => {
                                 res.render('./admin/booking/cancel_booking', {
                                     userdata: req.user,
-                                    all_cancel_trip:all_cancel_trip,
+                                    all_cancel_trip: all_cancel_trip,
                                     all_trips: all_trips,
                                     all_vendor: all_vendor,
                                     all_driver: all_driver,
