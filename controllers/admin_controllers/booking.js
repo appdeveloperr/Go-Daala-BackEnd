@@ -140,7 +140,7 @@ exports.cancel = function (req, res) {
         } else {
 
 
-            res.render('./admin/booking/cancel', {
+            res.render('./admin/booking/cancel_booking', {
                 all_trips: all_trip,
                 state:"cancel"
             })
