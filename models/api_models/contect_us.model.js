@@ -30,6 +30,9 @@ module.exports = (sequelize, Sequelize) => {
         vendor_id: {
             type: Sequelize.STRING
         },
+        customer_id: {
+            type: Sequelize.STRING
+        },
         admin_id: {
             type: Sequelize.STRING
         }
