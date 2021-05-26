@@ -93,14 +93,19 @@
                                                     <%=item.customer.first_name%> <%=item.customer.last_name%>
                                                     </td>
                                                     <%}%>
-
-                                                    <%}%>                                
+                                                    <%if(item.how_cancel==null){%>
+                                                        <td></td>
+                                                        <%}else{%>
+                                                        <td><%=item.how_cancel%></td>
+                                                    <%}%>               
+                                                    <%}%>                     
                                 </tr>
                                 <%});%>
 
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
