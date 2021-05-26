@@ -11,14 +11,14 @@ module.exports = function (app) {
 //-----------------admin get Booking index ----------------
 app.get('/admin/booking/index',isAdmin,booking.index);
 
-app.get('/admin/booking/ongoing',isAdmin,booking.ongoing);
+app.get('/admin/booking/ongoing',booking.ongoing);
 
 
 //-----------------admin get Complete booking ----------------
-app.get('/booking/index/complete',isAdmin,booking.complete);
+app.get('/booking/index/complete',booking.complete);
 
 //-----------------admin get cancel booking----------------
-app.get('/booking/index/cancel',isAdmin,booking.cancel);
+app.get('/booking/index/cancel',booking.cancel);
 
 
 //-----------------develpor side testing ----------------
