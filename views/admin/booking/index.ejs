@@ -45,9 +45,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        <%all_trips.forEach(function(item){ %>
                                         <tr>
-                                            <%all_trips.forEach(function(item){ %>
+                                            
                                                 <%if(state=='all'){%>
 
                                                     <td><%=a%><%a++%>
@@ -94,10 +94,10 @@
                                                     <%}%>
 
                                                     <%}%>
-                                                    <%})%>
+                                                  
 
                                                                     
-                                        </tr>
+                                        </tr>  <%})%>
                                      
 
 
