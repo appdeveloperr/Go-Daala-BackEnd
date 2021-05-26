@@ -77,9 +77,12 @@
                                                                 <%=item.vendor.first_name%> <%=item.vendor.last_name%>
                                                         </td>
                                                     <%}%>
-                                                     <td>
-                                                    <%=item.driver.first_name%> <%=item.driver.last_name%>
-                                                     </td>
+                                                     <%if(item.driver==null){%>
+                                                        <td></td>
+                                                <%}else{%>  
+                                                    <td> <%=item.driver.first_name%> <%=item.driver.last_name%> </td>
+                                                    <%}%>   
+                                                </td>
 
                                                      <%if(item.customer==null){%>
                                                     <td></td>
