@@ -1165,7 +1165,7 @@ exports.get_single_date_with_cash = (req, res) => {
                                 dash_board_single_detail: {
                                     total_trips: total_trips,
                                     total_cash: total_cash,
-                                    driver: driver.dataValues
+                                    user: driver.dataValues
                                 }
                             }
                         });
@@ -1177,7 +1177,7 @@ exports.get_single_date_with_cash = (req, res) => {
                                 dash_board_single_detail: {
                                     total_trips: total_trips,
                                     total_cash: total_cash,
-                                    driver: "driver is not exist in db"
+                                    user: "user is not exist in db"
                                 }
                             }
                         });
@@ -1211,7 +1211,7 @@ exports.get_single_date_with_cash = (req, res) => {
                             dash_board_single_detail: {
                                 total_trips: total_trips,
                                 total_cash: total_cash,
-                                driver: driver
+                                user: driver
                             }
                         }
                     });
