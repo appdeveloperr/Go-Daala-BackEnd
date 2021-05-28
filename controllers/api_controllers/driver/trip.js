@@ -757,7 +757,7 @@ exports.end_trip = (req, res) => {
                                 id: trip[1].customer_id
                             }
                         }).then(customer => {
-                            
+
                             admin.messaging().sendToDevice(try_to_parse(customer.dataValues.fcm_token), payload, options)
                                 .then(function (response) {
                                     console.log("Successfully sent message:", response);
@@ -1153,60 +1153,78 @@ exports.get_single_date_with_cash = (req, res) => {
         }).then(trip => {
             if (trip == null || trip == '') {
                 Driver.findOne({
-                    where:{
-                        id:req.body.driver_id
+                    where: {
+                        id: req.body.driver_id
                     }
-                }).then(driver=>{
-                    if(driver){
-                return res.status(200).send({
-                    status: 200,
-                    message: "Get driver for single date Trip with cash",
-                    successData: {
-                        dash_board_single_detail: {
-                            total_trips: total_trips,
-                            total_cash: total_cash,
-                            driver:driver.dataValues
-                        }
+                }).then(driver => {
+                    if (driver) {
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Get driver for single date Trip with cash",
+                            successData: {
+                                dash_board_single_detail: {
+                                    total_trips: total_trips,
+                                    total_cash: total_cash,
+                                    driver: driver.dataValues
+                                }
+                            }
+                        });
+                    } else {
+                        return res.status(200).send({
+                            status: 200,
+                            message: "Get driver for single date Trip with cash",
+                            successData: {
+                                dash_board_single_detail: {
+                                    total_trips: total_trips,
+                                    total_cash: total_cash,
+                                    driver: "driver is not exist in db"
+                                }
+                            }
+                        });
                     }
-                });
-            }else{
-                return res.status(200).send({
-                    status: 200,
-                    message: "Get driver for single date Trip with cash",
-                    successData: {
-                        dash_board_single_detail: {
-                            total_trips: total_trips,
-                            total_cash: total_cash,
-                            driver:"driver is not exist in db"
-                        }
-                    }
-                });
-            }
-            }).catch(err => {
+                }).catch(err => {
 
-                return res.status(200).send({
-                    status: 400,
-                    message: err.message,
-                    successData: {}
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
                 });
-    
-            });
             } else {
 
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
                 });
-                return res.status(200).send({
-                    status: 200,
-                    message: "Get driver for single date Trip with cash",
-                    successData: {
-                        dash_board_single_detail: {
-                            total_trips: total_trips,
-                            total_cash: total_cash
-                        }
+                Driver.findOne({
+                    where: {
+                        id: req.body.driver_id
                     }
+                }).then(driver => {
+
+
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Get driver for single date Trip with cash",
+                        successData: {
+                            dash_board_single_detail: {
+                                total_trips: total_trips,
+                                total_cash: total_cash,
+                                driver: driver
+                            }
+                        }
+                    });
+                }).catch(err => {
+
+                    return res.status(200).send({
+                        status: 400,
+                        message: err.message,
+                        successData: {}
+                    });
+
                 });
+
             }
         }).catch(err => {
 
