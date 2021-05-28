@@ -1157,6 +1157,7 @@ exports.get_single_date_with_cash = (req, res) => {
                         id:req.body.driver_id
                     }
                 }).then(driver=>{
+                    if(driver){
                 return res.status(200).send({
                     status: 200,
                     message: "Get driver for single date Trip with cash",
@@ -1168,6 +1169,19 @@ exports.get_single_date_with_cash = (req, res) => {
                         }
                     }
                 });
+            }else{
+                return res.status(200).send({
+                    status: 200,
+                    message: "Get driver for single date Trip with cash",
+                    successData: {
+                        dash_board_single_detail: {
+                            total_trips: total_trips,
+                            total_cash: total_cash,
+                            driver:"driver is not exist in db"
+                        }
+                    }
+                });
+            }
             }).catch(err => {
 
                 return res.status(200).send({
