@@ -1154,7 +1154,7 @@ exports.get_single_date_with_cash = (req, res) => {
             if (trip == null || trip == '') {
                 Driver.findOne({
                     where:{
-                        id:driver_id
+                        id:req.body.driver_id
                     }
                 }).then(driver=>{
                 return res.status(200).send({
@@ -1164,7 +1164,7 @@ exports.get_single_date_with_cash = (req, res) => {
                         dash_board_single_detail: {
                             total_trips: total_trips,
                             total_cash: total_cash,
-                            driver:driver
+                            driver:driver.dataValues
                         }
                     }
                 });
