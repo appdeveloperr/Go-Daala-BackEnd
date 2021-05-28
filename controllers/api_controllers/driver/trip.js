@@ -7,6 +7,7 @@ var Customer = db.customer;
 var Cancel_trip = db.cancel_trip;
 var Trip = db.trip;
 var admin = require("../../../config/fcm_init").isFcm;
+const { model } = require("mongoose");
 const Op = db.Sequelize.Op;
 //--------------driver receive trip---------------
 exports.receive_trip = (req, res, next) => {
@@ -1145,7 +1146,13 @@ exports.get_single_date_with_cash = (req, res) => {
                 createdAt: {
                     [Op.between]: [req.body.Date, req.body.Date + ' 23:59:59.000 +00:00'],
                 }
-            }
+            },
+            include: [
+
+                {
+                    model: db.driver
+                }
+            ]
             //,
             // order: [['createdAt', 'ASC']],
             // limit: count,

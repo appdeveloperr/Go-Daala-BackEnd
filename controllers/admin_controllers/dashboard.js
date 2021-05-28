@@ -9,96 +9,45 @@ const help_and_support = db.contect_us;
 const FAQS = db.faqs;
 const Customer = db.customer;
 
-exports.Dishboard = (req, res) => {
-    Banner.findAndCountAll().then(Banners => {
-
-        Promo.findAndCountAll().then(Promos => {
-
-            Vehicle.findAndCountAll().then(vehicles => {
-
-                Booking.findAndCountAll().then(Bookings => {
-
-                    Vendor.findAndCountAll().then(Vendors => {
-
-                        Driver.findAndCountAll().then(Drivers => {
-
-                            Customer.findAndCountAll().then(Customers => {
-
-                                help_and_support.findAndCountAll().then(Helps_and_Support => {
-
-                                    FAQS.findAndCountAll().then(FAQs => {
 
 
-                                        res.render('admin/index', {
-                                            Banner: Banners.count,
-                                            Promo: Promos.count,
-                                            Vehicle: vehicles.count,
-                                            Booking: Bookings.count,
-                                            Vendor: Vendors.count,
-                                            Customer: Customers.count,
-                                            Driver: Drivers.count,
-                                            help_and_support: Helps_and_Support.count,
-                                            FAQS: FAQs.count
-                                        });
+exports.Dishboard = async (req, res) => {
+    try {
+        const banner =await Banner.findAndCountAll();
 
-                                    }).catch(err => {
-                                        return res.status(200).send({
-                                            responsecode: 400,
-                                            message: err.message,
-                                        });
-                                    });
+    const promo = await Promo.findAndCountAll();
 
-                                }).catch(err => {
-                                    return res.status(200).send({
-                                        responsecode: 400,
-                                        message: err.message,
-                                    });
-                                });
+    const vehicle =await  Vehicle.findAndCountAll();
 
-                            }).catch(err => {
-                                return res.status(200).send({
-                                    responsecode: 400,
-                                    message: err.message,
-                                });
-                            });
+    const booking = await Booking.findAndCountAll();
 
-                        }).catch(err => {
-                            return res.status(200).send({
-                                responsecode: 400,
-                                message: err.message,
-                            });
-                        });
+    const vendor = await Vendor.findAndCountAll();
 
-                    }).catch(err => {
-                        return res.status(200).send({
-                            responsecode: 400,
-                            message: err.message,
-                        });
-                    });
+    const driver =await Driver.findAndCountAll();
 
-                }).catch(err => {
-                    return res.status(200).send({
-                        responsecode: 400,
-                        message: err.message,
-                    });
-                });
-            }).catch(err => {
-                return res.status(200).send({
-                    responsecode: 400,
-                    message: err.message,
-                });
-            });
-        }).catch(err => {
-            return res.status(200).send({
-                responsecode: 400,
-                message: err.message,
-            });
-        });
-    }).catch(err => {
+    const customer =await Customer.findAndCountAll();
+
+    const help_and_supports =await help_and_support.findAndCountAll();
+
+    const faq = await FAQS.findAndCountAll();
+
+
+    res.render('admin/index', {
+        Banner: banner.count,
+        Promo: promo.count,
+        Vehicle: vehicle.count,
+        Booking: booking.count,
+        Vendor: vendor.count,
+        Customer: customer.count,
+        Driver: driver.count,
+        help_and_support: help_and_supports.count,
+        FAQS: faq.count
+    });
+    } catch (error) {
         return res.status(200).send({
             responsecode: 400,
-            message: err.message,
+            message: error.message,
         });
-    });
-
+    }
+    
 }
