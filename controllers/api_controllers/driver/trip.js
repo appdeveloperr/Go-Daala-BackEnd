@@ -1145,29 +1145,38 @@ exports.get_single_date_with_cash = (req, res) => {
                 createdAt: {
                     [Op.between]: [req.body.Date, req.body.Date + ' 23:59:59.000 +00:00'],
                 }
-            },
-            include: [
-
-                {
-                    model: db.driver
-                }
-            ]
+            }
             //,
             // order: [['createdAt', 'ASC']],
             // limit: count,
 
         }).then(trip => {
             if (trip == null || trip == '') {
+                Driver.findOne({
+                    where:{
+                        id:driver_id
+                    }
+                }).then(driver=>{
                 return res.status(200).send({
                     status: 200,
                     message: "Get driver for single date Trip with cash",
                     successData: {
                         dash_board_single_detail: {
                             total_trips: total_trips,
-                            total_cash: total_cash
+                            total_cash: total_cash,
+                            driver:driver
                         }
                     }
                 });
+            }).catch(err => {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: err.message,
+                    successData: {}
+                });
+    
+            });
             } else {
 
                 trip.forEach(element => {
