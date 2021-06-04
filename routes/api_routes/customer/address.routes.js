@@ -27,8 +27,6 @@ module.exports = function (app) {
         "/api/customer/create-address",
         customerAuthJwt.verifyToken,
         controller.create_address,
-
-        // uploads.single('profile'),
     );
 
  //------------Customer Update address Function----------------

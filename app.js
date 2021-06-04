@@ -55,9 +55,9 @@ const db = require("./models/api_models");
 const User = db.user;
 
 // // force: true will drop the table if it already exists
-//db.sequelize.sync({force: true}).then(() => {
-//console.log('Drop and Resync Database with { force: true }');
- // initial();
+// db.sequelize.sync({force: true}).then(() => {
+// console.log('Drop and Resync Database with { force: true }');
+//  initial();
 // });
 
 
@@ -159,17 +159,6 @@ require('./routes/admin_routes/contectus.routes')(app);
 
 //----------- API Routes --------------------
 
-//-----------------Vendor Api routes--------------
-require('./routes/api_routes/vendor/auth.routes')(app);
-require('./routes/api_routes/vendor/forgot_password.routes')(app);
-require('./routes/api_routes/vendor/address.routes')(app);
-require('./routes/api_routes/vendor/trip.routes')(app);
-require('./routes/api_routes/vendor/validation_promo_code.routes')(app);
-require('./routes/api_routes/vendor/otp.routes')(app);
-require('./routes/api_routes/vendor/contectus.routes')(app);
-require('./routes/api_routes/vendor/faq.routes')(app);
-require('./routes/api_routes/vendor/review.routes')(app);
-require('./routes/api_routes/vendor/chat.routes')(app);
 
 //-----------------Customer Api routes--------------
 require('./routes/api_routes/customer/auth.routes')(app);
@@ -196,10 +185,22 @@ require('./routes/api_routes/driver/contectus.routes')(app);
 require('./routes/api_routes/driver/chat.routes')(app);
 
 
+//-----------------Admin app Api routes--------------
+require('./routes/api_routes/admin/auth.routes')(app);
+ require('./routes/api_routes/admin/forgot_password.routes')(app);
+// require('./routes/api_routes/vendor/address.routes')(app);
+// require('./routes/api_routes/vendor/trip.routes')(app);
+// require('./routes/api_routes/vendor/validation_promo_code.routes')(app);
+ require('./routes/api_routes/admin/otp.routes')(app);
+ require('./routes/api_routes/admin/product.routes')(app);
+// require('./routes/api_routes/vendor/contectus.routes')(app);
+// require('./routes/api_routes/vendor/faq.routes')(app);
+// require('./routes/api_routes/vendor/review.routes')(app);
+
 
 //Start the server
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 http.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

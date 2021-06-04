@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Driver = sequelize.define("drivers", {
+    const Admin = sequelize.define("admin", {
       id:{
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -27,15 +27,6 @@ module.exports = (sequelize, Sequelize) => {
       profile: {
         type: Sequelize.STRING
       },
-      cnic: {
-        type: Sequelize.STRING
-      },
-      driving_license: {
-        type: Sequelize.STRING
-      },
-      status: {
-        type: Sequelize.STRING
-      },
       account_info: {
         type: Sequelize.STRING
       },
@@ -47,9 +38,12 @@ module.exports = (sequelize, Sequelize) => {
       },
       total_review: {
         type: Sequelize.STRING
+      },
+      invite_code: {
+        type: Sequelize.STRING
       }
     });
   
-    return Driver;
+    return Admin;
   };
   

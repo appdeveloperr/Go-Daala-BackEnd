@@ -17,6 +17,7 @@ exports.signup = (req, res) => {
     req.checkBody('last_name', 'last name must have value!').notEmpty();
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
+    req.checkBody('city', 'city must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
     req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
 
@@ -55,7 +56,7 @@ exports.signup = (req, res) => {
             }
         } else {
             
-            console.log(req);
+          
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
             req.checkBody('cnic', 'cnic picture must have needed animage').isImage(req.files.cnic.name);
             req.checkBody('driving_license', 'driving_license picture must have needed animage').isImage(req.files.driving_license.name);
@@ -109,6 +110,7 @@ exports.signup = (req, res) => {
                     email: req.body.email,
                     phone_number: req.body.phone_number,
                     password: bcrypt.hashSync(req.body.password, 8),
+                    city:req.body.city,
                     profile: '/files/uploadsFiles/driver/' + fileOne,
                     cnic: '/files/uploadsFiles/driver/' + cnicfilename,
                     driving_license: '/files/uploadsFiles/driver/' + drivefilename,
@@ -305,10 +307,7 @@ exports.signin = (req, res) => {
                     });
                 }
 
-                var token = jwt.sign({ id: user.id }, config.secret, {
-
-
-                });
+                var token = jwt.sign({ id: user.id }, config.secret);
 
                 Driver.update({
                     status: 'active',
@@ -781,7 +780,8 @@ exports.sendOTP = (req, res) => {
 
                         //User is Exist
 
-                        var val = Math.floor(1000 + Math.random() * 9000);
+                        // var val = Math.floor(1000 + Math.random() * 9000);
+                       var  val = "123456";
                         var messageData = "Your Go Daala Verification Code is: " + val;
                         var mobileno = req.body.phone_number;
 
@@ -828,7 +828,8 @@ exports.sendOTP = (req, res) => {
 
         }
         if (req.body.type == "register") {
-            var val = Math.floor(1000 + Math.random() * 9000);
+          //  var val = Math.floor(1000 + Math.random() * 9000);
+          var val = "123456";
             var messageData = "Your Go Daala Verification Code is: " + val;
             var mobileno = req.body.phone_number;
 
@@ -872,6 +873,7 @@ exports.sendOTP = (req, res) => {
 exports.varify_otp = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
     req.checkBody('otp', 'Phone Number must have value!').notEmpty();
+    req.checkBody('fcm_token', 'fcm_token must have value!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -910,13 +912,52 @@ exports.varify_otp = (req, res) => {
                     phone_number: req.body.phone_number
                 }
             }).then(removedOTP => {
-
-
-                return res.status(200).send({
-                    status: 200,
-                    message: "OTP Validation Success",
-                });
-
+                Driver.findOne({
+                    where:{
+                        phone_number:req.body.phone_number
+                    }
+                }).then(driver=>{
+                    if(driver){
+                        Driver.update({
+                            status: 'active',
+                            fcm_token: req.body.fcm_token
+                        },
+                            {
+                                where: { phone_number: req.body.phone_number },
+                                returning: true,
+                                plain: true
+                             
+                            },  
+                        ).then(user => {
+                            var token = jwt.sign({ id: user.id }, config.secret);
+                           
+                                    delete user[1].dataValues.password;
+                                    user[1].dataValues.accessToken = token;
+                                    return res.status(200).send({
+                                        status: 200,
+                                        message: "Signing Up is successful",
+                                        successData: {
+                                            user: user[1],
+                                        }
+                                    });
+                
+                                
+                            }).catch(err => {
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: err.message,
+                                    successData: {}
+                                });
+                            });
+                    }else{
+                        return res.status(200).send({
+                            status: 400,
+                            message: "User Phone number is not found.",
+                            successData: {}
+                        });
+                    }
+                })
+               
 
             }).catch(err => {
                 return res.status(200).send({

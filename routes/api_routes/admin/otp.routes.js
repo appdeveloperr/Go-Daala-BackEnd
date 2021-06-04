@@ -1,4 +1,4 @@
-const controller = require("../../../controllers/api_controllers/vendor/auth");
+const controller = require("../../../controllers/api_controllers/admin/auth");
 
 
 
@@ -16,13 +16,13 @@ module.exports = function (app) {
 
     //------------driver send otp  Function----------------
     app.post(
-        "/api/vendor/send-otp",
+        "/api/admin/send-otp",
         controller.sendOTP,
     );
 
     // //------------driver create contect-us  Function----------------
     app.post(
-        "/api/vendor/varify-otp",
+        "/api/admin/varify-otp",
         controller.varify_otp,
     );
 

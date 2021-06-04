@@ -33,14 +33,23 @@ db.notification = require("../api_models/notification.model")(sequelize, Sequeli
 
 //---------------------------api models-------------------------
 db.chat = require("../api_models/chat.model")(sequelize, Sequelize);
-//---------------------------vendor models-------------------------
-db.vendor = require("../api_models/vendor.model")(sequelize, Sequelize);
+
+//---------------------------customer models-------------------------
 db.address = require("../api_models/address.model")(sequelize, Sequelize);
 db.vehicle = require("../api_models/vehicle.model")(sequelize, Sequelize);
 db.trip = require("../api_models/trip.model")(sequelize, Sequelize);
 db.review = require("../api_models/review.model")(sequelize, Sequelize);
 
 db.customer = require("../api_models/customer.model")(sequelize, Sequelize);
+
+
+//---------------------------Admin app models-------------------------
+db.admin = require("../api_models/admin.model")(sequelize, Sequelize);
+db.product = require("../api_models/product.model")(sequelize, Sequelize);
+// db.address = require("../api_models/address.model")(sequelize, Sequelize);
+// db.vehicle = require("../api_models/vehicle.model")(sequelize, Sequelize);
+// db.trip = require("../api_models/trip.model")(sequelize, Sequelize);
+// db.review = require("../api_models/review.model")(sequelize, Sequelize);
 
 
 //----------------------driver models-------------------------------
@@ -64,10 +73,7 @@ db.user.belongsToMany(db.role, {
   otherKey: "roleId"
 });
 
-//---------vendor save address with vendor id--------//
-db.address.belongsTo(db.vendor, {
-  foreignKey: "vendor_id"
-});
+
 
 
 //---------customer save address with customer id--------//
@@ -91,9 +97,7 @@ db.trip.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 
-db.trip.belongsTo(db.vendor, {
-  foreignKey: "vendor_id"
-});
+
 
 db.trip.belongsTo(db.customer, {
   foreignKey: "customer_id"
@@ -104,9 +108,8 @@ db.cancel_trip.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 
-db.cancel_trip.belongsTo(db.vendor, {
-  foreignKey: "vendor_id"
-});
+
+
 
 
 db.cancel_trip.belongsTo(db.customer, {
@@ -116,14 +119,20 @@ db.cancel_trip.belongsTo(db.customer, {
 db.cancel_trip.belongsTo(db.trip, {
   foreignKey: "trip_id"
 });
+
+
+//--------------product review----------------//
+db.review.belongsTo(db.product, {
+  foreignKey: "product_id"
+});
+
 //--------------review--------------
 db.review.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 
-db.review.belongsTo(db.vendor, {
-  foreignKey: "vendor_id"
-});
+
+
 
 db.review.belongsTo(db.customer, {
   foreignKey: "customer_id"
@@ -134,10 +143,8 @@ db.review.belongsTo(db.trip, {
   foreignKey: "trip_id"
 });
 
-//----------------promo------------------
-db.used_promos.belongsTo(db.vendor, {
-  foreignKey: "vendor_id"
-});
+
+
 
 db.used_promos.belongsTo(db.customer, {
   foreignKey: "customer_id"
@@ -150,9 +157,8 @@ db.notification.belongsTo(db.driver, {
   foreignKey: "driver_id"
 });
 
-db.notification.belongsTo(db.vendor, {
-  foreignKey: "vendor_id"
-});
+
+
 
 db.notification.belongsTo(db.customer, {
   foreignKey: "customer_id"
@@ -163,6 +169,16 @@ db.chat.belongsTo(db.trip,{
   foreignKey: "trip_id"
 });
 
+
+//--------------Admin app can add product----------------//
+db.product.belongsTo(db.admin, {
+  foreignKey: "admin_id"
+});
+
+//--------------driver app can add product----------------//
+db.product.belongsTo(db.driver, {
+  foreignKey: "driver_id"
+});
 
 
 db.ROLES = ["user", "admin", "moderator"];

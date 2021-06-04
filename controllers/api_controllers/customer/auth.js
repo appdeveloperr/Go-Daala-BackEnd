@@ -16,6 +16,7 @@ exports.signup = (req, res) => {
     req.checkBody('last_name', 'last name must have value!').notEmpty();
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
+    req.checkBody('city', 'city must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
     req.checkBody('fcm_token', 'Please provide a fcm token needed!')
 
@@ -52,7 +53,7 @@ exports.signup = (req, res) => {
                 });
             }
         } else {
-            console.log("CUSTOMER ERROR 2");
+            
 
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
             var errors = req.validationErrors();
@@ -74,7 +75,7 @@ exports.signup = (req, res) => {
                 console.log("NO ERROR COMING TO CREATE-1");
 
                 var path_file = './public/files/uploadsFiles/customer/';
-                var filename = 'profile-1' + Date.now() + req.files.profile.name;
+                var filename = 'customer-profile-1' + Date.now() + req.files.profile.name;
                 req.files.profile.mv(path_file + '' + filename, function (err) {
                     if (err) console.log("error occured");
                 });
@@ -88,6 +89,7 @@ exports.signup = (req, res) => {
                     last_name: req.body.last_name,
                     email: req.body.email,
                     phone_number: req.body.phone_number,
+                    city: req.body.city,
                     password: bcrypt.hashSync(req.body.password, 8),
                     profile: '/files/uploadsFiles/customer/' + filename,
                     account_info: 'unblock',
@@ -98,24 +100,16 @@ exports.signup = (req, res) => {
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret);
-
-
+                    user.dataValues.accessToken=token;
+                    delete user.dataValues.password;
 
                     return res.status(200).send({
                         status: 200,
                         message: "Signing Up is successful",
                         successData: {
-                            user: {
-                                id: user.id,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                email: user.email,
-                                phone_number: user.phone_number,
-                                profile: user.profile,
-                                account_info: user.account_info,
-                                fcm_token: user.fcm_token,
-                                accessToken: token
-                            }
+                            user: user
+                              
+                            
                         }
                     });
 
@@ -300,22 +294,16 @@ exports.signin = (req, res) => {
                     returning: true,
                     plain: true
                 }).then(user => {
-
+                    user[1].dataValues.accessToken = token;
+                    delete user[1].dataValues.password;
                     return res.status(200).send({
                         status: 200,
                         message: "Login Successfull.",
                         successData: {
-                            user: {
-                                id: user[1].id,
-                                first_name: user[1].first_name,
-                                last_name: user[1].last_name,
-                                email: user[1].email,
-                                phone_number: user[1].phone_number,
-                                profile: user[1].profile,
-                                account_info: user[1].account_info,
-                                fcm_token: user[1].fcm_token,
-                                accessToken: token
-                            }
+                            user: user[1]
+
+                            
+
                         }
 
                     });
@@ -381,23 +369,14 @@ exports.update = (req, res) => {
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                 });
-
+                user[1].dataValues.accessToken = token;
+                delete user[1].dataValues.password;
                 return res.status(200).send({
                     status: 200,
                     message: "UPDATED is successful",
                     successData: {
-                        user: {
-                            id: user[1].id,
-                            first_name: user[1].first_name,
-                            last_name: user[1].last_name,
-                            email: user[1].email,
-                            phone_number: user[1].phone_number,
-                            profile: user[1].profile,
-                            account_info: user[1].account_info,
-                            accessToken: token,
-                            fcm_token: user[1].fcm_token
-
-                        }
+                        user: user[1]
+                       
                     }
                 });
             }
@@ -442,22 +421,13 @@ exports.forgot_password = function (req, res) {
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                 });
-
+                user[1].dataValues.accessToken = token;
+                delete user[1].dataValues.password;
                 return res.status(200).send({
                     status: 200,
                     message: "Password UPDATED is successful",
                     successData: {
-                        user: {
-                            id: user[1].id,
-                            first_name: user[1].first_name,
-                            last_name: user[1].last_name,
-                            email: user[1].email,
-                            phone_number: user[1].phone_number,
-                            profile: user[1].profile,
-                            account_info: user[1].account_info,
-                            accessToken: token,
-                            fcm_token: user[1].fcm_token,
-                        }
+                        user: user[1]
                     }
                 });
             } else {
@@ -532,7 +502,7 @@ exports.update_picture = function (req, res) {
 
 
                 //-----------------move profile into server-------------------------------//
-                var filename = 'profile-1' + Date.now() + req.files.new_profile.name;
+                var filename = 'customer-profile-1' + Date.now() + req.files.new_profile.name;
                 req.files.new_profile.mv(path_file + '' + filename, function (err) {
                     if (err) console.log("error occured");
                 });
@@ -559,21 +529,14 @@ exports.update_picture = function (req, res) {
                     if (user != null || user != '') {
                         var token = jwt.sign({ id: user.id }, config.secret, {
                         });
+                        delete user[1].dataValues.password;
                         return res.status(200).send({
                             status: 200,
                             message: "Profile picture is  UPDATED is successful",
                             successData: {
-                                user: {
-                                    id: user[1].id,
-                                    first_name: user[1].first_name,
-                                    last_name: user[1].last_name,
-                                    email: user[1].email,
-                                    phone_number: user[1].phone_number,
-                                    profile: user[1].profile,
-                                    account_info: user[1].account_info,
-                                    fcm_token: user[1].fcm_token,
-                                    accessToken: token
-                                }
+                                user: user[1],
+                                accessToken: token
+
                             }
                         });
                     }
@@ -614,7 +577,6 @@ exports.sendOTP = (req, res) => {
         });
     }
     else {
-
         if (req.body.type == "forget") {
             //Check User Already Exist or Not?
             Customer.findOne({
@@ -636,8 +598,9 @@ exports.sendOTP = (req, res) => {
 
                         //User is Exist
 
-                        var val = Math.floor(1000 + Math.random() * 9000);
-                        var messageData = "Your Go Daala Verification Code is: " + val;
+                      //  var val = Math.floor(1000 + Math.random() * 9000);
+                       var  val  = "123456";
+                        var messageData = "Your Delivery Takers Verification Code is: " + val;
                         var mobileno = req.body.phone_number;
 
 
@@ -683,8 +646,9 @@ exports.sendOTP = (req, res) => {
 
         }
         if (req.body.type == "register") {
-            var val = Math.floor(1000 + Math.random() * 9000);
-            var messageData = "Your Go Daala Verification Code is: " + val;
+           // var val = Math.floor(1000 + Math.random() * 9000);
+           var val = "123456";
+            var messageData = "Your Delivery Takers Verification Code is: " + val;
             var mobileno = req.body.phone_number;
 
             axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
@@ -725,6 +689,7 @@ exports.sendOTP = (req, res) => {
 exports.varify_otp = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
     req.checkBody('otp', 'Phone Number must have value!').notEmpty();
+    req.checkBody('fcm_token', 'fcm_token must have value!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -763,13 +728,52 @@ exports.varify_otp = (req, res) => {
                     phone_number: req.body.phone_number
                 }
             }).then(removedOTP => {
-
-
-                return res.status(200).send({
-                    status: 200,
-                    message: "OTP Validation Success",
-                });
-
+                Customer.findOne({
+                    where:{
+                        phone_number:req.body.phone_number
+                    }
+                }).then(customer=>{
+                    if(customer){
+                        Customer.update({
+                            status: 'active',
+                            fcm_token: req.body.fcm_token
+                        },
+                            {
+                                where: { phone_number: req.body.phone_number },
+                                returning: true,
+                                plain: true
+                             
+                            },  
+                        ).then(user => {
+                            var token = jwt.sign({ id: user.id }, config.secret);
+                           
+                                    delete user[1].dataValues.password;
+                                    user[1].dataValues.accessToken = token;
+                                    return res.status(200).send({
+                                        status: 200,
+                                        message: "Signing Up is successful",
+                                        successData: {
+                                            user: user[1],
+                                        }
+                                    });
+                
+                                
+                            }).catch(err => {
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: err.message,
+                                    successData: {}
+                                });
+                            });
+                    }else{
+                        return res.status(200).send({
+                            status: 400,
+                            message: "User Phone number is not found.",
+                            successData: {}
+                        });
+                    }
+                })
+               
 
             }).catch(err => {
                 return res.status(200).send({

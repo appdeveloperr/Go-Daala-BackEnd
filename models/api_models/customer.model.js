@@ -24,6 +24,9 @@ module.exports = (sequelize, Sequelize) => {
     profile: {
       type: Sequelize.STRING
     },
+    city: {
+      type: Sequelize.STRING
+    },
     account_info: {
       type: Sequelize.STRING
     },
@@ -35,8 +38,13 @@ module.exports = (sequelize, Sequelize) => {
     },
     total_review: {
       type: Sequelize.STRING
+    },
+    invite_code: {
+      type: Sequelize.STRING
     }
   });
 
   return Customer;
 };
+
+

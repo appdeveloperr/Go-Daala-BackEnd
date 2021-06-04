@@ -1,28 +1,24 @@
 const db = require("../../../models/api_models");
 const config = require("../../../config/auth.config");
-const Vendor = db.vendor;
+const Admin = db.admin;
 var OTP = db.otp;
 const axios = require('axios');
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 var fs = require("fs");
-
-
-//-------------vendor signup--------------------
+//-------------admin app signup--------------------
 exports.signup = (req, res) => {
-  
 
     req.checkBody('first_name', 'first_name must have value!').notEmpty();
     req.checkBody('last_name', 'last name must have value!').notEmpty();
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
+    req.checkBody('city', 'city must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
     req.checkBody('fcm_token', 'Please provide a fcm token needed!')
 
     var errors = req.validationErrors();
-    if (errors) {                    
-        console.log("VENDOR ERROR 0");
-        //////////------input text validation error
+    if (errors) {                    //////////------input text validation error
         return res.status(200).send({
             status: 400,
             message: "validation error in Signing Up",
@@ -33,12 +29,12 @@ exports.signup = (req, res) => {
             }
         });
     } else {
+
         if (!req.files) {
+          
             req.checkBody('profile', 'profile picture must have needed!').notEmpty();
             var errors = req.validationErrors();
-            if (errors) {           
-                console.log("VENDOR ERROR 1");
-                //////////------input file validation error
+            if (errors) {                    //////////------input file validation error
                 return res.status(200).send({
                     status: 400,
                     message: "validation error in Signing Up",
@@ -50,11 +46,8 @@ exports.signup = (req, res) => {
                 });
             }
         } else {
-            
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
-            
             var errors = req.validationErrors();
-
             if (errors) {   //////////------input file must have image validation error
                 return res.status(200).send({
                     status: 400,
@@ -67,47 +60,46 @@ exports.signup = (req, res) => {
                 });
             } else {   ///------------------ no error exist
 
-                var path_file = './public/files/uploadsFiles/vendor/';
-                var filename = 'profile-1' + Date.now() + req.files.profile.name;
+                var path_file = './public/files/';
+                var filename = 'admin-profile-1'+ Date.now() + req.files.profile.name;
                 req.files.profile.mv(path_file + '' + filename, function (err) {
                     if (err) console.log("error occured");
                 });
+                var invite_code ='';
+                if(req.body.invite_code){
+                    invite_code = req.body.invite_code;
+                }
 
-
-
-                // Save vendor to Database
-                Vendor.create({
+                // Save admin app to Database
+                Admin.create({
                     first_name: req.body.first_name,
                     last_name: req.body.last_name,
                     email: req.body.email,
                     phone_number: req.body.phone_number,
                     password: bcrypt.hashSync(req.body.password, 8),
-                    profile: '/files/uploadsFiles/vendor/' + filename,
+                    city: req.body.city,
+                    profile: '/public/files/' + filename,
                     account_info: 'unblock',
                     fcm_token: req.body.fcm_token,
                     total_rating:"0",
-                    total_review:"0"
+                    total_review:"0",
+                    invite_code:invite_code
                     //  
                 }).then(user => {
 
-                    var token = jwt.sign({ id: user.id }, config.secret);
+                    var token = jwt.sign({ id: user.id }, config.secret, {
+                    });
 
+                    delete user.dataValues.password;
+                    user.dataValues.accessToken=token;
 
                     return res.status(200).send({
                         status: 200,
                         message: "Signing Up is successful",
                         successData: {
-                            user: {
-                                id: user.id,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                email: user.email,
-                                phone_number: user.phone_number,
-                                profile: user.profile,
-                                account_info: user.account_info,
-                                fcm_token: user.fcm_token,
-                                accessToken: token
-                            }
+                            user: user
+                               
+                            
                         }
                     });
 
@@ -127,7 +119,7 @@ exports.signup = (req, res) => {
     }
 };
 
-//-------------vendor varify_email_and_phone_number--------------------
+//-------------admin app varify_email_and_phone_number--------------------
 exports.varify_email_and_phone_number = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'Phone number must have value!').notEmpty();
@@ -143,7 +135,7 @@ exports.varify_email_and_phone_number = (req, res) => {
             }
         });
     } else {
-        Vendor.findOne({
+        Admin.findOne({
             where: {
                 email: req.body.email
             }
@@ -152,7 +144,7 @@ exports.varify_email_and_phone_number = (req, res) => {
 
                 if (!user) {
 
-                    Vendor.findOne({
+                    Admin.findOne({
                         where: {
                             phone_number: req.body.phone_number
                         }
@@ -228,7 +220,7 @@ exports.varify_email_and_phone_number = (req, res) => {
 
 
 
-//--------------vendor signin-------------------
+//--------------admin app signin-------------------
 exports.signin = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
@@ -245,12 +237,13 @@ exports.signin = (req, res) => {
             }
         });
     } else {
-        Vendor.findOne({
+        Admin.findOne({
             where: {
                 email: req.body.email
             }
         })
             .then(user => {
+                
 
                 if (!user) {
                     return res.status(200).send({
@@ -268,10 +261,10 @@ exports.signin = (req, res) => {
                 if (!passwordIsValid) {
                     return res.status(200).send({
                         status: 400,
-                        accessToken: null,
                         message: "Invalid user Password!"
                     });
                 }
+                
                 if (user.dataValues.account_info == 'block') {
                     return res.status(200).send({
                         status: 400,
@@ -280,41 +273,32 @@ exports.signin = (req, res) => {
                     });
                 }
 
-                var token = jwt.sign({ id: user.id }, config.secret, {
-                });
-
-                Vendor.update({
+                var token = jwt.sign({ id: user.id }, config.secret);
+               
+                Admin.update({
                     fcm_token: req.body.fcm_token
                 }, {
                     where: {
-                        id: user.id
+                        id: user.dataValues.id
                     },
-                returning: true,
-                plain: true
-                }).then(user => {
-
+                    returning: true,
+                    plain: true
+                },).then(user => {
+                    user[1].dataValues.accessToken=token;
+                    delete user[1].dataValues.password;
                     return res.status(200).send({
                         status: 200,
                         message: "Login Successfull.",
                         successData: {
-                            user: {
-                                id: user[1].id,
-                                first_name: user[1].first_name,
-                                last_name: user[1].last_name,
-                                email: user[1].email,
-                                phone_number: user[1].phone_number,
-                                profile: user[1].profile,
-                                account_info: user[1].account_info,
-                                fcm_token:user[1].fcm_token,
-                                accessToken: token
-                            }
+                            user: user[1]
+                            
                         }
     
                     });
                 }).catch(err => {
                     return res.status(200).send({
                         status: 400,
-                        message: err.message,
+                        message: "this is catch 1 "+err.message,
                         successData: {}
                     });
 
@@ -327,7 +311,7 @@ exports.signin = (req, res) => {
             .catch(err => {
                 return res.status(200).send({
                     status: 400,
-                    message: err.message,
+                    message: "this is catch"+err.message,
                     successData: {}
                 });
             });
@@ -335,14 +319,13 @@ exports.signin = (req, res) => {
 };
 
 
-//--------------vendor profile update---------------
+//--------------admin app profile update---------------
 exports.update = (req, res) => {
 
     req.checkBody('first_name', 'first_name must have value!').notEmpty();
     req.checkBody('last_name', 'last name must have value!').notEmpty();
-    req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
-
+    req.checkBody('admin_id', 'admin id must have id!').notEmpty();
 
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
@@ -356,40 +339,29 @@ exports.update = (req, res) => {
             }
         });
     } else {
-        Vendor.update({
+        Admin.update({
             first_name: req.body.first_name,
             last_name: req.body.last_name,
-            email: req.body.email,
             phone_number: req.body.phone_number,
 
         },
             {
-                where: { id: req.body.id },
+                where: { id: req.body.admin_id },
                 returning: true,
                 plain: true
             },
         ).then(user => {
-
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                 });
-
+                user[1].dataValues.accessToken = token;
+                delete user[1].dataValues.password;
                 return res.status(200).send({
                     status: 200,
                     message: "UPDATED is successful",
                     successData: {
-                        user: {
-                            id: user[1].id,
-                            first_name: user[1].first_name,
-                            last_name: user[1].last_name,
-                            email: user[1].email,
-                            phone_number: user[1].phone_number,
-                            profile: user[1].profile,
-                            account_info: user[1].account_info,
-                            accessToken: token,
-                            fcm_token:user[1].fcm_token
-
-                        }
+                        user: user[1]
+                        
                     }
                 });
             }
@@ -404,8 +376,8 @@ exports.update = (req, res) => {
 }
 
 
-//---------------vendor forgot password -----------------
-exports.forgot_password = function (req, res) {
+//---------------admin app forgot password -----------------
+exports.forgot_password = (req, res) =>{
     req.checkBody('new_password', 'new passwod must have value!').notEmpty();
     req.checkBody('phone_number', 'phone_number must have value!').notEmpty();
     var errors = req.validationErrors();
@@ -420,8 +392,7 @@ exports.forgot_password = function (req, res) {
             }
         });
     } else {
-
-        Vendor.update({
+        Admin.update({
             password: bcrypt.hashSync(req.body.new_password, 8)
         },
             {
@@ -432,24 +403,16 @@ exports.forgot_password = function (req, res) {
         ).then(user => {
 
             if (user != null || user != '') {
-                var token = jwt.sign({ id: user.id }, config.secret, {
-                });
-
+                var token = jwt.sign({ id: user.id }, config.secret);
+                user[1].dataValues.accessToken = token;
+                delete user[1].dataValues.password;
                 return res.status(200).send({
                     status: 200,
                     message: "Password UPDATED is successful",
                     successData: {
-                        user: {
-                            id: user[1].id,
-                            first_name: user[1].first_name,
-                            last_name: user[1].last_name,
-                            email: user[1].email,
-                            phone_number: user[1].phone_number,
-                            profile: user[1].profile,
-                            account_info: user[1].account_info,
-                            accessToken: token,
-                            fcm_token:user[1].fcm_token,
-                        }
+                        user: user[1]
+                            
+                        
                     }
                 });
             } else {
@@ -473,8 +436,9 @@ exports.forgot_password = function (req, res) {
 
 //-------------------------update profile picture-----------------------/////////////
 exports.update_picture = function (req, res) {
-    req.checkBody('id', 'id must have ID!').notEmpty();
-    req.checkBody('file', 'old file must have oldpath needed!');
+    req.checkBody('admin_id', 'admin id must have ID!').notEmpty();
+    req.checkBody('file', 'old file must have oldpath needed!').notEmpty();
+
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -516,7 +480,7 @@ exports.update_picture = function (req, res) {
 
 
 
-                var path_file = './public/files/uploadsFiles/vendor/';
+                var path_file = './public/files/';
 
                 var file = req.files.new_profile;
 
@@ -524,48 +488,40 @@ exports.update_picture = function (req, res) {
 
 
                 //-----------------move profile into server-------------------------------//
-                var filename = 'profile-1' + Date.now() + req.files.new_profile.name;
+                var filename ='admin-profile-1'+Date.now() + req.files.new_profile.name;
                 req.files.new_profile.mv(path_file + '' + filename, function (err) {
-                    if (err) console.log("error occured file not created");
+                    if (err) console.log("error occured");
                 });
 
 
 
-                fs.unlink('./public' + req.body.file, function (err) {
+                fs.unlink('.' + req.body.file, function (err) {
                     if (err) {
                         console.log("err occer file not deleted");
                     } else {
                         console.log("file  deleted");
                     }
                 })
-                Vendor.update({
-                    profile: '/files/uploadsFiles/vendor/' + filename
+                Admin.update({
+                    profile: '/public/files/' + filename
                 },
                     {
-                        where: { id: req.body.id },
+                        where: { id: req.body.admin_id },
                         returning: true,
                         plain: true
                     },
                 ).then(user => {
 
                     if (user != null || user != '') {
-                        var token = jwt.sign({ id: user.id }, config.secret, {
-                        });
+                        var token = jwt.sign({ id: user.id }, config.secret);
+                      user[1].dataValues.accessToken= token;
+                        delete user[1].dataValues.password;
                         return res.status(200).send({
                             status: 200,
                             message: "Profile picture is  UPDATED is successful",
                             successData: {
-                                user: {
-                                    id: user[1].id,
-                                    first_name: user[1].first_name,
-                                    last_name: user[1].last_name,
-                                    email: user[1].email,
-                                    phone_number: user[1].phone_number,
-                                    profile: user[1].profile,
-                                    account_info: user[1].account_info,
-                                    fcm_token:user[1].fcm_token,
-                                    accessToken: token
-                                }
+                                user: user[1]
+                                
                             }
                         });
                     }
@@ -588,7 +544,7 @@ exports.update_picture = function (req, res) {
     }
 }
 
-//------------------vendor SendOTP------------------------------------
+//------------------admin app SendOTP------------------------------------
 
 exports.sendOTP = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
@@ -609,7 +565,7 @@ exports.sendOTP = (req, res) => {
 
         if (req.body.type == "forget") {
             //Check User Already Exist or Not?
-            Vendor.findOne({
+            Admin.findOne({
                 where: {
                     phone_number: req.body.phone_number
                 }
@@ -629,7 +585,7 @@ exports.sendOTP = (req, res) => {
                         //User is Exist
 
                         var val = Math.floor(1000 + Math.random() * 9000);
-                        var messageData = "Your Go Daala Verification Code is: " + val;
+                        var messageData = "Your Delivery Takers Verification Code is: " + val;
                         var mobileno = req.body.phone_number;
 
 
@@ -675,8 +631,10 @@ exports.sendOTP = (req, res) => {
 
         }
         if (req.body.type == "register") {
+
+            
             var val = Math.floor(1000 + Math.random() * 9000);
-            var messageData = "Your Go Daala Verification Code is: " + val;
+            var messageData = "Your Delivery Takers Verification Code is: " + val;
             var mobileno = req.body.phone_number;
 
             axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
@@ -713,7 +671,7 @@ exports.sendOTP = (req, res) => {
     }
 };
 
-//--------------------vendor Verify OTP-------------------------------------
+//--------------------admin app Verify OTP-------------------------------------
 exports.varify_otp = (req, res) => {
     req.checkBody('phone_number', 'Phone Number must have value!').notEmpty();
     req.checkBody('otp', 'Phone Number must have value!').notEmpty();

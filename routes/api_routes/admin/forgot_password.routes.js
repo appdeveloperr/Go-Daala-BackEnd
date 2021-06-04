@@ -1,6 +1,6 @@
-const { vendorAuthJwt } = require("../../../middleware");
+const { adminAuthJwt } = require("../../../middleware");
 
-const controller = require("../../../controllers/api_controllers/vendor/auth");
+const controller = require("../../../controllers/api_controllers/admin/auth");
 
 
 
@@ -17,7 +17,7 @@ module.exports = function (app) {
 
     //------------Vendor forgot password  Function----------------
     app.post(
-        "/api/vendor/forgot-password",
+        "/api/admin/forgot-password",
         controller.forgot_password,
 
     );

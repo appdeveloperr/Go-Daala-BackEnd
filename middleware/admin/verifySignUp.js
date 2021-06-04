@@ -1,6 +1,7 @@
+const { admin } = require("../../models/api_models");
 const db = require("../../models/api_models");
 const ROLES = db.ROLES;
-const Vendor = db.vendor;
+const Admin = db.admin;
 const Address = db.address;
 checkDuplicateEmailOrPhone_number = (req, res, next) => {
 
@@ -18,12 +19,12 @@ checkDuplicateEmailOrPhone_number = (req, res, next) => {
       }
     });
   } else {
-    Vendor.findOne({
+    Admin.findOne({
       where: {
         email: req.body.email
       }
-    }).then(vendor => {
-      if (vendor) {
+    }).then(admin => {
+      if (admin) {
         return res.status(200).send({
           status: 400,
           message: "Failed! vendor email is already in use!",
@@ -35,12 +36,12 @@ checkDuplicateEmailOrPhone_number = (req, res, next) => {
       }
 
       // Email
-      Vendor.findOne({
+      Admin.findOne({
         where: {
           phone_number: req.body.phone_number
         }
-      }).then(vendor => {
-        if (vendor) {
+      }).then(admin => {
+        if (admin) {
 
 
           return res.status(200).send({

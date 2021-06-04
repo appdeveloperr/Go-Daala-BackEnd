@@ -5,10 +5,11 @@ const messages = require("./messages");
 const validater = require("./validater");
 const session = require("./session");
 
-//-------- Vendor Imports ----------
-const vendorAuthJwt = require("./vendor/authJwt");
-const vendorVerifySignUp = require("./vendor/verifySignUp");
 
+
+//-------- Vendor Imports ----------
+const adminAuthJwt = require("./admin/authJwt");
+const adminVerifySignUp = require("./admin/verifySignUp");
 
 //-------- Customer Imports ----------
 const customerAuthJwt = require("./customer/authJwt");
@@ -24,8 +25,8 @@ module.exports = {
   verifySignUp,
   messages,
   session,
-  vendorAuthJwt,
-  vendorVerifySignUp,
+  adminAuthJwt,
+  adminVerifySignUp,
   driverAuthJwt,
   driverVerifySignUp,
   driverVerifyNumberPlate,

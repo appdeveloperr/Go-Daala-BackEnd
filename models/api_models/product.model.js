@@ -1,45 +1,34 @@
 module.exports = (sequelize, Sequelize) => {
-    const Driver = sequelize.define("drivers", {
+    const Product = sequelize.define("product", {
       id:{
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
       },
-      first_name: {
+      name: {
         type: Sequelize.STRING
       },
-      last_name: {
+      product_type: {
         type: Sequelize.STRING
       },
-      email: {
+      price: {
         type: Sequelize.STRING
       },
-      phone_number: {
+      location: {
         type: Sequelize.STRING
       },
-      password: {
+      latitude: {
         type: Sequelize.STRING
       },
-      city: {
+      longitude: {
         type: Sequelize.STRING
       },
-      profile: {
+      details: {
         type: Sequelize.STRING
       },
-      cnic: {
-        type: Sequelize.STRING
-      },
-      driving_license: {
-        type: Sequelize.STRING
-      },
-      status: {
-        type: Sequelize.STRING
-      },
-      account_info: {
-        type: Sequelize.STRING
-      },
-      fcm_token: {
+     
+      image: {
         type: Sequelize.STRING
       },
       total_rating: {
@@ -48,8 +37,9 @@ module.exports = (sequelize, Sequelize) => {
       total_review: {
         type: Sequelize.STRING
       }
+     
     });
   
-    return Driver;
+    return Product;
   };
   
