@@ -15,10 +15,11 @@
 //------ AWS DB Credentials -------
    
 module.exports = {
- HOST: "ec2-54-157-100-65.compute-1.amazonaws.com",
- USER: "vrxoedmoehxohl",
- PASSWORD: "935c134aac3e838c52275c9e3ea88594ea367e2de13a2dada249e04ae4d4e466",
- DB: "d2hovpf6s94qo4",
+ HOST: "ec2-34-193-101-0.compute-1.amazonaws.com",
+ USER: "usurpbvairqvxq",
+ PASSWORD: "3ecdc8d04be333876260607abd3579d29b0aa1970b0c6b1693f4d9f2f7a9fcea",
+ DB: "dc35b0q7tccej9",
+ URL:"postgres://usurpbvairqvxq:3ecdc8d04be333876260607abd3579d29b0aa1970b0c6b1693f4d9f2f7a9fcea@ec2-34-193-101-0.compute-1.amazonaws.com:5432/dc35b0q7tccej9",
  dialect: "postgres",
  pool: {
    max: 5,

@@ -7,6 +7,7 @@ const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 const cors = require("cors");
+
 const app = express();
 var bcrypt = require("bcrypt");
 var http = require('http').Server(app);
@@ -200,9 +201,10 @@ require('./routes/api_routes/admin/auth.routes')(app);
 
 //Start the server
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
-http.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+app.set('port', (process.env.PORT || 3030));
+
+http.listen(app.get('port'), function () {
+  console.log('Node app is running on port', app.get('port'));
 });
 
 
