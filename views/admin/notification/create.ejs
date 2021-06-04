@@ -41,11 +41,11 @@
 
                                 <div class="radio">
                                     <label><input type="radio" name="driver" value="All_drivers"
-                                            onclick=" getDriver('All_drivers')">All Drivers</label>
+                                            onclick=" getDriver('All_drivers')"> All Drivers</label>
                                 </div>
                                 <div class="radio">
                                     <label><input type="radio" name="driver" id="chkYes" value="spacific_driver"
-                                            onclick="getDriver('spacific_driver')">Spacific Driver</label>
+                                            onclick="getDriver('spacific_driver')"> Spacific Driver</label>
                                 </div>
 
                                 <div id="dvtext" class="form-group" style="display: none">
@@ -58,13 +58,17 @@
                                         <%});}%>
                                     </select>
                                 </div>
+
+
+
+
                                 <div class="radio">
                                     <label><input type="radio" name="vendor" value="All_vendors"
-                                            onclick="getDriver('All_vendors')">All Vendors</label>
+                                            onclick="getDriver('All_vendors')"> All Vendors</label>
                                 </div>
                                 <div class="radio">
                                     <label><input type="radio" name="vendor" value="spacific_vendor"
-                                            onclick="getDriver('spacific_vendor')">Spacific Vendor</label>
+                                            onclick="getDriver('spacific_vendor')"> Spacific Vendor</label>
                                 </div>
                                 <div id="dvtext_vendor" class="form-group" style="display: none">
                                     <label for="cars">Choose a Vendor:</label>
@@ -73,6 +77,26 @@
                                         <%all_vendors.forEach(function(vendor){%>
                                         <option value="<%=vendor.fcm_token%>"><%=vendor.first_name%>
                                             <%=vendor.last_name%></option>
+                                        <%});}%>
+                                    </select>
+                                </div>
+
+                               
+                                <div class="radio">
+                                    <label><input type="radio" name="customer" value="All_customers"
+                                            onclick="getDriver('All_customers')"> All Customers</label>
+                                </div>
+                                <div class="radio">
+                                    <label><input type="radio" name="customer" value="spacific_customer"
+                                            onclick="getDriver('spacific_customer')"> Spacific Customer</label>
+                                </div>
+                                <div id="dvtext_customer" class="form-group" style="display: none">
+                                    <label for="cars">Choose a Customer:</label>
+                                    <select name="customer_fcm" class="form-control">
+                                        <%if(all_customer){%>
+                                        <%all_customer.forEach(function(customer){%>
+                                        <option value="<%=customer.fcm_token%>"><%=customer.first_name%>
+                                            <%=customer.last_name%></option>
                                         <%});}%>
                                     </select>
                                 </div>
@@ -102,6 +126,11 @@
                                     $("#dvtext_vendor").css("display", "block");
                                 } else if (a == 'All_vendors') {
                                     $("#dvtext_vendor").css("display", "none");
+                                }
+                                else if (a == 'spacific_customer') {
+                                    $("#dvtext_customer").css("display", "block");
+                                } else if (a == 'All_customers') {
+                                    $("#dvtext_customer").css("display", "none");
                                 }
                             }
 

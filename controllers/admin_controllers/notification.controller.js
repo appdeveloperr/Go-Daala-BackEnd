@@ -5,6 +5,7 @@ const Driver = db.driver;
 var admin = require("firebase-admin");
 const notification = db.notification;
 var serviceAccount = require("../../config/go-daala-prod-firebase-adminsdk-kx7hm-c8b83fe095.json");
+const { customer } = require("../../models/api_models");
 
 
 
@@ -35,13 +36,27 @@ exports.create = function (req, res) {
         if (all_drivers) {
             Vendor.findAll().then(all_vendors => {
                 if (all_vendors) {
-                    res.render('admin/notification/create', {
-                        userdata: req.user,
-                        all_drivers: all_drivers,
-                        all_vendors: all_vendors,
-                        title: '',
-                        disc: ''
-                    })
+                    customer.findAll().then(all_customers => {
+                        if (all_customers) {
+                            res.render('admin/notification/create', {
+                                userdata: req.user,
+                                all_drivers: all_drivers,
+                                all_vendors: all_vendors,
+                                all_customer: all_customers,
+                                title: '',
+                                disc: ''
+                            })
+                        }
+                    }).catch(err => {
+
+                        return res.status(200).send({
+                            status: 400,
+                            message: err.message,
+                            successData: {}
+                        });
+
+                    });
+
                 }
             }).catch(err => {
 
@@ -209,7 +224,7 @@ exports.sendtoAll = (req, res) => {
 
                 }
             })
-        }if (req.body.vendor == 'All_vendors') {
+        } if (req.body.vendor == 'All_vendors') {
             Vendor.findAll().then(all_vendors => {
                 if (all_vendors) {
 
@@ -236,7 +251,7 @@ exports.sendtoAll = (req, res) => {
         }
         if (req.body.driver == 'spacific_driver') {
 
-            
+
             admin.messaging().sendToDevice(try_to_parse(req.body.driver_fcm), payload, options)
                 .then(function (response) {
                     console.log("Successfully sent message:", response);
@@ -254,8 +269,51 @@ exports.sendtoAll = (req, res) => {
         }
         if (req.body.vendor == 'spacific_vendor') {
 
-            
+
             admin.messaging().sendToDevice(try_to_parse(req.body.vendor_fcm), payload, options)
+                .then(function (response) {
+                    console.log("Successfully sent message:", response);
+                })
+                .catch(function (error) {
+                    console.log("Error sending message:", error);
+                    return res.status(200).send({
+                        responsecode: 400,
+                        notification: response.results[0]
+                    })
+
+                });
+
+
+        }
+        if (req.body.customer == 'All_customers') {
+            Customer.findAll().then(all_customers => {
+                if (all_customers) {
+
+                    all_customers.forEach(element => {
+                        myarray.push(try_to_parse(element.fcm_token))
+                    });
+
+
+                    admin.messaging().sendToDevice(myarray, payload, options)
+                        .then(function (response) {
+                            console.log("Successfully sent message:", response);
+                        })
+                        .catch(function (error) {
+                            console.log("Error sending message:", error);
+                            return res.status(200).send({
+                                responsecode: 400,
+                                notification: response.results[0]
+                            })
+
+                        });
+
+                }
+            });
+        }
+        if (req.body.customer == 'spacific_customer') {
+
+
+            admin.messaging().sendToDevice(try_to_parse(req.body.customer_fcm), payload, options)
                 .then(function (response) {
                     console.log("Successfully sent message:", response);
                 })

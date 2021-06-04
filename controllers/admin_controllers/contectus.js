@@ -42,7 +42,8 @@ exports.create = function (req, res, next) {
       message: req.body.message,
       message_holder: 'outsider',
       vendor_id: 'null',
-      driver_id: 'null'
+      driver_id: 'null',
+      customer_id:'null'
 
 
 

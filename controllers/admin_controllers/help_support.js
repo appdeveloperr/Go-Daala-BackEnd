@@ -75,6 +75,25 @@ exports.reply = function (req, res) {
                     });
                 });
 
+            } else if (one_contect_record.dataValues.customer_id!=null ||one_contect_record.dataValues.customer_id!='') {
+                Contect_us.findAll({
+                    where: {
+                        customer_id: one_contect_record.dataValues.customer_id
+                    }
+                }).then(all_contect_record => {
+                    if (all_contect_record) {
+                        res.render('./admin/help_support/reply', {
+                            userdata: req.user,
+                            all_contect_record: all_contect_record
+                        });
+                    }
+                }).catch(err => {
+                    return res.status(200).send({
+                        responsecode: 400,
+                        message: err.message,
+                    });
+                });
+
             }
 
         }
@@ -103,6 +122,7 @@ exports.upload_reply = function (req, res) {
             message: req.body.content,
             driver_id: req.body.driver_id[0],
             vendor_id: req.body.vendor_id[0],
+            customer_id: req.body.customer_id[0],
             admin_id: req.body.admin_id[0],
         }).then(banner => {
             res.redirect('/contect_us/reply/' + req.body.id[0]);

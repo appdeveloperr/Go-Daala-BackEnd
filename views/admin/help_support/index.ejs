@@ -56,7 +56,11 @@
                                     <td>Driver </td>
                                     <%} else if(item.vendor_id!='null'){%>
                                     <td>Vendor</td>
-                                    <%}%>
+                                    <%} else if(item.customer_id!='null'){%>
+                                      <td>
+                                        Customer
+                                      </td>
+                                      <%}%>
                                     <td><a href="/contect_us/reply/<%=item.id%>" class="mr-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-reply" viewBox="0 0 16 16">

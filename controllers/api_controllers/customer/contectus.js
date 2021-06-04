@@ -69,7 +69,6 @@ exports.get_reply = function (req, res) {
     Contect_us.findAll({
         where: {
             customer_id: req.body.customer_id
-            // admin_id:"1"
         }
     }).then(all_customer_record => {
         if (all_customer_record!=null|| all_customer_record!='') {

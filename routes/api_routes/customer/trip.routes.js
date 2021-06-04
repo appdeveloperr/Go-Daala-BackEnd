@@ -1,5 +1,4 @@
-const { vendorVerifySignUp } = require("../../../middleware");
-const { vendorAuthJwt } = require("../../../middleware");
+const { customerAuthJwt } = require("../../../middleware");
 
 const controller = require("../../../controllers/api_controllers/customer/trip");
 
@@ -18,7 +17,7 @@ module.exports = function (app) {
 
 
     app.get("/api/customer/testing",
-        // vendorAuthJwt.verifyToken,
+        // customerAuthJwt.verifyToken,
         controller.test);
 
 
@@ -27,7 +26,7 @@ module.exports = function (app) {
     //------------Vendor Create trip Function----------------
     app.post(
         "/api/customer/create-trip",
-        // vendorAuthJwt.verifyToken,
+        customerAuthJwt.verifyToken,
         controller.create_trip
 
         // uploads.single('profile'),
@@ -35,7 +34,7 @@ module.exports = function (app) {
     //--------------vendor recent all trip---------------------------//get_all_trips
     app.post(
         "/api/customer/get-all-trips",
-      //  vendorAuthJwt.verifyToken,
+      customerAuthJwt.verifyToken,
          controller.get_all_trips,
     );
 
@@ -43,28 +42,28 @@ module.exports = function (app) {
     //--------------vendor fair_calculation  trip---------------
     app.post(
         "/api/customer/fair-calculation",
-       // vendorAuthJwt.verifyToken,
+       customerAuthJwt.verifyToken,
         controller.fair_calculation
     )
 
   //------------vendor trip_detail  trip Function----------------
   app.post(
     "/api/customer/trip-detail",
-    //vendorAuthJwt.verifyToken,
+    customerAuthJwt.verifyToken,
     controller.trip_detail
 )
 
   //------------vendor share trip to another person Function----------------
    app.post(
        "/api/customer/trip-share",
-        vendorAuthJwt.verifyToken,
+       customerAuthJwt.verifyToken,
        controller.trip_share
    )
 
     //------------vendor cencal trip Function----------------
     app.post(
         "/api/customer/cancel-trip",
-        // vendorAuthJwt.verifyToken,
+         customerAuthJwt.verifyToken,
         controller.cancel_trip,
     );
 
@@ -75,7 +74,7 @@ module.exports = function (app) {
     //------------vendor all cencal trip Function----------------
     app.post(
         "/api/customer/all-cancel-trip",
-        // vendorAuthJwt.verifyToken,
+        customerAuthJwt.verifyToken,
         controller.all_cancel_trip,
     );
 
@@ -83,7 +82,7 @@ module.exports = function (app) {
     //------------vendor all ongoing trip Function----------------
     app.post(
         "/api/customer/all-ongoing-trip",
-        // vendorAuthJwt.verifyToken,
+        customerAuthJwt.verifyToken,
         controller.all_ongoing_trip,
     );
 
