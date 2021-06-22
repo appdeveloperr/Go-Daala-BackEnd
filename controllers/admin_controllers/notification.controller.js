@@ -2,6 +2,7 @@ const db = require("../../models/api_models");
 const Trips = db.trip;
 const Vendor = db.vendor;
 const Driver = db.driver;
+const Customer = db.customer;
 var admin = require("firebase-admin");
 const notification = db.notification;
 var serviceAccount = require("../../config/go-daala-prod-firebase-adminsdk-kx7hm-c8b83fe095.json");
