@@ -976,7 +976,7 @@ exports.trip_share = (req, res) => {
         var messageData = "Track your trip by using following link: " + "\n" + " Track Your Trip : http://www.godaala.com/trip?trip_id=" + message;
         var mobileno = req.body.mobile_no;
 
-        axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+        axios.get('http://api.veevotech.com/sendsms?hash=2fefa107d5eddd16fc16e420e976b2eb&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
             .then(response => {
                 console.log("massage sent is successfully");
 

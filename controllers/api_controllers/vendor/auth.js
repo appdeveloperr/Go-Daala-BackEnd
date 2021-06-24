@@ -633,7 +633,7 @@ exports.sendOTP = (req, res) => {
                         var mobileno = req.body.phone_number;
 
 
-                        axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                        axios.get('http://api.veevotech.com/sendsms?hash=2fefa107d5eddd16fc16e420e976b2eb&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
                             .then(response => {
 
 
@@ -679,7 +679,7 @@ exports.sendOTP = (req, res) => {
             var messageData = "Your Go Daala Verification Code is: " + val;
             var mobileno = req.body.phone_number;
 
-            axios.get('http://api.veevotech.com/sendsms?hash=3defxp3deawsbnnnzu27k4jbcm26nzhb9mzt8tq7&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+            axios.get('http://api.veevotech.com/sendsms?hash=2fefa107d5eddd16fc16e420e976b2eb&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
                 .then(response => {
 
 
