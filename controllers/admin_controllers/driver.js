@@ -4,7 +4,7 @@ const Driver = db.driver;
 const Vendor = db.vendor;
 const Vehicle_reg = db.vehicle_reg;
 const Trip = db.trip;
-
+const Op = db.Sequelize.Op;
 
 const fs = require('fs');
 const { vehicle } = require("../../models/api_models");
@@ -299,45 +299,28 @@ exports.unactive = function (req, res, next) {
 
 //--------------driver recent  all trip---------------
 exports.recent_trip = (req, res) => {
-  // Save vendor to Database
-  Driver.findOne({
-    where: {
-      id: req.params.id
-    }
-  }).then(driver_infor => {
+Driver.findOne({where:{
+  id:req.params.id
+}}).then(driver=>{
+
+
     Trip.findAll({
       where: {
         driver_id: req.params.id
+      },
+      include:[
+        {
+          model: db.vendor
+      },
+      {
+        model:db.customer
       }
+      ]
     }).then(trip => {
-      Vendor.findAll().then(vendor_infor => {
         res.render('admin/trip/driver_trip', {
-          userdata: req.user,
+          driver_information:driver,
           driver_trip: trip,
-          driver_information: driver_infor.dataValues,
-          vendor_information: vendor_infor
         })
-      }).catch(err => {
-
-        return res.status(200).send({
-          status: 400,
-          message: err.message,
-          successData: {}
-        });
-
-      });
-
-
-    }).catch(err => {
-
-      return res.status(200).send({
-        status: 400,
-        message: err.message,
-        successData: {}
-      });
-
-    });
-
   }).catch(err => {
 
     return res.status(200).send({
@@ -348,6 +331,15 @@ exports.recent_trip = (req, res) => {
 
   });
 
+}).catch(err => {
+
+  return res.status(200).send({
+    status: 400,
+    message: err.message,
+    successData: {}
+  });
+
+});
 
 }
 

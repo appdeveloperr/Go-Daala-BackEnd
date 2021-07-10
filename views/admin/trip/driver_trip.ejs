@@ -1,92 +1,133 @@
 <%- include('../../_layouts/adminheader'); %>
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>All Trip</h1>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-        <div class="row">
-            <div class="col-12">
-                <!-- /.card -->
-                <div class="card">
-
-                    <div class="card-header"><%if(driver_information){ var dues=0; var earning=0;%>
-                        
-                        <a href="#" >Driver <%=driver_information.first_name%> <%=driver_information.last_name%> and his trips list and Total Earning= <%if(driver_trip){ driver_trip.forEach(function(earn){ if(earn.status!='cancel'){earning=earning+parseInt(earn.total_cost)} });}%><%=earning%>   ||  Total Paid Commission= <%=driver_information.paid_company_commission%> remaining Dues:</a>
-                        <%}%>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>All Trip</h1>
                     </div>
-                    
-                    <!-- /.card-header -->
-                    <%if(driver_trip){ var a=1; %>
-                    <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Pick Up</th>
-                                    <th>Drop Off</th>
-                                    <th>Vehicle Name</th>
-                                    <th>Estimated Distance</th>
-                                    <th>Estimated Time</th>
-                                    <th>Total Cost</th>
-                                    <th>Vendor Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                               
-                                <tr> <%driver_trip.forEach(function(item){  %>
-                                    <td><%=a%><%a++%></td>
-                                    <td><%=item.pickup%></td>
-                                    <td><%=item.dropoff%> </td>
-                                    <td><%=item.vehicle_name%> </td>
-                                    <td><%=item.estimated_distance%></td>
-                                    <td><%=item.estimated_time%></td>
-                                    <td><%=item.total_cost%></td>
-                                    <% vendor_information.forEach(function(element){   %>
-                                        <%if(item.vendor_id==element.id){%>
-                                     <td><%=element.first_name%> <%=element.last_name%></td>
-                                     <%}})%>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <!-- /.card -->
+                    <div class="card">
+
+                        <div class="card-header">
+                            <%if(driver_information){ var remaining=0; var earning=0;%>
+                                                
+                                <a href="#">Driver <%=driver_information.first_name%>
+                                        <%=driver_information.last_name%> and his trips list and Total
+                                            Earning= <%if(driver_trip){ driver_trip.forEach(function(earn){
+                                                if(earn.status!='cancel' ){earning=earning+parseInt(earn.total_cost)}
+                                                });}%>
+                                                <%=earning%> || Total Paid Commission=
+                                                    <%=driver_information.paid_company_commission%>  ||  Remaining
+                                                    Commission: <% remaining = (100 * driver_information.paid_company_commission) / earning; remaining =driver_information.paid_company_commission-earning;%> <%=remaining%></a>
+                                <%}%>
+                        </div>
+
+                        <!-- /.card-header -->
+                        <%if(driver_trip){ var a=1; %>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Pick Up</th>
+                                            <th>Drop Off</th>
+                                            <th>Vehicle Name</th>
+                                            <th>Estimated Distance</th>
+                                            <th>Estimated Time</th>
+                                            <th>Total Cost</th>
+                                            <th>Vendor Name</th>
+                                            <th>Customer Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <%driver_trip.forEach(function(item){ %>
+                                                <td>
+                                                    <%=a%>
+                                                        <%a++%>
+                                                </td>
+                                                <td>
+                                                    <%=item.pickup%>
+                                                </td>
+                                                <td>
+                                                    <%=item.dropoff%>
+                                                </td>
+                                                <td>
+                                                    <%=item.vehicle_name%>
+                                                </td>
+                                                <td>
+                                                    <%=item.estimated_distance%>
+                                                </td>
+                                                <td>
+                                                    <%=item.estimated_time%>
+                                                </td>
+                                                <td>
+                                                    <%=item.total_cost%>
+                                                </td>
+                                                <%if(item.dataValues.vendor){%>
+                                                    <td>
+                                                        <%=item.dataValues.vendor.first_name%>
+                                                            <%=item.dataValues.vendor.last_name%>
+                                                    </td>
+                                                    <%}else{ %>
+                                                        <td></td>
+                                                        <%}%>
+                                                            <%if(item.dataValues.customer){%>
+                                                                <td>
+                                                                    <%=item.dataValues.customer.first_name%>
+                                                                        <%=item.dataValues.customer.last_name%>
+                                                                </td>
+
+                                                                <%}else{%>
+                                                                    <td></td>
+                                                                    <% }})%>
+
+                                        </tr>
+                                        
+
+                                    </tbody>
+                                    <tfoot>
                                     
-                                </tr>
-                                <%});%>
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Pick Up</th>
+                                                <th>Drop Off</th>
+                                                <th>Vehicle Name</th>
+                                                <th>Estimated Distance</th>
+                                                <th>Estimated Time</th>
+                                                <th>Total Cost</th>
+                                                <th>Vendor Name</th>
+                                                <th>Customer Name</th>
+                                            </tr>
+                                      
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <%}%>
+                                <!-- /.card-body -->
                     </div>
-                    <%}%>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
 
 
 
-<%- include('../../_layouts/adminfooter'); %>
+    <%- include('../../_layouts/adminfooter'); %>
