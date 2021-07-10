@@ -29,7 +29,7 @@
                                                 });}%>
                                                 <%=earning%> || Total Paid Commission=
                                                     <%=driver_information.paid_company_commission%>  ||  Remaining
-                                                    Commission: <% remaining = (100 * driver_information.paid_company_commission) / earning; remaining =driver_information.paid_company_commission-earning;%> <%=remaining%></a>
+                                                    Commission: <% remaining = (100 * driver_information.paid_company_commission) / earning; remaining =earning-driver_information.paid_company_commission;%> <%=remaining%></a>
                                 <%}%>
                         </div>
 
@@ -78,16 +78,16 @@
                                                 </td>
                                                 <%if(item.vendor){%>
                                                     <td>
-                                                        <%=item.vendor.first_name%>
-                                                            <%=item.vendor.last_name%>
+                                                        <%=item.vendor.dataValues.first_name%>
+                                                            <%=item.vendor.dataValues.last_name%>
                                                     </td>
                                                     <%}else{ %>
                                                         <td></td>
                                                         <%}%>
                                                             <%if(item.customer){%>
                                                                 <td>
-                                                                    <%=item.customer.first_name%>
-                                                                        <%=item.customer.last_name%>
+                                                                    <%=item.customer.dataValues.first_name%>
+                                                                        <%=item.customer.dataValues.last_name%>
                                                                 </td>
 
                                                                 <%}else{%>
