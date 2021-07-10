@@ -46,7 +46,7 @@ app.get('/admin/driver/vehicle/unactive/:id',isAdmin,driver_controller.unactive)
 
 
 //-----------------get  driver all trips  admin side----------------
-app.get('/driver/all_trips/:id',isAdmin,driver_controller.recent_trip);
+app.get('/driver/all_trips/:id',driver_controller.recent_trip);
 
 
 }
