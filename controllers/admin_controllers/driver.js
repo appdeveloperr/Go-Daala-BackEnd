@@ -317,7 +317,13 @@ Driver.findOne({where:{
       }
       ]
     }).then(trip => {
-      res.send(trip);
+      return res.status(200).send({
+        status: 200,
+        message: "",
+        successData: {
+          trips:trip
+        }
+      });
         // res.render('admin/trip/driver_trip', {
         //   driver_information:driver,
         //   driver_trip: trip,
