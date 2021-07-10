@@ -116,7 +116,8 @@ exports.signup = (req, res) => {
                     account_info: "block",
                     fcm_token: req.body.fcm_token,
                     total_rating: "0",
-                    total_review: "0"
+                    total_review: "0",
+                    paid_company_commission:'0'
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret, {

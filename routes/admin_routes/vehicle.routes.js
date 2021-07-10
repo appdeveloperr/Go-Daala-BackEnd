@@ -26,7 +26,8 @@ module.exports = function (app) {
       type:"",
       service_charges:"",
       distance:"",
-      time:""
+      time:"",
+      company_commission:""
     });
   });
 

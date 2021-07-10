@@ -15,6 +15,10 @@ module.exports = (sequelize, Sequelize) => {
         image_path: {
             type: Sequelize.STRING
         }
+        ,
+        company_commission: {
+            type: Sequelize.STRING
+        }
     });
 
     return Vehicle;

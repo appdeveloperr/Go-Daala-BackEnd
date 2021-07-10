@@ -44,6 +44,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       total_review: {
         type: Sequelize.STRING
+      },
+      paid_company_commission:{
+        type: Sequelize.STRING
       }
     });
   

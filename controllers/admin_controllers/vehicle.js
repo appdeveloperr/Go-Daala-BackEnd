@@ -10,7 +10,7 @@ exports.create = function (req, res, next) {
   req.checkBody('service_charges', 'Service  must have needed!')
   req.checkBody('distance', 'Distance must have  needed!').notEmpty();
   req.checkBody('time', 'Time must have value!').notEmpty();
-
+  req.checkBody('company_commission', 'company_commission must have value!').notEmpty();
 
   var errors = req.validationErrors();
   if (errors) {
@@ -20,7 +20,8 @@ exports.create = function (req, res, next) {
       type: req.body.type,
       service_charges: req.body.service_charges,
       distance: req.body.distance,
-      time: req.body.time
+      time: req.body.time,
+      company_commission:req.body.company_commission
 
     });
   } else {
@@ -36,7 +37,8 @@ exports.create = function (req, res, next) {
           type: req.body.type,
           service_charges: req.body.service_charges,
           distance: req.body.distance,
-          time: req.body.time
+          time: req.body.time,
+          company_commission:req.body.company_commission
 
         });
       }
@@ -53,7 +55,8 @@ exports.create = function (req, res, next) {
           type: req.body.type,
           service_charges: req.body.service_charges,
           distance: req.body.distance,
-          time: req.body.time
+          time: req.body.time,
+          company_commission:req.body.company_commission
 
         });
       } else {   ///------------------ no error exist
@@ -68,7 +71,8 @@ exports.create = function (req, res, next) {
           service: req.body.service_charges,
           distance: req.body.distance,
           time: req.body.time,
-          image_path: "/files/uploadsFiles/" + filename
+          image_path: "/files/uploadsFiles/" + filename,
+          company_commission:req.body.company_commission
         }).then(vehicle => {
           req.flash('success', 'Successfuly your vehicle is  Added!');
           res.redirect('/admin/vehicle/index');
@@ -146,6 +150,7 @@ exports.update = function (req, res, next) {
   req.checkBody('distance', 'Distance must have  needed!').notEmpty();
   req.checkBody('time', 'Time must have value!').notEmpty();
   req.checkBody('old_file', 'old file path must have value!').notEmpty();
+  req.checkBody('company_commission', 'company_commission must have value!').notEmpty();
 
   var errors = req.validationErrors();
   if (errors) {
@@ -186,7 +191,8 @@ exports.update = function (req, res, next) {
           service: req.body.service_charges,
           distance: req.body.distance,
           time: req.body.time,
-          image_path: "/files/uploadsFiles/" + filename
+          image_path: "/files/uploadsFiles/" + filename,
+          company_commission:req.body.company_commission
         }, {
           where: {
             id: req.body.id
@@ -209,6 +215,7 @@ exports.update = function (req, res, next) {
         service: req.body.service_charges,
         distance: req.body.distance,
         time: req.body.time,
+        company_commission:req.body.company_commission
       }, {
         where: {
           id: req.body.id

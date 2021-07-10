@@ -19,8 +19,9 @@
                 <!-- /.card -->
                 <div class="card">
 
-                    <div class="card-header"><%if(driver_information){%>
-                        <a href="#" >Driver <%=driver_information.first_name%> <%=driver_information.last_name%> and his trips list</a>
+                    <div class="card-header"><%if(driver_information){ var dues=0; var earning=0;%>
+                        
+                        <a href="#" >Driver <%=driver_information.first_name%> <%=driver_information.last_name%> and his trips list and Total Earning= <%if(driver_trip){ driver_trip.forEach(function(earn){ if(earn.status!='cancel'){earning=earning+parseInt(earn.total_cost)} });}%><%=earning%>   ||  Total Paid Commission= <%=driver_information.paid_company_commission%> remaining Dues:</a>
                         <%}%>
                     </div>
                     
