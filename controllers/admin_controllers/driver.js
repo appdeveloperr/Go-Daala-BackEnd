@@ -317,10 +317,11 @@ Driver.findOne({where:{
       }
       ]
     }).then(trip => {
-        res.render('admin/trip/driver_trip', {
-          driver_information:driver,
-          driver_trip: trip,
-        })
+      res.send(trip);
+        // res.render('admin/trip/driver_trip', {
+        //   driver_information:driver,
+        //   driver_trip: trip,
+        // })
   }).catch(err => {
 
     return res.status(200).send({
