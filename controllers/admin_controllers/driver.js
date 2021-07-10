@@ -299,35 +299,43 @@ exports.unactive = function (req, res, next) {
 
 //--------------driver recent  all trip---------------
 exports.recent_trip = (req, res) => {
-Driver.findOne({where:{
-  id:req.params.id
-}}).then(driver=>{
+  Driver.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then(driver => {
 
 
     Trip.findAll({
       where: {
         driver_id: req.params.id
       },
-      include:[
+      include: [
         {
           model: db.vendor
-      },
-      {
-        model:db.customer
-      }
+        },
+        {
+          model: db.customer
+        }
       ]
     }).then(trip => {
       return res.status(200).send({
         status: 200,
         message: "",
         successData: {
-          trips:trip
+          trips: trip
         }
       });
-        // res.render('admin/trip/driver_trip', {
-        //   driver_information:driver,
-        //   driver_trip: trip,
-        // })
+    }).catch(err => {
+
+      return res.status(200).send({
+        status: 400,
+        message: err.message,
+        successData: {}
+      });
+
+    });
+
   }).catch(err => {
 
     return res.status(200).send({
@@ -337,16 +345,6 @@ Driver.findOne({where:{
     });
 
   });
-
-}).catch(err => {
-
-  return res.status(200).send({
-    status: 400,
-    message: err.message,
-    successData: {}
-  });
-
-});
 
 }
 
