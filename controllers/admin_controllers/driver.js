@@ -9,7 +9,7 @@ const Op = db.Sequelize.Op;
 const fs = require('fs');
 const { vehicle } = require("../../models/api_models");
 const { app } = require("firebase-admin");
-const { title } = require("process");
+// const { title } = require("process");
 
 
 
