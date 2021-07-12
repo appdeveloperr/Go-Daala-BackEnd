@@ -9,6 +9,7 @@ const Op = db.Sequelize.Op;
 const fs = require('fs');
 const { vehicle } = require("../../models/api_models");
 const { app } = require("firebase-admin");
+const { model } = require("mongoose");
 // const { title } = require("process");
 
 
@@ -299,11 +300,9 @@ exports.unactive = function (req, res, next) {
 
 //--------------driver recent  all trip---------------
 exports.recent_trip = (req, res) => {
-  Driver.findOne({
-    where: {
-      id: req.params.id
-    }
-  }).then(driver => {
+Driver.findOne({where:{
+  id:req.params.id
+}}).then(driver_info=>{
     Trip.findAll({
       where: {
         driver_id: req.params.id
@@ -317,21 +316,24 @@ exports.recent_trip = (req, res) => {
         }
       ]
     }).then(trip => {
-      return res.status(200).send({
-        status: 200,
-        message: "",
-        successData: {
-          trips: trip
+      Vehicle_reg.findOne({
+        where: {
+          driver_id: req.body.params.id
         }
-      });
-    }).catch(err => {
-      return res.status(200).send({
-        status: 400,
-        message: err.message,
-        successData: {}
-      });
-    });
+      }).then(driver_vehicle => {
+        res.render('./admin/driver/driver_trip', {
+          driver_trip:trip,
+          driver_information:driver_info,
+          driver_vehicle:driver_vehicle
+
+        });
+      })
+     
   });
+
+}).catch(err => {
+  console.log(err);
+});
 }
 
 
