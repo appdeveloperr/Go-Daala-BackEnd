@@ -29,7 +29,7 @@
                                                 });}%>
                                                 <%=earning%> || Total Paid Commission=
                                                     <%=driver_information.paid_company_commission%>  ||  Remaining  
-                                                    Commissions: <% if(driver_vehicle!=null){total_company_commission = (earning * parseInt(driver_vehicle.dataValues.company_commission)) / 100; remaining =total_company_commission-parseInt(driver_information.paid_company_commission);}console.log('this is total_company_commission: '+total_company_commission+' this is remaining commission: '+remaining)%>  <%=remaining%></a>
+                                                    Commissions: <% if(driver_vehicle!=null){total_company_commission = (earning * parseInt(driver_vehicle.dataValues.company_commission)) / 100; remaining =total_company_commission-parseInt(driver_information.paid_company_commission);}console.log('this is total_company_commission: '+total_company_commission+' this is remaining commission: '+remaining    +'vehicle commission:'+ parseInt(driver_vehicle.dataValues.company_commission))%>  <%=remaining%></a>
                                 <%}%>
                         </div>
 
