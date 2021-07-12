@@ -321,7 +321,7 @@ Driver.findOne({where:{
           driver_id: req.params.id
         }
       }).then(driver_vehicles => {
-        console.log(parseInt(driver_vehicle.company_commission))
+        console.log(parseInt(driver_vehicles.company_commission))
         res.render('./admin/trip/driver_trip', {
           driver_trip:trip,
           driver_information:driver_info,
