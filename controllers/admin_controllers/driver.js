@@ -4,12 +4,12 @@ const Driver = db.driver;
 const Vendor = db.vendor;
 const Vehicle_reg = db.vehicle_reg;
 const Trip = db.trip;
+const Vehicle = db.vehicle
 const Op = db.Sequelize.Op;
 
 const fs = require('fs');
 const { vehicle } = require("../../models/api_models");
 const { app } = require("firebase-admin");
-const { model } = require("mongoose");
 // const { title } = require("process");
 
 
@@ -321,13 +321,27 @@ Driver.findOne({where:{
           driver_id: req.params.id
         }
       }).then(driver_vehicles => {
-        console.log(parseInt(driver_vehicles.company_commission))
-        res.render('./admin/trip/driver_trip', {
-          driver_trip:trip,
-          driver_information:driver_info,
-          driver_vehicle:driver_vehicles
-
-        });
+        if(driver_vehicles!=null){
+          Vehicle.findOne({where:{vehicle_type:driver_vehicles.dataValues.vehicle_type}}).then(company_commission=>{
+            console.log(company_commission.dataValues.company_commission)
+            res.render('./admin/trip/driver_trip', {
+              driver_trip:trip,
+              driver_information:driver_info,
+              driver_vehicle:company_commission.dataValues.company_commission
+    
+            });
+  
+          })
+        }else{
+          res.render('./admin/trip/driver_trip', {
+            driver_trip:trip,
+            driver_information:driver_info,
+            driver_vehicle:0
+  
+          });
+        }
+      
+      
       })
      
   });
@@ -338,7 +352,23 @@ Driver.findOne({where:{
 }
 
 
-
+exports.add_commission=async(req,res)=>{
+const commission =  parseInt(req.body.add_commission) + parseInt(req.body.old_paid_commission);
+  Driver.update({
+    paid_company_commission: commission
+  }, {
+    where: {
+      id: req.body.id
+    }
+  }).then(paid_commission => {
+    if (paid_commission) {
+      req.flash('success', 'Successfuly your add Company Commission');
+      res.redirect('/driver/all_trips/'+req.body.id);
+    }
+  }).catch(err => {
+    console.log(err);
+  });
+}
 
 
 exports.chat = function (req, res, next) {
