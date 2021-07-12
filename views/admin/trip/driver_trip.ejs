@@ -20,7 +20,7 @@
                     <div class="card">
 
                         <div class="card-header">
-                            <%if(driver_information){ var remaining=0; var earning=0;%>
+                            <%if(driver_information){ var remaining=0; var earning=0; total_company_commission=0;%>
                                                 
                                 <a href="#">Driver <%=driver_information.first_name%>
                                         <%=driver_information.last_name%> and his trips list and Total
@@ -28,8 +28,8 @@
                                                 if(earn.status!='cancel' ){earning=earning+parseInt(earn.total_cost)}
                                                 });}%>
                                                 <%=earning%> || Total Paid Commission=
-                                                    <%=driver_information.paid_company_commission%>  ||  Remaining
-                                                    Commissions: <% remaining = (100 * driver_information.paid_company_commission) / earning; remaining =earning-driver_information.paid_company_commission;%> <%=remaining%></a>
+                                                    <%=driver_information.paid_company_commission%>  ||  Remaining  
+                                                    Commissions: <% if(driver_vehicle!=null){total_company_commission = (earning * parseInt(driver_vehicle.company_commission)) / 100; remaining =total_company_commission-driver_information.paid_company_commission;}%> <%=remaining%></a>
                                 <%}%>
                         </div>
 
