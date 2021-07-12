@@ -382,7 +382,7 @@ exports.recent_trip = (req, res) => {
 
   return res.status(200).send({
     status: 400,
-    message: err.message,
+    message:"driver is data is empty"+ err.message,
     successData: {}
   });
 
