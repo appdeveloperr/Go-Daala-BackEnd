@@ -303,13 +303,13 @@ exports.recent_trip = (req, res) => {
   Vehicle_reg.findOne({
     where: {
       driver_id: req.body.params
-    }, include: [
+    },include:[
       {
         model: db.driver
       }
     ]
   }).then(driver_data => {
-    if (!driver_data) {
+    if (driver_data==null || driver_data=='') {
       console.log("driver is data is empty");
       // Driver.findOne({
       //   where: {
