@@ -310,70 +310,73 @@ exports.recent_trip = (req, res) => {
     ]
   }).then(driver_data => {
     if (!driver_data) {
-      Driver.findOne({
-        where: {
-          id: req.params.id
-        }
-      }).then(driver => {
-        Trip.findAll({
-          where: {
-            driver_id: req.params.id
-          },
-          include: [
-            {
-              model: db.vendor
-            },
-            {
-              model: db.customer
-            }
-          ]
-        }).then(trip => {
-          return res.status(200).send({
-            status: 200,
-            message: "",
-            successData: {
-              trips: trip
-            }
-          });
-        }).catch(err => {
+      console.log("driver is data is empty");
+      // Driver.findOne({
+      //   where: {
+      //     id: req.params.id
+      //   }
+      // }).then(driver => {
+      //   Trip.findAll({
+      //     where: {
+      //       driver_id: req.params.id
+      //     },
+      //     include: [
+      //       {
+      //         model: db.vendor
+      //       },
+      //       {
+      //         model: db.customer
+      //       }
+      //     ]
+      //   }).then(trip => {
+      //     return res.status(200).send({
+      //       status: 200,
+      //       message: "",
+      //       successData: {
+      //         trips: trip
+      //       }
+      //     });
+      //   }).catch(err => {
 
-          return res.status(200).send({
-            status: 400,
-            message: err.message,
-            successData: {}
-          });
-        });
-      });
+      //     return res.status(200).send({
+      //       status: 400,
+      //       message: err.message,
+      //       successData: {}
+      //     });
+      //   });
+      // });
     } else {
-      Trip.findAll({
-        where: {
-          driver_id: req.params.id
-        },
-        include: [
-          {
-            model: db.vendor
-          },
-          {
-            model: db.customer
-          }
-        ]
-      }).then(trip => {
-        return res.status(200).send({
-          status: 200,
-          message: "",
-          successData: {
-            trips: trip
-          }
-        });
-      }).catch(err => {
+      console.log("driver is data is not empty"+driver_data);
+      res.send(driver_data);
+      // Trip.findAll({
+      //   where: {
+      //     driver_id: req.params.id
+      //   },
+      //   include: [
+      //     {
+      //       model: db.vendor
+      //     },
+      //     {
+      //       model: db.customer
+      //     }
+      //   ]
+      // }).then(trip => {
+      //   return res.status(200).send({
+      //     status: 200,
+      //     message: "",
+      //     successData: {
+      //       trips: trip
+      //     }
+      //   });
+      // }).catch(err => {
 
-        return res.status(200).send({
-          status: 400,
-          message: err.message,
-          successData: {}
-        });
+      //   return res.status(200).send({
+      //     status: 400,
+      //     message: err.message,
+      //     successData: {}
+      //   });
 
-      });
+      // });
     }
   }).catch (err => {
 
