@@ -35,6 +35,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     total_review: {
       type: Sequelize.STRING
+    },
+    bussiness_name: {
+      type: Sequelize.STRING
     }
   });
 

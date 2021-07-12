@@ -52,6 +52,7 @@
                                                                     class="btn btn-outline-primary">All Trips</button>
                                                             </a>
 
+
                                                             <%if(one_drivers.account_info=='block'){%>
 
                                                                 <a href="/admin/driver/unblock/<%=one_drivers.id%>"
@@ -69,6 +70,10 @@
                                                                     </a>
 
                                                                     <%}%>
+
+                                                                    <a href="/driver/all_trips/<%=one_drivers.id%>" class="mr-2">
+                                                                        <button type="button" class="btn  btn-info">Commission</button>
+                                                                </a>
                                                         </td>
                                         </tr>
                                         <thead>

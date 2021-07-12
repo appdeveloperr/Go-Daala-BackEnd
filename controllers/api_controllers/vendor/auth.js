@@ -17,7 +17,8 @@ exports.signup = (req, res) => {
     req.checkBody('email', 'email must have value!').notEmpty();
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
-    req.checkBody('fcm_token', 'Please provide a fcm token needed!')
+    req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
+    req.checkBody('bussiness_name', 'Please provide a bussiness name needed!').notEmpty();
 
     var errors = req.validationErrors();
     if (errors) {                    
@@ -86,7 +87,8 @@ exports.signup = (req, res) => {
                     account_info: 'unblock',
                     fcm_token: req.body.fcm_token,
                     total_rating:"0",
-                    total_review:"0"
+                    total_review:"0",
+                    bussiness_name:req.body.bussiness_name
                     //  
                 }).then(user => {
 
@@ -106,7 +108,8 @@ exports.signup = (req, res) => {
                                 profile: user.profile,
                                 account_info: user.account_info,
                                 fcm_token: user.fcm_token,
-                                accessToken: token
+                                accessToken: token,
+                                bussiness_name:user.bussiness_name
                             }
                         }
                     });
