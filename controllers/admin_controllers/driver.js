@@ -318,7 +318,7 @@ Driver.findOne({where:{
     }).then(trip => {
       Vehicle_reg.findOne({
         where: {
-          driver_id: req.body.params.id
+          driver_id: req.params.id
         }
       }).then(driver_vehicle => {
         res.render('./admin/driver/driver_trip', {
