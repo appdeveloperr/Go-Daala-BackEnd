@@ -340,6 +340,7 @@ exports.signin = (req, res) => {
                             vehicle_info.dataValues.service = vehicle_charges.dataValues.service;
                             vehicle_info.dataValues.distance = vehicle_charges.dataValues.distance;
                             vehicle_info.dataValues.time = vehicle_charges.dataValues.time;
+                            vehicle_info.dataValues.company_commission=vehicle_charges.dataValues.company_commission;
                             console.log(vehicle_info);
                             return res.status(200).send({
                                 status: 200,

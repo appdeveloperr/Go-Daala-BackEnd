@@ -122,7 +122,8 @@ exports.create_vehicle_reg = (req, res) => {
                                     driver_id: vehicle_reg.driver_id,
                                     service: vehicles.service,
                                     distance: vehicles.distance,
-                                    time: vehicles.time
+                                    time: vehicles.time,
+                                    company_commission:vehicles.company_commission
                                 }
                             }
                         });
