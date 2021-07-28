@@ -1,5 +1,6 @@
 const db = require("../../../models/api_models");
 const Address = db.address;
+const Vendor = db.vendor;
 
 //--------------vendor create address---------------
 exports.create_address = (req, res) => {
@@ -95,21 +96,29 @@ exports.update_address = (req, res) => {
         ).then(address => {
 
             if (address!=null|| address!='') {
-
-                return res.status(200).send({
-                    status: 200,
-                    message: "Address updated is successful",
-                    successData: {
-                        address: {
-                            id: address[1].id,
-                            label: address[1].label,
-                            address: address[1].address,
-                            latitude: address[1].latitude,
-                            longitude: address[1].longitude,
-                            vendor_id: address[1].vendor_id
-                        }
+                Vendor.findOne({
+                    where:{
+                        id:address[1].vendor_id
                     }
-                });
+                }).then(user=>{
+                    return res.status(200).send({
+                        status: 200,
+                        message: "Address updated is successful",
+                        successData: {
+                            address: address[1],
+                            user:user.dataValues
+                        }
+                    });
+                }).catch(err => {
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+
+        });
+              
             }
         }).catch(err => {
             return res.status(200).send({
