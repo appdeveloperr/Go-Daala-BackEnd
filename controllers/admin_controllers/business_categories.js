@@ -90,7 +90,7 @@ exports.api_get_business_categories =(req,res)=>{
   Business_categories.findAll().then(all_business_categories => {
     
       return res.status(200).send({
-      status: 400,
+      status: 200,
       message: 'get all_business_categories successful retrived',
       successData:{
         all_business_categories:all_business_categories
