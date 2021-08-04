@@ -30,6 +30,7 @@ db.role = require("../api_models/role.model")(sequelize, Sequelize);
 db.banner = require("../api_models/banner.model")(sequelize, Sequelize);
 db.promo = require("../api_models/promo.model")(sequelize, Sequelize);
 db.notification = require("../api_models/notification.model")(sequelize, Sequelize);
+db.business_categories = require("../api_models/business_categories.model")(sequelize, Sequelize);
 
 //---------------------------api models-------------------------
 db.chat = require("../api_models/chat.model")(sequelize, Sequelize);

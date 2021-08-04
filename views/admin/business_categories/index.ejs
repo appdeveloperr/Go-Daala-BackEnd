@@ -1,0 +1,132 @@
+<%- include('../../_layouts/adminheader'); %>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Business Categories</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- /.card -->
+                        <div class="card">
+                            <div class="card-header">
+
+                                <form method="post" action="/admin/business_categories/add">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <input type="text" class="form-control" name="name" value="" placeholder="Enter Business Categories Name" required>
+                                            </div>
+                                            <div class="col-sm">
+                                                <input type="submit" class="btn btn-success" value="Add Category">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <!-- /.card-header -->
+                            <%if(all_business_categories){ var a=1;%>
+                                <div class="card-body">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Name</th>
+                                                
+    
+                                                <th>Action</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%all_business_categories.forEach(function(item){ %>
+                                                <tr>
+
+                                                    <td>
+                                                        <%=a%>
+                                                            <%a++%>
+                                                    </td>
+                                                    <td>
+                                                        <form method="post" action="/admin/business_categories/update">
+
+                                                            <div class="container">
+                                                                <div class="row">
+                                                                    <div class="col-sm">
+                                                                        <input type="text" name="name"
+                                                                            value="<%=item.name%>" class="form-control"
+                                                                            placeholder="Enter business categories Name">
+
+                                                                        <input type="text" name="id"
+                                                                            value="<%=item.id%>" hidden>
+                                                                    </div>
+                                                                    <div class="col-sm">
+                                                                        <input type="submit" class="btn btn-secondary"
+                                                                            value="update">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+                                                        </form>
+
+                                                    </td>
+                                                   
+
+                        
+
+                                                    <td>
+               
+
+
+                                                        <a class="confirmDeletion"
+                                                            href="/admin/business_categories/delete/<%=item.id%>">
+                                                            <button class="btn btn-danger">Delete</button>
+                                                        </a>
+
+                                                    </td>
+
+                                                </tr>
+                                                <%});%>
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Name</th>
+                                         
+                                                <th>Action</th>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <%}%>
+                                    <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+
+    <%- include('../../_layouts/adminfooter'); %>
