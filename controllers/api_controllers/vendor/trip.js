@@ -136,7 +136,7 @@ exports.create_trip = (req, res) => {
                                         };
                                         var intervalObj = null;
                                         var temp = 1;
-                                        var time = 500;
+                                        var time = 1500;
                                         var fcm_token = null;
                                         admin.messaging().sendToDevice(try_to_parse(obj2[0].fcm_token), payload, options)
                                             .then(function (response) {
