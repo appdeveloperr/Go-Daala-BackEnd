@@ -22,7 +22,7 @@ app.post('/admin/business_categories/add', isAdmin, business_categories_controll
 app.post('/admin/business_categories/update', isAdmin, business_categories_controller.update);
 app.get('/admin/business_categories/delete/:id', isAdmin, business_categories_controller.delete);
 
-app.get('/admin/vendor/get_business_categories',vendorAuthJwt.verifyToken, business_categories_controller.api_get_business_categories);
+app.get('/api/admin/vendor/get_business_categories',vendorAuthJwt.verifyToken, business_categories_controller.api_get_business_categories);
 
 
 

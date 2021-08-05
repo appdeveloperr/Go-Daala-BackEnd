@@ -55,10 +55,10 @@ const db = require("./models/api_models");
 const User = db.user;
 
 // force: true will drop the table if it already exists
-db.sequelize.sync({force: false}).then(() => {
-console.log('Drop and Resync Database with { force: true }');
- initial();
- });
+// db.sequelize.sync({force: false}).then(() => {
+// console.log('Drop and Resync Database with { force: true }');
+//  initial();
+//  });
 
 
 
