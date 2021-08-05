@@ -27,7 +27,7 @@ module.exports = (sequelize, Sequelize) => {
       cnic: {
         type: Sequelize.STRING
       },
-      driving_license: {
+      cnic_text: {
         type: Sequelize.STRING
       },
       status: {

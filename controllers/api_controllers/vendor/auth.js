@@ -19,7 +19,7 @@ exports.signup = (req, res) => {
     req.checkBody('password', 'password must have value!').notEmpty();
     req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
     req.checkBody('bussiness_name', 'Please provide a bussiness name needed!').notEmpty();
-
+    req.checkBody('store_image', 'Please provide a store image needed!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    
         console.log("VENDOR ERROR 0");
@@ -53,7 +53,7 @@ exports.signup = (req, res) => {
         } else {
             
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
-            
+            req.checkBody('store_image', 'store picture must have needed animage').isImage(req.files.store_image.name);
             var errors = req.validationErrors();
 
             if (errors) {   //////////------input file must have image validation error
@@ -74,6 +74,11 @@ exports.signup = (req, res) => {
                     if (err) console.log("error occured");
                 });
 
+                var cnic_Text = 'profile-1' + Date.now() + req.files.cnic_Text.name;
+                req.files.cnic_Text.mv(path_file + '' + cnic_Text, function (err) {
+                    if (err) console.log("error occured");
+                });
+
 
 
                 // Save vendor to Database
@@ -88,7 +93,8 @@ exports.signup = (req, res) => {
                     fcm_token: req.body.fcm_token,
                     total_rating:"0",
                     total_review:"0",
-                    bussiness_name:req.body.bussiness_name
+                    bussiness_name:req.body.bussiness_name,
+                    store_image:'/files/uploadsFiles/vendor/' +cnic_Text
                     //  
                 }).then(user => {
 
@@ -109,7 +115,8 @@ exports.signup = (req, res) => {
                                 account_info: user.account_info,
                                 fcm_token: user.fcm_token,
                                 accessToken: token,
-                                bussiness_name:user.bussiness_name
+                                bussiness_name:user.bussiness_name,
+                                store_image:user.store_image
                             }
                         }
                     });

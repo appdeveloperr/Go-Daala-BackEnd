@@ -38,6 +38,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     bussiness_name: {
       type: Sequelize.STRING
+    },
+    store_image: {
+      type: Sequelize.STRING
     }
   });
 

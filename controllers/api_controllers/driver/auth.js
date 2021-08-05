@@ -19,7 +19,7 @@ exports.signup = (req, res) => {
     req.checkBody('phone_number', 'phone number must have value!').notEmpty();
     req.checkBody('password', 'password must have value!').notEmpty();
     req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
-
+    req.checkBody('cnic_text', 'Please provide a cnic_text  needed!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         console.log("DRIVER ERROR 0");
@@ -38,7 +38,6 @@ exports.signup = (req, res) => {
 
             req.checkBody('profile', 'profile picture must have needed!').notEmpty();
             req.checkBody('cnic', 'CNIC picture must have needed!').notEmpty();
-            req.checkBody('driving_license', 'Driving License picture must have needed!').notEmpty();
             var errors = req.validationErrors();
             if (errors) {                 //////////------input file validation error
                 console.log("DRIVER ERROR 1");
@@ -58,7 +57,6 @@ exports.signup = (req, res) => {
             console.log(req);
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
             req.checkBody('cnic', 'cnic picture must have needed animage').isImage(req.files.cnic.name);
-            req.checkBody('driving_license', 'driving_license picture must have needed animage').isImage(req.files.driving_license.name);
             var errors = req.validationErrors();
             if (errors) {   //////////------input file must have image validation error
                 console.log("DRIVER ERROR 2");
@@ -94,13 +92,6 @@ exports.signup = (req, res) => {
 
 
 
-                //-----------------move driving_license into server-------------------------------//
-                var drivefilename = 'profile-3' + Date.now() + req.files.driving_license.name;
-                req.files.driving_license.mv(path_file + drivefilename, function (err) {
-                    if (err) console.log("error occured");
-                });
-
-
 
                 // Save vendor to Database
                 Driver.create({
@@ -111,7 +102,7 @@ exports.signup = (req, res) => {
                     password: bcrypt.hashSync(req.body.password, 8),
                     profile: '/files/uploadsFiles/driver/' + fileOne,
                     cnic: '/files/uploadsFiles/driver/' + cnicfilename,
-                    driving_license: '/files/uploadsFiles/driver/' + drivefilename,
+                    cnic_text: req.body.cnic_text,
                     status: "active",
                     account_info: "block",
                     fcm_token: req.body.fcm_token,
