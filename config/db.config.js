@@ -13,7 +13,6 @@
 // };
 
 //------ AWS DB Credentials -------
-
 module.exports = {
   HOST: "localhost",
   USER: "root",
