@@ -367,11 +367,13 @@ exports.create_trip = (req, res) => {
 
                                     // new code sending fcm every one at a time 
                                     if (obj2.length > 0) {
+                                        console.log('total drivers: '+obj2.length);
+                                        console.log('fcm array: '+fcm_array);
                                         var payload = {
-                                            notification: {
-                                                title: "trip_id",
-                                                body: trip.id.toString()
-                                            },
+                                            // notification: {
+                                            //     title: "trip_id",
+                                            //     body: trip.id.toString()
+                                            // },
                                             data: {
                                                 title: "trip_id",
                                                 body: trip.id.toString()
