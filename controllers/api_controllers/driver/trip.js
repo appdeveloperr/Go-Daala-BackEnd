@@ -421,6 +421,9 @@ exports.cencal_trip = (req, res) => {
                                         notification: {
                                             title: "Driver Cancel The Trip",
                                             body: trip[1].id.toString()
+                                        }, data:{
+                                            title: "Driver Cancel The Trip",
+                                            body: trip[1].id.toString()
                                         }
                                     };
 
@@ -482,6 +485,9 @@ exports.cencal_trip = (req, res) => {
 
                             var payload = {
                                 notification: {
+                                    title: "Driver Cancel The Trip",
+                                    body: trip[1].id.toString()
+                                }, data:{
                                     title: "Driver Cancel The Trip",
                                     body: trip[1].id.toString()
                                 }
@@ -610,6 +616,9 @@ exports.start_trip = (req, res) => {
                     notification: {
                         title: "Start trip",
                         body: trip[1].id.toString()
+                    }, data:{
+                        title: "Start trip",
+                        body: trip[1].id.toString()
                     }
                 };
 
@@ -707,6 +716,9 @@ exports.end_trip = (req, res) => {
 
         var payload = {
             notification: {
+                title: "Completed trip",
+                body: req.body.trip_id.toString()
+            }, data:{
                 title: "Completed trip",
                 body: req.body.trip_id.toString()
             }

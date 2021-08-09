@@ -126,6 +126,10 @@ exports.create_trip = (req, res) => {
                                             notification: {
                                                 title: "trip_id",
                                                 body: trip.id.toString()
+                                            },
+                                            data:{
+                                                title: "trip_id",
+                                                body: trip.id.toString()
                                             }
                                         };
 
@@ -734,6 +738,10 @@ exports.cancel_trip = (req, res) => {
                             notification: {
                                 title: "Customer Cancel Trip",
                                 body: trip[1].id.toString()
+                            },
+                            data:{
+                                title: "Customer Cancel Trip",
+                                body: trip[1].id.toString()
                             }
                         };
 
@@ -939,6 +947,10 @@ exports.trip_share = (req, res) => {
                         console.log("this is fcm : " + user.dataValues.fcm_token);
                         var payload = {
                             notification: {
+                                title: "trip_id",
+                                body: req.body.trip_id.toString()
+                            },
+                            data:{
                                 title: "trip_id",
                                 body: req.body.trip_id.toString()
                             }

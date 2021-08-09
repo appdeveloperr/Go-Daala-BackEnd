@@ -99,6 +99,10 @@ exports.socket_io = function (io) {
                 notification: {
                     title: user_format.text.username,
                     body: user_format.text.message
+                },
+                data:{
+                    title: user_format.text.username,
+                    body: user_format.text.message
                 }
             };
 
