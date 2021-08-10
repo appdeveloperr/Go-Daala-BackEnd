@@ -121,13 +121,253 @@ exports.create_trip = (req, res) => {
 
                                     console.log("Total drivers:" + obj2.length);
                                     console.log("trip id :" + trip.id);
+
+                                    //old code 
+                                    // if (obj2.length > 0) {
+                                    //     var payload = {
+                                    //         // notification: {
+                                    //         //     title: "trip_id",
+                                    //         //     body: trip.id.toString()
+                                    //         // },
+                                    //         data:{
+                                    //             title: "trip_id",
+                                    //             body: trip.id.toString()
+                                    //         }
+                                    //     };
+
+                                    //     var options = {
+                                    //         priority: "high",
+                                    //         timeToLive: 60 * 60 * 24
+                                    //     };
+                                    //     var intervalObj = null;
+                                    //     var temp = 1;
+                                    //     var time = 10000;
+                                    //     var fcm_token = null;
+                                    //     admin.messaging().sendToDevice(try_to_parse(obj2[0].fcm_token), payload, options)
+                                    //         .then(function (response) {
+                                    //             console.log("Successfully sent message:", response);
+                                    //             intervalObj = setInterval(function () {
+
+                                    //                 if (temp < obj2.length) {
+                                    //                     Trip.findOne({
+                                    //                         where: {
+                                    //                             id: trip.id
+                                    //                         }
+                                    //                     }).then((is_accepted_trip) => {
+                                    //                         if (!is_accepted_trip.dataValues.driver_id) {
+
+                                    //                             admin.messaging().sendToDevice(try_to_parse(obj2[temp].fcm_token), payload, options)
+                                    //                                 .then(function (response) {
+                                    //                                     console.log("Successfully sent message:", response);
+
+                                    //                                 })
+                                    //                                 .catch(function (error) {
+                                    //                                     console.log("Error sending message:", error);
+                                    //                                     return res.status(200).send({
+                                    //                                         responsecode: 400,
+                                    //                                         notification: response.results[0]
+                                    //                                     })
+
+                                    //                                 });
+
+
+                                    //                             temp = temp + 1;
+
+                                    //                         } else {
+                                    //                             var check_driver_lat_long = null;
+                                    //                             for (var i = 0; i < obj2.length; i++) {
+                                    //                                 if (obj2[i].driver_id == is_accepted_trip.dataValues.driver_id) {
+                                    //                                     check_driver_lat_long = i;
+                                    //                                 }
+                                    //                             }
+                                    //                             Driver.findOne({
+                                    //                                 where: {
+                                    //                                     id: is_accepted_trip.dataValues.driver_id
+                                    //                                 }
+                                    //                             }).then(driver_data => {
+                                    //                                 delete driver_data.dataValues.password;
+
+                                    //                                 Vehicle.findOne({
+                                    //                                     where: {
+                                    //                                         driver_id: driver_data.dataValues.id
+                                    //                                     }
+                                    //                                 }).then(vehicle_info => {
+                                    //                                     return res.status(200).send({
+                                    //                                         status: 200,
+                                    //                                         message: "Create Trip with accepted drivers is successful",
+                                    //                                         successData: {
+                                    //                                             request_trip: trip,
+                                    //                                             accepted_driver: driver_data,
+                                    //                                             driver_current_location: {
+                                    //                                                 latitude: obj2[check_driver_lat_long].latitude,
+                                    //                                                 longitude: obj2[check_driver_lat_long].longitude
+                                    //                                             },
+                                    //                                             driver_vehicle_info: vehicle_info
+
+                                    //                                         }
+                                    //                                     });
+                                    //                                 }).catch(err => {
+                                    //                                     console.log("track 1");
+                                    //                                     return res.status(200).send({
+                                    //                                         status: 400,
+                                    //                                         message: err.message,
+                                    //                                         successData: {}
+                                    //                                     });
+
+                                    //                                 });
+
+
+                                    //                             }).catch(err => {
+                                    //                                 console.log("track 2");
+                                    //                                 return res.status(200).send({
+                                    //                                     status: 400,
+                                    //                                     message: err.message,
+                                    //                                     successData: {}
+                                    //                                 });
+
+                                    //                             });
+
+
+                                    //                             //------ if any driver is accept to trip then stop fcm-------//
+
+                                    //                             clearInterval(intervalObj);
+
+
+                                    //                         }
+                                    //                     }).catch(err => {
+                                    //                         console.log("track 3");
+                                    //                         return res.status(200).send({
+                                    //                             status: 400,
+                                    //                             message: err.message,
+                                    //                             successData: {}
+                                    //                         });
+
+                                    //                     });
+
+                                    //                 }
+                                    //                 //----------- length is less then and stop loop fcm ------
+                                    //                 else {
+
+                                    //                     clearInterval(intervalObj);
+                                    //                     Trip.findOne({
+                                    //                         where: {
+                                    //                             id: trip.id
+                                    //                         }
+                                    //                     }).then(function (checking_anyone_accept) {
+                                    //                         if (!checking_anyone_accept.dataValues.driver_id) {
+
+                                    //                             //--------Delete Trip after no one is accept-----//
+                                    //                             Trip.destroy({
+                                    //                                 where: {
+                                    //                                     id: trip.id
+                                    //                                 }
+                                    //                             }).then(removedTrip => {
+
+
+                                    //                                 return res.status(200).send({
+                                    //                                     status: 400,
+                                    //                                     message: "All the drivers are busy please try again",
+                                    //                                     successData: {}
+                                    //                                 });
+
+
+                                    //                             }).catch(err => {
+                                    //                                 console.log("track 4");
+                                    //                                 return res.status(200).send({
+                                    //                                     status: 400,
+                                    //                                     message: err.message,
+                                    //                                 });
+                                    //                             });
+
+                                    //                         } else {
+
+                                    //                             var check_driver_lat_long = null;
+                                    //                             for (var i = 0; i < obj2.length; i++) {
+                                    //                                 if (obj2[i].driver_id == checking_anyone_accept.dataValues.driver_id) {
+                                    //                                     check_driver_lat_long = i;
+                                    //                                 }
+                                    //                             }
+                                    //                             Driver.findOne({
+                                    //                                 where: {
+                                    //                                     id: checking_anyone_accept.dataValues.driver_id
+                                    //                                 }
+                                    //                             }).then(driver_data => {
+                                    //                                 delete driver_data.dataValues.password;
+                                    //                                 Vehicle.findOne({
+                                    //                                     where: {
+                                    //                                         driver_id: driver_data.dataValues.id
+                                    //                                     }
+                                    //                                 }).then(vehicle_info => {
+                                    //                                     return res.status(200).send({
+                                    //                                         status: 200,
+                                    //                                         message: "Create Trip with accepted drivers  is successful",
+                                    //                                         successData: {
+                                    //                                             request_trip: trip,
+                                    //                                             accepted_driver: driver_data,
+                                    //                                             driver_current_location: {
+                                    //                                                 latitude: obj2[check_driver_lat_long].latitude,
+                                    //                                                 longitude: obj2[check_driver_lat_long].longitude
+                                    //                                             },
+                                    //                                             driver_vehicle_info: vehicle_info
+
+                                    //                                         }
+                                    //                                     });
+
+                                    //                                 }).catch(err => {
+                                    //                                     console.log("track 5");
+                                    //                                     return res.status(200).send({
+                                    //                                         status: 400,
+                                    //                                         message: err.message,
+                                    //                                         successData: {}
+                                    //                                     });
+
+                                    //                                 });
+
+
+                                    //                             }).catch(err => {
+                                    //                                 console.log("track 6");
+                                    //                                 return res.status(200).send({
+                                    //                                     status: 400,
+                                    //                                     message: err.message,
+                                    //                                     successData: {}
+                                    //                                 });
+
+                                    //                             });
+
+                                    //                         }
+                                    //                     })
+
+                                    //                 };
+
+                                    //             }, time);
+
+                                    //         })
+                                    //         .catch(function (error) {
+                                    //             console.log("Error sending message:", error);
+                                    //             return res.status(200).send({
+                                    //                 responsecode: 400,
+                                    //                 notification: response.results[0]
+                                    //             });
+                                    //         });
+
+
+                                    // } else {
+                                    //     return res.status(200).send({
+                                    //         status: 400,
+                                    //         message: "No driver is exist in your around",
+                                    //         successData: {}
+                                    //     });
+
+                                    // }
+
+
+                                    //new code 
                                     if (obj2.length > 0) {
+                                        console.log('total drivers: '+obj2.length);
+                                        console.log('fcm array: '+fcm_array);
                                         var payload = {
-                                            // notification: {
-                                            //     title: "trip_id",
-                                            //     body: trip.id.toString()
-                                            // },
-                                            data:{
+                                    
+                                            data: {
                                                 title: "trip_id",
                                                 body: trip.id.toString()
                                             }
@@ -137,42 +377,21 @@ exports.create_trip = (req, res) => {
                                             priority: "high",
                                             timeToLive: 60 * 60 * 24
                                         };
-                                        var intervalObj = null;
-                                        var temp = 1;
-                                        var time = 10000;
-                                        var fcm_token = null;
-                                        admin.messaging().sendToDevice(try_to_parse(obj2[0].fcm_token), payload, options)
-                                            .then(function (response) {
-                                                console.log("Successfully sent message:", response);
-                                                intervalObj = setInterval(function () {
 
-                                                    if (temp < obj2.length) {
+                                        admin.messaging().sendToDevice(fcm_array, payload, options)
+                                            .then(function (response) {
+                                                console.log("Successfully sent fcm:", response);
+                                                var time = 5000
+                                                const intervalObj = setInterval(() => {
+                                                    if (time <= 40000) {
                                                         Trip.findOne({
                                                             where: {
                                                                 id: trip.id
                                                             }
                                                         }).then((is_accepted_trip) => {
-                                                            if (!is_accepted_trip.dataValues.driver_id) {
-
-                                                                admin.messaging().sendToDevice(try_to_parse(obj2[temp].fcm_token), payload, options)
-                                                                    .then(function (response) {
-                                                                        console.log("Successfully sent message:", response);
-
-                                                                    })
-                                                                    .catch(function (error) {
-                                                                        console.log("Error sending message:", error);
-                                                                        return res.status(200).send({
-                                                                            responsecode: 400,
-                                                                            notification: response.results[0]
-                                                                        })
-
-                                                                    });
-
-
-                                                                temp = temp + 1;
-
-                                                            } else {
+                                                            if (is_accepted_trip.dataValues.driver_id) { //true condition any driver is accepted
                                                                 var check_driver_lat_long = null;
+
                                                                 for (var i = 0; i < obj2.length; i++) {
                                                                     if (obj2[i].driver_id == is_accepted_trip.dataValues.driver_id) {
                                                                         check_driver_lat_long = i;
@@ -226,128 +445,53 @@ exports.create_trip = (req, res) => {
                                                                 });
 
 
-                                                                //------ if any driver is accept to trip then stop fcm-------//
+                                                                //------ if any driver is accept to trip then stop loop for waiting response-------//
 
                                                                 clearInterval(intervalObj);
 
 
                                                             }
-                                                        }).catch(err => {
-                                                            console.log("track 3");
-                                                            return res.status(200).send({
-                                                                status: 400,
-                                                                message: err.message,
-                                                                successData: {}
-                                                            });
 
                                                         });
-
-                                                    }
-                                                    //----------- length is less then and stop loop fcm ------
-                                                    else {
-
-                                                        clearInterval(intervalObj);
-                                                        Trip.findOne({
+                                                        time = time + 5000;
+                                                    } else {
+                                                        
+                                                      
+                                                        //--------Delete Trip after no one is accept-----//
+                                                        Trip.destroy({
                                                             where: {
                                                                 id: trip.id
                                                             }
-                                                        }).then(function (checking_anyone_accept) {
-                                                            if (!checking_anyone_accept.dataValues.driver_id) {
-
-                                                                //--------Delete Trip after no one is accept-----//
-                                                                Trip.destroy({
-                                                                    where: {
-                                                                        id: trip.id
-                                                                    }
-                                                                }).then(removedTrip => {
+                                                        }).then(removedTrip => {
+                                                            console.log('object is distory and trip_id: '+trip.id);
+                                                            return res.status(200).send({
+                                                                status: 400,
+                                                                message: "All the drivers are busy please try again",
+                                                                successData: {}
+                                                            });
 
 
-                                                                    return res.status(200).send({
-                                                                        status: 400,
-                                                                        message: "All the drivers are busy please try again",
-                                                                        successData: {}
-                                                                    });
+                                                        }).catch(err => {
+                                                            console.log("track 4");
+                                                            return res.status(200).send({
+                                                                status: 400,
+                                                                message: err.message,
+                                                            });
+                                                        });
+                                                        clearInterval(intervalObj);
+                                                    }
 
-
-                                                                }).catch(err => {
-                                                                    console.log("track 4");
-                                                                    return res.status(200).send({
-                                                                        status: 400,
-                                                                        message: err.message,
-                                                                    });
-                                                                });
-
-                                                            } else {
-
-                                                                var check_driver_lat_long = null;
-                                                                for (var i = 0; i < obj2.length; i++) {
-                                                                    if (obj2[i].driver_id == checking_anyone_accept.dataValues.driver_id) {
-                                                                        check_driver_lat_long = i;
-                                                                    }
-                                                                }
-                                                                Driver.findOne({
-                                                                    where: {
-                                                                        id: checking_anyone_accept.dataValues.driver_id
-                                                                    }
-                                                                }).then(driver_data => {
-                                                                    delete driver_data.dataValues.password;
-                                                                    Vehicle.findOne({
-                                                                        where: {
-                                                                            driver_id: driver_data.dataValues.id
-                                                                        }
-                                                                    }).then(vehicle_info => {
-                                                                        return res.status(200).send({
-                                                                            status: 200,
-                                                                            message: "Create Trip with accepted drivers  is successful",
-                                                                            successData: {
-                                                                                request_trip: trip,
-                                                                                accepted_driver: driver_data,
-                                                                                driver_current_location: {
-                                                                                    latitude: obj2[check_driver_lat_long].latitude,
-                                                                                    longitude: obj2[check_driver_lat_long].longitude
-                                                                                },
-                                                                                driver_vehicle_info: vehicle_info
-
-                                                                            }
-                                                                        });
-
-                                                                    }).catch(err => {
-                                                                        console.log("track 5");
-                                                                        return res.status(200).send({
-                                                                            status: 400,
-                                                                            message: err.message,
-                                                                            successData: {}
-                                                                        });
-
-                                                                    });
-
-
-                                                                }).catch(err => {
-                                                                    console.log("track 6");
-                                                                    return res.status(200).send({
-                                                                        status: 400,
-                                                                        message: err.message,
-                                                                        successData: {}
-                                                                    });
-
-                                                                });
-
-                                                            }
-                                                        })
-
-                                                    };
 
                                                 }, time);
-
                                             })
                                             .catch(function (error) {
                                                 console.log("Error sending message:", error);
                                                 return res.status(200).send({
                                                     responsecode: 400,
                                                     notification: response.results[0]
-                                                });
-                                            });
+                                                })
 
+                                            });
 
                                     } else {
                                         return res.status(200).send({
@@ -355,7 +499,6 @@ exports.create_trip = (req, res) => {
                                             message: "No driver is exist in your around",
                                             successData: {}
                                         });
-
                                     }
                                 }
                             }).catch(err => {
