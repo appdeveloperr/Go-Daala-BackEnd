@@ -370,10 +370,7 @@ exports.create_trip = (req, res) => {
                                         console.log('total drivers: '+obj2.length);
                                         console.log('fcm array: '+fcm_array);
                                         var payload = {
-                                            // notification: {
-                                            //     title: "trip_id",
-                                            //     body: trip.id.toString()
-                                            // },
+                                    
                                             data: {
                                                 title: "trip_id",
                                                 body: trip.id.toString()
@@ -390,7 +387,7 @@ exports.create_trip = (req, res) => {
                                                 console.log("Successfully sent fcm:", response);
                                                 var time = 5000
                                                 const intervalObj = setInterval(() => {
-                                                    if (time <= 60000) {
+                                                    if (time <= 50000) {
                                                         Trip.findOne({
                                                             where: {
                                                                 id: trip.id
@@ -461,9 +458,9 @@ exports.create_trip = (req, res) => {
 
                                                         });
                                                         time = time + 5000;
-                                                    } else {
-                                                        clearInterval(intervalObj);
-                                                      
+                                                    } 
+                                                        
+                                                    clearInterval(intervalObj);
                                                         //--------Delete Trip after no one is accept-----//
                                                         Trip.destroy({
                                                             where: {
@@ -471,12 +468,14 @@ exports.create_trip = (req, res) => {
                                                             }
                                                         }).then(removedTrip => {
                                                             console.log('object is distory and trip_id: '+trip.id);
+
                                                             return res.status(200).send({
                                                                 status: 400,
                                                                 message: "All the drivers are busy please try again",
                                                                 successData: {}
                                                             });
-
+                                                            
+            
 
                                                         }).catch(err => {
                                                             console.log("track 4");
@@ -485,10 +484,19 @@ exports.create_trip = (req, res) => {
                                                                 message: err.message,
                                                             });
                                                         });
-                                                    }
+                                                        clearInterval(intervalObj);
+                                                    
 
 
                                                 }, time);
+
+                                                return res.status(200).send({
+                                                    status: 400,
+                                                    message: "All the drivers are busy please try again",
+                                                    successData: {}
+                                                });
+                                                
+
                                             })
                                             .catch(function (error) {
                                                 console.log("Error sending message:", error);
