@@ -491,7 +491,8 @@ exports.cencal_trip = (req, res) => {
                                     body: trip[1].id.toString()
                                 }, data:{
                                     title: "Driver Cancel The Trip",
-                                    body: trip[1].id.toString()
+                                    body: trip[1].id.toString(),
+                                    price:req.body.price.toString()
                                 }
                             };
 
@@ -508,22 +509,10 @@ exports.cencal_trip = (req, res) => {
                                         status: 200,
                                         message: "Driver cencal trip  is successfull",
                                         successData: {
-                                            trip: {
-                                                id: trip[1].id,
-                                                pickup: trip[1].pickup,
-                                                dropoff: trip[1].dropoff,
-                                                pickup_latitude: trip[1].pickup_latitude,
-                                                pick_longitude: trip[1].pick_longitude,
-                                                vehicle_name: trip[1].vehicle_name,
-                                                estimated_distance: trip[1].estimated_distance,
-                                                estimated_time: trip[1].estimated_time,
-                                                total_cost: trip[1].total_cost,
-                                                driver_id: trip[1].driver_id,
-                                                vendor_id: trip[1].vendor_id,
-                                                status: trip[1].status
+                                            trip: trip[1]
 
 
-                                            }
+                                            
                                         }
                                     });
                                 }).catch(err => {
@@ -702,34 +691,7 @@ exports.end_trip = (req, res) => {
         }
         console.log("MYARRAYYYY SIZE: " + myarray.length)
 
-        var payload = {
-            notification: {
-                title: "Completed trip",
-                body: req.body.trip_id.toString()
-            }, data:{
-                title: "Completed trip",
-                body: req.body.trip_id.toString()
-            }
-        };
-
-        var options = {
-            priority: "high",
-            timeToLive: 60 * 60 * 24
-        };
-
-
-        admin.messaging().sendToDevice(myarray, payload, options)
-            .then(function (response) {
-                console.log("Successfully sent message:", response);
-            })
-            .catch(function (error) {
-                console.log("Error sending message:", error);
-                return res.status(200).send({
-                    responsecode: 400,
-                    notification: response.results[0]
-                })
-
-            });
+       
 
         // Save vendor to Database
         Trip.update({
@@ -743,6 +705,32 @@ exports.end_trip = (req, res) => {
                 returning: true,
                 plain: true
             }).then(trip => {
+                var total_cost =  parseInt(trip[1].total_cost) + parseInt(trip[1].loading_cost);
+                total_cost = total_cost + parseInt(req.body.unloading_cost);
+                var payload = {
+                    notification: {
+                        title: "Completed trip",
+                        body: req.body.trip_id.toString()
+                    }, data:{
+                        title: "Completed trip",
+                        body: req.body.trip_id.toString(),
+                        total_cost:total_cost.toString()
+                    }
+                };
+        
+                var options = {
+                    priority: "high",
+                    timeToLive: 60 * 60 * 24
+                };
+        
+        
+                admin.messaging().sendToDevice(myarray, payload, options)
+                    .then(function (response) {
+                        console.log("Successfully sent message:", response);
+                    })
+                    .catch(function (error) {
+                        console.log("Error sending fcm message:", error);
+                    });
 
                 Driver_lat_long.update({
                     status: "available"
