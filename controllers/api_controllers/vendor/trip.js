@@ -1068,20 +1068,49 @@ exports.trip_detail = (req, res) => {
                     }
                 ]
             }).then(trip => {
+                if(trip.dataValues.driver_id){
+                    driver_lat_long.findOne({where:{
+                        driver_id:trip.dataValues.driver_id
+                    }}).then(Driver_lat_long=>{
+                        if(Driver_lat_long){
+                            return res.status(200).send({
+                                status: 200,
+                                message: "trip detail is successfully",
+                                successData: {
+                                    trip: trip.dataValues,
+                                    Driver_lat_long:Driver_lat_long.dataValues
+                                }
+                            });
+                        }else{
+                            return res.status(200).send({
+                                status: 200,
+                                message: "trip detail is successfully",
+                                successData: {
+                                    trip: trip.dataValues,
+                                    Driver_lat_long:''
+                                }
+                            });
+                        }
+                    }).catch(err => {
 
-
-
-
-                return res.status(200).send({
-                    status: 200,
-                    message: "trip detail is successfully",
-                    successData: {
-                        trip: trip.dataValues
-                    }
-                });
-
-
-
+                        return res.status(200).send({
+                            status: 400,
+                            message: "error in trip detail api gating driver lat long:" + err.message,
+                            successData: {}
+                        });
+        
+                    });
+                }else{
+                    return res.status(200).send({
+                        status: 200,
+                        message: "trip detail is successfully",
+                        successData: {
+                            trip: trip.dataValues,
+                            Driver_lat_long:''
+                        }
+                    });
+                }
+          
             }).catch(err => {
 
                 return res.status(200).send({
