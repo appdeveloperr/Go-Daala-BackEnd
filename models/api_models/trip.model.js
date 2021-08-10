@@ -36,6 +36,12 @@ module.exports = (sequelize, Sequelize) => {
       total_cost: {
         type: Sequelize.STRING
       },
+      loading_cost: {
+        type: Sequelize.STRING
+      },
+      unloading_cost: {
+        type: Sequelize.STRING
+      },
       status: {
         type: Sequelize.STRING
       },

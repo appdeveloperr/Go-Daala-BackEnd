@@ -575,7 +575,7 @@ exports.start_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     req.checkBody('driver_id', 'please provide driver id!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver_fcm!').notEmpty();
-
+    req.checkBody('loading_cast', 'please provide loading_cast!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -592,6 +592,7 @@ exports.start_trip = (req, res) => {
         Trip.update({
             driver_id: req.body.driver_id,
             status: "start",
+            loading_cast:req.body.loading_cast
 
         },
             {
@@ -636,23 +637,8 @@ exports.start_trip = (req, res) => {
                             status: 200,
                             message: "Driver start trip  is successfull",
                             successData: {
-                                trip: {
-                                    id: trip[1].id,
-                                    pickup: trip[1].pickup,
-                                    dropoff: trip[1].dropoff,
-                                    pickup_lat: trip[1].pickup_lat,
-                                    pickup_long: trip[1].pickup_long,
-                                    dropoff_lat: trip[1].dropoff_lat,
-                                    dropoff_long: trip[1].dropoff_long,
-                                    vehicle_name: trip[1].vehicle_name,
-                                    estimated_distance: trip[1].estimated_distance,
-                                    estimated_time: trip[1].estimated_time,
-                                    total_cost: trip[1].total_cost,
-                                    driver_id: trip[1].driver_id,
-                                    vendor_id: trip[1].vendor_id,
-                                    status: trip[1].status
-
-                                }
+                                trip: trip[1]
+                                   
                             }
                         });
                     })
@@ -686,7 +672,7 @@ exports.end_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     req.checkBody('driver_id', 'please provide driver id!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver_fcm!').notEmpty();
-
+    req.checkBody('unloading_cast', 'please provide unloading_cast!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -749,6 +735,7 @@ exports.end_trip = (req, res) => {
         Trip.update({
             driver_id: req.body.driver_id,
             status: "end",
+            unloading_cast:req.body.unloading_cast
 
         },
             {
@@ -779,22 +766,7 @@ exports.end_trip = (req, res) => {
                                         status: 200,
                                         message: "Driver end trip  is successfull",
                                         successData: {
-                                            trip: {
-                                                id: trip[1].id,
-                                                pickup: trip[1].pickup,
-                                                dropoff: trip[1].dropoff,
-                                                pickup_latitude: trip[1].pickup_latitude,
-                                                pick_longitude: trip[1].pick_longitude,
-                                                vehicle_name: trip[1].vehicle_name,
-                                                estimated_distance: trip[1].estimated_distance,
-                                                estimated_time: trip[1].estimated_time,
-                                                total_cost: trip[1].total_cost,
-                                                driver_id: trip[1].driver_id,
-                                                vendor_id: trip[1].vendor_id,
-                                                status: trip[1].status
-
-
-                                            }
+                                            trip: trip[1]
                                         }
                                     });
 
@@ -824,22 +796,7 @@ exports.end_trip = (req, res) => {
                             status: 200,
                             message: "Driver end trip  is successfull",
                             successData: {
-                                trip: {
-                                    id: trip[1].id,
-                                    pickup: trip[1].pickup,
-                                    dropoff: trip[1].dropoff,
-                                    pickup_latitude: trip[1].pickup_latitude,
-                                    pick_longitude: trip[1].pick_longitude,
-                                    vehicle_name: trip[1].vehicle_name,
-                                    estimated_distance: trip[1].estimated_distance,
-                                    estimated_time: trip[1].estimated_time,
-                                    total_cost: trip[1].total_cost,
-                                    driver_id: trip[1].driver_id,
-                                    vendor_id: trip[1].vendor_id,
-                                    status: trip[1].status
-
-
-                                }
+                                trip: trip[i]
                             }
                         });
 
