@@ -575,7 +575,7 @@ exports.start_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     req.checkBody('driver_id', 'please provide driver id!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver_fcm!').notEmpty();
-    req.checkBody('loading_cast', 'please provide loading_cast!').notEmpty();
+    req.checkBody('loading_cost', 'please provide loading_cost!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -592,7 +592,7 @@ exports.start_trip = (req, res) => {
         Trip.update({
             driver_id: req.body.driver_id,
             status: "start",
-            loading_cast:req.body.loading_cast
+            loading_cost:req.body.loading_cost
 
         },
             {
@@ -672,7 +672,7 @@ exports.end_trip = (req, res) => {
     req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     req.checkBody('driver_id', 'please provide driver id!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver_fcm!').notEmpty();
-    req.checkBody('unloading_cast', 'please provide unloading_cast!').notEmpty();
+    req.checkBody('unloading_cost', 'please provide unloading_cost!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
