@@ -840,74 +840,72 @@ exports.trip_detail = (req, res) => {
         });
     } else {
 
-
-
-        Trip.update({
-            customer_id: req.body.customer_id
-        },
+        Trip.findOne(
             {
-                where: { id: req.body.trip_id },
-                returning: true,
-                plain: true
-            }).then(updatedtrip => {
-
-
-
-                Trip.findOne(
+                where:
+                    { id: req.body.trip_id },
+                include: [
                     {
-                        where:
-                            { id: req.body.trip_id },
-                        include: [
-                            {
-                                model: driver
-                            },
-                            {
-                                model: customer
-                            },
-                            {
-                                model: vendor
-                            }
-                        ]
-                    }).then(trip => {
-        
-        
-                        return res.status(200).send({
-                            status: 200,
-                            message: "trip detail is successfully",
-                            successData: {
-                                trip: trip.dataValues
-                            }
-                        });
-        
-        
-        
+                        model: driver
+                    }, {
+                        model: customer
+                    }
+                ]
+            }).then(trip => {
+                if(trip.dataValues.driver_id){
+                    driver_lat_long.findOne({where:{
+                        driver_id:trip.dataValues.driver_id
+                    }}).then(Driver_lat_long=>{
+                        if(Driver_lat_long){
+                            return res.status(200).send({
+                                status: 200,
+                                message: "trip detail is successfully",
+                                successData: {
+                                    trip: trip.dataValues,
+                                    Driver_lat_long:Driver_lat_long.dataValues
+                                }
+                            });
+                        }else{
+                            return res.status(200).send({
+                                status: 200,
+                                message: "trip detail is successfully",
+                                successData: {
+                                    trip: trip.dataValues,
+                                    Driver_lat_long:''
+                                }
+                            });
+                        }
                     }).catch(err => {
-        
+
                         return res.status(200).send({
                             status: 400,
-                            message: "error in trip detail apis:" + err.message,
+                            message: "error in trip detail api gating driver lat long:" + err.message,
                             successData: {}
                         });
         
                     });
-        
-        
-
-
-                
+                }else{
+                    return res.status(200).send({
+                        status: 200,
+                        message: "trip detail is successfully",
+                        successData: {
+                            trip: trip.dataValues,
+                            Driver_lat_long:''
+                        }
+                    });
+                }
+          
             }).catch(err => {
 
                 return res.status(200).send({
                     status: 400,
-                    message: "error in trip update apis:" + err.message,
+                    message: "error in trip detail apis:" + err.message,
                     successData: {}
                 });
 
             });
 
 
-
-   
     }
 
 
