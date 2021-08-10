@@ -470,6 +470,7 @@ exports.create_trip = (req, res) => {
                                                                 id: trip.id
                                                             }
                                                         }).then(removedTrip => {
+                                                            console.log('object is distory and trip_id: '+trip.id);
                                                             return res.status(200).send({
                                                                 status: 400,
                                                                 message: "All the drivers are busy please try again",
@@ -588,6 +589,7 @@ exports.test_lat_log = function (req, res) {
     var time = 5000
     const intervalObj = setInterval(() => {
         if (time <= 60000) {
+            
             console.log('interviewing the interval time = ' + time);
             time = time + 5000;
         } else {
@@ -822,6 +824,7 @@ exports.cancel_trip = (req, res) => {
     req.checkBody('vendor_id', 'please provide vendor id!').notEmpty();
     req.checkBody('vendor_fcm', 'please provide vendor fcm!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver fcm!').notEmpty();
+    req.checkBody('price', 'please provide price').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -838,7 +841,8 @@ exports.cancel_trip = (req, res) => {
         Trip.update({
             vendor_id: req.body.vendor_id,
             status: "cancel",
-            how_cancel: "vendor"
+            how_cancel: "vendor",
+            total_cost:req.body.price
 
         },
             {
@@ -883,7 +887,8 @@ exports.cancel_trip = (req, res) => {
                                             body: trip[1].id.toString()
                                         }, data: {
                                             title: "Vendor Cancel Trip",
-                                            body: trip[1].id.toString()
+                                            body: trip[1].id.toString(),
+                                            price:req.body.price.toString()
                                         }
                                     };
 

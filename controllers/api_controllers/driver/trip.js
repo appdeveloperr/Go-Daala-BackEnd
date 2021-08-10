@@ -380,7 +380,8 @@ exports.cencal_trip = (req, res) => {
         Trip.update({
             driver_id: req.body.driver_id,
             status: "cancel",
-            how_cancel: "driver"
+            how_cancel: "driver",
+            total_cost:req.body.price
 
         },
             {
@@ -423,7 +424,8 @@ exports.cencal_trip = (req, res) => {
                                             body: trip[1].id.toString()
                                         }, data:{
                                             title: "Driver Cancel The Trip",
-                                            body: trip[1].id.toString()
+                                            body: trip[1].id.toString(),
+                                            price:req.body.price.toString()
                                         }
                                     };
 
