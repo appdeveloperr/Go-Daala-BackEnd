@@ -61,6 +61,7 @@ exports.create_trip = (req, res) => {
         }).then(trip => {
             var obj = new Array();
             var obj2 = new Array();
+            var fcm_array = new Array();
 
             // var centerPoint = { lat: 31.571868, lng: 74.3309312 }; // office lat long 
             // var centerPoint = { lat: 31.506432, lng: 74.32437759999999 }; // model town lat long
@@ -109,7 +110,7 @@ exports.create_trip = (req, res) => {
                                                 obj[i].distance = n;
                                                 obj[i].fcm_token = driv.fcm_token;
                                                 obj2.push(obj[i]);
-
+                                                fcm_array.push(try_to_parse(driv.fcm_token));
                                             }
                                         });
                                     }
