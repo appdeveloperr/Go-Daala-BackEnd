@@ -387,7 +387,7 @@ exports.create_trip = (req, res) => {
                                                 console.log("Successfully sent fcm:", response);
                                                 var time = 5000
                                                 const intervalObj = setInterval(() => {
-                                                    if (time <= 60000) {
+                                                    if (time <= 40000) {
                                                         Trip.findOne({
                                                             where: {
                                                                 id: trip.id
