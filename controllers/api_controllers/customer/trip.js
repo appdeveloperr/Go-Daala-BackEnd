@@ -905,22 +905,7 @@ exports.cancel_trip = (req, res) => {
                                     status: 200,
                                     message: "Customer cencal trip  is successfull",
                                     successData: {
-                                        trip: {
-                                            id: trip[1].id,
-                                            pickup: trip[1].pickup,
-                                            dropoff: trip[1].dropoff,
-                                            pickup_latitude: trip[1].pickup_latitude,
-                                            pick_longitude: trip[1].pick_longitude,
-                                            vehicle_name: trip[1].vehicle_name,
-                                            estimated_distance: trip[1].estimated_distance,
-                                            estimated_time: trip[1].estimated_time,
-                                            total_cost: trip[1].total_cost,
-                                            driver_id: trip[1].driver_id,
-                                            customer_id: trip[1].customer_id,
-                                            status: trip[1].status
-
-
-                                        }
+                                        trip: trip[1]
                                     }
                                 });
                             })
@@ -1120,8 +1105,9 @@ exports.trip_share = (req, res) => {
                             .catch(function (error) {
                                 console.log("Error sending message:", error);
                                 return res.status(200).send({
-                                    responsecode: 400,
-                                    notification: response.results[0]
+                                    status: 400,
+                                    message: response.results[0],
+                                    successData:{}
                                 })
 
                             });

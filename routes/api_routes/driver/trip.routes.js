@@ -101,5 +101,15 @@ module.exports = function (app) {
         controller.get_single_date_with_cash,
     );
 
+
+      //------------driver loading_and_unloading api   Function----------------
+      app.post(
+        "/api/driver/loading_and_unloading",
+       driverAuthJwt.verifyToken,
+        controller.loading_and_unloading,
+    );
+
+
+
 };
 

@@ -79,22 +79,7 @@ exports.receive_trip = (req, res, next) => {
                                             status: 200,
                                             message: "Driver receive trip  is successful",
                                             successData: {
-                                                trip: {
-                                                    id: trip[1].id,
-                                                    pickup: trip[1].pickup,
-                                                    dropoff: trip[1].dropoff,
-                                                    pickup_lat: trip[1].pickup_lat,
-                                                    pickup_long: trip[1].pickup_long,
-                                                    dropoff_lat: trip[1].dropoff_lat,
-                                                    dropoff_long: trip[1].dropoff_long,
-                                                    vehicle_name: trip[1].vehicle_name,
-                                                    estimated_distance: trip[1].estimated_distance,
-                                                    estimated_time: trip[1].estimated_time,
-                                                    total_cost: trip[1].total_cost,
-                                                    driver_id: trip[1].driver_id,
-                                                    vendor_id: trip[1].customer_id,
-                                                    status: trip[1].status
-                                                },
+                                                trip: trip[1],
                                                 customer: customer_info,
                                                 vendor: null
                                             }
@@ -147,24 +132,7 @@ exports.receive_trip = (req, res, next) => {
                                             status: 200,
                                             message: "Driver receive trip  is successful",
                                             successData: {
-                                                trip: {
-                                                    id: trip[1].id,
-                                                    pickup: trip[1].pickup,
-                                                    dropoff: trip[1].dropoff,
-
-                                                    pickup_lat: trip[1].pickup_lat,
-                                                    pickup_long: trip[1].pickup_long,
-
-                                                    dropoff_lat: trip[1].dropoff_lat,
-                                                    dropoff_long: trip[1].dropoff_long,
-                                                    vehicle_name: trip[1].vehicle_name,
-                                                    estimated_distance: trip[1].estimated_distance,
-                                                    estimated_time: trip[1].estimated_time,
-                                                    total_cost: trip[1].total_cost,
-                                                    driver_id: trip[1].driver_id,
-                                                    vendor_id: trip[1].vendor_id,
-                                                    status: trip[1].status
-                                                },
+                                                trip:trip[1],
                                                 vendor: vendor_info,
                                                 customer: null
                                             }
@@ -558,6 +526,72 @@ exports.cencal_trip = (req, res) => {
     }
 }
 
+//--------------driver loading_and_unloading time trip---------------
+exports.loading_and_unloading= (req, res) =>{
+    req.checkBody('driver_fcm', 'please provide driver_fcm!').notEmpty();
+    req.checkBody('vendor_fcm', 'please provide vendor_fcm!').notEmpty();
+    req.checkBody('customer_fcm', 'please provide customer_fcm!').notEmpty();
+    req.checkBody('title', 'please provide title!').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in loading_and_unloading time Trip",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+        var myarray = [];
+        console.log("Customer FCM: " + req.body.customer_fcm + " / Vendor FCM: " + req.body.vendor_fcm + " / Driver FCM: " + req.body.driver_fcm)
+        if (req.body.customer_fcm !== null && req.body.customer_fcm !== "null" && req.body.customer_fcm !== '') {
+            myarray.push(try_to_parse(req.body.customer_fcm));
+        }
+
+        if (req.body.vendor_fcm !== null && req.body.vendor_fcm !== "null" && req.body.vendor_fcm !== '') {
+            myarray.push(try_to_parse(req.body.vendor_fcm));
+        }
+        if (req.body.driver_fcm !== null && req.body.driver_fcm !== "null" && req.body.driver_fcm !== '') {
+            myarray.push(try_to_parse(req.body.driver_fcm));
+        }
+        console.log("MYARRAYYYY SIZE CUSTOMER CREATED: " + myarray.length)
+
+        var payload = {
+           data:{
+                title:req.body.title.toString()
+            }
+        };
+
+        var options = {
+            priority: "high",
+            timeToLive: 60 * 60 * 24
+        };
+
+        admin.messaging().sendToDevice(myarray, payload, options)
+            .then(function (response) {
+                console.log("Successfully sent message:", response);
+                return res.status(200).send({
+                    status: 200,
+                    message: req.body.title.toString()+" time successfull",
+                    successData: { }
+                });
+            })
+            .catch(function (error) {
+                console.log("Error sending message:", error);
+                return res.status(200).send({
+                    status: 400,
+                    message: error.results[0],
+                    successData:{}
+                })
+
+            });
+    }
+}
+
+
+
 
 //--------------driver start trip---------------
 exports.start_trip = (req, res) => {
@@ -578,6 +612,7 @@ exports.start_trip = (req, res) => {
         });
     } else {
         // Save vendor to Database
+       
         Trip.update({
             driver_id: req.body.driver_id,
             status: "start",
@@ -610,7 +645,8 @@ exports.start_trip = (req, res) => {
                         body: trip[1].id.toString()
                     }, data:{
                         title: "Start trip",
-                        body: trip[1].id.toString()
+                        body: trip[1].id.toString(),
+                        loading_cost:"Loading Cost:"+trip[1].loading_cost.toString()
                     }
                 };
 
@@ -714,7 +750,8 @@ exports.end_trip = (req, res) => {
                     }, data:{
                         title: "Completed trip",
                         body: req.body.trip_id.toString(),
-                        total_cost:total_cost.toString()
+                        total_cost:total_cost.toString(),
+                        unloading_cost: "UnLoading Cost: "+req.body.unloading_cost.toString()
                     }
                 };
         

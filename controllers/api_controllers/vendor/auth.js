@@ -74,8 +74,8 @@ exports.signup = (req, res) => {
                     if (err) console.log("error occured");
                 });
 
-                var cnic_Text = 'profile-1' + Date.now() + req.files.cnic_Text.name;
-                req.files.cnic_Text.mv(path_file + '' + cnic_Text, function (err) {
+                var store_image = 'store_image-1' + Date.now() + req.files.store_image.name;
+                req.files.store_image.mv(path_file + '' + store_image, function (err) {
                     if (err) console.log("error occured");
                 });
 
@@ -94,30 +94,19 @@ exports.signup = (req, res) => {
                     total_rating:"0",
                     total_review:"0",
                     bussiness_name:req.body.bussiness_name,
-                    store_image:'/files/uploadsFiles/vendor/' +cnic_Text
+                    store_image:'/files/uploadsFiles/vendor/' +store_image
                     //  
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret);
 
+                    delete user.dataValues.password; 
 
                     return res.status(200).send({
                         status: 200,
                         message: "Signing Up is successful",
                         successData: {
-                            user: {
-                                id: user.id,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                email: user.email,
-                                phone_number: user.phone_number,
-                                profile: user.profile,
-                                account_info: user.account_info,
-                                fcm_token: user.fcm_token,
-                                accessToken: token,
-                                bussiness_name:user.bussiness_name,
-                                store_image:user.store_image
-                            }
+                            user: user
                         }
                     });
 

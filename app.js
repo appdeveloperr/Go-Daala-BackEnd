@@ -56,10 +56,10 @@ const User = db.user;
 
 // force: true will drop the table if it already exists
 
-db.sequelize.sync({force: ture}).then(() => {
-console.log('Drop and Resync Database with { force: true }');
- initial();
- });
+// db.sequelize.sync({force: ture}).then(() => {
+// console.log('Drop and Resync Database with { force: true }');
+//  initial();
+//  });
 
 
 

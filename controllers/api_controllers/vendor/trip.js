@@ -903,22 +903,7 @@ exports.cancel_trip = (req, res) => {
                                                 status: 200,
                                                 message: "Vendor cencal trip  is successfull",
                                                 successData: {
-                                                    trip: {
-                                                        id: trip[1].id,
-                                                        pickup: trip[1].pickup,
-                                                        dropoff: trip[1].dropoff,
-                                                        pickup_latitude: trip[1].pickup_latitude,
-                                                        pick_longitude: trip[1].pick_longitude,
-                                                        vehicle_name: trip[1].vehicle_name,
-                                                        estimated_distance: trip[1].estimated_distance,
-                                                        estimated_time: trip[1].estimated_time,
-                                                        total_cost: trip[1].total_cost,
-                                                        driver_id: trip[1].driver_id,
-                                                        vendor_id: trip[1].vendor_id,
-                                                        status: trip[1].status
-
-
-                                                    }
+                                                    trip: trip[1]
                                                 }
                                             });
                                         })
@@ -958,9 +943,11 @@ exports.cancel_trip = (req, res) => {
                                     body: trip[1].id.toString()
                                 }, data: {
                                     title: "Vendor Cancel Trip",
-                                    body: trip[1].id.toString()
+                                    body: trip[1].id.toString(),
+                                    price:req.body.price.toString()
                                 }
                             };
+                  
 
                             var options = {
                                 priority: "high",
@@ -975,22 +962,7 @@ exports.cancel_trip = (req, res) => {
                                         status: 200,
                                         message: "Vendor cencal trip  is successfull",
                                         successData: {
-                                            trip: {
-                                                id: trip[1].id,
-                                                pickup: trip[1].pickup,
-                                                dropoff: trip[1].dropoff,
-                                                pickup_latitude: trip[1].pickup_latitude,
-                                                pick_longitude: trip[1].pick_longitude,
-                                                vehicle_name: trip[1].vehicle_name,
-                                                estimated_distance: trip[1].estimated_distance,
-                                                estimated_time: trip[1].estimated_time,
-                                                total_cost: trip[1].total_cost,
-                                                driver_id: trip[1].driver_id,
-                                                vendor_id: trip[1].vendor_id,
-                                                status: trip[1].status
-
-
-                                            }
+                                            trip: trip[1]
                                         }
                                     });
                                 })
