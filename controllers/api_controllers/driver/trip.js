@@ -1148,7 +1148,6 @@ exports.get_single_date_with_cash = (req, res) => {
                     [Op.between]: [req.body.Date, req.body.Date + ' 23:59:59.000 +00:00'],
 					
                 },
-				,
 				 status: {
                     [Op.ne]: 'wait',
                 },
