@@ -881,10 +881,7 @@ exports.cancel_trip = (req, res) => {
                         myarray.push(try_to_parse(req.body.driver_fcm));
 
                         var payload = {
-                            notification: {
-                                title: "Customer Cancel Trip",
-                                body: trip[1].id.toString()
-                            },
+                          
                             data:{
                                 title: "Customer Cancel Trip",
                                 body: trip[1].id.toString(),
@@ -1076,10 +1073,7 @@ exports.trip_share = (req, res) => {
                     if (user) {
                         console.log("this is fcm : " + user.dataValues.fcm_token);
                         var payload = {
-                            notification: {
-                                title: "trip_id",
-                                body: req.body.trip_id.toString()
-                            },
+                      
                             data:{
                                 title: "trip_id",
                                 body: req.body.trip_id.toString()

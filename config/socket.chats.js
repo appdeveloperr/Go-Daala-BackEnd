@@ -96,10 +96,7 @@ exports.socket_io = function (io) {
             console.log(formatMessage(user.username, message));
             const user_format = formatMessage(user.username, message);
             var payload = {
-                notification: {
-                    title: user_format.text.username,
-                    body: user_format.text.message
-                },
+               
                 data:{
                     title: user_format.text.username,
                     body: user_format.text.message

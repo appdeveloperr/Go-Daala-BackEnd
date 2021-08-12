@@ -387,10 +387,7 @@ exports.cencal_trip = (req, res) => {
                                     myarray.push(try_to_parse(req.body.driver_fcm));
 
                                     var payload = {
-                                        notification: {
-                                            title: "Driver Cancel The Trip",
-                                            body: trip[1].id.toString()
-                                        }, data:{
+                                         data:{
                                             title: "Driver Cancel The Trip",
                                             body: trip[1].id.toString(),
                                             price:req.body.price.toString()
@@ -454,10 +451,7 @@ exports.cencal_trip = (req, res) => {
                             myarray.push(try_to_parse(req.body.driver_fcm));
 
                             var payload = {
-                                notification: {
-                                    title: "Driver Cancel The Trip",
-                                    body: trip[1].id.toString()
-                                }, data:{
+                                data:{
                                     title: "Driver Cancel The Trip",
                                     body: trip[1].id.toString(),
                                     price:req.body.price.toString()
@@ -640,10 +634,7 @@ exports.start_trip = (req, res) => {
                 console.log("MYARRAYYYY SIZE CUSTOMER CREATED: " + myarray.length)
 
                 var payload = {
-                    notification: {
-                        title: "Start trip",
-                        body: trip[1].id.toString()
-                    }, data:{
+                    data:{
                         title: "Start trip",
                         body: trip[1].id.toString(),
                         loading_cost:"Loading Cost:"+trip[1].loading_cost.toString()
@@ -744,10 +735,7 @@ exports.end_trip = (req, res) => {
                 var total_cost =  parseInt(trip[1].total_cost) + parseInt(trip[1].loading_cost);
                 total_cost = total_cost + parseInt(req.body.unloading_cost);
                 var payload = {
-                    notification: {
-                        title: "Completed trip",
-                        body: req.body.trip_id.toString()
-                    }, data:{
+                    data:{
                         title: "Completed trip",
                         body: req.body.trip_id.toString(),
                         total_cost:total_cost.toString(),
