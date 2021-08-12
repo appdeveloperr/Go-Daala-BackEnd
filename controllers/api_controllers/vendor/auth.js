@@ -99,7 +99,7 @@ exports.signup = (req, res) => {
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret);
-
+                    user.dataValues.accessToken = token;
                     delete user.dataValues.password; 
 
                     return res.status(200).send({
