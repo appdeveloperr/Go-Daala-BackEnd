@@ -996,7 +996,10 @@ exports.get_all_trips_with_cash = (req, res) => {
         var total_trips = 0;
         Trip.findAll({
             where: {
-                driver_id: req.body.driver_id
+                driver_id: req.body.driver_id,
+				 status: {
+                    [Op.ne]: 'wait',
+                }
             },
             order: [
                 ['id', 'DESC'],
@@ -1070,6 +1073,9 @@ exports.get_selected_date_with_cash = (req, res) => {
                 createdAt: {
                     [Op.between]: [req.body.start, req.body.end],
                 },
+				 status: {
+                    [Op.ne]: 'wait',
+                },
             },
             order: [['createdAt', 'ASC']],
             // limit: count,
@@ -1140,7 +1146,12 @@ exports.get_single_date_with_cash = (req, res) => {
                 driver_id: req.body.driver_id,
                 createdAt: {
                     [Op.between]: [req.body.Date, req.body.Date + ' 23:59:59.000 +00:00'],
-                }
+					
+                },
+				,
+				 status: {
+                    [Op.ne]: 'wait',
+                },
             }
             //,
             // order: [['createdAt', 'ASC']],
