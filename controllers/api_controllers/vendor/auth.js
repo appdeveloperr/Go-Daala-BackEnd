@@ -19,7 +19,7 @@ exports.signup = (req, res) => {
     req.checkBody('password', 'password must have value!').notEmpty();
     req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
     req.checkBody('bussiness_name', 'Please provide a bussiness name needed!').notEmpty();
-    req.checkBody('store_image', 'Please provide a store image needed!').notEmpty();
+  
     var errors = req.validationErrors();
     if (errors) {                    
         console.log("VENDOR ERROR 0");
