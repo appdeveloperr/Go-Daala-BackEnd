@@ -1130,7 +1130,7 @@ exports.trip_share = (req, res) => {
                         console.log("this is fcm : " + user.dataValues.fcm_token);
                         var payload = {
                           data: {
-                                title: "trip_id",
+                                title: "Share Trip",
                                 body: req.body.trip_id.toString()
                             }
                         };
