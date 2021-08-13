@@ -809,7 +809,7 @@ exports.end_trip = (req, res) => {
                             status: 200,
                             message: "Driver end trip  is successfull",
                             successData: {
-                                trip: trip[i]
+                                trip: trip[1]
                             }
                         });
 
