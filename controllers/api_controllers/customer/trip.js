@@ -976,7 +976,7 @@ exports.trip_detail = (req, res) => {
                     }, {
                         model: db.customer
                     }, {
-                        model: db.customer
+                        model: db.vendor
                     }
                 ]
             }).then(trip => {
