@@ -1026,9 +1026,11 @@ exports.trip_detail = (req, res) => {
                     { id: req.body.trip_id },
                 include: [
                     {
-                        model: driver
+                        model: db.driver
                     }, {
-                        model: vendor
+                        model: db.vendor
+                    },{
+                        model:db.customer
                     }
                 ]
             }).then(trip => {
