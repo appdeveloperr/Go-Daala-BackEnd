@@ -19,7 +19,7 @@ exports.signup = (req, res) => {
     req.checkBody('password', 'password must have value!').notEmpty();
     req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
     req.checkBody('bussiness_name', 'Please provide a bussiness name needed!').notEmpty();
-  
+	req.checkBody('business_type', 'Please provide a business type needed!').notEmpty();
     var errors = req.validationErrors();
     if (errors) {                    
         console.log("VENDOR ERROR 0");
@@ -94,7 +94,8 @@ exports.signup = (req, res) => {
                     total_rating:"0",
                     total_review:"0",
                     bussiness_name:req.body.bussiness_name,
-                    store_image:'/files/uploadsFiles/vendor/' +store_image
+                    store_image:'/files/uploadsFiles/vendor/' +store_image,
+					business_type:req.body.business_type
                     //  
                 }).then(user => {
 
