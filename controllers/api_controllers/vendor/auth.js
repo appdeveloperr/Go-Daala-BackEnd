@@ -291,22 +291,13 @@ exports.signin = (req, res) => {
                 returning: true,
                 plain: true
                 }).then(user => {
-
+                    delete user[1].dataValues.password;
+                    user[1].dataValues.accessToken = token;
                     return res.status(200).send({
                         status: 200,
                         message: "Login Successfull.",
                         successData: {
-                            user: {
-                                id: user[1].id,
-                                first_name: user[1].first_name,
-                                last_name: user[1].last_name,
-                                email: user[1].email,
-                                phone_number: user[1].phone_number,
-                                profile: user[1].profile,
-                                account_info: user[1].account_info,
-                                fcm_token:user[1].fcm_token,
-                                accessToken: token
-                            }
+                            user:user[1]
                         }
     
                     });
@@ -372,23 +363,14 @@ exports.update = (req, res) => {
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                 });
+                delete user[1].dataValues.password;
+                user[1].dataValues.accessToken = token;
 
                 return res.status(200).send({
                     status: 200,
                     message: "UPDATED is successful",
                     successData: {
-                        user: {
-                            id: user[1].id,
-                            first_name: user[1].first_name,
-                            last_name: user[1].last_name,
-                            email: user[1].email,
-                            phone_number: user[1].phone_number,
-                            profile: user[1].profile,
-                            account_info: user[1].account_info,
-                            accessToken: token,
-                            fcm_token:user[1].fcm_token
-
-                        }
+                        user:user[1]
                     }
                 });
             }
@@ -433,22 +415,14 @@ exports.forgot_password = function (req, res) {
             if (user != null || user != '') {
                 var token = jwt.sign({ id: user.id }, config.secret, {
                 });
+                delete user[1].dataValues.password;
+                user[1].dataValues.accessToken = token;
 
                 return res.status(200).send({
                     status: 200,
                     message: "Password UPDATED is successful",
                     successData: {
-                        user: {
-                            id: user[1].id,
-                            first_name: user[1].first_name,
-                            last_name: user[1].last_name,
-                            email: user[1].email,
-                            phone_number: user[1].phone_number,
-                            profile: user[1].profile,
-                            account_info: user[1].account_info,
-                            accessToken: token,
-                            fcm_token:user[1].fcm_token,
-                        }
+                        user: user[1]
                     }
                 });
             } else {
@@ -550,21 +524,14 @@ exports.update_picture = function (req, res) {
                     if (user != null || user != '') {
                         var token = jwt.sign({ id: user.id }, config.secret, {
                         });
+                        delete user[1].dataValues.password;
+                        user[1].dataValues.accessToken = token;
+
                         return res.status(200).send({
                             status: 200,
                             message: "Profile picture is  UPDATED is successful",
                             successData: {
-                                user: {
-                                    id: user[1].id,
-                                    first_name: user[1].first_name,
-                                    last_name: user[1].last_name,
-                                    email: user[1].email,
-                                    phone_number: user[1].phone_number,
-                                    profile: user[1].profile,
-                                    account_info: user[1].account_info,
-                                    fcm_token:user[1].fcm_token,
-                                    accessToken: token
-                                }
+                                user: user[1]
                             }
                         });
                     }
