@@ -628,7 +628,7 @@ exports.sendOTP = (req, res) => {
                         //User is Exist
 
                         var val = Math.floor(1000 + Math.random() * 9000);
-                        var messageData = "Your Go Daala Verification Code is: " + val;
+                        var messageData = "Your Daala Verification Code is: " + val;
                         var mobileno = req.body.phone_number;
 
 
@@ -675,7 +675,7 @@ exports.sendOTP = (req, res) => {
         }
         if (req.body.type == "register") {
             var val = Math.floor(1000 + Math.random() * 9000);
-            var messageData = "Your Go Daala Verification Code is: " + val;
+            var messageData = "Your Daala Verification Code is: " + val;
             var mobileno = req.body.phone_number;
 
             axios.get('http://api.veevotech.com/sendsms?hash=2fefa107d5eddd16fc16e420e976b2eb&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)

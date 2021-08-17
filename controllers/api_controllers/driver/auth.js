@@ -775,7 +775,7 @@ exports.sendOTP = (req, res) => {
                         //User is Exist
 
                         var val = Math.floor(1000 + Math.random() * 9000);
-                        var messageData = "Your Go Daala Verification Code is: " + val;
+                        var messageData = "Your Daala Verification Code is: " + val;
                         var mobileno = req.body.phone_number;
 
 
@@ -822,7 +822,7 @@ exports.sendOTP = (req, res) => {
         }
         if (req.body.type == "register") {
             var val = Math.floor(1000 + Math.random() * 9000);
-            var messageData = "Your Go Daala Verification Code is: " + val;
+            var messageData = "Your Daala Verification Code is: " + val;
             var mobileno = req.body.phone_number;
 
             // axios.get('http://smsctp1.eocean.us:24555/api?action=sendmessage&username=mkhata_99095&password=pak@456&recipient='+mobileno+'&originator=99095&messagedata='+messageData)

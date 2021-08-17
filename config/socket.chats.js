@@ -16,7 +16,7 @@ const {
 exports.socket_io = function (io) {
     console.log("outside io");
 
-    const AppName = 'Go Daala App';
+    const AppName = 'Daala App';
 
     // Run when client connects
     io.on('connection', socket => {
