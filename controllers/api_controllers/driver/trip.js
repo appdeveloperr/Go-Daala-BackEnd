@@ -724,7 +724,8 @@ exports.end_trip = (req, res) => {
         Trip.update({
             driver_id: req.body.driver_id,
             status: "end",
-            unloading_cast:req.body.unloading_cast
+            unloading_cost:req.body.unloading_cost
+
 
         },
             {
