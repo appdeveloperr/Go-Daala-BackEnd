@@ -1131,7 +1131,8 @@ exports.trip_share = (req, res) => {
                         var payload = {
                           data: {
                                 title: "Share Trip",
-                                body: req.body.trip_id.toString()
+                                body: req.body.trip_id.toString(),
+                                mobileno: mobileno.toString()
                             }
                         };
 
