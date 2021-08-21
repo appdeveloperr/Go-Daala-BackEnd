@@ -578,10 +578,10 @@ exports.loading_and_unloading = (req, res) => {
 
                 console.log("Customer ID on Unloading "+trip.customer_id);
 
-                if (trip[1].customer_id != null && trip[1].customer_id != '') {
+                if (trip.customer_id != null && trip.customer_id != '') {
                     Customer.findOne({
                         where: {
-                            id: trip[1].customer_id
+                            id: trip.customer_id
                         }
                     }).then(customer => {
 
@@ -631,11 +631,11 @@ exports.loading_and_unloading = (req, res) => {
             }).catch(function (error) {
                 console.log("Error sending message:", error);
 
-                return res.status(200).send({
-                    status: 200,
-                    message: req.body.title.toString() + " time successfull",
-                    successData: {}
-                });
+                // return res.status(200).send({
+                //     status: 200,
+                //     message: req.body.title.toString() + " time successfull",
+                //     successData: {}
+                // });
 
             });
 
