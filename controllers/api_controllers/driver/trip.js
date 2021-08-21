@@ -579,52 +579,52 @@ exports.loading_and_unloading = (req, res) => {
 
                 console.log("Customer ID on Unloading "+trip[1].customer_id);
 
-                // if (trip[1].customer_id != null && trip[1].customer_id != '') {
-                //     Customer.findOne({
-                //         where: {
-                //             id: trip[1].customer_id
-                //         }
-                //     }).then(customer => {
+                if (trip[1].customer_id != null && trip[1].customer_id != '') {
+                    Customer.findOne({
+                        where: {
+                            id: trip[1].customer_id
+                        }
+                    }).then(customer => {
 
-                //         admin.messaging().sendToDevice(try_to_parse(customer.dataValues.fcm_token), payload, options)
-                //             .then(function (response) {
-                //                 console.log("Successfully sent message:", response);
-                //                 return res.status(200).send({
-                //                     status: 200,
-                //                     message: req.body.title.toString() + " time successfull",
-                //                     successData: {}
-                //                 });
+                        admin.messaging().sendToDevice(try_to_parse(customer.dataValues.fcm_token), payload, options)
+                            .then(function (response) {
+                                console.log("Successfully sent message:", response);
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: req.body.title.toString() + " time successfull",
+                                    successData: {}
+                                });
 
-                //             })
-                //             .catch(function (error) {
-                //                 console.log("Error sending message:", error);
-                //                 return res.status(200).send({
-                //                     status: 200,
-                //                     message: req.body.title.toString() + " time successfull",
-                //                     successData: {}
-                //                 });
+                            })
+                            .catch(function (error) {
+                                console.log("Error sending message:", error);
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: req.body.title.toString() + " time successfull",
+                                    successData: {}
+                                });
 
-                //             });
-                //     }).catch(err => {
+                            });
+                    }).catch(err => {
 
-                //         return res.status(200).send({
-                //             status: 200,
-                //             message: req.body.title.toString() + " time successfull",
-                //             successData: {}
-                //         });
+                        return res.status(200).send({
+                            status: 200,
+                            message: req.body.title.toString() + " time successfull",
+                            successData: {}
+                        });
 
-                //     });
+                    });
 
-                // } else {
+                } else {
 
-                //     return res.status(200).send({
-                //         status: 200,
-                //         message: req.body.title.toString() + " time successfull",
-                //         successData: {}
-                //     });
+                    return res.status(200).send({
+                        status: 200,
+                        message: req.body.title.toString() + " time successfull",
+                        successData: {}
+                    });
                 
 
-                // }
+                }
 
 
 
