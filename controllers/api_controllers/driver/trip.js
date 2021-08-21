@@ -566,6 +566,7 @@ exports.loading_and_unloading = (req, res) => {
         admin.messaging().sendToDevice(myarray, payload, options)
             .then(function (response) {
                 console.log("Successfully sent message:", response);
+                console.log("on Unloading tripID: ", req.body.trip_id);
 
             //Sending Unloading FCM to Tracking Customer 
             Trip.findOne({
