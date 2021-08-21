@@ -574,8 +574,9 @@ exports.loading_and_unloading = (req, res) => {
                     id: req.body.trip_id
                 }
             }).then(trip => {
+                console.log("TRIP JSON on Unloading "+JSON.stringify(trip));
 
-                console.log("Customer ID on Unloading "+trip[0].customer_id);
+                console.log("Customer ID on Unloading "+trip[1].customer_id);
 
                 // if (trip[1].customer_id != null && trip[1].customer_id != '') {
                 //     Customer.findOne({
