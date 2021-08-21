@@ -631,11 +631,11 @@ exports.loading_and_unloading = (req, res) => {
             }).catch(function (error) {
                 console.log("Error sending message:", error);
 
-                // return res.status(200).send({
-                //     status: 200,
-                //     message: req.body.title.toString() + " time successfull",
-                //     successData: {}
-                // });
+                return res.status(200).send({
+                    status: 200,
+                    message: req.body.title.toString() + " time successfull",
+                    successData: {}
+                });
 
             });
 
