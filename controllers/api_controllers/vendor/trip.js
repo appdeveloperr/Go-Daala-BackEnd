@@ -840,7 +840,7 @@ exports.cancel_trip = (req, res) => {
             vendor_id: req.body.vendor_id,
             status: "cancel",
             how_cancel: "vendor",
-            total_cost:req.body.price
+            total_cost: req.body.price
 
         },
             {
@@ -883,7 +883,7 @@ exports.cancel_trip = (req, res) => {
                                       data: {
                                             title: "Vendor Cancel Trip",
                                             body: trip[1].id.toString(),
-                                            price:req.body.price.toString()
+                                            price: req.body.price.toString()
                                         }
                                     };
 
