@@ -840,7 +840,7 @@ exports.cancel_trip = (req, res) => {
             vendor_id: req.body.vendor_id,
             status: "cancel",
             how_cancel: "vendor",
-            total_cost:req.body.price
+            total_cost: req.body.price
 
         },
             {
@@ -883,7 +883,7 @@ exports.cancel_trip = (req, res) => {
                                       data: {
                                             title: "Vendor Cancel Trip",
                                             body: trip[1].id.toString(),
-                                            price:req.body.price.toString()
+                                            price: req.body.price.toString()
                                         }
                                     };
 
@@ -1131,7 +1131,12 @@ exports.trip_share = (req, res) => {
                         var payload = {
                           data: {
                                 title: "Share Trip",
-                                body: req.body.trip_id.toString()
+                                body: req.body.trip_id.toString(),
+<<<<<<< HEAD
+                                phone_number:mobileno.toString()
+=======
+                                mobileno: mobileno.toString()
+>>>>>>> ea08a97b9c9ecc1f57e6f849087cf494ce9b3d11
                             }
                         };
 

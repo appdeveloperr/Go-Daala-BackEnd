@@ -132,7 +132,7 @@ exports.receive_trip = (req, res, next) => {
                                             status: 200,
                                             message: "Driver receive trip  is successful",
                                             successData: {
-                                                trip:trip[1],
+                                                trip: trip[1],
                                                 vendor: vendor_info,
                                                 customer: null
                                             }
@@ -349,7 +349,7 @@ exports.cencal_trip = (req, res) => {
             driver_id: req.body.driver_id,
             status: "cancel",
             how_cancel: "driver",
-            total_cost:req.body.price
+            total_cost: req.body.price
 
         },
             {
@@ -387,10 +387,10 @@ exports.cencal_trip = (req, res) => {
                                     myarray.push(try_to_parse(req.body.driver_fcm));
 
                                     var payload = {
-                                         data:{
+                                        data: {
                                             title: "Driver Cancel The Trip",
                                             body: trip[1].id.toString(),
-                                            price:req.body.price.toString()
+                                            price: req.body.price.toString()
                                         }
                                     };
 
@@ -451,10 +451,10 @@ exports.cencal_trip = (req, res) => {
                             myarray.push(try_to_parse(req.body.driver_fcm));
 
                             var payload = {
-                                data:{
+                                data: {
                                     title: "Driver Cancel The Trip",
                                     body: trip[1].id.toString(),
-                                    price:req.body.price.toString()
+                                    price: req.body.price.toString()
                                 }
                             };
 
@@ -474,7 +474,7 @@ exports.cencal_trip = (req, res) => {
                                             trip: trip[1]
 
 
-                                            
+
                                         }
                                     });
                                 }).catch(err => {
@@ -521,7 +521,8 @@ exports.cencal_trip = (req, res) => {
 }
 
 //--------------driver loading_and_unloading time trip---------------
-exports.loading_and_unloading= (req, res) =>{
+exports.loading_and_unloading = (req, res) => {
+    req.checkBody('trip_id', 'please provide trip id!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver_fcm!').notEmpty();
     req.checkBody('vendor_fcm', 'please provide vendor_fcm!').notEmpty();
     req.checkBody('customer_fcm', 'please provide customer_fcm!').notEmpty();
@@ -543,7 +544,6 @@ exports.loading_and_unloading= (req, res) =>{
         if (req.body.customer_fcm !== null && req.body.customer_fcm !== "null" && req.body.customer_fcm !== '') {
             myarray.push(try_to_parse(req.body.customer_fcm));
         }
-
         if (req.body.vendor_fcm !== null && req.body.vendor_fcm !== "null" && req.body.vendor_fcm !== '') {
             myarray.push(try_to_parse(req.body.vendor_fcm));
         }
@@ -553,8 +553,8 @@ exports.loading_and_unloading= (req, res) =>{
         console.log("MYARRAYYYY SIZE CUSTOMER CREATED: " + myarray.length)
 
         var payload = {
-           data:{
-                title:req.body.title.toString()
+            data: {
+                title: req.body.title.toString()
             }
         };
 
@@ -566,21 +566,97 @@ exports.loading_and_unloading= (req, res) =>{
         admin.messaging().sendToDevice(myarray, payload, options)
             .then(function (response) {
                 console.log("Successfully sent message:", response);
+                console.log("on Unloading tripID: ", req.body.trip_id);
+
+            //Sending Unloading FCM to Tracking Customer 
+            Trip.findOne({
+                where: {
+                    id: req.body.trip_id
+                }
+            }).then(trip => {
+                console.log("TRIP JSON on Unloading "+JSON.stringify(trip));
+
+                console.log("Customer ID on Unloading "+trip.customer_id);
+
+                if (trip.customer_id != null && trip.customer_id != '') {
+                    Customer.findOne({
+                        where: {
+                            id: trip.customer_id
+                        }
+                    }).then(customer => {
+
+                        admin.messaging().sendToDevice(try_to_parse(customer.dataValues.fcm_token), payload, options)
+                            .then(function (response) {
+                                console.log("Successfully sent message:", response);
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: req.body.title.toString() + " time successfull",
+                                    successData: {}
+                                });
+
+                            })
+                            .catch(function (error) {
+                                console.log("Error sending message:", error);
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: req.body.title.toString() + " time successfull",
+                                    successData: {}
+                                });
+
+                            });
+                    }).catch(err => {
+
+                        return res.status(200).send({
+                            status: 200,
+                            message: req.body.title.toString() + " time successfull",
+                            successData: {}
+                        });
+
+                    });
+
+                } else {
+
+                    return res.status(200).send({
+                        status: 200,
+                        message: req.body.title.toString() + " time successfull",
+                        successData: {}
+                    });
+                
+
+                }
+
+
+
+
+            }).catch(function (error) {
+                console.log("Error sending message:", error);
+
                 return res.status(200).send({
                     status: 200,
-                    message: req.body.title.toString()+" time successfull",
-                    successData: { }
+                    message: req.body.title.toString() + " time successfull",
+                    successData: {}
                 });
+
+            });
+
+
+
+
+               
             })
             .catch(function (error) {
                 console.log("Error sending message:", error);
                 return res.status(200).send({
                     status: 400,
                     message: error.results[0],
-                    successData:{}
+                    successData: {}
                 })
 
             });
+
+
+
+           
     }
 }
 
@@ -606,11 +682,11 @@ exports.start_trip = (req, res) => {
         });
     } else {
         // Save vendor to Database
-       
+
         Trip.update({
             driver_id: req.body.driver_id,
             status: "start",
-            loading_cost:req.body.loading_cost
+            loading_cost: req.body.loading_cost
 
         },
             {
@@ -634,10 +710,10 @@ exports.start_trip = (req, res) => {
                 console.log("MYARRAYYYY SIZE CUSTOMER CREATED: " + myarray.length)
 
                 var payload = {
-                    data:{
+                    data: {
                         title: "Start trip",
                         body: trip[1].id.toString(),
-                        loading_cost:"Loading Cost:"+trip[1].loading_cost.toString()
+                        loading_cost: "Loading Cost:" + trip[1].loading_cost.toString()
                     }
                 };
 
@@ -654,7 +730,7 @@ exports.start_trip = (req, res) => {
                             message: "Driver start trip  is successfull",
                             successData: {
                                 trip: trip[1]
-                                   
+
                             }
                         });
                     })
@@ -718,38 +794,36 @@ exports.end_trip = (req, res) => {
         }
         console.log("MYARRAYYYY SIZE: " + myarray.length)
 
-       
+
 
         // Save vendor to Database
         Trip.update({
             driver_id: req.body.driver_id,
             status: "end",
-            unloading_cost:req.body.unloading_cost
-
-
+            unloading_cost: req.body.unloading_cost
         },
             {
                 where: { id: req.body.trip_id },
                 returning: true,
                 plain: true
             }).then(trip => {
-                var total_cost =  parseInt(trip[1].total_cost) + parseInt(trip[1].loading_cost);
+                var total_cost = parseInt(trip[1].total_cost) + parseInt(trip[1].loading_cost);
                 total_cost = total_cost + parseInt(req.body.unloading_cost);
                 var payload = {
-                    data:{
+                    data: {
                         title: "Completed trip",
                         body: req.body.trip_id.toString(),
-                        total_cost:total_cost.toString(),
-                        unloading_cost: "UnLoading Cost: "+req.body.unloading_cost.toString()
+                        total_cost: total_cost.toString(),
+                        unloading_cost: "UnLoading Cost: " + req.body.unloading_cost.toString()
                     }
                 };
-        
+
                 var options = {
                     priority: "high",
                     timeToLive: 60 * 60 * 24
                 };
-        
-        
+
+
                 admin.messaging().sendToDevice(myarray, payload, options)
                     .then(function (response) {
                         console.log("Successfully sent message:", response);
@@ -986,7 +1060,7 @@ exports.get_all_trips_with_cash = (req, res) => {
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
-				 status: {
+                status: {
                     [Op.ne]: 'wait',
                 }
             },
@@ -1062,7 +1136,7 @@ exports.get_selected_date_with_cash = (req, res) => {
                 createdAt: {
                     [Op.between]: [req.body.start, req.body.end],
                 },
-				 status: {
+                status: {
                     [Op.ne]: 'wait',
                 },
             },
@@ -1135,9 +1209,9 @@ exports.get_single_date_with_cash = (req, res) => {
                 driver_id: req.body.driver_id,
                 createdAt: {
                     [Op.between]: [req.body.Date, req.body.Date + ' 23:59:59.000 +00:00'],
-					
+
                 },
-				 status: {
+                status: {
                     [Op.ne]: 'wait',
                 },
             }
