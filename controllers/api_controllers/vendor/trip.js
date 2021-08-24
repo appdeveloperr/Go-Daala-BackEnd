@@ -1132,11 +1132,8 @@ exports.trip_share = (req, res) => {
                           data: {
                                 title: "Share Trip",
                                 body: req.body.trip_id.toString(),
-<<<<<<< HEAD
-                                phone_number:mobileno.toString()
-=======
-                                mobileno: mobileno.toString()
->>>>>>> ea08a97b9c9ecc1f57e6f849087cf494ce9b3d11
+                                mobileno:mobileno.toString()
+
                             }
                         };
 
