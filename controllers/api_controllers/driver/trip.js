@@ -1054,9 +1054,14 @@ exports.get_all_trips_with_cash = (req, res) => {
             }
         });
     } else {
-        // Save vendor to Database
-        var total_cash = 0;
-        var total_trips = 0;
+        // Save vendor to Database   complete ? cancel 
+        const total_cash = 0;
+        const total_trips = 0;
+        const complete_trip =0;
+        const canceled_trip=0;
+        const canceled_by_vendor=0;
+        const canceled_by_driver=0;
+        const canceled_by_customer=0;
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
@@ -1075,7 +1080,13 @@ exports.get_all_trips_with_cash = (req, res) => {
                     successData: {
                         dash_board_detail: {
                             total_trips: total_trips,
-                            total_cash: total_cash
+                            total_cash: total_cash,
+                            complete_trip,
+                            canceled_trip,
+                            vendor_cancel,
+                            driver_cancel,
+                            customer_cancel
+                            
                         }
                     }
                 });
@@ -1084,6 +1095,18 @@ exports.get_all_trips_with_cash = (req, res) => {
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
+                    if(element.status='end'){
+                        complete_trip = complete_trip +1;
+                    }else if(element.status='cancel'){
+                        canceled_trip = canceled_trip +1;  
+                        if(element.how_cancel=='driver'){
+                            driver_cancel = driver_cancel + 1;
+                        }else if(element.how_cancel=='vendor'){
+                            vendor_cancel = vendor_cancel + 1;
+                        }else if(element.how_cancel=='customer'){
+                            customer_cancel = customer_cancel + 1;
+                        }
+                    }
                 });
                 return res.status(200).send({
                     status: 200,
@@ -1091,7 +1114,12 @@ exports.get_all_trips_with_cash = (req, res) => {
                     successData: {
                         dash_board_detail: {
                             total_trips: total_trips,
-                            total_cash: total_cash
+                            total_cash: total_cash,
+                            complete_trip,
+                            canceled_trip,
+                            vendor_cancel,
+                            driver_cancel,
+                            customer_cancel
                         }
                     }
                 });
@@ -1127,8 +1155,13 @@ exports.get_selected_date_with_cash = (req, res) => {
             }
         });
     } else {
-        var total_cash = 0;
-        var total_trips = 0;
+        const total_cash = 0;
+        const total_trips = 0;
+        const complete_trip =0;
+        const canceled_trip=0;
+        const canceled_by_vendor=0;
+        const canceled_by_driver=0;
+        const canceled_by_customer=0;
         // Save vendor to Database
         Trip.findAll({
             where: {
@@ -1151,7 +1184,12 @@ exports.get_selected_date_with_cash = (req, res) => {
                     successData: {
                         dash_board_detail: {
                             total_trips: total_trips,
-                            total_cash: total_cash
+                            total_cash: total_cash,
+                            complete_trip,
+                            canceled_trip,
+                            vendor_cancel,
+                            driver_cancel,
+                            customer_cancel
                         }
                     }
                 });
@@ -1159,6 +1197,18 @@ exports.get_selected_date_with_cash = (req, res) => {
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
+                    if(element.status='end'){
+                        complete_trip = complete_trip +1;
+                    }else if(element.status='cancel'){
+                        canceled_trip = canceled_trip +1;  
+                        if(element.how_cancel=='driver'){
+                            driver_cancel = driver_cancel + 1;
+                        }else if(element.how_cancel=='vendor'){
+                            vendor_cancel = vendor_cancel + 1;
+                        }else if(element.how_cancel=='customer'){
+                            customer_cancel = customer_cancel + 1;
+                        }
+                    }
                 });
                 return res.status(200).send({
                     status: 200,
@@ -1166,7 +1216,12 @@ exports.get_selected_date_with_cash = (req, res) => {
                     successData: {
                         dash_board_detail: {
                             total_trips: total_trips,
-                            total_cash: total_cash
+                            total_cash: total_cash,
+                            complete_trip,
+                            canceled_trip,
+                            vendor_cancel,
+                            driver_cancel,
+                            customer_cancel
                         }
                     }
                 });
