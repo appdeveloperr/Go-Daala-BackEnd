@@ -1055,13 +1055,13 @@ exports.get_all_trips_with_cash = (req, res) => {
         });
     } else {
         // Save vendor to Database   complete ? cancel 
-        const total_cash = 0;
-        const total_trips = 0;
-        const complete_trip =0;
-        const canceled_trip=0;
-        const canceled_by_vendor=0;
-        const canceled_by_driver=0;
-        const canceled_by_customer=0;
+        var total_cash = 0;
+        var total_trips = 0;
+        var complete_trip =0;
+        var canceled_trip=0;
+        var canceled_by_vendor=0;
+        var canceled_by_driver=0;
+        var canceled_by_customer=0;
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
@@ -1083,9 +1083,9 @@ exports.get_all_trips_with_cash = (req, res) => {
                             total_cash: total_cash,
                             complete_trip,
                             canceled_trip,
-                            vendor_cancel,
-                            driver_cancel,
-                            customer_cancel
+                            canceled_by_vendor,
+                            canceled_by_driver,
+                            canceled_by_customer
                             
                         }
                     }
@@ -1100,11 +1100,11 @@ exports.get_all_trips_with_cash = (req, res) => {
                     }else if(element.status='cancel'){
                         canceled_trip = canceled_trip +1;  
                         if(element.how_cancel=='driver'){
-                            driver_cancel = driver_cancel + 1;
+                            canceled_by_driver = canceled_by_driver + 1;
                         }else if(element.how_cancel=='vendor'){
-                            vendor_cancel = vendor_cancel + 1;
+                            canceled_by_vendor = canceled_by_vendor + 1;
                         }else if(element.how_cancel=='customer'){
-                            customer_cancel = customer_cancel + 1;
+                            canceled_by_customer = canceled_by_customer + 1;
                         }
                     }
                 });
@@ -1117,9 +1117,9 @@ exports.get_all_trips_with_cash = (req, res) => {
                             total_cash: total_cash,
                             complete_trip,
                             canceled_trip,
-                            vendor_cancel,
-                            driver_cancel,
-                            customer_cancel
+                            canceled_by_vendor,
+                            canceled_by_driver,
+                            canceled_by_customer
                         }
                     }
                 });
@@ -1155,13 +1155,13 @@ exports.get_selected_date_with_cash = (req, res) => {
             }
         });
     } else {
-        const total_cash = 0;
-        const total_trips = 0;
-        const complete_trip =0;
-        const canceled_trip=0;
-        const canceled_by_vendor=0;
-        const canceled_by_driver=0;
-        const canceled_by_customer=0;
+        var total_cash = 0;
+        var total_trips = 0;
+        var complete_trip =0;
+        var canceled_trip=0;
+        var canceled_by_vendor=0;
+        var canceled_by_driver=0;
+        var canceled_by_customer=0;
         // Save vendor to Database
         Trip.findAll({
             where: {
@@ -1187,9 +1187,9 @@ exports.get_selected_date_with_cash = (req, res) => {
                             total_cash: total_cash,
                             complete_trip,
                             canceled_trip,
-                            vendor_cancel,
-                            driver_cancel,
-                            customer_cancel
+                            canceled_by_vendor,
+                            canceled_by_driver,
+                            canceled_by_customer
                         }
                     }
                 });
@@ -1202,11 +1202,11 @@ exports.get_selected_date_with_cash = (req, res) => {
                     }else if(element.status='cancel'){
                         canceled_trip = canceled_trip +1;  
                         if(element.how_cancel=='driver'){
-                            driver_cancel = driver_cancel + 1;
+                            canceled_by_driver = canceled_by_driver + 1;
                         }else if(element.how_cancel=='vendor'){
-                            vendor_cancel = vendor_cancel + 1;
+                            canceled_by_vendor = canceled_by_vendor + 1;
                         }else if(element.how_cancel=='customer'){
-                            customer_cancel = customer_cancel + 1;
+                            canceled_by_customer = canceled_by_customer + 1;
                         }
                     }
                 });
@@ -1219,9 +1219,9 @@ exports.get_selected_date_with_cash = (req, res) => {
                             total_cash: total_cash,
                             complete_trip,
                             canceled_trip,
-                            vendor_cancel,
-                            driver_cancel,
-                            customer_cancel
+                            canceled_by_vendor,
+                            canceled_by_driver,
+                            canceled_by_customer
                         }
                     }
                 });
