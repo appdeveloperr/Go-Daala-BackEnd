@@ -1259,6 +1259,11 @@ exports.get_single_date_with_cash = (req, res) => {
         // Save vendor to Database
         var total_cash = 0;
         var total_trips = 0;
+        var complete_trip =0;
+        var canceled_trip=0;
+        var canceled_by_vendor=0;
+        var canceled_by_driver=0;
+        var canceled_by_customer=0;
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
@@ -1289,7 +1294,12 @@ exports.get_single_date_with_cash = (req, res) => {
                                 dash_board_single_detail: {
                                     total_trips: total_trips,
                                     total_cash: total_cash,
-                                    user: driver.dataValues
+                                    user: driver.dataValues,
+                                    complete_trip:complete_trip,
+                                    canceled_trip:canceled_trip,
+                                    canceled_by_vendor:canceled_by_vendor,
+                                    canceled_by_driver:canceled_by_driver,
+                                    canceled_by_customer:canceled_by_customer
                                 }
                             }
                         });
@@ -1301,7 +1311,12 @@ exports.get_single_date_with_cash = (req, res) => {
                                 dash_board_single_detail: {
                                     total_trips: total_trips,
                                     total_cash: total_cash,
-                                    user: "user is not exist in db"
+                                    user: "user is not exist in db",
+                                    complete_trip:complete_trip,
+                                    canceled_trip:canceled_trip,
+                                    canceled_by_vendor:canceled_by_vendor,
+                                    canceled_by_driver:canceled_by_driver,
+                                    canceled_by_customer:canceled_by_customer
                                 }
                             }
                         });
@@ -1320,6 +1335,18 @@ exports.get_single_date_with_cash = (req, res) => {
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
+                    if(element.status=='end'){
+                        complete_trip = complete_trip +1;
+                    }if(element.status=='cancel'){
+                        canceled_trip = canceled_trip +1;  
+                        if(element.how_cancel=='driver'){
+                            canceled_by_driver = canceled_by_driver + 1;
+                        }if(element.how_cancel=='vendor'){
+                            canceled_by_vendor = canceled_by_vendor + 1;
+                        }if(element.how_cancel=='customer'){
+                            canceled_by_customer = canceled_by_customer + 1;
+                        }
+                    }
                 });
                 Driver.findOne({
                     where: {
@@ -1335,7 +1362,12 @@ exports.get_single_date_with_cash = (req, res) => {
                             dash_board_single_detail: {
                                 total_trips: total_trips,
                                 total_cash: total_cash,
-                                user: driver
+                                user: driver,
+                                complete_trip:complete_trip,
+                                canceled_trip:canceled_trip,
+                                canceled_by_vendor:canceled_by_vendor,
+                                canceled_by_driver:canceled_by_driver,
+                                canceled_by_customer:canceled_by_customer
                             }
                         }
                     });
