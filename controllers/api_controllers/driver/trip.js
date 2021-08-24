@@ -1095,9 +1095,9 @@ exports.get_all_trips_with_cash = (req, res) => {
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
-                    if(element.status='end'){
+                    if(element.status=='end'){
                         complete_trip = complete_trip +1;
-                    }if(element.status='cancel'){
+                    }if(element.status=='cancel'){
                         canceled_trip = canceled_trip +1;  
                         if(element.how_cancel=='driver'){
                             canceled_by_driver = canceled_by_driver + 1;
@@ -1197,9 +1197,9 @@ exports.get_selected_date_with_cash = (req, res) => {
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
-                    if(element.status='end'){
+                    if(element.status=='end'){
                         complete_trip = complete_trip +1;
-                    }if(element.status='cancel'){
+                    }if(element.status=='cancel'){
                         canceled_trip = canceled_trip +1;  
                         if(element.how_cancel=='driver'){
                             canceled_by_driver = canceled_by_driver + 1;
