@@ -1068,7 +1068,7 @@ exports.get_all_trips_with_cash = (req, res) => {
             where: {
                 driver_id: req.body.driver_id,
                 status: {
-                    [Op.ne]: ['wait','start']
+                    [Op.ne]: 'wait'
                 }
             },
             order: [
@@ -1184,7 +1184,7 @@ exports.get_selected_date_with_cash = (req, res) => {
                     [Op.between]: [req.body.start, req.body.end],
                 },
                 status: {
-                    [Op.ne]:['wait','start']
+                    [Op.ne]:'wait'
                 },
             },
             order: [['createdAt', 'ASC']],
@@ -1298,7 +1298,8 @@ exports.get_single_date_with_cash = (req, res) => {
 
                 },
                 status: {
-                    [Op.ne]: ['wait','start']
+                    [Op.ne]: 'wait'
+                   
                 },
             }
             //,
