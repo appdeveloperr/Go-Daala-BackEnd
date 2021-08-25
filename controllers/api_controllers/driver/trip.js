@@ -1371,7 +1371,6 @@ exports.get_single_date_with_cash = (req, res) => {
                         if(element.loading_cost != null){
                             loading_cost = parseInt(element.loading_cost);
                         }
-
                         if(element.unloading_cost != null){
                             unloading_cost = parseInt(element.unloading_cost);
                         }
