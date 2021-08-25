@@ -1333,7 +1333,19 @@ exports.get_single_date_with_cash = (req, res) => {
             } else {
 
                 trip.forEach(element => {
-                    total_cash = total_cash + parseInt(element.total_cost);
+
+                        var loading_cost = 0;
+                        var unloading_cost = 0;
+
+                        if(element.loading_cost != null){
+                            loading_cost = parseInt(element.loading_cost);
+                        }
+
+                        if(element.unloading_cost != null){
+                            unloading_cost = parseInt(element.unloading_cost);
+                        }
+
+                    total_cash = total_cash + parseInt(element.total_cost) +  loading_cost + unloading_cost  ;
                     total_trips = total_trips + 1;
                     if(element.status=='end'){
                         complete_trip = complete_trip +1;
