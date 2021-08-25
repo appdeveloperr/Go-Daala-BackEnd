@@ -568,53 +568,43 @@ exports.loading_and_unloading = (req, res) => {
                 console.log("Successfully sent message:", response);
                 console.log("on Unloading tripID: ", req.body.trip_id);
 
-                //Sending Unloading FCM to Tracking Customer 
-                Trip.findOne({
-                    where: {
-                        id: req.body.trip_id
-                    }
-                }).then(trip => {
-                    console.log("TRIP JSON on Unloading " + JSON.stringify(trip));
+            //Sending Unloading FCM to Tracking Customer 
+            Trip.findOne({
+                where: {
+                    id: req.body.trip_id
+                }
+            }).then(trip => {
+                console.log("TRIP JSON on Unloading "+JSON.stringify(trip));
 
-                    console.log("Customer ID on Unloading " + trip.customer_id);
+                console.log("Customer ID on Unloading "+trip.customer_id);
 
-                    if (trip.customer_id != null && trip.customer_id != '') {
-                        Customer.findOne({
-                            where: {
-                                id: trip.customer_id
-                            }
-                        }).then(customer => {
+                if (trip.customer_id != null && trip.customer_id != '') {
+                    Customer.findOne({
+                        where: {
+                            id: trip.customer_id
+                        }
+                    }).then(customer => {
 
-                            admin.messaging().sendToDevice(try_to_parse(customer.dataValues.fcm_token), payload, options)
-                                .then(function (response) {
-                                    console.log("Successfully sent message:", response);
-                                    return res.status(200).send({
-                                        status: 200,
-                                        message: req.body.title.toString() + " time successfull",
-                                        successData: {}
-                                    });
-
-                                })
-                                .catch(function (error) {
-                                    console.log("Error sending message:", error);
-                                    return res.status(200).send({
-                                        status: 200,
-                                        message: req.body.title.toString() + " time successfull",
-                                        successData: {}
-                                    });
-
+                        admin.messaging().sendToDevice(try_to_parse(customer.dataValues.fcm_token), payload, options)
+                            .then(function (response) {
+                                console.log("Successfully sent message:", response);
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: req.body.title.toString() + " time successfull",
+                                    successData: {}
                                 });
-                        }).catch(err => {
 
-                            return res.status(200).send({
-                                status: 200,
-                                message: req.body.title.toString() + " time successfull",
-                                successData: {}
+                            })
+                            .catch(function (error) {
+                                console.log("Error sending message:", error);
+                                return res.status(200).send({
+                                    status: 200,
+                                    message: req.body.title.toString() + " time successfull",
+                                    successData: {}
+                                });
+
                             });
-
-                        });
-
-                    } else {
+                    }).catch(err => {
 
                         return res.status(200).send({
                             status: 200,
@@ -622,27 +612,37 @@ exports.loading_and_unloading = (req, res) => {
                             successData: {}
                         });
 
+                    });
 
-                    }
-
-
-
-
-                }).catch(function (error) {
-                    console.log("Error sending message:", error);
+                } else {
 
                     return res.status(200).send({
                         status: 200,
                         message: req.body.title.toString() + " time successfull",
                         successData: {}
                     });
+                
 
+                }
+
+
+
+
+            }).catch(function (error) {
+                console.log("Error sending message:", error);
+
+                return res.status(200).send({
+                    status: 200,
+                    message: req.body.title.toString() + " time successfull",
+                    successData: {}
                 });
 
+            });
 
 
 
 
+               
             })
             .catch(function (error) {
                 console.log("Error sending message:", error);
@@ -656,7 +656,7 @@ exports.loading_and_unloading = (req, res) => {
 
 
 
-
+           
     }
 }
 
@@ -1057,31 +1057,19 @@ exports.get_all_trips_with_cash = (req, res) => {
         // Save vendor to Database   complete ? cancel 
         var total_cash = 0;
         var total_trips = 0;
-        var total_loading_cost = 0;
-        var total_unloading_cost = 0;
-        var complete_trip = 0;
-        var canceled_trip = 0;
-        var canceled_by_vendor = 0;
-        var canceled_by_driver = 0;
-        var canceled_by_customer = 0;
+        var  total_loading_cost=0;
+        var total_unloading_cost=0;
+        var complete_trip =0;
+        var canceled_trip=0;
+        var canceled_by_vendor=0;
+        var canceled_by_driver=0;
+        var canceled_by_customer=0;
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
-                // status: {
-                //     [Op.ne]: 'wait'
-                // }
                 status: {
-                    [Op.and]: [
-                        status: {
-                            [Op.ne]: 'wait'
-                        }
-                        ,
-                        status: {
-                            [Op.ne]: 'start'
-                        }
-
-                    ]
-                },
+                    [Op.ne]: 'wait'
+                }
             },
             order: [
                 ['id', 'DESC'],
@@ -1095,14 +1083,14 @@ exports.get_all_trips_with_cash = (req, res) => {
                         dash_board_detail: {
                             total_trips: total_trips,
                             total_cash: total_cash,
-                            total_loading_cost: total_loading_cost,
-                            total_unloading_cost: total_unloading_cost,
-                            complete_trip: complete_trip,
-                            canceled_trip: canceled_trip,
-                            canceled_by_vendor: canceled_by_vendor,
-                            canceled_by_driver: canceled_by_driver,
-                            canceled_by_customer: canceled_by_customer
-
+                            total_loading_cost:total_loading_cost,
+                            total_unloading_cost:total_unloading_cost,
+                            complete_trip:complete_trip,
+                            canceled_trip:canceled_trip,
+                            canceled_by_vendor:canceled_by_vendor,
+                            canceled_by_driver:canceled_by_driver,
+                            canceled_by_customer:canceled_by_customer
+                            
                         }
                     }
                 });
@@ -1111,21 +1099,21 @@ exports.get_all_trips_with_cash = (req, res) => {
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
-                    if (element.loading_cost != null || element.loading_cost != '' || element.loading_cost != 'null') {
-                        total_loading_cost = total_loading_cost + parseInt(element.loading_cost);
+                    if(element.loading_cost!=null || element.loading_cost!='' || element.loading_cost!='null'){
+                        total_loading_cost=total_loading_cost   +parseInt(element.loading_cost);
                     }
-                    if (element.unloading_cost != null || element.unloading_cost != '' || element.unloading_cost != 'null') {
-                        total_unloading_cost = total_unloading_cost + parseInt(element.unloading_cost);
+                    if(element.unloading_cost!=null || element.unloading_cost!='' || element.unloading_cost!='null'){
+                    total_unloading_cost=total_unloading_cost + parseInt(element.unloading_cost);
                     }
-                    if (element.status == 'end') {
-                        complete_trip = complete_trip + 1;
-                    } if (element.status == 'cancel') {
-                        canceled_trip = canceled_trip + 1;
-                        if (element.how_cancel == 'driver') {
+                    if(element.status=='end'){
+                        complete_trip = complete_trip +1;
+                    }if(element.status=='cancel'){
+                        canceled_trip = canceled_trip +1;  
+                        if(element.how_cancel=='driver'){
                             canceled_by_driver = canceled_by_driver + 1;
-                        } if (element.how_cancel == 'vendor') {
+                        }if(element.how_cancel=='vendor'){
                             canceled_by_vendor = canceled_by_vendor + 1;
-                        } if (element.how_cancel == 'customer') {
+                        }if(element.how_cancel=='customer'){
                             canceled_by_customer = canceled_by_customer + 1;
                         }
                     }
@@ -1137,13 +1125,13 @@ exports.get_all_trips_with_cash = (req, res) => {
                         dash_board_detail: {
                             total_trips: total_trips,
                             total_cash: total_cash,
-                            total_loading_cost: total_loading_cost,
-                            total_unloading_cost: total_unloading_cost,
-                            complete_trip: complete_trip,
-                            canceled_trip: canceled_trip,
-                            canceled_by_vendor: canceled_by_vendor,
-                            canceled_by_driver: canceled_by_driver,
-                            canceled_by_customer: canceled_by_customer
+                            total_loading_cost:total_loading_cost,
+                            total_unloading_cost:total_unloading_cost,
+                            complete_trip:complete_trip,
+                            canceled_trip:canceled_trip,
+                            canceled_by_vendor:canceled_by_vendor,
+                            canceled_by_driver:canceled_by_driver,
+                            canceled_by_customer:canceled_by_customer
                         }
                     }
                 });
@@ -1181,13 +1169,13 @@ exports.get_selected_date_with_cash = (req, res) => {
     } else {
         var total_cash = 0;
         var total_trips = 0;
-        var total_loading_cost = 0;
-        var total_unloading_cost = 0;
-        var complete_trip = 0;
-        var canceled_trip = 0;
-        var canceled_by_vendor = 0;
-        var canceled_by_driver = 0;
-        var canceled_by_customer = 0;
+        var  total_loading_cost=0;
+        var total_unloading_cost=0;
+        var complete_trip =0;
+        var canceled_trip=0;
+        var canceled_by_vendor=0;
+        var canceled_by_driver=0;
+        var canceled_by_customer=0;
         // Save vendor to Database
         Trip.findAll({
             where: {
@@ -1195,20 +1183,8 @@ exports.get_selected_date_with_cash = (req, res) => {
                 createdAt: {
                     [Op.between]: [req.body.start, req.body.end],
                 },
-                // status: {
-                //     [Op.ne]: 'wait'
-                // },
                 status: {
-                    [Op.and]: [
-                        status: {
-                            [Op.ne]: 'wait'
-                        }
-                        ,
-                        status: {
-                            [Op.ne]: 'start'
-                        }
-
-                    ]
+                    [Op.ne]:'wait'
                 },
             },
             order: [['createdAt', 'ASC']],
@@ -1223,35 +1199,35 @@ exports.get_selected_date_with_cash = (req, res) => {
                         dash_board_detail: {
                             total_trips: total_trips,
                             total_cash: total_cash,
-                            total_loading_cost: total_loading_cost,
-                            total_unloading_cost: total_unloading_cost,
-                            complete_trip: complete_trip,
-                            canceled_trip: canceled_trip,
-                            canceled_by_vendor: canceled_by_vendor,
-                            canceled_by_driver: canceled_by_driver,
-                            canceled_by_customer: canceled_by_customer
+                            total_loading_cost:total_loading_cost,
+                            total_unloading_cost:total_unloading_cost,
+                            complete_trip:complete_trip,
+                            canceled_trip:canceled_trip,
+                            canceled_by_vendor:canceled_by_vendor,
+                            canceled_by_driver:canceled_by_driver,
+                            canceled_by_customer:canceled_by_customer
                         }
                     }
                 });
             } else {
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
-                    if (element.loading_cost != null || element.loading_cost != '' || element.loading_cost != 'null') {
-                        total_loading_cost = total_loading_cost + parseInt(element.loading_cost);
+                    if(element.loading_cost!=null || element.loading_cost!='' || element.loading_cost!='null'){
+                        total_loading_cost=total_loading_cost   +parseInt(element.loading_cost);
                     }
-                    if (element.unloading_cost != null || element.unloading_cost != '' || element.unloading_cost != 'null') {
-                        total_unloading_cost = total_unloading_cost + parseInt(element.unloading_cost);
+                    if(element.unloading_cost!=null || element.unloading_cost!='' || element.unloading_cost!='null'){
+                    total_unloading_cost=total_unloading_cost + parseInt(element.unloading_cost);
                     }
                     total_trips = total_trips + 1;
-                    if (element.status == 'end') {
-                        complete_trip = complete_trip + 1;
-                    } if (element.status == 'cancel') {
-                        canceled_trip = canceled_trip + 1;
-                        if (element.how_cancel == 'driver') {
+                    if(element.status=='end'){
+                        complete_trip = complete_trip +1;
+                    }if(element.status=='cancel'){
+                        canceled_trip = canceled_trip +1;  
+                        if(element.how_cancel=='driver'){
                             canceled_by_driver = canceled_by_driver + 1;
-                        } if (element.how_cancel == 'vendor') {
+                        }if(element.how_cancel=='vendor'){
                             canceled_by_vendor = canceled_by_vendor + 1;
-                        } if (element.how_cancel == 'customer') {
+                        }if(element.how_cancel=='customer'){
                             canceled_by_customer = canceled_by_customer + 1;
                         }
                     }
@@ -1263,13 +1239,13 @@ exports.get_selected_date_with_cash = (req, res) => {
                         dash_board_detail: {
                             total_trips: total_trips,
                             total_cash: total_cash,
-                            total_loading_cost: total_loading_cost,
-                            total_unloading_cost: total_unloading_cost,
-                            complete_trip: complete_trip,
-                            canceled_trip: canceled_trip,
-                            canceled_by_vendor: canceled_by_vendor,
-                            canceled_by_driver: canceled_by_driver,
-                            canceled_by_customer: canceled_by_customer
+                            total_loading_cost:total_loading_cost,
+                            total_unloading_cost:total_unloading_cost,
+                            complete_trip:complete_trip,
+                            canceled_trip:canceled_trip,
+                            canceled_by_vendor:canceled_by_vendor,
+                            canceled_by_driver:canceled_by_driver,
+                            canceled_by_customer:canceled_by_customer
                         }
                     }
                 });
@@ -1307,13 +1283,13 @@ exports.get_single_date_with_cash = (req, res) => {
         // Save vendor to Database
         var total_cash = 0;
         var total_trips = 0;
-        var total_loading_cost = 0;
-        var total_unloading_cost = 0;
-        var complete_trip = 0;
-        var canceled_trip = 0;
-        var canceled_by_vendor = 0;
-        var canceled_by_driver = 0;
-        var canceled_by_customer = 0;
+        var total_loading_cost=0;
+        var total_unloading_cost=0;
+        var complete_trip =0;
+        var canceled_trip=0;
+        var canceled_by_vendor=0;
+        var canceled_by_driver=0;
+        var canceled_by_customer=0;
         Trip.findAll({
             where: {
                 driver_id: req.body.driver_id,
@@ -1321,21 +1297,9 @@ exports.get_single_date_with_cash = (req, res) => {
                     [Op.between]: [req.body.Date, req.body.Date + ' 23:59:59.000 +00:00'],
 
                 },
-                // status: {
-                //     [Op.ne]: 'wait'
-
-                // },
                 status: {
-                    [Op.and]: [
-                        status: {
-                            [Op.ne]: 'wait'
-                        }
-                        ,
-                        status: {
-                            [Op.ne]: 'start'
-                        }
-
-                    ]
+                    [Op.ne]: 'wait'
+                   
                 },
             }
             //,
@@ -1357,14 +1321,14 @@ exports.get_single_date_with_cash = (req, res) => {
                                 dash_board_single_detail: {
                                     total_trips: total_trips,
                                     total_cash: total_cash,
-                                    total_loading_cost: total_loading_cost,
-                                    total_unloading_cost: total_unloading_cost,
+                                    total_loading_cost:total_loading_cost,
+                                    total_unloading_cost:total_unloading_cost,
                                     user: driver.dataValues,
-                                    complete_trip: complete_trip,
-                                    canceled_trip: canceled_trip,
-                                    canceled_by_vendor: canceled_by_vendor,
-                                    canceled_by_driver: canceled_by_driver,
-                                    canceled_by_customer: canceled_by_customer
+                                    complete_trip:complete_trip,
+                                    canceled_trip:canceled_trip,
+                                    canceled_by_vendor:canceled_by_vendor,
+                                    canceled_by_driver:canceled_by_driver,
+                                    canceled_by_customer:canceled_by_customer
                                 }
                             }
                         });
@@ -1376,14 +1340,14 @@ exports.get_single_date_with_cash = (req, res) => {
                                 dash_board_single_detail: {
                                     total_trips: total_trips,
                                     total_cash: total_cash,
-                                    total_loading_cost: total_loading_cost,
-                                    total_unloading_cost: total_unloading_cost,
+                                    total_loading_cost:total_loading_cost,
+                                    total_unloading_cost:total_unloading_cost,
                                     user: "user is not exist in db",
-                                    complete_trip: complete_trip,
-                                    canceled_trip: canceled_trip,
-                                    canceled_by_vendor: canceled_by_vendor,
-                                    canceled_by_driver: canceled_by_driver,
-                                    canceled_by_customer: canceled_by_customer
+                                    complete_trip:complete_trip,
+                                    canceled_trip:canceled_trip,
+                                    canceled_by_vendor:canceled_by_vendor,
+                                    canceled_by_driver:canceled_by_driver,
+                                    canceled_by_customer:canceled_by_customer
                                 }
                             }
                         });
@@ -1402,21 +1366,21 @@ exports.get_single_date_with_cash = (req, res) => {
                 trip.forEach(element => {
                     total_cash = total_cash + parseInt(element.total_cost);
                     total_trips = total_trips + 1;
-                    if (element.loading_cost != null || element.loading_cost != '' || element.loading_cost != 'null') {
-                        total_loading_cost = total_loading_cost + parseInt(element.loading_cost);
+                    if(element.loading_cost!=null || element.loading_cost!='' || element.loading_cost!='null'){
+                        total_loading_cost=total_loading_cost   +parseInt(element.loading_cost);
                     }
-                    if (element.unloading_cost != null || element.unloading_cost != '' || element.unloading_cost != 'null') {
-                        total_unloading_cost = total_unloading_cost + parseInt(element.unloading_cost);
+                    if(element.unloading_cost!=null || element.unloading_cost!='' || element.unloading_cost!='null'){
+                    total_unloading_cost=total_unloading_cost + parseInt(element.unloading_cost);
                     }
-                    if (element.status == 'end') {
-                        complete_trip = complete_trip + 1;
-                    } if (element.status == 'cancel') {
-                        canceled_trip = canceled_trip + 1;
-                        if (element.how_cancel == 'driver') {
+                    if(element.status=='end'){
+                        complete_trip = complete_trip +1;
+                    }if(element.status=='cancel'){
+                        canceled_trip = canceled_trip +1;  
+                        if(element.how_cancel=='driver'){
                             canceled_by_driver = canceled_by_driver + 1;
-                        } if (element.how_cancel == 'vendor') {
+                        }if(element.how_cancel=='vendor'){
                             canceled_by_vendor = canceled_by_vendor + 1;
-                        } if (element.how_cancel == 'customer') {
+                        }if(element.how_cancel=='customer'){
                             canceled_by_customer = canceled_by_customer + 1;
                         }
                     }
@@ -1435,15 +1399,15 @@ exports.get_single_date_with_cash = (req, res) => {
                             dash_board_single_detail: {
                                 total_trips: total_trips,
                                 total_cash: total_cash,
-                                total_loading_cost: total_loading_cost,
-                                total_unloading_cost: total_unloading_cost,
+                                total_loading_cost:total_loading_cost,
+                                total_unloading_cost:total_unloading_cost,
                                 user: driver,
-                                complete_trip: complete_trip,
-
-                                canceled_trip: canceled_trip,
-                                canceled_by_vendor: canceled_by_vendor,
-                                canceled_by_driver: canceled_by_driver,
-                                canceled_by_customer: canceled_by_customer
+                                complete_trip:complete_trip,
+                    
+                                canceled_trip:canceled_trip,
+                                canceled_by_vendor:canceled_by_vendor,
+                                canceled_by_driver:canceled_by_driver,
+                                canceled_by_customer:canceled_by_customer
                             }
                         }
                     });
