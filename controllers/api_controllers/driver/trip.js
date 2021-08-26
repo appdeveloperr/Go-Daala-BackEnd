@@ -395,7 +395,9 @@ exports.cencal_trip = (req, res) => {
                                         data: {
                                             title: "Driver Cancel The Trip",
                                             body: trip[1].id.toString(),
-                                            price: req.body.price.toString()
+                                            price: req.body.price.toString(),
+                                            estimated_distance: trip[1].estimated_distance,
+                                            estimated_time: trip[1].estimated_time
                                         }
                                     };
 
@@ -459,7 +461,9 @@ exports.cencal_trip = (req, res) => {
                                 data: {
                                     title: "Driver Cancel The Trip",
                                     body: trip[1].id.toString(),
-                                    price: req.body.price.toString()
+                                    price: req.body.price.toString(),
+                                    estimated_distance: trip[1].estimated_distance,
+                                    estimated_time: trip[1].estimated_time
                                 }
                             };
 
@@ -477,9 +481,6 @@ exports.cencal_trip = (req, res) => {
                                         message: "Driver cencal trip  is successfull",
                                         successData: {
                                             trip: trip[1]
-
-
-
                                         }
                                     });
                                 }).catch(err => {

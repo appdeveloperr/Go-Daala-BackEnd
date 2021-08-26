@@ -888,7 +888,9 @@ exports.cancel_trip = (req, res) => {
                                       data: {
                                             title: "Vendor Cancel Trip",
                                             body: trip[1].id.toString(),
-                                            price: req.body.price.toString()
+                                            price: req.body.price.toString(),
+                                            estimated_distance: trip[1].estimated_distance,
+                                            estimated_time: trip[1].estimated_time
                                         }
                                     };
 
@@ -943,7 +945,9 @@ exports.cancel_trip = (req, res) => {
                               data: {
                                     title: "Vendor Cancel Trip",
                                     body: trip[1].id.toString(),
-                                    price:req.body.price.toString()
+                                    price:req.body.price.toString(),
+                                    estimated_distance: trip[1].estimated_distance,
+                                    estimated_time: trip[1].estimated_time
                                 }
                             };
                   
