@@ -836,6 +836,7 @@ exports.cancel_trip = (req, res) => {
     req.checkBody('customer_fcm', 'please provide customer fcm!').notEmpty();
     req.checkBody('driver_fcm', 'please provide driver fcm!').notEmpty();
     req.checkBody('price', 'please provide price !').notEmpty();
+  
     var errors = req.validationErrors();
     if (errors) {                    //////////------input text validation error
         return res.status(200).send({
@@ -853,7 +854,12 @@ exports.cancel_trip = (req, res) => {
             customer_id: req.body.customer_id,
             status: "cancel",
             how_cancel: "customer",
-            total_cost:req.body.price
+            total_cost:req.body.price,
+            estimated_distance: req.body.estimated_distance,
+            estimated_time:  req.body.estimated_time,
+            dropoff_lat: req.body.dropoff_lat,
+            dropoff_long: req.body.dropoff_long,
+            dropoff: req.body.dropoff
 
         },
             {

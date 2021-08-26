@@ -349,7 +349,12 @@ exports.cencal_trip = (req, res) => {
             driver_id: req.body.driver_id,
             status: "cancel",
             how_cancel: "driver",
-            total_cost: req.body.price
+            total_cost: req.body.price,
+            estimated_distance: req.body.estimated_distance,
+            estimated_time:  req.body.estimated_time,
+            dropoff_lat: req.body.dropoff_lat,
+            dropoff_long: req.body.dropoff_long,
+            dropoff: req.body.dropoff
 
         },
             {
