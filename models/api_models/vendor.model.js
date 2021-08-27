@@ -41,7 +41,10 @@ module.exports = (sequelize, Sequelize) => {
     },
     store_image: {
       type: Sequelize.STRING
-    }
+    },
+    business_type: {
+      type: Sequelize.STRING
+    },
   });
 
   return Vendor;

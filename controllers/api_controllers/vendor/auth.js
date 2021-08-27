@@ -95,7 +95,7 @@ exports.signup = (req, res) => {
                     total_review:"0",
                     bussiness_name:req.body.bussiness_name,
                     store_image:'/files/uploadsFiles/vendor/' +store_image,
-					business_type:req.body.business_type
+					business_type: req.body.business_type
                     //  
                 }).then(user => {
 
