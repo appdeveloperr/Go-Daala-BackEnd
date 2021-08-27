@@ -121,7 +121,7 @@ exports.signup = (req, res) => {
 
 
                      //Send Welcome SMS
-                     var messageData = "لالا "+ req.body.first_name+" "+ req.body.last_name+" کو ڈالا پر خوش آمدید کہتے ہیں  او لالا، چلاؤ ڈالا";
+                     var messageData = "لالا  کو ڈالا پر خوش آمدید کہتے ہیں  او لالا، چلاؤ ڈالا";
                      var mobileno = req.body.phone_number;
  
                      axios.get('http://api.veevotech.com/sendsms?hash=2fefa107d5eddd16fc16e420e976b2eb&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
@@ -137,7 +137,7 @@ exports.signup = (req, res) => {
                             });
                          })
                          .catch(error => {
- 
+                            console.log(error);
                             return res.status(200).send({
                                 status: 200,
                                 message: "Signing Up is successful",
