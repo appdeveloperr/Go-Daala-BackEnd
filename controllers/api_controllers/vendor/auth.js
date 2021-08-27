@@ -10,7 +10,7 @@ var fs = require("fs");
 
 //-------------vendor signup--------------------
 exports.signup = (req, res) => {
-  
+
 
     req.checkBody('first_name', 'first_name must have value!').notEmpty();
     req.checkBody('last_name', 'last name must have value!').notEmpty();
@@ -19,9 +19,9 @@ exports.signup = (req, res) => {
     req.checkBody('password', 'password must have value!').notEmpty();
     req.checkBody('fcm_token', 'Please provide a fcm token needed!').notEmpty();
     req.checkBody('bussiness_name', 'Please provide a bussiness name needed!').notEmpty();
-	req.checkBody('business_type', 'Please provide a business type needed!').notEmpty();
+    req.checkBody('business_type', 'Please provide a business type needed!').notEmpty();
     var errors = req.validationErrors();
-    if (errors) {                    
+    if (errors) {
         console.log("VENDOR ERROR 0");
         //////////------input text validation error
         return res.status(200).send({
@@ -37,7 +37,7 @@ exports.signup = (req, res) => {
         if (!req.files) {
             req.checkBody('profile', 'profile picture must have needed!').notEmpty();
             var errors = req.validationErrors();
-            if (errors) {           
+            if (errors) {
                 console.log("VENDOR ERROR 1");
                 //////////------input file validation error
                 return res.status(200).send({
@@ -51,7 +51,7 @@ exports.signup = (req, res) => {
                 });
             }
         } else {
-            
+
             req.checkBody('profile', 'profile picture must have needed animage').isImage(req.files.profile.name);
             req.checkBody('store_image', 'store picture must have needed animage').isImage(req.files.store_image.name);
             var errors = req.validationErrors();
@@ -91,25 +91,52 @@ exports.signup = (req, res) => {
                     profile: '/files/uploadsFiles/vendor/' + filename,
                     account_info: 'unblock',
                     fcm_token: req.body.fcm_token,
-                    total_rating:"0",
-                    total_review:"0",
-                    bussiness_name:req.body.bussiness_name,
-                    store_image:'/files/uploadsFiles/vendor/' +store_image,
-					business_type: req.body.business_type
+                    total_rating: "0",
+                    total_review: "0",
+                    bussiness_name: req.body.bussiness_name,
+                    store_image: '/files/uploadsFiles/vendor/' + store_image,
+                    business_type: req.body.business_type
                     //  
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret);
                     user.dataValues.accessToken = token;
-                    delete user.dataValues.password; 
+                    delete user.dataValues.password;
 
-                    return res.status(200).send({
-                        status: 200,
-                        message: "Signing Up is successful",
-                        successData: {
-                            user: user
-                        }
-                    });
+
+
+                    //Send Welcome SMS
+                    var messageData = "Welcome "+req.body.bussiness_name+" to the Daala\nDaala helps you in logistics, keep moving with daala";
+                    var mobileno = req.body.phone_number;
+
+
+                    axios.get('http://api.veevotech.com/sendsms?hash=2fefa107d5eddd16fc16e420e976b2eb&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                        .then(response => {
+
+
+                            return res.status(200).send({
+                                status: 200,
+                                message: "Signing Up is successful",
+                                successData: {
+                                    user: user
+                                }
+                            });
+
+                        })
+                        .catch(error => {
+
+                            return res.status(200).send({
+                                status: 200,
+                                message: "Signing Up is successful",
+                                successData: {
+                                    user: user
+                                }
+                            });
+                        });
+
+
+
+
 
                 })
                     .catch(err => {
@@ -289,8 +316,8 @@ exports.signin = (req, res) => {
                     where: {
                         id: user.id
                     },
-                returning: true,
-                plain: true
+                    returning: true,
+                    plain: true
                 }).then(user => {
                     delete user[1].dataValues.password;
                     user[1].dataValues.accessToken = token;
@@ -298,9 +325,9 @@ exports.signin = (req, res) => {
                         status: 200,
                         message: "Login Successfull.",
                         successData: {
-                            user:user[1]
+                            user: user[1]
                         }
-    
+
                     });
                 }).catch(err => {
                     return res.status(200).send({
@@ -312,7 +339,7 @@ exports.signin = (req, res) => {
                 });
 
 
-             
+
 
             })
             .catch(err => {
@@ -371,7 +398,7 @@ exports.update = (req, res) => {
                     status: 200,
                     message: "UPDATED is successful",
                     successData: {
-                        user:user[1]
+                        user: user[1]
                     }
                 });
             }
