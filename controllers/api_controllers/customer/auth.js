@@ -99,25 +99,62 @@ exports.signup = (req, res) => {
 
                     var token = jwt.sign({ id: user.id }, config.secret);
 
+                    //Send Welcome SMS
+                    var messageData = "Welcome "+ req.body.first_name+" "+ req.body.last_name+" to the Daala\nDaala is here to move your loads";
+                    var mobileno = req.body.phone_number;
+
+                    axios.get('http://api.veevotech.com/sendsms?hash=2fefa107d5eddd16fc16e420e976b2eb&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
+                        .then(response => {
 
 
-                    return res.status(200).send({
-                        status: 200,
-                        message: "Signing Up is successful",
-                        successData: {
-                            user: {
-                                id: user.id,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                email: user.email,
-                                phone_number: user.phone_number,
-                                profile: user.profile,
-                                account_info: user.account_info,
-                                fcm_token: user.fcm_token,
-                                accessToken: token
-                            }
-                        }
-                    });
+                            return res.status(200).send({
+                                status: 200,
+                                message: "Signing Up is successful",
+                                successData: {
+                                    user: {
+                                        id: user.id,
+                                        first_name: user.first_name,
+                                        last_name: user.last_name,
+                                        email: user.email,
+                                        phone_number: user.phone_number,
+                                        profile: user.profile,
+                                        account_info: user.account_info,
+                                        fcm_token: user.fcm_token,
+                                        accessToken: token
+                                    }
+                                }
+                            });
+
+                        })
+                        .catch(error => {
+
+                            return res.status(200).send({
+                                status: 200,
+                                message: "Signing Up is successful",
+                                successData: {
+                                    user: {
+                                        id: user.id,
+                                        first_name: user.first_name,
+                                        last_name: user.last_name,
+                                        email: user.email,
+                                        phone_number: user.phone_number,
+                                        profile: user.profile,
+                                        account_info: user.account_info,
+                                        fcm_token: user.fcm_token,
+                                        accessToken: token
+                                    }
+                                }
+                            });
+                        });
+
+
+
+
+
+
+
+
+                
 
                 })
                     .catch(err => {

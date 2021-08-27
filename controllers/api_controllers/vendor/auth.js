@@ -109,7 +109,6 @@ exports.signup = (req, res) => {
                     var messageData = "Welcome "+req.body.bussiness_name+" to the Daala\nDaala helps you in logistics, keep moving with daala";
                     var mobileno = req.body.phone_number;
 
-
                     axios.get('http://api.veevotech.com/sendsms?hash=2fefa107d5eddd16fc16e420e976b2eb&receivenum=' + mobileno + '&sendernum=8583&textmessage=' + messageData)
                         .then(response => {
 
