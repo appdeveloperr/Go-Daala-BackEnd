@@ -1121,7 +1121,7 @@ exports.trip_share = (req, res) => {
         });
     } else {
         //------------------vendor Send message to another person for share trip ------------------------------------
-        var message = req.body.trip_id + "/" + req.body.mobile_no.toString() + "\n" + "Download App:  https://play.google.com/store/apps/details?id=com.techreneur.godaalavendor";
+        var message = req.body.trip_id + "/" + req.body.mobile_no.toString() + "\n" + "Download App:  https://play.google.com/store/apps/details?id=com.techreneur.godaalacustomer";
         var messageData = "Track your trip by using following link: " + "\n" + " Track Your Trip : http://www.godaala.com/trip?trip_id=" + message;
         var mobileno = req.body.mobile_no;
 
