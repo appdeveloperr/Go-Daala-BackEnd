@@ -110,6 +110,15 @@ module.exports = function (app) {
     );
 
 
+     //------------Add Bonus to Referal Driver Function----------------
+     app.post(
+        "/api/driver/add_bonus_to_referal",
+        driverAuthJwt.verifyToken,
+        controller.add_bonus_to_referal,
+    );
+
+
+
 
 };
 

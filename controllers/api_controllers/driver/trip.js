@@ -351,7 +351,7 @@ exports.cencal_trip = (req, res) => {
             how_cancel: "driver",
             total_cost: req.body.price,
             estimated_distance: req.body.estimated_distance,
-            estimated_time:  req.body.estimated_time,
+            estimated_time: req.body.estimated_time,
             dropoff_lat: req.body.dropoff_lat,
             dropoff_long: req.body.dropoff_long,
             dropoff: req.body.dropoff
@@ -525,6 +525,8 @@ exports.cencal_trip = (req, res) => {
 
     }
 }
+
+
 
 //--------------driver loading_and_unloading time trip---------------
 exports.loading_and_unloading = (req, res) => {
@@ -927,6 +929,185 @@ function try_to_parse(token) {
         return token;
     }
 }
+
+
+
+//--------------driver add_bonus_to_referal ---------------
+exports.add_bonus_to_referal = (req, res) => {
+    req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
+    req.checkBody('referal_code', 'referal_code is required!').notEmpty();
+    req.checkBody('bonus_amount', 'bonus_amount is required!!').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in add_bonus_to_referal",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+
+        //Find the Current Driver by ID
+
+        Driver.findOne({
+            where: {
+                id: req.body.driver_id
+            }
+        }).then(driver => {
+            if (driver) {
+
+                var updatedBonus = parseInt(driver.bonus_amount) + req.body.bonus_amount;
+                //Update Bonus Amount in Current Driver
+                Driver.update({
+                    bonus_amount: updatedBonus,
+                },
+                    {
+                        where: { id: req.body.driver_id },
+                        returning: true,
+                        plain: true
+                    }).then(driver => {
+
+                        if (driver != null) {
+
+                            //Find Other Driver by invite Code
+
+                            Driver.findOne({
+                                where: {
+                                    invite_code: req.body.referal_code
+                                }
+                            }).then(otherDriver => {
+                                if (otherDriver) {
+
+                                    var updatedBonus = parseInt(otherDriver.bonus_amount) + req.body.bonus_amount;
+
+                                    //Update Bonus Amount in Other Driver
+                                    Driver.update({
+                                        bonus_amount: updatedBonus,
+                                    },
+                                        {
+                                            where: { id: otherDriver.id },
+                                            returning: true,
+                                            plain: true
+                                        }).then(driver => {
+
+
+                                            //update bonus is given in Crrent Driver
+
+                                            Driver.update({
+                                                is_referal_bonus_given: "yes",
+                                            },
+                                                {
+                                                    where: { id: req.body.driver_id },
+                                                    returning: true,
+                                                    plain: true
+                                                }).then(driver => {
+
+                                                    return res.status(200).send({
+                                                        status: 200,
+                                                        message: "Referal Bonus Added Successfully",
+                                                        successData: {}
+                                                    });
+        
+
+
+                                                }).catch(err => {
+
+                                                    return res.status(200).send({
+                                                        status: 400,
+                                                        message: err.message,
+                                                        successData: {}
+                                                    });
+        
+                                                });
+                            
+
+
+
+                                           
+
+                                        }).catch(err => {
+
+                                            return res.status(200).send({
+                                                status: 400,
+                                                message: err.message,
+                                                successData: {}
+                                            });
+
+                                        });
+
+
+                                        } else {
+
+                                            return res.status(200).send({
+                                                status: 400,
+                                                message: "Other Driver not found",
+                                                successData: {}
+                                            });
+
+
+                                        }
+
+                            }).catch(err => {
+
+                                            return res.status(200).send({
+                                                status: 400,
+                                                message: err.message,
+                                                successData: {}
+                                            });
+
+                                        });
+
+
+
+
+
+                        } else {
+
+                            return res.status(200).send({
+                                status: 400,
+                                message: "Driver not found",
+                                successData: {}
+                            });
+
+
+                        }
+
+                    }).catch(err => {
+
+                        return res.status(200).send({
+                            status: 400,
+                            message: err.message,
+                            successData: {}
+                        });
+
+                    });
+
+            }
+
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+
+
+
+
+
+    }
+
+}
+
+
+
 
 
 //--------------driver Get  all  Trip ---------------
