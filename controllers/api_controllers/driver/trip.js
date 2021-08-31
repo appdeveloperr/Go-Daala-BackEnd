@@ -1088,7 +1088,17 @@ exports.add_bonus_to_referal = (req, res) => {
 
                     });
 
+            } else {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: "Driver not found",
+                    successData: {}
+                });
+
+
             }
+
 
         }).catch(err => {
 
