@@ -960,7 +960,7 @@ exports.add_bonus_to_referal = (req, res) => {
         }).then(currentdriver => {
             if (currentdriver) {
 
-                var updatedBonus = parseInt(currentdriver.bonus_amount) + req.body.bonus_amount;
+                var updatedBonus = parseInt(currentdriver.bonus_amount) + parseInt(req.body.bonus_amount);
                 //Update Bonus Amount in Current Driver
                 Driver.update({
                     bonus_amount: updatedBonus,
@@ -982,7 +982,7 @@ exports.add_bonus_to_referal = (req, res) => {
                             }).then(otherDriver => {
                                 if (otherDriver) {
 
-                                    var updatedBonus = parseInt(otherDriver.bonus_amount) + req.body.bonus_amount;
+                                    var updatedBonus = parseInt(otherDriver.bonus_amount) + parseInt(req.body.bonus_amount);
 
                                     //Update Bonus Amount in Other Driver
                                     Driver.update({
