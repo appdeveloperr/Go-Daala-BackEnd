@@ -47,6 +47,21 @@ module.exports = (sequelize, Sequelize) => {
       },
       paid_company_commission:{
         type: Sequelize.STRING
+      },
+      invite_code:{
+        type: Sequelize.INTEGER,
+        unique: true,
+        allowNull: false,
+        autoIncrement: true,
+      },
+      referal_code:{
+        type: Sequelize.INTEGER
+      },
+      bonus_amount:{
+        type: Sequelize.STRING
+      },
+      i:{
+        type: Sequelize.STRING
       }
     });
   
