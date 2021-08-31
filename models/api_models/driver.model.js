@@ -1,10 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
     const Driver = sequelize.define("drivers", {
       id:{
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+      unique: true
+
       },
       first_name: {
         type: Sequelize.STRING
@@ -49,18 +51,15 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       invite_code:{
-        type: Sequelize.INTEGER,
-        unique: true,
-        allowNull: false,
-        autoIncrement: true,
-      },
+        type: Sequelize.STRING
+     },
       referal_code:{
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       bonus_amount:{
         type: Sequelize.STRING
       },
-      i:{
+      is_referal_bonus_given:{
         type: Sequelize.STRING
       }
     });

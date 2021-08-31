@@ -108,7 +108,12 @@ exports.signup = (req, res) => {
                     fcm_token: req.body.fcm_token,
                     total_rating: "0",
                     total_review: "0",
-                    paid_company_commission:'0'
+                    paid_company_commission:'0',
+                    invite_code: req.body.first_name+req.body.phone_number.substring(4, 10)+req.body.first_name.substring(2,5),
+                    bonus_amount: "0",
+                    referal_code: req.body.referal_code,
+                    is_referal_bonus_given: req.body.is_referal_bonus_given
+
                 }).then(user => {
 
                     var token = jwt.sign({ id: user.id }, config.secret, {
