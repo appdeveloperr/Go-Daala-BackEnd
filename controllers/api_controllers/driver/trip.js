@@ -957,10 +957,10 @@ exports.add_bonus_to_referal = (req, res) => {
             where: {
                 id: req.body.driver_id
             }
-        }).then(driver => {
-            if (driver) {
+        }).then(currentdriver => {
+            if (currentdriver) {
 
-                var updatedBonus = parseInt(driver.bonus_amount) + req.body.bonus_amount;
+                var updatedBonus = parseInt(currentdriver.bonus_amount) + req.body.bonus_amount;
                 //Update Bonus Amount in Current Driver
                 Driver.update({
                     bonus_amount: updatedBonus,
@@ -1009,7 +1009,9 @@ exports.add_bonus_to_referal = (req, res) => {
                                                     return res.status(200).send({
                                                         status: 200,
                                                         message: "Referal Bonus Added Successfully",
-                                                        successData: {}
+                                                        successData: {
+                                                            driver:currentdriver
+                                                        }
                                                     });
         
 
