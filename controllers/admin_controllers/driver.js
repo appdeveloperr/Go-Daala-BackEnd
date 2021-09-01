@@ -112,9 +112,7 @@ exports.unblock = function (req, res, next) {
 
 
   Driver.update({
-    account_info: 'unblock',
-    status: "unactive"
-  }, {
+    account_info: 'unblock'  }, {
     where: {
       id: req.params.id
     }
