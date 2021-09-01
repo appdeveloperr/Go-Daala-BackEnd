@@ -1681,6 +1681,8 @@ exports.get_single_date_with_cash = (req, res) => {
                         delete driver.dataValues.password;
                         driver.dataValues.accessToken = token;
 
+                       console.log("Driver Single Date with Cash: "+Json.stringify(driver));
+
                         return res.status(200).send({
                             status: 200,
                             message: "Get driver for single date Trip with cash",
