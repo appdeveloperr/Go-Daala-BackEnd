@@ -1019,7 +1019,7 @@ exports.add_bonus_to_referal = (req, res) => {
                                                         status: 200,
                                                         message: "Referal Bonus Added Successfully",
                                                         successData: {
-                                                            driver: driverUpdated
+                                                            driver: driverUpdated[1]
                                                         }
                                                     });
 
