@@ -112,7 +112,9 @@ exports.signup = (req, res) => {
                     invite_code: req.body.first_name+req.body.phone_number.substring(4, 10)+req.body.first_name.substring(2,5),
                     bonus_amount: "0",
                     referal_code: req.body.referal_code,
-                    is_referal_bonus_given: req.body.is_referal_bonus_given
+                    is_referal_bonus_given: req.body.is_referal_bonus_given,
+                    is_myfirst_ride_bonus_given: "no"
+
 
                 }).then(user => {
 

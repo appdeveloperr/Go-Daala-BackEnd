@@ -1005,21 +1005,21 @@ exports.add_bonus_to_referal = (req, res) => {
                                                     where: { id: req.body.driver_id },
                                                     returning: true,
                                                     plain: true
-                                                }).then(driver => {
+                                                }).then(driverUpdated => {
 
 
-                                                    var token = jwt.sign({ id: updatedDriver[1].id }, config.secret, {
+                                                    var token = jwt.sign({ id: driverUpdated[1].id }, config.secret, {
                                                     });
 
-                                                    delete updatedDriver[1].password;
-                                                    updatedDriver[1].dataValues.accessToken = token;
+                                                    delete driverUpdated[1].password;
+                                                    driverUpdated[1].accessToken = token;
 
 
                                                     return res.status(200).send({
                                                         status: 200,
                                                         message: "Referal Bonus Added Successfully",
                                                         successData: {
-                                                            driver: updatedDriver
+                                                            driver: driverUpdated
                                                         }
                                                     });
 
@@ -1169,21 +1169,47 @@ exports.add_my_first_ride_bonus = (req, res) => {
 
                         if (updatedDriver != null) {
 
+                            //update bonus is given in Crrent Driver
 
-                            var token = jwt.sign({ id: user.id }, config.secret, {
-                            });
+                            Driver.update({
+                                is_myfirst_ride_bonus_given: "yes",
+                            },
+                                {
+                                    where: { id: req.body.driver_id },
+                                    returning: true,
+                                    plain: true
+                                }).then(driverUpdated => {
 
-                            delete updatedDriver[1].password;
-                            updatedDriver[1].dataValues.accessToken = token;
 
 
-                            return res.status(200).send({
-                                status: 200,
-                                message: "First Ride Bonus Added Successfully",
-                                successData: {
-                                    driver: updatedDriver
-                                }
-                            });
+                                    var token = jwt.sign({ id: driverUpdated[1].id }, config.secret, {
+                                    });
+
+                                    delete driverUpdated[1].password;
+                                    driverUpdated[1].accessToken = token;
+
+
+                                    return res.status(200).send({
+                                        status: 200,
+                                        message: "First Ride Bonus Added Successfully",
+                                        successData: {
+                                            driver: driverUpdated
+                                        }
+                                    });
+
+
+
+
+                                }).catch(err => {
+
+                                    return res.status(200).send({
+                                        status: 400,
+                                        message: err.message,
+                                        successData: {}
+                                    });
+
+                                });
+
 
 
 
