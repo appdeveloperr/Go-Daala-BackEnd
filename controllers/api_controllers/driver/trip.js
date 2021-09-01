@@ -1010,9 +1010,9 @@ exports.add_bonus_to_referal = (req, res) => {
 
                                                     var token = jwt.sign({ id: driverUpdated[1].id }, config.secret, {
                                                     });
-
-                                                    delete driverUpdated[1].password;
-                                                    driverUpdated[1].accessToken = token;
+                                                  
+                                                    delete driverUpdated[1].dataValues.password;
+                                                    driverUpdated[1].dataValues.accessToken = token;
 
 
                                                     return res.status(200).send({
@@ -1185,9 +1185,8 @@ exports.add_my_first_ride_bonus = (req, res) => {
                                     var token = jwt.sign({ id: driverUpdated[1].id }, config.secret, {
                                     });
 
-                                    delete driverUpdated[1].password;
-                                    driverUpdated[1].accessToken = token;
-
+                                    delete driverUpdated[1].dataValues.password;
+                                    driverUpdated[1].dataValues.accessToken = token;
 
                                     return res.status(200).send({
                                         status: 200,
