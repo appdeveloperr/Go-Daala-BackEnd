@@ -1193,7 +1193,7 @@ exports.add_my_first_ride_bonus = (req, res) => {
                                         status: 200,
                                         message: "First Ride Bonus Added Successfully",
                                         successData: {
-                                            driver: driverUpdated
+                                            driver: driverUpdated[1]
                                         }
                                     });
 
