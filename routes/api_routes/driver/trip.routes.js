@@ -118,6 +118,14 @@ module.exports = function (app) {
     );
 
 
+     //------------Add My First Ride Bonus Driver Function----------------
+     app.post(
+        "/api/driver/add_my_first_ride_bonus",
+        driverAuthJwt.verifyToken,
+        controller.add_my_first_ride_bonus,
+    );
+
+
 
 
 };

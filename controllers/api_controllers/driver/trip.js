@@ -2,6 +2,7 @@ const db = require("../../../models/api_models");
 const config = require("../../../config/auth.config");
 const Driver_lat_long = db.driver_lat_long;
 const Driver = db.driver;
+var jwt = require("jsonwebtoken");
 var Vendor = db.vendor;
 var Customer = db.customer;
 var Cancel_trip = db.cancel_trip;
@@ -1009,7 +1010,7 @@ exports.add_bonus_to_referal = (req, res) => {
 
                                                     var token = jwt.sign({ id: user.id }, config.secret, {
                                                     });
-                                
+
                                                     delete updatedDriver[1].password;
                                                     updatedDriver[1].dataValues.accessToken = token;
 
@@ -1018,10 +1019,10 @@ exports.add_bonus_to_referal = (req, res) => {
                                                         status: 200,
                                                         message: "Referal Bonus Added Successfully",
                                                         successData: {
-                                                            driver:updatedDriver
+                                                            driver: updatedDriver
                                                         }
                                                     });
-        
+
 
 
                                                 }).catch(err => {
@@ -1031,13 +1032,13 @@ exports.add_bonus_to_referal = (req, res) => {
                                                         message: err.message,
                                                         successData: {}
                                                     });
-        
+
                                                 });
-                            
 
 
 
-                                           
+
+
 
                                         }).catch(err => {
 
@@ -1050,26 +1051,26 @@ exports.add_bonus_to_referal = (req, res) => {
                                         });
 
 
-                                        } else {
+                                } else {
 
-                                            return res.status(200).send({
-                                                status: 400,
-                                                message: "Other Driver not found",
-                                                successData: {}
-                                            });
+                                    return res.status(200).send({
+                                        status: 400,
+                                        message: "Other Driver not found",
+                                        successData: {}
+                                    });
 
 
-                                        }
+                                }
 
                             }).catch(err => {
 
-                                            return res.status(200).send({
-                                                status: 400,
-                                                message: err.message,
-                                                successData: {}
-                                            });
+                                return res.status(200).send({
+                                    status: 400,
+                                    message: err.message,
+                                    successData: {}
+                                });
 
-                                        });
+                            });
 
 
 
@@ -1125,6 +1126,121 @@ exports.add_bonus_to_referal = (req, res) => {
     }
 
 }
+
+
+
+//----------------- add_my_first_ride_bonus ----------------------------
+exports.add_my_first_ride_bonus = (req, res) => {
+    req.checkBody('driver_id', 'driver_id must have ID!').notEmpty();
+    req.checkBody('bonus_amount', 'bonus_amount is required!!').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {                    //////////------input text validation error
+        return res.status(200).send({
+            status: 400,
+            message: "validation error in add_bonus_to_referal",
+            successData: {
+                error: {
+                    error: errors
+                }
+            }
+        });
+    } else {
+
+        //Find the Current Driver by ID
+
+        Driver.findOne({
+            where: {
+                id: req.body.driver_id
+            }
+        }).then(currentdriver => {
+            if (currentdriver) {
+
+                var updatedBonus = parseInt(currentdriver.bonus_amount) + parseInt(req.body.bonus_amount);
+                //Update Bonus Amount in Current Driver
+                Driver.update({
+                    bonus_amount: updatedBonus,
+                },
+                    {
+                        where: { id: req.body.driver_id },
+                        returning: true,
+                        plain: true
+                    }).then(updatedDriver => {
+
+                        if (updatedDriver != null) {
+
+
+                            var token = jwt.sign({ id: user.id }, config.secret, {
+                            });
+
+                            delete updatedDriver[1].password;
+                            updatedDriver[1].dataValues.accessToken = token;
+
+
+                            return res.status(200).send({
+                                status: 200,
+                                message: "First Ride Bonus Added Successfully",
+                                successData: {
+                                    driver: updatedDriver
+                                }
+                            });
+
+
+
+
+                        } else {
+
+                            return res.status(200).send({
+                                status: 400,
+                                message: "Driver not found",
+                                successData: {}
+                            });
+
+
+                        }
+
+                    }).catch(err => {
+
+                        return res.status(200).send({
+                            status: 400,
+                            message: err.message,
+                            successData: {}
+                        });
+
+                    });
+
+            } else {
+
+                return res.status(200).send({
+                    status: 400,
+                    message: "Driver not found",
+                    successData: {}
+                });
+
+
+            }
+
+
+        }).catch(err => {
+
+            return res.status(200).send({
+                status: 400,
+                message: err.message,
+                successData: {}
+            });
+
+        });
+
+
+
+
+
+    }
+
+}
+
+
+
 
 
 
