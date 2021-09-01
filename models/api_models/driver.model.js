@@ -61,6 +61,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       is_referal_bonus_given:{
         type: Sequelize.STRING
+      },
+      is_myfirst_ride_bonus_given:{
+        type: Sequelize.STRING
       }
     });
   

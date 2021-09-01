@@ -1008,7 +1008,7 @@ exports.add_bonus_to_referal = (req, res) => {
                                                 }).then(driver => {
 
 
-                                                    var token = jwt.sign({ id: user.id }, config.secret, {
+                                                    var token = jwt.sign({ id: updatedDriver[1].id }, config.secret, {
                                                     });
 
                                                     delete updatedDriver[1].password;
