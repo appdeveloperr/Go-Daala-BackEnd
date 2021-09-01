@@ -969,9 +969,9 @@ exports.add_bonus_to_referal = (req, res) => {
                         where: { id: req.body.driver_id },
                         returning: true,
                         plain: true
-                    }).then(driver => {
+                    }).then(updatedDriver => {
 
-                        if (driver != null) {
+                        if (updatedDriver != null) {
 
                             //Find Other Driver by invite Code
 
@@ -1006,11 +1006,19 @@ exports.add_bonus_to_referal = (req, res) => {
                                                     plain: true
                                                 }).then(driver => {
 
+
+                                                    var token = jwt.sign({ id: user.id }, config.secret, {
+                                                    });
+                                
+                                                    delete updatedDriver[1].password;
+                                                    updatedDriver[1].dataValues.accessToken = token;
+
+
                                                     return res.status(200).send({
                                                         status: 200,
                                                         message: "Referal Bonus Added Successfully",
                                                         successData: {
-                                                            driver:currentdriver
+                                                            driver:updatedDriver
                                                         }
                                                     });
         
