@@ -1774,9 +1774,11 @@ exports.get_single_date_with_cash = (req, res) => {
                     var token = jwt.sign({ id: driver.id }, config.secret, {
                     });
 
-                    delete driver.password;
-                    driver.accessToken = token;
+                    delete driver.dataValues.password;
+                    driver.dataValues.accessToken = token;
 
+
+                    console.log("Driver Single Date with Cash: "+Json.stringify(driver));
 
                     return res.status(200).send({
                         status: 200,
