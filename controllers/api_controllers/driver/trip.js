@@ -1674,6 +1674,14 @@ exports.get_single_date_with_cash = (req, res) => {
                     }
                 }).then(driver => {
                     if (driver) {
+
+
+                        var token = jwt.sign({ id: driver.id }, config.secret, {
+                        });
+
+                        delete driver.dataValues.password;
+                        driver.dataValues.accessToken = token;
+
                         return res.status(200).send({
                             status: 200,
                             message: "Get driver for single date Trip with cash",
@@ -1762,6 +1770,12 @@ exports.get_single_date_with_cash = (req, res) => {
                     }
                 }).then(driver => {
 
+                    var token = jwt.sign({ id: driver.id }, config.secret, {
+                    });
+
+                    delete driver.password;
+                    driver.accessToken = token;
+
 
                     return res.status(200).send({
                         status: 200,
@@ -1774,7 +1788,6 @@ exports.get_single_date_with_cash = (req, res) => {
                                 total_unloading_cost: total_unloading_cost,
                                 user: driver,
                                 complete_trip: complete_trip,
-
                                 canceled_trip: canceled_trip,
                                 canceled_by_vendor: canceled_by_vendor,
                                 canceled_by_driver: canceled_by_driver,
