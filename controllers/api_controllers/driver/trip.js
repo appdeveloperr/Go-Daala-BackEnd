@@ -1014,6 +1014,8 @@ exports.add_bonus_to_referal = (req, res) => {
                                                     delete driverUpdated[1].dataValues.password;
                                                     driverUpdated[1].dataValues.accessToken = token;
 
+                                                   
+                                
 
                                                     return res.status(200).send({
                                                         status: 200,
@@ -1776,8 +1778,6 @@ exports.get_single_date_with_cash = (req, res) => {
 
                     delete driver.dataValues.password;
                     driver.dataValues.accessToken = token;
-
-
                     console.log("Driver Single Date with Cash: "+JSON.stringify(driver));
 
                     return res.status(200).send({
