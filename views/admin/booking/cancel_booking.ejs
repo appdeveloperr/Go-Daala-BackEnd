@@ -36,8 +36,9 @@
                                     <th>Vehicle Name</th>
                                     <th>Estimated Distance</th>
                                     <th>Estimated Time</th>
-                                    <th>Total Cost</th>
-
+                                    <th>Trip Cost</th>
+                                    <th>Loading Cost</th>
+                                    <th>Unloading Cost</th>
                                     <th>Vendor Name</th>
                                     <th>Driver Name</th>
                                     <th>Customer Name</th>
@@ -69,6 +70,13 @@
                                                     </td>
                                                     <td>
                                                         <%=item.total_cost%>
+                                                    </td>
+
+                                                    <td>
+                                                        <%=item.loading_cost%>
+                                                    </td>
+                                                    <td>
+                                                        <%=item.unloading_cost%>
                                                     </td>
                     
                                                     <%if(item.vendor==null){%>

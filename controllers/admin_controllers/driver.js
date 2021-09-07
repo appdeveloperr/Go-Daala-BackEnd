@@ -368,6 +368,24 @@ const commission =  parseInt(req.body.add_commission) + parseInt(req.body.old_pa
   });
 }
 
+exports.update_bonus_amount=async(req,res)=>{
+  const bonus_amount =  parseInt(req.body.old_bonus_amount) - parseInt(req.body.bonus_amount);
+    Driver.update({
+      bonus_amount: bonus_amount
+    }, {
+      where: {
+        id: req.body.id
+      }
+    }).then(bonus_amounts => {
+      if (bonus_amounts) {
+        req.flash('success', 'Successfuly your add Company Commission');
+        res.redirect('/driver/all_trips/'+req.body.id);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
 
 exports.chat = function (req, res, next) {
   res.render('index');

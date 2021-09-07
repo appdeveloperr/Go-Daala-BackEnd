@@ -29,12 +29,19 @@
                                                 });}%>
                                                 <%=earning%> || Total Paid Commission=
                                                     <%=driver_information.paid_company_commission%>  ||  Remaining  
-                                                    Commissions: <% if(driver_vehicle!=null){total_company_commission = (earning * parseInt(driver_vehicle)) / 100; remaining =total_company_commission-parseInt(driver_information.paid_company_commission);}console.log('this is total_company_commission: '+total_company_commission+' this is remaining commission: '+remaining    +'vehicle commission:'+ parseInt(driver_vehicle))%>  <%=remaining%></a>
+                                                    Commissions: <% if(driver_vehicle!=null){total_company_commission = (earning * parseInt(driver_vehicle)) / 100; remaining =total_company_commission-parseInt(driver_information.paid_company_commission);}console.log('this is total_company_commission: '+total_company_commission+' this is remaining commission: '+remaining    +'vehicle commission:'+ parseInt(driver_vehicle))%>  <%=remaining%> || Bonus Amount = <%=driver_information.bonus_amount%></a>
                                                     <form method="post" action="/driver/add-commission">
                                                         <input type="number" name="add_commission" value="">
                                                         <input type="text" name="id" value="<%=driver_information.id%>" hidden> 
                                                         <input type="text" name="old_paid_commission" value="<%=driver_information.paid_company_commission%>" hidden>
                                                         <input type="submit" value="Add">   
+                                                    </form>
+
+                                                    <form method="post" action="/driver/update-bonus_amount">
+                                                        <input type="number" name="bonus_amount" value="">
+                                                        <input type="text" name="id" value="<%=driver_information.id%>" hidden> 
+                                                        <input type="text" name="old_bonus_amount" value="<%=driver_information.bonus_amount%>" hidden>
+                                                        <input type="submit" value="Update Bonus Amount">   
                                                     </form>
                                 <%}%>
                         </div>
@@ -51,7 +58,9 @@
                                             <th>Vehicle Name</th>
                                             <th>Estimated Distance</th>
                                             <th>Estimated Time</th>
-                                            <th>Total Cost</th>
+                                            <th>Trip Cost</th>
+                                            <th>Loading Cost</th>
+                                            <th>Unloading Cost</th>
                                             <th>Vendor Name</th>
                                             <th>Customer Name</th>
                                         </tr>
@@ -82,6 +91,14 @@
                                                 <td>
                                                     <%=item.total_cost%>
                                                 </td>
+
+                                                <td>
+                                                    <%=item.loading_cost%>
+                                                </td>
+                                                <td>
+                                                    <%=item.unloading_cost%>
+                                                </td>
+
                                                 <%if(item.dataValues.vendor){%>
                                                     <td>
                                                         <%=item.vendor.dataValues.first_name%>
@@ -113,7 +130,9 @@
                                                 <th>Vehicle Name</th>
                                                 <th>Estimated Distance</th>
                                                 <th>Estimated Time</th>
-                                                <th>Total Cost</th>
+                                                <th>Trip Cost</th>
+                                                <th>Loading Cost</th>
+                                                <th>Unloading Cost</th>
                                                 <th>Vendor Name</th>
                                                 <th>Customer Name</th>
                                             </tr>

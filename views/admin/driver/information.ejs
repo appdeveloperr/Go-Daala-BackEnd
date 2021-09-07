@@ -34,47 +34,46 @@
                                             <th>Profile Image</th>
                                             <th>CNIC</th>
                                             <th>CNIC #</th>
+
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                         <tr>
-                                        
-                                                        <td><img src="<%=one_drivers.profile%>" width="200" height="100"></td>
-                                                        <td><img src="<%=one_drivers.cnic%>" width="200" height="100"></td>
-                                                        <td><%=one_drivers.cnic_text%></td>
 
-                                                        <td>
+                                            <td><img src="<%=one_drivers.profile%>" width="200" height="100"></td>
+                                            <td><img src="<%=one_drivers.cnic%>" width="200" height="100"></td>
+                                            <td>
+                                                <%=one_drivers.cnic_text%>
+                                            </td>
+                                       
+                                                <a href="/driver/all_trips/<%=one_drivers.id%>" class="mr-2">
+                                                    <button type="button" class="btn btn-outline-primary">All
+                                                        Trips</button>
+                                                </a>
+
+
+                                                <%if(one_drivers.account_info=='block'){%>
+
+                                                    <a href="/admin/driver/unblock/<%=one_drivers.id%>" class="mr-2">
+                                                        <button type="button" class="btn btn-success">UNBLOCK</button>
+                                                    </a>
+
+                                                    <%}else{%>
+
+                                                        <a href="/admin/driver/block/<%=one_drivers.id%>" class="mr-2">
+                                                            <button type="button" class="btn btn-danger">BLOCK</button>
+                                                        </a>
+
+                                                        <%}%>
+
                                                             <a href="/driver/all_trips/<%=one_drivers.id%>"
                                                                 class="mr-2">
                                                                 <button type="button"
-                                                                    class="btn btn-outline-primary">All Trips</button>
+                                                                    class="btn  btn-info">Commission</button>
                                                             </a>
-
-
-                                                            <%if(one_drivers.account_info=='block'){%>
-
-                                                                <a href="/admin/driver/unblock/<%=one_drivers.id%>"
-                                                                    class="mr-2">
-                                                                    <button type="button"
-                                                                        class="btn btn-success">UNBLOCK</button>
-                                                                </a>
-
-                                                                <%}else{%>
-
-                                                                    <a href="/admin/driver/block/<%=one_drivers.id%>"
-                                                                        class="mr-2">
-                                                                        <button type="button"
-                                                                            class="btn btn-danger">BLOCK</button>
-                                                                    </a>
-
-                                                                    <%}%>
-
-                                                                    <a href="/driver/all_trips/<%=one_drivers.id%>" class="mr-2">
-                                                                        <button type="button" class="btn  btn-info">Commission</button>
-                                                                </a>
-                                                        </td>
+                                            </td>
                                         </tr>
                                         <thead>
                                             <tr>
@@ -82,6 +81,7 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone Number</th>
+
                                                 <th>Status</th>
 
 
@@ -101,10 +101,43 @@
                                             <td>
                                                 <%=one_drivers.phone_number%>
                                             </td>
+
                                             <td>
                                                 <%=one_drivers.status%>
                                             </td>
 
+
+                                        </tr>
+
+                                        <thead>
+                                            <tr>
+
+                                                <th>Rating</th>
+                                                <th>Paid Company Commission</th>
+                                                <th>bonus_amount</th>
+                                                <th>Created At</th>
+
+
+
+
+                                            </tr>
+                                        </thead>
+                                        <tr>
+                                            <td>
+                                                <%var rating=0; if(one_drivers.total_review!="0" ){
+                                                    rating=parseInt(one_drivers.total_rating)/parseInt(one_drivers.total_review);}%>
+                                                    <%=rating%>
+                                            <td>
+                                            <td>
+                                                <%=one_drivers.paid_company_commission%>
+                                            </td>
+                                            <td>
+                                                <%=one_drivers.bonus_amount%>
+                                            </td>
+
+                                            <td>
+                                                <%=one_drivers.createdAt%>
+                                            </td>
 
                                         </tr>
 
@@ -133,28 +166,31 @@
                                             <tbody>
 
                                                 <tr>
-                    
-                                                                <td><img src="<%=one_vehicle.vehicle_document%>" width="200" height="100"></td>
-                                                                <td><img src="<%=one_vehicle.frint_image%>" width="200" height="100"></td>
-                                                                <td><img src="<%=one_vehicle.back_image%>" width="200" height="100"></td>
 
-                                                                <%if(one_vehicle.status=='unactive'){%>
-                                                                    <td>
-                                                                        <a href="/admin/driver/vehicle/active/<%=one_drivers.id%>"
-                                                                            class="mr-2">
-                                                                            <button type="button"
-                                                                                class="btn btn-success">ACTIVE</button>
-                                                                        </a>
-                                                                    </td>
-                                                                    <%}else{%>
-                                                                        <td>
-                                                                            <a href="/admin/driver/vehicle/unactive/<%=one_drivers.id%>"
-                                                                                class="mr-2">
-                                                                                <button type="button"
-                                                                                    class="btn btn-danger">UNACTIVE</button>
-                                                                            </a>
-                                                                        </td>
-                                                                        <%}%>
+                                                    <td><img src="<%=one_vehicle.vehicle_document%>" width="200"
+                                                            height="100"></td>
+                                                    <td><img src="<%=one_vehicle.frint_image%>" width="200"
+                                                            height="100"></td>
+                                                    <td><img src="<%=one_vehicle.back_image%>" width="200" height="100">
+                                                    </td>
+
+                                                    <%if(one_vehicle.status=='unactive'){%>
+                                                        <td>
+                                                            <a href="/admin/driver/vehicle/active/<%=one_drivers.id%>"
+                                                                class="mr-2">
+                                                                <button type="button"
+                                                                    class="btn btn-success">ACTIVE</button>
+                                                            </a>
+                                                        </td>
+                                                        <%}else{%>
+                                                            <td>
+                                                                <a href="/admin/driver/vehicle/unactive/<%=one_drivers.id%>"
+                                                                    class="mr-2">
+                                                                    <button type="button"
+                                                                        class="btn btn-danger">UNACTIVE</button>
+                                                                </a>
+                                                            </td>
+                                                            <%}%>
                                                 </tr>
 
 

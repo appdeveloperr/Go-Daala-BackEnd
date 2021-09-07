@@ -34,7 +34,10 @@
                                     <th>vehicle_name</th>
                                     <th>estimated_distance</th>
                                     <th>estimated_time</th>
-                                    <th>total_cost</th>
+                                    
+                                    <th>Trip Cost</th>
+                                    <th>Loading Cost</th>
+                                    <th>Unloading Cost</th>
                                     <th>status</th>
                                 </tr>
                             </thead>
@@ -60,6 +63,14 @@
                                     </td>
                                     <td>
                                         <%=item.total_cost%>
+                                    </td>
+
+                                    <td>
+                                        <%=item.loading_cost%>
+                                    </td>
+
+                                    <td>
+                                        <%=item.unloading_cost%>
                                     </td>
                                     <td>
                                         <%=item.status%>

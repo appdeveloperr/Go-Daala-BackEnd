@@ -48,7 +48,9 @@ app.get('/admin/driver/vehicle/unactive/:id',isAdmin,driver_controller.unactive)
 //-----------------get  driver all trips  admin side----------------
 app.get('/driver/all_trips/:id',isAdmin,driver_controller.recent_trip);
 
-app.post('/driver/add-commission',isAdmin,driver_controller.add_commission)
+app.post('/driver/add-commission',isAdmin,driver_controller.add_commission);
 
+
+app.post('/driver/update-bonus_amount',isAdmin,driver_controller.update_bonus_amount);
 
 }
