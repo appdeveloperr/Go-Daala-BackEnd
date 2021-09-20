@@ -194,9 +194,11 @@ exports.index_address = (req, res) => {
             status: 200,
             message: "Get all vendor address",
             successData: {
-                address: {
-                    all_address: all_address
-                }
+                address:  all_address
+                
+                //  address: {
+                //     all_address: all_address
+                // }
             }
         });
 

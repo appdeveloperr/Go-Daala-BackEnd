@@ -53,7 +53,6 @@ module.exports = function (app) {
 
 
     app.post('/api/driver/unactive-status',
-   
     controller.unactive_status
     )
 };

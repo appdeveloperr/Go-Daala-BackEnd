@@ -174,7 +174,7 @@ exports.index_address = (req, res) => {
 	}).then(all_address => {
         if (!all_address) {
             return res.status(200).send({
-                responsecode: 400,
+                status: 400,
                 message: "no recode exist",
                 successData: {
 
