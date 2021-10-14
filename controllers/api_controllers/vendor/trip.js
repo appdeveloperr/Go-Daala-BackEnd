@@ -93,7 +93,7 @@ exports.create_trip = (req, res) => {
                                         spacific_Vehicle.forEach(spacific_vehi => {
                                             if ((Loc[i].driver_id == spacific_vehi.driver_id) && (spacific_vehi.vehicle_type == req.body.vehicle_type)) {
                                                 var checkPoint = { lat: Loc[i].latitude, lng: Loc[i].longitude };
-                                                var n = arePointsNear(checkPoint, centerPoint, 5);
+                                                var n = arePointsNear(checkPoint, centerPoint, 50);
                                                 if (n == true && Loc[i].dataValues.driver_id != null) {
 
                                                     obj.push(Loc[i].dataValues);
